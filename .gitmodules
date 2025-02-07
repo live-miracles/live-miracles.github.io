@@ -1,0 +1,6 @@
+[submodule "gallery"]
+	path = gallery
+	url = git@github.com:isha-live/gallery.git
+[submodule "gallery-ext"]
+	path = gallery-ext
+	url = git@github.com:isha-live/gallery-ext.git
