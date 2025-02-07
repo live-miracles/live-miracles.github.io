@@ -4,3 +4,6 @@
 [submodule "gallery-ext"]
 	path = gallery-ext
 	url = git@github.com:isha-live/gallery-ext.git
+[submodule "vmix-master"]
+	path = vmix-master
+	url = git@github.com:isha-live/vmix-master.git
