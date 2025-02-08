@@ -7,3 +7,6 @@
 [submodule "vmix-master"]
 	path = vmix-master
 	url = git@github.com:isha-live/vmix-master.git
+[submodule "delayed-yt"]
+	path = delayed-yt
+	url = git@github.com:isha-live/delayed-yt.git

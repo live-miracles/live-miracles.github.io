@@ -1,6 +1,6 @@
-## [YAD: YouTube Auto Delay](https://isha-live.github.io/yad/)
+## [YAD: Delayed YouTube](https://isha-live.github.io/delayed-yt/)
 
-<img width="700" alt="YAD" src="https://github.com/user-attachments/assets/3c1f0cb4-c946-4cd5-81b5-1ea3502c01be">
+<img width="700" alt="Delayed YouTube" src="https://github.com/user-attachments/assets/3c1f0cb4-c946-4cd5-81b5-1ea3502c01be">
 
 Webpage where you can configure a delay for any YouTube
 stream, and it will automatically maintain it. It solves the
@@ -21,7 +21,7 @@ It provides usefull features:
 
 ## [Gallery Chrome Extension](https://isha-live.github.io/gallery-ext/)
 
-<img width="400" alt="Screenshot 2024-10-28 at 11 27 42" src="https://github.com/user-attachments/assets/25f017eb-ed04-4aae-8c86-cfd71ef68cd6">
+<img width="400" alt="Gallery Chrome Extension" src="https://github.com/user-attachments/assets/25f017eb-ed04-4aae-8c86-cfd71ef68cd6">
 
 Because of the CORS policy, we can't access the videos with JavaScript directly. That's why a Chrome Extension is required to enable VU meters, lowest quality selection, and other features.
 
