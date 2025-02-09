@@ -1,5 +1,7 @@
 .PHONY: *
 
+DIR ?= .
+
 all:
 	make start
 
@@ -7,7 +9,7 @@ install:
 	npm install
 
 pretty:
-	npx prettier --write .
+	npx prettier --write $(DIR)
 
 pretty-gal:
 	npx prettier --write gallery/
