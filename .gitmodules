@@ -10,3 +10,6 @@
 [submodule "delayed-yt"]
 	path = delayed-yt
 	url = git@github.com:isha-live/delayed-yt.git
+[submodule "live-generator"]
+	path = live-generator
+	url = git@github.com:isha-live/live-generator.git
