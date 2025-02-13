@@ -3,17 +3,14 @@ const path = require('path');
 const fs = require('fs');
 const { marked } = require('marked');
 const net = require('net');
-const os = require('os');
 
 const app = express();
 const folderName = '.';
 const readmePath = path.join(__dirname, folderName, 'README.md');
 
-// Serve static files under /lsm route
-app.use('/lsm', express.static(path.join(__dirname, folderName)));
+app.use('/', express.static(path.join(__dirname, folderName)));
 
-// Serve README.md at /lsm as the default content
-app.get('/lsm', (req, res) => {
+app.get('/', (req, res) => {
     fs.readFile(readmePath, 'utf8', (err, data) => {
         if (err) {
             res.status(500).send('Error reading README.md');
@@ -24,28 +21,10 @@ app.get('/lsm', (req, res) => {
     });
 });
 
-// Redirect root (/) to /lsm/
-app.get('/', (req, res) => {
-    res.redirect('/lsm/');
-});
-
 // Handle 404 errors for undefined routes
 app.use((req, res) => {
     res.status(404).send('404: Not Found');
 });
-
-// Function to get the local IP address
-const getLocalIPAddress = () => {
-    const interfaces = os.networkInterfaces();
-    for (const name of Object.keys(interfaces)) {
-        for (const iface of interfaces[name]) {
-            if (iface.family === 'IPv4' && !iface.internal) {
-                return iface.address;
-            }
-        }
-    }
-    return 'localhost'; // Fallback in case no IP is found
-};
 
 // Function to check if a port is available
 const checkPort = (port) => {
@@ -66,9 +45,8 @@ const startServer = async (port) => {
         currentPort++;
     }
 
-    const ipAddress = getLocalIPAddress();
     app.listen(currentPort, () => {
-        console.log(`Server is running at http://${ipAddress}:${currentPort}/lsm/`);
+        console.log(`Server is running at http://localhost:${currentPort}/`);
     });
 };
 
