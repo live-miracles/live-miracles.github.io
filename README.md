@@ -1,4 +1,4 @@
-## [YAD: Delayed YouTube](https://isha-live.github.io/delayed-yt/)
+## [Delayed YouTube](https://isha-live.github.io/delayed-yt/)
 
 <img width="700" alt="Delayed YouTube" src="https://github.com/user-attachments/assets/3c1f0cb4-c946-4cd5-81b5-1ea3502c01be">
 
