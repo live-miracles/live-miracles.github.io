@@ -13,3 +13,6 @@
 [submodule "live-generator"]
 	path = live-generator
 	url = git@github.com:isha-live/live-generator.git
+[submodule "gcp-monitor"]
+	path = gcp-monitor
+	url = git@github.com:isha-live/gcp-monitor.git
