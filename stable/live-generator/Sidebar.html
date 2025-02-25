@@ -1,0 +1,144 @@
+<!doctype html>
+<html>
+  <head>
+    <base target="_top" />
+    <link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons1.css" />
+    <style>
+      .hidden {
+        display: none;
+      }
+      .m-1 {
+        margin: 0.25rem;
+      }
+      .m-2 {
+        margin: 0.5rem;
+      }
+      .m-3 {
+        margin: 0.75rem;
+      }
+    </style>
+  </head>
+  <body class="m-3">
+    <div id="yt-loading">YouTube is loading...</div>
+
+    <div id="yt-not-signed-in" class="hidden">
+      <p>Please authorize your YouTube account.</p>
+      <button onclick="signInYouTube()" class="action">Sign In</button>
+    </div>
+
+    <div id="yt-signed-in" class="hidden">
+      <p>
+        Hello <b><span id="yt-user-email">...</span></b>
+      </p>
+      <p>
+        <b><span id="yt-channel">...</span></b> Channel <button onclick="signOutYouTube()">Sign Out</button>
+      </p>
+      <hr />
+      <button onclick="scheduleYouTubeBroadcasts()" class="action">Schedule Selected Rows</button>
+      <p>If you leave year, month, day, or hour empty it will use the current date.</p>
+      <br />
+      <button onclick="updateStreamKeys()" class="action">Update Stream Keys</button>
+      <br />
+      <p class="grey" id="yt-message"></p>
+      <p class="error" id="yt-error"></p>
+    </div>
+
+    <hr />
+    <div id="zo-loading">Zoom is loading...</div>
+
+    <div id="zo-not-signed-in" class="hidden">
+      <p>Please authorize your Zoom account to continue.</p>
+      <button onclick="signInZoom()" class="action">Sign In</button>
+    </div>
+    <div id="zo-signed-in" class="hidden"></div>
+
+    <script>
+      const authUrlYt = '<?= authUrlYouTube ?>';
+      const loadingYtDiv = document.getElementById('yt-loading');
+      const userEmailYtSpan = document.getElementById('yt-user-email');
+      const channelYtElem = document.getElementById('yt-channel');
+      const messageYtElem = document.getElementById('yt-message');
+      const errorYtElem = document.getElementById('yt-error');
+
+      const signedInYtDiv = document.getElementById('yt-signed-in');
+      const notSignedInYtDiv = document.getElementById('yt-not-signed-in');
+
+      function signInYouTube() {
+        window.open(authUrlYt);
+      }
+
+      function signOutYouTube() {
+        google.script.run
+          .withSuccessHandler(() => {
+            updateYtUI();
+          })
+          .signOut();
+      }
+
+      function updateStreamKeys() {
+        messageYtElem.textContent = 'Loading...';
+        messageYtElem.classList.remove('hidden');
+        errorYtElem.classList.add('hidden');
+        google.script.run
+          .withSuccessHandler((message) => {
+            messageYtElem.textContent = message;
+          })
+          .withFailureHandler(failureHandler)
+          .updateStreamKeys();
+      }
+
+      function scheduleYouTubeBroadcasts() {
+        messageYtElem.textContent = 'Loading...';
+        messageYtElem.classList.remove('hidden');
+        errorYtElem.classList.add('hidden');
+        google.script.run
+          .withSuccessHandler((message) => {
+            messageYtElem.textContent = message;
+          })
+          .withFailureHandler(failureHandler)
+          .scheduleBroadcasts();
+      }
+
+      function updateYtUI() {
+        loadingYtDiv.classList.remove('hidden');
+        signedInYtDiv.classList.add('hidden');
+        notSignedInYtDiv.classList.add('hidden');
+
+        google.script.run
+          .withSuccessHandler((hasAccess) => {
+            loadingYtDiv.classList.add('hidden');
+            if (hasAccess) {
+              google.script.run
+                .withSuccessHandler((email) => {
+                  userEmailYtSpan.textContent = email;
+                })
+                .withFailureHandler(failureHandler)
+                .getUserEmail();
+              google.script.run
+                .withSuccessHandler((channel) => {
+                  channelYtElem.textContent = channel.title;
+                  google.script.run.withFailureHandler(failureHandler).addChannel(channel.id, channel.title);
+                })
+                .withFailureHandler(failureHandler)
+                .getMyChannel();
+              signedInYtDiv.classList.remove('hidden');
+              notSignedInYtDiv.classList.add('hidden');
+            } else {
+              signedInYtDiv.classList.add('hidden');
+              notSignedInYtDiv.classList.remove('hidden');
+            }
+          })
+          .withFailureHandler(failureHandler)
+          .hasAccess();
+      }
+
+      const failureHandler = (e) => {
+        errorYtElem.textContent = e.message;
+        messageYtElem.classList.add('hidden');
+        errorYtElem.classList.remove('hidden');
+      };
+
+      updateYtUI();
+    </script>
+  </body>
+</html>
