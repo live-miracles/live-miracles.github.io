@@ -1,3 +1,18 @@
 [submodule "delayed-yt"]
 	url = git@github.com:live-miracles/delayed-yt.git
 	path = delayed-yt
+[submodule "gallery"]
+	path = gallery
+	url = git@github.com:live-miracles/gallery.git
+[submodule "gallery-ext"]
+	path = gallery-ext
+	url = git@github.com:live-miracles/gallery-ext.git
+[submodule "vmix-master"]
+	path = vmix-master
+	url = git@github.com:live-miracles/vmix-master.git
+[submodule "gcp-monitor"]
+	path = gcp-monitor
+	url = git@github.com:live-miracles/gcp-monitor.git
+[submodule "live-generator"]
+	path = live-generator
+	url = git@github.com:live-miracles/live-generator.git
