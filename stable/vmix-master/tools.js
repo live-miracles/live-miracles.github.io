@@ -136,13 +136,17 @@ function showLog(url, status, value, error, time) {
 }
 
 function storeLog(url, status, value, error, time) {
-    const logs = localStorage.getItem('logs') ? JSON.parse(localStorage.getItem('logs')) : [];
+    const logs = localStorage.getItem('vmix-master-logs')
+        ? JSON.parse(localStorage.getItem('vmix-master-logs'))
+        : [];
     logs.unshift({ time: time, url: url, status, value: value, error: error });
     localStorage.setItem('logs', JSON.stringify(logs.slice(0, LOG_SIZE)));
 }
 
 function showStoredLogs() {
-    const logs = localStorage.getItem('logs') ? JSON.parse(localStorage.getItem('logs')) : [];
+    const logs = localStorage.getItem('vmix-master-logs')
+        ? JSON.parse(localStorage.getItem('vmix-master-logs'))
+        : [];
     logs.reverse().forEach((log) => showLog(log.url, log.status, log.value, log.error, log.time));
 }
 

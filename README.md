@@ -1,4 +1,4 @@
-## [Delayed YouTube](https://isha-live.github.io/delayed-yt/)
+## [Delayed YouTube](https://live-miracles.github.io/delayed-yt/)
 
 <img width="700" alt="Delayed YouTube" src="https://github.com/user-attachments/assets/3c1f0cb4-c946-4cd5-81b5-1ea3502c01be">
 
@@ -7,7 +7,7 @@ stream, and it will automatically maintain it. It solves the
 skipping problem when because of network lag a stream with delay
 goes to LIVE, and as a result, participants miss this skipped fragment.
 
-## [Live Streaming Gallery](https://isha-live.github.io/gallery/)
+## [Live Streaming Gallery](https://live-miracles.github.io/gallery/)
 
 <img width="700" alt="Live Streaming Gallery" src="https://github.com/user-attachments/assets/c0d302e0-d959-4d95-9b85-f93a4c9b2fc5">
 
@@ -19,13 +19,13 @@ It provides usefull features:
 - Sets lowest quality for all playing YouTube videos.
 - And others!
 
-## [Gallery Chrome Extension](https://isha-live.github.io/gallery-ext/)
+## [Gallery Chrome Extension](https://live-miracles.github.io/gallery-ext/)
 
 <img width="400" alt="Gallery Chrome Extension" src="https://github.com/user-attachments/assets/25f017eb-ed04-4aae-8c86-cfd71ef68cd6">
 
 Because of the CORS policy, we can't access the videos with JavaScript directly. That's why a Chrome Extension is required to enable VU meters, lowest quality selection, and other features.
 
-## [vMix Master](https://isha-live.github.io/vmix-master/)
+## [vMix Master](https://live-miracles.github.io/vmix-master/)
 
 <img width="700" alt="vMix Master" src="https://github.com/user-attachments/assets/5d166448-c202-458b-b1ec-8e9c7d089d0a">
 

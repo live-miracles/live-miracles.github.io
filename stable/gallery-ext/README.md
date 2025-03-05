@@ -5,7 +5,7 @@ That is why a Chrome Extension is required to enable VU meters, automatic qualit
 
 ## Installation
 
-1. Go to the root of this repo: [https://github.com/isha-live/gallery-ext](https://github.com/isha-live/gallery-ext)
+1. Go to the root of this repo: [https://github.com/live-miracles/gallery-ext](https://github.com/live-miracles/gallery-ext)
 2. Click on the green **"Code"** button, and download it using the **"Download ZIP"** option (or clone it).
 
     ![image](./assets/download-zip.avif)
