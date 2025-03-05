@@ -1,0 +1,3 @@
+[submodule "delayed-yt"]
+	url = git@github.com:live-miracles/delayed-yt.git
+	path = delayed-yt
