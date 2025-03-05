@@ -10,21 +10,13 @@
     <script src="./Sortable.min.js"></script>
   </head>
   <body class="bg-base-100 text-base-content">
-    <div class="fixed bottom-2 right-9 rounded bg-neutral px-3">
-      <label class="swap m-1">
-        <input id="show-focus" type="checkbox" class="show-toggle url-param" checked />
-        <div class="badge swap-on badge-secondary badge-outline rounded py-3">focus</div>
-        <div class="badge swap-off badge-secondary rounded py-3">focus</div>
-      </label>
-    </div>
-
     <div class="flex flex-col items-center">
       <div class="flex w-full flex-wrap" id="gallery"></div>
     </div>
 
-    <div class="prose m-3 mx-auto hidden rounded-box border-2 border-error p-2 text-error" id="outdated-extension-warning">
+    <div class="prose m-3 mx-auto rounded-box border-2 border-error p-2 text-error" id="outdated-extension-warning" style="display: none">
       <b>Warning:</b> You're using an outdated Chrome extension version "<span id="ext-version"></span>". Please
-      <a class="link" href="/gallery-ext/#update">update</a> it to the latest version "<span id="gal-version">1.1.1</span>", as some features might
+      <a class="link" href="/gallery-ext/#update">update</a> it to the latest version "<span id="gal-version">2.0.0</span>", as some features might
       not work properly.
     </div>
 
@@ -35,7 +27,6 @@
       <div class="flex-none">
         <ul class="menu menu-horizontal px-1">
           <li><a href="/">Home</a></li>
-          <li><a href="#docs">Docs</a></li>
           <li>
             <a href="/gallery-ext/" target="_blank" t>Extension</a>
           </li>
@@ -46,8 +37,8 @@
 
     <div class="divider focus mx-auto mt-10 w-[750px]">Controls</div>
 
-    <div class="m-auto mt-10 hidden w-[750px] px-1" id="controls">
-      <div class="mb-4 flex items-center gap-1">
+    <div class="m-auto mt-10 w-[750px] px-1" style="display: none" id="controls">
+      <div class="focus mb-4 flex items-center gap-1">
         <input id="gallery-url" type="text" placeholder="URL" class="input input-xs input-bordered ml-0 flex-1" />
 
         <button id="update-gallery-url" class="btn btn-secondary btn-xs">
@@ -60,23 +51,38 @@
 
       <div>
         <label class="relative inline-flex cursor-pointer items-center">
+          <input type="checkbox" id="show-focus" class="show-toggle url-param toggle toggle-secondary m-0" checked />
+          <span class="text-md ms-3">Show everything</span>
+        </label>
+      </div>
+
+      <div class="focus">
+        <label class="relative inline-flex cursor-pointer items-center">
           <input type="checkbox" id="audioLevels" class="url-param toggle toggle-secondary m-0" checked />
           <span class="text-md ms-3">Draw audio levels</span>
         </label>
       </div>
-      <div class="mb-4">
+      <div class="focus">
         <label class="relative inline-flex cursor-pointer items-center">
           <input type="checkbox" id="noAudioBlink" class="url-param toggle toggle-secondary m-0" disabled />
           <span class="text-md ms-3">Blink if no audio for over 5 seconds</span>
         </label>
       </div>
-      <div>
+      <div class="focus mb-4">
+        <label class="relative inline-flex cursor-pointer items-center">
+          <input type="checkbox" id="mute-rotation" class="url-param toggle toggle-secondary m-0" />
+          <span class="text-md ms-3">Auto unmute boxes one by one during monitoring</span>
+          <input type="text" id="rotation-boxes" class="url-param input input-xs input-bordered mx-1 my-0" placeholder="e.g. 1 2 5" />
+          <input type="text" id="rotation-time" class="url-param input input-xs input-bordered mx-0 my-0 w-12" placeholder="sec" value="60" />
+        </label>
+      </div>
+      <div class="focus">
         <label class="relative inline-flex cursor-pointer items-center">
           <input type="checkbox" id="autoLive" class="url-param toggle toggle-secondary m-0" checked />
           <span class="text-md ms-3">YouTube: automatically switch to LIVE</span>
         </label>
       </div>
-      <div class="mb-4">
+      <div class="focus mb-4">
         <label class="relative inline-flex cursor-pointer items-center">
           <button id="setQuality" class="btn btn-outline btn-secondary btn-xs">Lowest Quality</button>
           <span class="text-md ms-3">YouTube: Select the lowest quality (resolution) for all videos</span>
@@ -93,7 +99,7 @@
       <button id="update-rows" class="btn btn-outline btn-secondary btn-xs mt-3">Update</button>
     </div>
 
-    <div id="docs" class="divider focus mx-auto my-10 w-[750px]">Documentation</div>
+    <div class="divider focus mx-auto my-10 w-[750px]">Documentation</div>
 
     <div class="prose focus m-auto w-[760px] max-w-[750px] px-1">
       <p>Please use the latest Chrome browser and install the extension.</p>
@@ -120,6 +126,15 @@
 
       This is only needed if we are using Screen Share with an audio input. Audio from YT, JW, etc. will work fine without disabling the flags.
 
+      <h3>Tips</h3>
+      <ul>
+        <li>You can paste a YouTube URL into the value field and it will automatically extract the video ID.</li>
+        <li>
+          You can copy several YouTube links with names from a Google Sheet into the URL field in the Control section and it will automatically add
+          them all.
+        </li>
+      </ul>
+
       <h3>Value</h3>
       <ul>
         <li>
@@ -143,7 +158,11 @@
 
     <footer class="footer footer-center focus mt-10 bg-base-300 p-4 text-base-content">
       <aside>
-        <p>Copyright © 2024 - All right reserved by LSM</p>
+        <p>
+          For any bug / feature requests, please open an issue in our
+          <a class="link" href="https://github.com/isha-live/gallery/" target="_blank">GitHub</a> repo (ʃƪ˶˘ ﻬ ˘˶).
+        </p>
+        <p>Check out our <a class="link" href="/">homepage</a> for more streaming tools (=ↀωↀ=).</p>
       </aside>
     </footer>
   </body>

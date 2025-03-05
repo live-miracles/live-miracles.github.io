@@ -60,7 +60,7 @@ function parseDocumentConfig() {
         } else if (input.type === 'text') {
             params.append('__' + input.id, input.value);
         } else {
-            conole.error('unexpected type: ' + input.type);
+            console.error('unexpected type: ' + input.type);
         }
     });
     return params;
@@ -113,6 +113,38 @@ function extractYouTubeId(str) {
     }
 }
 
+function isValidYouTubeId(str) {
+    return /^[a-zA-Z0-9-_]{11}$/.test(str);
+}
+
+function parseSheetBuffer(str) {
+    const lines = str.split('\n').filter((line) => line.trim() !== '');
+    const result = [];
+
+    for (const line of lines) {
+        let parts = line.split('\t');
+        if (parts.length === 1) {
+            parts.push('');
+        }
+        if (parts.length !== 2) continue;
+
+        let [first, second] = parts;
+
+        first = extractYouTubeId(first.trim());
+        second = extractYouTubeId(second.trim());
+
+        if (isValidYouTubeId(second)) {
+            first = first === '' ? String(result.length + 1) : first;
+            result.push({ key: first, value: second });
+        } else if (isValidYouTubeId(first)) {
+            second = second === '' ? String(result.length + 1) : second;
+            result.push({ key: second, value: first });
+        }
+    }
+
+    return result;
+}
+
 async function getAvailableMics() {
     try {
         await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -126,6 +158,14 @@ async function getAvailableMics() {
     }
 }
 
+function parseNumbers(str) {
+    return str
+        .split(' ')
+        .map((num) => num.trim())
+        .filter((num) => num !== '')
+        .map((num) => parseInt(num));
+}
+
 export {
     getRowName,
     getRowType,
@@ -137,6 +177,8 @@ export {
     updateUrlParams,
     generateUUID,
     extractYouTubeId,
+    parseSheetBuffer,
     updateGalleryUrlInput,
     getAvailableMics,
+    parseNumbers,
 };
