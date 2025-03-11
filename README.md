@@ -1,6 +1,6 @@
 ## [Delayed YouTube](https://live-miracles.github.io/delayed-yt/)
 
-<img width="700" alt="Delayed YouTube" src="https://github.com/user-attachments/assets/3c1f0cb4-c946-4cd5-81b5-1ea3502c01be">
+<img width="700" alt="Delayed YouTube" src="https://github.com/user-attachments/assets/f929e929-07e4-4359-a7e9-a14f66fd353c">
 
 Webpage where you can configure a delay for any YouTube
 stream, and it will automatically maintain it. It solves the
@@ -21,13 +21,13 @@ It provides usefull features:
 
 ## [Gallery Chrome Extension](https://live-miracles.github.io/gallery-ext/)
 
-<img width="400" alt="Gallery Chrome Extension" src="https://github.com/user-attachments/assets/25f017eb-ed04-4aae-8c86-cfd71ef68cd6">
+<img width="400" alt="Gallery Chrome Extension" src="https://github.com/user-attachments/assets/c5bd58c8-836c-49cd-b97c-825182708ff3">
 
 Because of the CORS policy, we can't access the videos with JavaScript directly. That's why a Chrome Extension is required to enable VU meters, lowest quality selection, and other features.
 
 ## [vMix Master](https://live-miracles.github.io/vmix-master/)
 
-<img width="700" alt="vMix Master" src="https://github.com/user-attachments/assets/5d166448-c202-458b-b1ec-8e9c7d089d0a">
+<img width="700" alt="vMix Master" src="https://github.com/user-attachments/assets/ad8fd4e9-939b-4239-84c4-10f47a881c47">
 
 During live translations we often need to sync multiple vMix systems. This script uses vMix API to giv
 
