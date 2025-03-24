@@ -6,6 +6,7 @@ module.exports = {
         './yad/**/*.{html,js}',
         './scheduler/**/*.{html,js}',
         './vmix-master/**/*.{html,js}',
+        './grafana-monitor/**/*.{html,js}',
     ],
     theme: {
         extend: {},

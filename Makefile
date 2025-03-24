@@ -38,3 +38,6 @@ css-scheduler:
 
 css-vmm:
 	npx tailwindcss -i vmix-master/input.css -o vmix-master/output.css --watch
+
+css-graf:
+	npx tailwindcss -i grafana-monitor/input.css -o grafana-monitor/output.css --watch
