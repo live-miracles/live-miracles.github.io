@@ -16,3 +16,6 @@
 [submodule "live-generator"]
 	path = live-generator
 	url = git@github.com:live-miracles/live-generator.git
+[submodule "grafana-monitor"]
+	path = grafana-monitor
+	url = git@github.com:live-miracles/grafana-monitor.git
