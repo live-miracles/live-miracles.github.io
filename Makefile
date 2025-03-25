@@ -15,7 +15,7 @@ pretty-gal:
 	npx prettier --write gallery/
 	npx prettier --write gallery-ext/
 
-pretty-yad:
+pretty-del-yt:
 	npx prettier --write yad/
 
 pretty-vmm:
@@ -24,20 +24,18 @@ pretty-vmm:
 start:
 	npm start
 
-css-yad:
-	npx tailwindcss -i yad/input.css -o yad/output.css --watch
+css-del-yt:
+	npx @tailwindcss/cli -i ./delayed-yt/input.css -o ./delayed-yt/output.css --watch
 
 css-gal:
-	npx tailwindcss -i gallery/input.css -o gallery/output.css --watch
+	npx @tailwindcss/cli -i ./gallery/input.css -o ./gallery/output.css --watch
 
 css-gal-ext:
-	npx tailwindcss -i gallery-ext/popup.css -o gallery-ext/output.css --watch
-
-css-scheduler:
-		npx tailwindcss -i scheduler/input.css -o scheduler/output.css --watch
+	npx @tailwindcss/cli -i ./gallery-ext/popup.css -o ./gallery-ext/output.css --watch
 
 css-vmm:
-	npx tailwindcss -i vmix-master/input.css -o vmix-master/output.css --watch
+	npx @tailwindcss/cli -i ./vmix-master/input.css -o ./vmix-master/output.css --watch
 
 css-graf:
-	npx tailwindcss -i grafana-monitor/input.css -o grafana-monitor/output.css --watch
+	npx @tailwindcss/cli -i ./grafana-monitor/input.css -o ./grafana-monitor/output.css --watch
+
