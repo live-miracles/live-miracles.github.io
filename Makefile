@@ -38,4 +38,3 @@ css-vmm:
 
 css-graf:
 	npx @tailwindcss/cli -i ./grafana-monitor/input.css -o ./grafana-monitor/output.css --watch
-
