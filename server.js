@@ -51,6 +51,6 @@ const startServer = async (port) => {
 };
 
 // Start the process by checking port 3000
-startServer(3000).catch((err) => {
+startServer(80).catch((err) => {
     console.error('Error starting the server:', err);
 });
