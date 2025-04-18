@@ -5,6 +5,8 @@ const { marked } = require('marked');
 const net = require('net');
 
 const app = express();
+app.use(express.json());
+
 const folderName = '.';
 const readmePath = path.join(__dirname, folderName, 'README.md');
 
@@ -20,6 +22,9 @@ app.get('/', (req, res) => {
         }
     });
 });
+
+const statusRoutes = require('./delayed-yt/routes');
+app.use('/delayed-yt/api', statusRoutes);
 
 // Handle 404 errors for undefined routes
 app.use((req, res) => {
