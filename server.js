@@ -1,5 +1,6 @@
 const express = require('express');
 const https = require('https');
+const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
 const { marked } = require('marked');
@@ -7,6 +8,13 @@ const net = require('net');
 
 const app = express();
 app.use(express.json());
+
+app.use(
+    cors({
+        origin: 'https://live-miracles.github.io',
+        credentials: true, // if you're using cookies or auth headers
+    }),
+);
 
 const folderName = '.';
 const readmePath = path.join(__dirname, folderName, 'README.md');
@@ -54,17 +62,20 @@ const startServer = async (port) => {
     app.listen(currentPort, () => {
         console.log(`HTTP server is running at http://localhost:${currentPort}/`);
     });
-    const options = {
-        key: fs.readFileSync('./localhost-key.pem'),
-        cert: fs.readFileSync('./localhost-cert.pem'),
-    };
-
-    https.createServer(options, app).listen(443, () => {
-        console.log('HTTPS server is running at https://localhost:443/');
-    });
 };
 
-// Start the process by checking port 3000
+// Start the process by checking port 3000 & 80
+startServer(3000).catch((err) => {
+    console.error('Error starting the server:', err);
+});
 startServer(80).catch((err) => {
     console.error('Error starting the server:', err);
+});
+
+const options = {
+    key: fs.readFileSync('./localhost-key.pem'),
+    cert: fs.readFileSync('./localhost-cert.pem'),
+};
+https.createServer(options, app).listen(443, () => {
+    console.log('HTTPS server is running at https://localhost:443/');
 });
