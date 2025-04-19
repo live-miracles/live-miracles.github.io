@@ -1,4 +1,5 @@
 const express = require('express');
+const https = require('https');
 const path = require('path');
 const fs = require('fs');
 const { marked } = require('marked');
@@ -51,7 +52,15 @@ const startServer = async (port) => {
     }
 
     app.listen(currentPort, () => {
-        console.log(`Server is running at http://localhost:${currentPort}/`);
+        console.log(`HTTP server is running at http://localhost:${currentPort}/`);
+    });
+    const options = {
+        key: fs.readFileSync('./localhost-key.pem'),
+        cert: fs.readFileSync('./localhost-cert.pem'),
+    };
+
+    https.createServer(options, app).listen(443, () => {
+        console.log('HTTPS server is running at https://localhost:443/');
     });
 };
 
