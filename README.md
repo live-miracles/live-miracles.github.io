@@ -33,3 +33,6 @@ During live translations, we sometimes use multiple vMix systems. This web inter
 
 - Custom Commands: remotely adjust input volume, turn on/off external devices, etc.
 - vMix Web: Provides a web vMix-like interface.
+- AudioFade script: this script prevents an abrupt auidio cut during the transitions.
+- DurationTimer script: this script will print in a text input how many minutes:seconds of the video is left.
+- Slave script: when master switches to the input n, this script will cause the current vMix (slave) to follow and switch to input n.
