@@ -9,12 +9,7 @@ const net = require('net');
 const app = express();
 app.use(express.json());
 
-app.use(
-    cors({
-        origin: 'https://live-miracles.github.io',
-        credentials: true, // if you're using cookies or auth headers
-    }),
-);
+app.use(cors({ origin: 'https://live-miracles.github.io' }));
 
 const folderName = '.';
 const readmePath = path.join(__dirname, folderName, 'README.md');
