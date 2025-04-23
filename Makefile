@@ -13,6 +13,3 @@ start:
 
 pretty:
 	npx prettier --write $(DIR)
-
-css:
-	npx @tailwindcss/cli -i ./$(DIR)/input.css -o ./$(DIR)/output.css --watch
