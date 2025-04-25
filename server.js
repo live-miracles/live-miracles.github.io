@@ -14,8 +14,6 @@ app.use(cors({ origin: 'https://live-miracles.github.io' }));
 const folderName = '.';
 const readmePath = path.join(__dirname, folderName, 'README.md');
 
-app.use('/', express.static(path.join(__dirname, folderName)));
-
 app.get('/', (req, res) => {
     fs.readFile(readmePath, 'utf8', (err, data) => {
         if (err) {
@@ -29,6 +27,11 @@ app.get('/', (req, res) => {
 
 const statusRoutes = require('./delayed-yt/routes');
 app.use('/delayed-yt/api', statusRoutes);
+
+const vmixMasterRoutes = require('./vmix-master/routes');
+app.use('/vmix-master', vmixMasterRoutes);
+
+app.use('/', express.static(path.join(__dirname, folderName)));
 
 // Handle 404 errors for undefined routes
 app.use((req, res) => {
