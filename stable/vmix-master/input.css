@@ -1,6 +1,8 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+@plugin "@tailwindcss/typography";
+@plugin "daisyui" {
+    themes: night;
+}
 
 @keyframes fadeInRight {
     from {
@@ -21,18 +23,6 @@
     animation: fadeInRight 1s ease-out;
 }
 
-.btn-error:disabled {
-    background-color: oklch(var(--er) / var(--tw-bg-opacity));
-}
-
-.btn-warning:disabled {
-    background-color: oklch(var(--wa) / var(--tw-bg-opacity));
-}
-
-.btn-success:disabled {
-    background-color: oklch(var(--su) / var(--tw-bg-opacity));
-}
-
 .mixer-header.bg-success {
-    @apply font-semibold text-primary-content;
+    @apply text-primary-content font-semibold;
 }

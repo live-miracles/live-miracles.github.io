@@ -8,6 +8,8 @@ function getPlayer(type, value, id) {
 
     if (type === 'SS') {
         return getCustomPlayer('./screen-share.html?' + urlParams);
+    } else if (type === 'CU' && value.endsWith('.m3u8')) {
+        return getCustomPlayer(`./m3u8-player.html?` + urlParams);
     } else if (type === 'CU' || value === '') {
         return getCustomPlayer(value);
     } else if (type === 'YT') {
@@ -16,6 +18,8 @@ function getPlayer(type, value, id) {
         return getYouTubePlayer(value, urlParams, false);
     } else if (type === 'JW') {
         return getJWPlayer(value, urlParams);
+    } else if (type === 'VC') {
+        return getVCPlayer(value, urlParams);
     } else if (type === 'FB') {
         return getFacebookPlayer(value, urlParams);
     } else {
@@ -62,11 +66,22 @@ function getJWPlayer(value, urlParams) {
     return iframe;
 }
 
+function getVCPlayer(value, urlParams) {
+    const iframe = document.createElement('iframe');
+    iframe.className = 'player';
+    iframe.src = `https://player.vdocipher.com/live?liveId=${value}&preview=true?autoplay=1&${urlParams}`;
+    iframe.title = 'VdoCipher Player';
+    iframe.frameBorder = '0';
+    iframe.allow = 'encrypted-media; autoplay; fullscreen; clipboard-read; clipboard-write;';
+    iframe.allowfullscreen = true;
+    return iframe;
+}
+
 function getFacebookPlayer(value, urlParams) {
     const iframe = document.createElement('iframe');
     iframe.src = `https://www.facebook.com/video/embed?video_id=${value}&${urlParams}`;
     iframe.className = 'player fb-video';
-    iframe.frameborder = '0';
+    iframe.frameBorder = '0';
     iframe.allow = 'autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share';
     iframe.allowfullscreen = 'true';
     iframe.setAttribute('allowFullScreen', 'true');

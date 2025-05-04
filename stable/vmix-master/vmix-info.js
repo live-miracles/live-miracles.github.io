@@ -88,15 +88,15 @@ function renderVmixInfo(box) {
     const preview = info.inputs[info.preview];
     box.querySelector('.vmixInfo').innerHTML = `
       <div class="mb-1">
-        <span class="badge font-semibold px-1 rounded">${info.preset}</span>
-        ${info.recording ? '<span class="badge badge-error badge-outline px-1 rounded">REC</span>' : ''}
-        ${info.external ? '<span class="badge badge-error badge-outline px-1 rounded">EXT</span>' : ''}
-        ${info.stream ? '<span class="badge badge-error badge-outline px-1 rounded">STREAM</span>' : ''}
-         ${info.fadeToBlack ? '<span class="badge badge-error badge-outline px-1 rounded">FTB</span>' : ''}
+        <span class="badge font-semibold px-1 rounded-xs">${info.preset}</span>
+        ${info.recording ? '<span class="badge badge-error badge-outline px-1 rounded-xs">REC</span>' : ''}
+        ${info.external ? '<span class="badge badge-error badge-outline px-1 rounded-xs">EXT</span>' : ''}
+        ${info.stream ? '<span class="badge badge-error badge-outline px-1 rounded-xs">STREAM</span>' : ''}
+         ${info.fadeToBlack ? '<span class="badge badge-error badge-outline px-1 rounded-xs">FTB</span>' : ''}
         ${info.overlays
             .map(
                 (o, i) =>
-                    `<span class="badge badge-success badge-outline px-1 rounded"> ${'<'.repeat(i)}${o}${'>'.repeat(i)}</span>`,
+                    `<span class="badge badge-success badge-outline px-1 rounded-xs"> ${'<'.repeat(i)}${o}${'>'.repeat(i)}</span>`,
             )
             .filter(Boolean)
             .join('\n')}
@@ -159,6 +159,9 @@ function renderVmixInfo(box) {
             })
             .join('')}
       </ol>`;
+
+    const volumeCanvas = box.querySelector('.volume-canvas');
+    drawAudioLevels(volumeCanvas, vmixInfo.value.audio[getBusName('M')]);
 }
 
 function getBusName(bus, capital = false) {
@@ -209,4 +212,13 @@ function getVolumeInfo(input) {
         gain = ' | ' + input.gainDb + 'dB';
     }
     return Math.round(input.volume) + '%' + gain;
+}
+
+function drawAudioLevels(canvas, input) {
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, 100, 100);
+    const left = Math.log10(parseFloat(input.meterF1)) * 20;
+    const right = Math.log10(parseFloat(input.meterF2)) * 20;
+    drawDbMeter(ctx, 0, left, input.muted === 'True');
+    drawDbMeter(ctx, 52, right, input.muted === 'True');
 }

@@ -60,6 +60,13 @@ function renderCustomFunctions() {
         min: '0',
         max: '60000',
     };
+    const scriptName = {
+        name: 'script-name',
+        type: 'text',
+        placeholder: 'Script Name',
+        value: '',
+        width: 'w-26',
+    };
 
     const buttons = [
         { func: 'StartExternal', inputs: [] },
@@ -84,6 +91,8 @@ function renderCustomFunctions() {
         { func: 'SetPosition', inputs: [min, sec, input] },
         { func: 'StartCountdown', inputs: [input] },
         { func: 'StopCountdown', inputs: [input] },
+        { func: 'ScriptStart', inputs: [scriptName] },
+        { func: 'ScriptStop', inputs: [scriptName] },
     ];
 
     let innerHTML = '';
@@ -101,7 +110,7 @@ function renderCustomFunctions() {
                 type="${input.type}"
                 placeholder="${input.placeholder}"
                 name: "${input.name}"
-                class="${input.name}-param input input-xs input-bordered ${input.width}"
+                class="${input.name}-param input input-xs ${input.width}"
                 value="${input.value}"
                 min="${input.min}"
                 max="${input.max}" />`,
@@ -129,6 +138,7 @@ function renderCustomFunctions() {
             const minParam = container.querySelector('.min-param');
             const secParam = container.querySelector('.sec-param');
             const msParam = container.querySelector('.ms-param');
+            const scriptNameParam = container.querySelector('.script-name-param');
 
             let request = 'Function=' + btn.innerHTML;
             if (inputParam?.value) {
@@ -145,6 +155,9 @@ function renderCustomFunctions() {
             if (minParam?.value && secParam?.value) {
                 request +=
                     '&Value=' + (parseInt(minParam.value) * 60 + parseInt(secParam.value)) + '000';
+            }
+            if (scriptNameParam?.value) {
+                request += '&Value=' + scriptNameParam.value;
             }
             customExecution(request);
         };

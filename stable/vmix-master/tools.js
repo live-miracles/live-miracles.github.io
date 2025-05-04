@@ -131,7 +131,7 @@ function showLog(url, status, value, error, time) {
     if (status === 200) {
         show(url, message);
     } else {
-        showError(url, message);
+        showError(url, message + ' || ' + error);
     }
 }
 
@@ -139,8 +139,8 @@ function storeLog(url, status, value, error, time) {
     const logs = localStorage.getItem('vmix-master-logs')
         ? JSON.parse(localStorage.getItem('vmix-master-logs'))
         : [];
-    logs.unshift({ time: time, url: url, status, value: value, error: error });
-    localStorage.setItem('logs', JSON.stringify(logs.slice(0, LOG_SIZE)));
+    logs.unshift({ time: time, url: url, status, value: value, error: String(error) });
+    localStorage.setItem('vmix-master-logs', JSON.stringify(logs.slice(0, LOG_SIZE)));
 }
 
 function showStoredLogs() {
@@ -191,6 +191,43 @@ function ensureArray(element) {
     } else {
         return [element];
     }
+}
+
+// Draw the segmented dB meter with peak indicator
+function drawDbMeter(ctx, xOffset, dB, muted) {
+    const canvasHeight = 100;
+
+    // Define dB ranges and colors
+    const dbRanges = [
+        { min: -100, max: -90, frac: 0.07, colorOn: '#008000', colorOff: '#008080' },
+        { min: -90, max: -36, frac: 0.28, colorOn: '#008000', colorOff: '#008080' },
+        { min: -36, max: -18, frac: 0.25, colorOn: '#00c000', colorOff: '#00c0c0' },
+        { min: -18, max: -6, frac: 0.25, colorOn: '#00ff00', colorOff: '#00ffff' },
+        { min: -6, max: -1, frac: 0.12, colorOn: '#ffff00', colorOff: '#faff74' },
+        { min: -1, max: 0, frac: 0.03, colorOn: '#ff0000', colorOff: '#ff0000' },
+    ];
+
+    let accumulatedHeight = 0; // Track filled height
+
+    dbRanges.forEach((range) => {
+        if (dB >= range.min) {
+            const rangeHeight = range.frac * canvasHeight;
+
+            // Calculate the portion of this range to be filled
+            const filledFraction = Math.min(dB, range.max) - range.min;
+            const filledHeight = (filledFraction / (range.max - range.min)) * rangeHeight;
+
+            // Draw the segment for this range
+            ctx.fillStyle = muted ? range.colorOff : range.colorOn;
+            ctx.fillRect(
+                xOffset,
+                canvasHeight - accumulatedHeight - filledHeight,
+                50,
+                filledHeight,
+            );
+            accumulatedHeight += rangeHeight;
+        }
+    });
 }
 
 function xml2json(xml) {
