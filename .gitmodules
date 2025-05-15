@@ -22,3 +22,6 @@
 [submodule "studio-usage-automation"]
 	path = studio-usage-automation
 	url = git@github.com:live-miracles/studio-usage-automation.git
+[submodule "multi-lang-qa"]
+	path = multi-lang-qa
+	url = git@github.com:live-miracles/multi-lang-qa.git
