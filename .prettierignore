@@ -5,3 +5,4 @@ package-lock.json
 output.css
 stable
 *.min.css
+*.min.js
