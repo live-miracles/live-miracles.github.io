@@ -3,7 +3,6 @@
         "start": "npx nodemon server.js"
     },
     "devDependencies": {
-        "@parcel/watcher-linux-x64-glibc": "^2.5.1",
         "@tailwindcss/cli": "^4.1.3",
         "@tailwindcss/typography": "^0.5.16",
         "daisyui": "^5.0.17",
