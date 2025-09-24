@@ -36,3 +36,7 @@ During live translations, we sometimes use multiple vMix systems. This web inter
 - AudioFade script: this script prevents an abrupt auidio cut during the transitions.
 - DurationTimer script: this script will print in a text input how many minutes:seconds of the video is left.
 - Slave script: when master switches to the input n, this script will cause the current vMix (slave) to follow and switch to input n.
+
+## Contribute
+
+This repo contains the server and dev configs like prettier for the sub-repos. Clone this repo if you want to contribute to any of the projects.
