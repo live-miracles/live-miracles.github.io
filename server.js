@@ -25,7 +25,16 @@ app.get('/', (req, res) => {
     });
 });
 
-app.use('/', express.static(path.join(__dirname, folderName)));
+app.use(
+    '/',
+    express.static(path.join(__dirname, folderName), {
+        setHeaders: (res, filePath) => {
+            if (filePath.endsWith('.vb')) {
+                res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+            }
+        },
+    }),
+);
 
 // Handle 404 errors for undefined routes
 app.use((req, res) => {
