@@ -42,17 +42,20 @@ During live translations, we sometimes use multiple vMix systems. This web inter
 This repo contains the server and dev configs like prettier for the sub-repos.
 
 Clone this repo if you want to contribute to any of the projects.
+
 ```sh
 $ git clone --recurse-submodules git@github.com:live-miracles/live-miracles.github.io.git
 $ make  # will start the server at port 3000
 ```
 
 Adding new repo:
+
 ```sh
 $ git submodule add https://github.com/user/other-repo.git path/inside/your/repo
 ```
 
 Formatting code:
+
 ```sh
 $ make pretty  # Format all files
 $ make pretty DIR=vmix-master  # format files in a specific folder
