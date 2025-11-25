@@ -51,7 +51,7 @@ $ make  # will start the server at port 3000
 Adding new repo:
 
 ```sh
-$ git submodule add https://github.com/user/other-repo.git path/inside/your/repo
+$ git submodule add git@github.com:live-miracles/other-repo.git path/inside/your/repo
 ```
 
 Formatting code:
