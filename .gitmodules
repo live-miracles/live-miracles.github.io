@@ -25,6 +25,3 @@
 [submodule "multi-lang-qa"]
 	path = multi-lang-qa
 	url = git@github.com:live-miracles/multi-lang-qa.git
-[submodule "restreamer"]
-	path = restreamer
-	url = git@github.com:live-miracles/restreamer.git
