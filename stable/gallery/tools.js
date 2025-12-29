@@ -1,24 +1,16 @@
-// ===== Row Utils =====
-function getRowName(row) {
-    return row.querySelector('.row-name').value;
-}
-
-function getRowType(row) {
-    return row.querySelector('.row-type').value;
-}
-
-function getRowValue(row) {
-    return row.querySelector('.row-value').value;
-}
-
 // ===== Document Config & URL Utils =====
-function setInputValue(id, value) {
-    const input = document.getElementById(id, value);
-    console.assert(input !== null, 'Can\'t find element with ID "' + id + '"');
-    if (input === null) {
-        return;
+function getInputValue(input) {
+    if (input.type === 'checkbox') {
+        return input.checked ? '1' : '0';
+    } else if (input.type === 'text' || input.type === 'number') {
+        return input.value;
+    } else {
+        console.error('Unknown input type: ' + input.type);
+        return null;
     }
+}
 
+function setInputValue(input, value) {
     if (input.type === 'checkbox') {
         console.assert(['0', '1'].includes(value));
         input.checked = value === '1';
@@ -29,36 +21,26 @@ function setInputValue(id, value) {
     }
 }
 
-function getBoxUrlParams() {
+function setDocumentUrlParams() {
     const url = window.location.href;
     const searchParams = new URLSearchParams(new URL(url).search);
-    const params = [];
-    searchParams.forEach(function (value, key) {
-        if (key === '' || key.startsWith('__')) return;
-        params.push({ key: key, value: value });
+
+    document.querySelectorAll('.url-param').forEach((input) => {
+        const value = searchParams.get(input.id);
+        if (value) {
+            setInputValue(input, value);
+        }
     });
-    return params;
 }
 
-function getConfigUrlParams() {
-    const url = window.location.href;
-    const searchParams = new URLSearchParams(new URL(url).search);
-    const params = [];
-    searchParams.forEach(function (value, key) {
-        if (key === '' || !key.startsWith('__')) return;
-        params.push({ key: key.substring(2), value: value });
-    });
-    return params;
-}
-
-function parseDocumentConfig() {
+function getDocumentUrlParams() {
     const params = new URLSearchParams();
 
     document.querySelectorAll('.url-param').forEach((input) => {
         if (input.type === 'checkbox') {
-            params.append('__' + input.id, input.checked ? '1' : '0');
-        } else if (input.type === 'text') {
-            params.append('__' + input.id, input.value);
+            params.append(input.id, input.checked ? '1' : '0');
+        } else if (input.type === 'text' || input.type === 'number') {
+            params.append(input.id, input.value);
         } else {
             console.error('unexpected type: ' + input.type);
         }
@@ -66,16 +48,30 @@ function parseDocumentConfig() {
     return params;
 }
 
-function updateUrlParams() {
-    const rowParams = new URLSearchParams();
-    document.querySelectorAll('.row').forEach((row) => {
-        const key = getRowName(row);
-        const val = getRowType(row) + getRowValue(row);
-        if (key === '') return;
-        rowParams.append(key, val);
-    });
-    const configParams = parseDocumentConfig();
-    window.history.pushState({}, '', `?${rowParams.toString()}&${configParams.toString()}`);
+function updateUrlParam(e) {
+    const name = e.currentTarget.id;
+    const value = getInputValue(e.currentTarget);
+
+    const url = new URL(window.location.href);
+    url.searchParams.set(name, value);
+    window.history.replaceState({}, '', url);
+    updateGalleryUrlInput();
+}
+
+function updateBoxesParam() {
+    const boxes = [];
+    const param = Array.from(document.querySelectorAll('.box'))
+        .map((box) => {
+            const name = box.getAttribute('data-name').replace(/[.~]/g, '');
+            const type = box.getAttribute('data-type').replace(/[.~]/g, '');
+            const value = box.getAttribute('data-value').replaceAll('~', '\\~');
+            return name + '.' + type + '.' + value;
+        })
+        .join('~');
+
+    const url = new URL(window.location.href);
+    url.searchParams.set('boxes', param);
+    window.history.replaceState({}, '', url);
     updateGalleryUrlInput();
 }
 
@@ -153,7 +149,9 @@ async function getAvailableMics() {
         await navigator.mediaDevices.getUserMedia({ audio: true });
         const devices = await navigator.mediaDevices.enumerateDevices();
         const audioInputDevices = devices.filter((device) => device.kind === 'audioinput');
-        return audioInputDevices.sort((a, b) => a.label.localeCompare(b.label));
+        return audioInputDevices.sort((a, b) =>
+            a.label.localeCompare(b.label, undefined, { numeric: true, sensitivity: 'base' }),
+        );
     } catch (error) {
         console.error('Error accessing microphones:', error);
         alert('Could not access microphones. Please grant permissions.');
@@ -170,14 +168,10 @@ function parseNumbers(str) {
 }
 
 export {
-    getRowName,
-    getRowType,
-    getRowValue,
-    getBoxUrlParams,
-    setInputValue,
-    getConfigUrlParams,
-    parseDocumentConfig,
-    updateUrlParams,
+    updateBoxesParam,
+    setDocumentUrlParams,
+    getDocumentUrlParams,
+    updateUrlParam,
     generateUUID,
     extractYouTubeId,
     parseSheetBuffer,

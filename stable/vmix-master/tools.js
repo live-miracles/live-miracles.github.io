@@ -193,6 +193,16 @@ function ensureArray(element) {
     }
 }
 
+function formatTimeMMSS(ms) {
+    const totalSeconds = Math.floor(ms / 1000);
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    const pad = (num) => String(num).padStart(2, '0');
+    return `${hours === 0 ? '' : hours + ':'}${pad(minutes)}:${pad(seconds)}`;
+}
+
 // Draw the segmented dB meter with peak indicator
 function drawDbMeter(ctx, xOffset, dB, muted) {
     const canvasHeight = 100;

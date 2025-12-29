@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>vMix Master</title>
     <link rel="icon" type="image/png" href="./logo.svg" />
-    <link rel="stylesheet" href="./output.min.css" />
+    <link rel="stylesheet" href="./output.css" />
     <script src="./Sortable.min.js" defer></script>
     <script src="./tools.js" defer></script>
     <script src="./vmix-api.js" defer></script>
@@ -23,23 +23,33 @@
       </div>
       <div class="flex-none">
         <ul class="menu menu-horizontal px-1">
-          <li><a href="/">Home</a></li>
-          <li><a href="/vmix-master/scripts/audio-fade.vb">AudioFade</a></li>
-          <li><a href="/vmix-master/scripts/duration-timer.vb">DurationTimer</a></li>
-          <li><a href="/vmix-master/scripts/slave.vb">Slave</a></li>
+          <li><a href="/stable/vmix-master/">Stable</a></li>
+          <li>
+            <details>
+              <summary>vMix Scripts</summary>
+              <ul class="bg-base-100 rounded-t-none p-2">
+                <li><a href="https://github.com/live-miracles/vmix-master/blob/master/scripts/audio-fade.vb">AudioFade</a></li>
+                <li><a href="https://github.com/live-miracles/vmix-master/blob/master/scripts/duration-timer.vb">DurationTimer</a></li>
+                <li><a href="https://github.com/live-miracles/vmix-master/blob/master/scripts/slave.vb">Slave</a></li>
+                <li><a href="https://github.com/live-miracles/vmix-master/blob/master/scripts/name-slave.vb">NameSlave</a></li>
+                <li><a href="https://github.com/live-miracles/vmix-master/blob/master/scripts/translator.vb">Translator</a></li>
+                <li><a href="https://github.com/live-miracles/vmix-master/blob/master/scripts/auto-gain.vb">AutoGain</a></li>
+              </ul>
+            </details>
+          </li>
           <li><a href="https://github.com/live-miracles/vmix-master/">GitHub</a></li>
         </ul>
       </div>
     </div>
 
-    <div class="focus flex hidden flex-col items-center">
+    <div class="focus flex flex-col items-center">
       <div class="flex w-full flex-wrap p-2">
         <div class="flex min-w-full items-center justify-center">
           <button id="add-box" class="btn btn-outline btn-secondary flex">Add Instance</button>
           <button id="refresh-all" class="btn btn-outline btn-secondary mx-3 flex">Refresh All</button>
           <label class="input input-secondary w-fit">
             Refresh Rate (sec)
-            <input id="refresh-rate" class="url-param w-12" name="refreshRate" type="number" min="1" value="5" placeholder="sec" />
+            <input id="refresh-rate" class="url-param w-12" name="refreshRate" type="number" min="1" value="1" placeholder="sec" />
           </label>
         </div>
       </div>
@@ -122,7 +132,7 @@
     </div>
 
     <div
-      class="logs border-secondary bg-base-300 fixed right-1 bottom-1 mx-auto hidden h-[280px] w-[685px] w-[700px] overflow-y-scroll rounded-lg border p-1 opacity-80"></div>
+      class="logs border-secondary bg-base-300 fixed right-1 bottom-1 mx-auto hidden h-[280px] w-[700px] overflow-y-scroll rounded-lg border p-1 opacity-80"></div>
 
     <div class="bg-neutral fixed right-9 bottom-2 rounded-xs px-3">
       <label class="swap m-1">
@@ -144,7 +154,7 @@
       </label>
 
       <label class="swap m-1">
-        <input id="show-custom-functions" type="checkbox" class="show-toggle url-param" />
+        <input id="show-custom-functions" type="checkbox" class="show-toggle url-param" checked />
         <div class="badge swap-on badge-secondary rounded-xs py-3">custom</div>
         <div class="badge swap-off badge-secondary badge-outline rounded-xs py-3">custom</div>
       </label>
@@ -158,13 +168,79 @@
 
     <div class="divider focus mt-5 hidden">Documentation</div>
     <div class="prose focus mx-auto hidden max-w-3xl px-5">
-      You can read official vMix API documentation here:
-      <a href="https://www.vmix.com/help25/index.htm?DeveloperAPI.html">vmix.com/help25/index.htm?DeveloperAPI.html</a>
-
-      <h3>How to Use</h3>
       You won't be able to access the vMix API over HTTPS, so you'll need to download the source code from GitHub. You can either clone the repository
       if you have <b>Git</b> installed, or click <b>Code</b> → <b>Download ZIP</b>. After this go to the <code>vmix-master/</code> folder and open the
       <code>index.html</code> file in the Chrome browser.
+
+      <h3>vMix Scripts</h3>
+      <h4>vMix Audio Handling</h4>
+      <p>
+        The audio volume science is a little bit hard to understand and vMix in addition also makes it even more complicated by using different
+        scales. Here is some background on the Decibel (dB) based scales (like "volumeThreshold"), the formulas how the scales can be converted, and
+        some examples:
+      </p>
+
+      <pre>
+Scales:
+    Volume:      0 to 100    (used for UI volume bars, SetVolumeFade)
+    Amplitude:   0 to 1      (used for API audio bus meter, @meterF1)
+    Amplitude2:  0 to 100    (used for API input volume input, @volume)
+    Decibels:    -oo to 0    (used in audio science)
+
+Formulas:
+    Amplitude    = Amplitude2 / 100
+    Amplitude2   = Amplitude * 100
+    Volume       = (Amplitude ^ 0.25) * 100
+    Amplitude    = (Volume / 100) ^ 4
+    Decibels     = 20 * Math.Log10(Amplitude)
+    Amplitude    = 10 ^ (Decibels / 20)
+
+Examples:
+    ==== METER (measured) ===============      ==== CONTROL =============
+    Volume (%) Amplitude  Decibel (dB FS)      Volume (%) Decibel (dB FS) *
+    ---------- ---------- ---------------      ---------- ---------------
+    100        1,0000        0,00              100        - 18,00
+     95        0,8145     -  1,78               95        - 19,78
+     90        0,6561     -  3,66               90        - 21,66
+     85        0,5220     -  5,65               85        - 23,65
+     80        0,4096     -  7,75               80        - 25,75
+     75        0,3164     - 10,00               75        - 28,00
+     70        0,2401     - 12,39               70        - 30,39
+     65        0,1785     - 14,97               65        - 32,97
+     60        0,1296     - 17,75               60        - 35,75
+     55        0,0915     - 20,77               55        - 38,77
+     50        0,0625     - 24,08               50        - 42,08
+     45        0,0410     - 27,74               45        - 45,74
+     40        0,0256     - 31,84               40        - 49,84
+     35        0,0150     - 36,47               35        - 54,47
+     30        0,0081     - 41,83               30        - 59,83
+     25        0,0039     - 48,16               25        - 66,16
+     20        0,0016     - 55,92               20        - 73,92
+     15        0,0005     - 65,91               15        - 83,91
+     10        0,0001     - 80,00               10        - 98,00
+      5        0,0000     -104,08                5        -122,08
+      1        0,0000     -160,00                1        -178,08
+      0        0,0000     -    oo                0        -    oo
+
+  (*) for a usual incoming voice signal of -18 dB FS
+</pre
+      >
+
+      <p>
+        <strong>Attention:</strong> Keep in mind that 100% of a Volume Meter corresponds to 0 dB FS, while 100% of the Volume Bar corresponds to the
+        full incoming signal (usually about the target loudness of -18 dB FS for voice). So, if you attenuate by targeting a Volume Bar of 50%, you
+        are reducing your incoming signal BY(!) -24 dB relative, and NOT TO(!) -24 dB absolute.
+      </p>
+
+      <h3>Links</h3>
+      You can check out some usefull scripts
+      <ul>
+        <li>
+          Official vMix API documentation:
+          <a href="https://www.vmix.com/help29/DeveloperAPI.html">www.vmix.com/help29/DeveloperAPI.html</a>
+        </li>
+        <li>Usefull vMix Scripts by RSE: <a href="https://github.com/rse/vmix-scripts">github.com/rse/vmix-scripts</a></li>
+      </ul>
     </div>
 
     <div class="h-10"></div>

@@ -2,10 +2,6 @@ function initBoxes() {
     document.querySelectorAll('.box').forEach((box) => addMuteAction(box));
 }
 
-function addResetOnclick() {
-    document.querySelectorAll('.reset-btn').forEach((btn) => (btn.onclick = initBoxes));
-}
-
 function addMuteAction(box) {
     const boxId = box.getAttribute('data-id');
     console.assert(boxId);
@@ -31,8 +27,10 @@ function addMuteAction(box) {
 
     const installedBadge = document.getElementById('installedBadge');
     console.assert(installedBadge);
+    installedBadge.classList.add('badge-success');
     installedBadge.classList.remove('badge-error');
     installedBadge.innerHTML = 'Installed';
+
     const warningElem = document.getElementById('outdated-extension-warning');
     console.assert(warningElem);
     const extVersion = chrome.runtime.getManifest().version;
@@ -43,9 +41,7 @@ function addMuteAction(box) {
     }
 
     initBoxes();
-    addResetOnclick();
-    document.getElementById('update-rows').addEventListener('click', initBoxes);
-    document.getElementById('add-data-row').addEventListener('click', addResetOnclick);
+    document.getElementById('add-box-btn').addEventListener('click', initBoxes);
 
     const audioLevelsElem = document.getElementById('audioLevels');
     console.assert(audioLevelsElem);

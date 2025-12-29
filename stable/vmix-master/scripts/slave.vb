@@ -5,7 +5,10 @@
 Dim masterAPI = "http://192.168.x.x:8088/api"
 
 Dim timestamp As String = DateTime.Now.ToString("HH:mm:ss")
-Console.WriteLine(timestamp & " Slave 1.0.4")
+Console.WriteLine(timestamp & " Slave 1.0.5")
+
+Dim loopTime = 300
+Dim transitionBuffer = 3000
 
 Dim localXml As New System.Xml.XmlDocument()
 Dim localResponse As String
@@ -24,7 +27,7 @@ If masterAPI = "http://192.168.x.x:8088/api" Then
 End If
 
 Do While True
-    Sleep(500)
+    Sleep(loopTime)
 
     Try
         localResponse = API.XML()
@@ -41,14 +44,13 @@ Do While True
             API.Function("Stinger1", masterActive)
             timestamp = DateTime.Now.ToString("HH:mm:ss")
             Console.WriteLine(timestamp & " Slave | New active: " & masterActive)
-            Sleep(3000)
+            Sleep(transitionBuffer)
         End If
 
         If masterPreview <> localPreview Then
             API.Function("PreviewInput", masterPreview)
             timestamp = DateTime.Now.ToString("HH:mm:ss")
             Console.WriteLine(timestamp & " Slave | New preview: " & masterPreview)
-            Sleep(500)
         End If
     Catch ex As Exception
         timestamp = DateTime.Now.ToString("HH:mm:ss")

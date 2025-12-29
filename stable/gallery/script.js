@@ -1,115 +1,69 @@
 import {
-    getBoxUrlParams,
-    getConfigUrlParams,
-    setInputValue,
-    updateUrlParams,
+    setDocumentUrlParams,
+    updateUrlParam,
     updateGalleryUrlInput,
     parseNumbers,
     parseSheetBuffer,
 } from './tools.js';
-import { addBox, getBoxes } from './box.js';
-import { addRow, updateRowNumbers } from './row.js';
+import { addBox, getBoxes, updateBoxNumbers } from './box.js';
 
-function initRows() {
-    document.getElementById('data-rows').innerHTML = '';
-    const urlParams = getBoxUrlParams();
-    if (urlParams.length === 0) {
-        addRow();
-    }
-    urlParams.forEach((param) => {
-        addRow(param.key, param.value.substring(0, 2), param.value.substring(2));
-    });
-}
-
-function updateRows() {
-    updateUrlParams();
-    updateBoxes();
-    updateRowNumbers();
-}
-
-function updateBoxes() {
+function initBoxes() {
     document.getElementById('gallery').innerHTML = '';
-    const urlParams = getBoxUrlParams();
-    urlParams.forEach((param) => {
-        addBox(param.key, param.value.substring(0, 2), param.value.substring(2));
-    });
-}
 
-function setInputElements() {
-    const urlParams = getConfigUrlParams();
-    urlParams.forEach((param) => setInputValue(param.key, param.value));
-}
-
-function showElements() {
-    document.querySelectorAll('.show-toggle').forEach((elem) => {
-        const name = elem.id.slice('show-'.length);
-        const show = elem.checked;
-        document.querySelectorAll('.' + name).forEach((e) => {
-            if (show) {
-                e.classList.remove('hidden');
-            } else {
-                e.classList.add('hidden');
-            }
-        });
-    });
-}
-
-let rotationInterval = null;
-function muteRotation() {
-    const toggleElem = document.getElementById('mute-rotation');
-    const checked = toggleElem.checked;
-    if (!checked) {
-        clearInterval(rotationInterval);
-        return;
+    const params = new URLSearchParams(window.location.search);
+    const boxesParam = params.get('boxes') ? params.get('boxes') : '';
+    const boxes = boxesParam
+        .split(/(?<!\\)~/)
+        .filter(Boolean)
+        .map((str) => str.split('.', 3))
+        .forEach((param) => addBox(param[0], param[1], param[2].replaceAll('\\~', '~')));
+    if (boxesParam === '') {
+        addBox();
     }
+}
+
+function getRotationBoxes() {
     const allBoxes = getBoxes();
-    const boxesElem = document.getElementById('rotation-boxes');
-    const rotationBoxes = parseNumbers(boxesElem.value);
-    const boxes =
-        boxesElem.value === ''
-            ? allBoxes
-            : rotationBoxes.map((i) => allBoxes[i - 1]).filter(Boolean);
-    if (boxes.length < 2) {
-        setTimeout(() => toggleElem.click(), 350);
-        boxesElem.classList.add('border-error');
-        return;
-    }
-    boxesElem.classList.remove('border-error');
+    const boxesText = document.getElementById('rotation-boxes').value.trim();
+    if (boxesText === '') return allBoxes;
 
-    const timeElem = document.getElementById('rotation-time');
-    const time = parseInt(timeElem.value);
-    if (isNaN(time) || time <= 0) {
-        setTimeout(() => toggleElem.click(), 350);
-        timeElem.classList.add('border-error');
-        return;
-    }
-    timeElem.classList.remove('border-error');
+    const rotationBoxes = parseNumbers(boxesText);
+    return rotationBoxes.map((i) => allBoxes[i - 1]).filter(Boolean);
+}
 
-    let i = 1;
-    boxes[0].querySelector('.solo-btn').click();
-    rotationInterval = setInterval(() => {
-        const box = boxes[i];
-        i = (i + 1) % boxes.length;
-        box.querySelector('.solo-btn').click();
-    }, time * 1000);
+function rotateAudio(index = 0, waitTime = -1) {
+    const time = parseInt(document.getElementById('rotation-time').value);
+    const rotationTime = isNaN(time) ? 1 : Math.max(1, time);
+
+    const isRotationEnabled = document.getElementById('mute-rotation').checked;
+    if (isRotationEnabled) {
+        if (waitTime === -1 || waitTime >= rotationTime) {
+            const boxes = getRotationBoxes();
+            const len = boxes.length;
+            const newIndex = len === 0 ? 0 : (index + 1) % len;
+            setTimeout(() => rotateAudio(newIndex, 0), 1000);
+            if (len === 0) return;
+            boxes[index % len].querySelector('.solo-btn').click();
+        } else {
+            setTimeout(() => rotateAudio(index, waitTime + 1), 1000);
+        }
+    } else {
+        setTimeout(rotateAudio, 1000);
+    }
 }
 
 (() => {
     updateGalleryUrlInput();
-    setInputElements();
+    setDocumentUrlParams();
 
     window.mics = [];
-    initRows();
 
-    updateBoxes();
+    initBoxes();
     document
         .querySelectorAll('.url-param')
-        .forEach((elem) => elem.addEventListener('change', updateUrlParams));
+        .forEach((elem) => elem.addEventListener('change', updateUrlParam));
 
-    showElements();
-    document
-        .querySelectorAll('.show-toggle')
-        .forEach((elem) => elem.addEventListener('click', showElements));
+    document.getElementById('add-box-btn').addEventListener('click', () => addBox());
 
     const base = window.location.origin + window.location.pathname;
     const galleryUrl = document.getElementById('gallery-url');
@@ -130,8 +84,8 @@ function muteRotation() {
             e.target.value = paste;
         } else {
             const rows = parseSheetBuffer(paste);
-            const pairs = rows.map((r) => r.key + '=YT' + r.value);
-            e.target.value = base + '?' + pairs.join('&');
+            const param = rows.map((r) => r.key + '.YT.' + r.value).join('~');
+            e.target.value = base + '?boxes=' + param;
         }
     };
     galleryUrl.addEventListener('keydown', (e) => {
@@ -140,21 +94,12 @@ function muteRotation() {
         }
     });
 
-    document.getElementById('add-data-row').addEventListener('click', () => addRow());
-    document.getElementById('update-rows').addEventListener('click', updateRows);
+    rotateAudio();
 
-    const muteRotationToggle = document.getElementById('mute-rotation');
-    muteRotationToggle.addEventListener('click', muteRotation);
-    if (muteRotationToggle.checked) {
-        muteRotationToggle.click();
-        muteRotationToggle.click();
-    }
-
-    const dataRows = document.getElementById('data-rows');
-    new Sortable(dataRows, {
+    new Sortable(document.getElementById('gallery'), {
         animation: 150,
         handle: '.handle', // Draggable by the entire row
         ghostClass: 'bg-base-300', // Adds a class for the dragged item
-        onSort: updateRowNumbers,
+        onSort: updateBoxNumbers,
     });
 })();

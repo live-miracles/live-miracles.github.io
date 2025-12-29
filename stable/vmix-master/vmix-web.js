@@ -95,7 +95,6 @@ function prerenderVmixWeb() {
 }
 
 async function renderVmixWeb() {
-    const vmixContainer = document.getElementById('vmix-container');
     const masterInput = document.getElementById('master');
 
     const master = getMaster();
@@ -137,6 +136,10 @@ async function renderVmixWeb() {
         const inputElem = document.getElementById('input-' + i);
         inputElem.classList.add('hidden');
         inputElem.classList.remove('inline-block');
+
+        const mixerElem = document.getElementById('mixer-' + i);
+        mixerElem.classList.add('hidden');
+        mixerElem.classList.remove('inline-block');
     }
 
     ['M', 'A', 'B'].forEach((bus) => {
@@ -279,7 +282,10 @@ function getInputProgress(input) {
 }
 
 function getInputVolume(input) {
-    const gain = input.gainDb === undefined ? '' : ' | ' + input.gainDb + 'dB';
+    let gain = '';
+    if (input.gainDb !== undefined && input.gainDb !== '0') {
+        gain = ' | ' + Math.round(input.gainDb * 100) / 100 + 'dB';
+    }
     return Math.round(input.volume) + '%' + gain;
 }
 

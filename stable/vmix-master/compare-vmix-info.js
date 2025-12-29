@@ -1,5 +1,5 @@
 function extractLeadingNumbers(input) {
-    const match = input.match(/^(Virtual - )?(\d+_(?:\d+_)?)/);
+    const match = input.match(/^(Virtual - )?(\d+(?:_\d+)?)/);
     if (match) {
         return match[1] ? match[1] + match[2] : match[2];
     }
@@ -36,12 +36,13 @@ function compareSlaves() {
          <li>Compare first slave's vMix Call settings with others
            (<code>callVideoSource</code>, <code>callAudioSource</code>).</li>
          <li>Compare master input <b>leading numbers</b> with slaves.</li>
-         <li>Compare master input <b>types</b> with slaves (only for inputs with a leading number).</li>
-         <li>Compare master input <b>layers</b> with slaves (only for inputs with a leading number).</li>
+         <li>Compare master input <b>types</b> with slaves.</li>
+         <li>Compare master input <b>layers</b> with slaves.</li>
+         <li>Compare master input <b>duration</b> with slaves.</li>
        </ul>
 
-       <b>P.S.</b> Leading number means something like <code>05_</code>, <code>05_3_</code>
-       or <code>05_03_</code>.`;
+       The comparison will be done only for inputs with a <b>leading number</b> like <code>05</code>, <code>05_3</code>
+       or <code>05_03</code>.`;
     const master = getMaster();
     if (master === null) {
         compareReport.className = className + 'border-info prose';
@@ -133,7 +134,7 @@ function compareSlaves() {
                 continue;
             }
 
-            // check leading numbers (e.g. 05_)
+            // check leading numbers (e.g. 05, 05_1)
             const leadNum2 = extractLeadingNumbers(input2.title);
             if (leadNum1 !== leadNum2) {
                 msg = `vMix #${num2} input ${i} starts with "${leadNum2}" instead of "${leadNum1}".`;
@@ -169,6 +170,15 @@ function compareSlaves() {
             if (input1.overlays.length < input2.overlays.length) {
                 msg = `vMix #${num2} input ${i} has ${input2.overlays.length} layer(s) while master has ${input1.overlays.length} layer(s).`;
                 errors.push(getError('additional layers', msg));
+            }
+
+            // check input duration
+            const dur1 = parseInt(input1.duration);
+            const dur2 = parseInt(input2.duration);
+            const durDiff = Math.round(Math.abs(dur1 - dur2) / 1000);
+            if (durDiff >= 5) {
+                msg = `vMix #${num2} input ${i} has duration ${formatTimeMMSS(dur2)} is different from master's ${formatTimeMMSS(dur1)} by ${durDiff}s.`;
+                warnings.push(getWarning('type mismatch', msg));
             }
         }
     });

@@ -1,12 +1,13 @@
 {
     "name": "Live Streaming Gallery",
-    "version": "2.0.0",
+    "version": "4.0.0",
     "description": "Miscellaneous features for Live Streaming Gallery",
     "permissions": ["storage", "tabs"],
     "host_permissions": [
         "https://*.youtube-nocookie.com/*",
         "https://*.youtube.com/*",
         "https://*.innerengineering.vualto.com/*",
+        "https://player.vdocipher.com/*",
         "https://*.facebook.com/v3.2/plugins/*",
         "https://live-miracles.github.io/gallery/*",
         "https://live-miracles.github.io/stable/gallery/*",
@@ -28,6 +29,11 @@
             "all_frames": true
         },
         {
+            "matches": ["https://player.vdocipher.com/live?*"],
+            "js": ["messages.js", "utils.js", "vc-iframe.js"],
+            "all_frames": true
+        },
+        {
             "matches": [
                 "https://live-miracles.github.io/gallery/screen-share.html*",
                 "https://live-miracles.github.io/stable/gallery/screen-share.html*",
@@ -35,6 +41,16 @@
                 "http://localhost:3000/stable/gallery/screen-share.html*"
             ],
             "js": ["messages.js", "utils.js", "ss-iframe.js"],
+            "all_frames": true
+        },
+        {
+            "matches": [
+                "https://live-miracles.github.io/gallery/m3u8-player.html*",
+                "https://live-miracles.github.io/stable/gallery/m3u8-player.html*",
+                "http://localhost:3000/gallery/m3u8-player.html*",
+                "http://localhost:3000/stable/gallery/m3u8-player.html*"
+            ],
+            "js": ["messages.js", "utils.js", "mu-iframe.js"],
             "all_frames": true
         },
         {
@@ -50,7 +66,10 @@
                 "http://localhost:3000/gallery/*",
                 "http://localhost:3000/stable/gallery/*"
             ],
-            "exclude_matches": ["*://*/*.html*"],
+            "exclude_matches": [
+                "*://*/gallery/screen-share.html*",
+                "*://*/gallery/m3u8-player.html*"
+            ],
             "js": ["messages.js", "content-script.js"]
         }
     ],
@@ -64,6 +83,12 @@
             ]
         }
     ],
+    "icons": {
+        "16": "assets/16.png",
+        "32": "assets/32.png",
+        "48": "assets/48.png",
+        "128": "assets/128.png"
+    },
     "action": {
         "default_icon": {
             "16": "assets/16.png",

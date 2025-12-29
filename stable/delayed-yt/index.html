@@ -1,12 +1,14 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="night">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Delayed YouTube</title>
     <script src="./tools.js" defer></script>
+    <script src="./render.js" defer></script>
+    <script src="./status-update.js" defer></script>
     <script src="./script.js" defer></script>
-    <link rel="stylesheet" href="./output.css" />
+    <link rel="stylesheet" href="./output.min.css" />
     <link rel="icon" type="image/png" href="./logo.png" />
   </head>
   <body class="scrollbar-none">
@@ -23,7 +25,7 @@
         allowfullscreen></iframe>
     </div>
 
-    <div id="delay-info" class="fixed right-2 top-2 z-50 hidden rounded px-4 py-2 text-sm opacity-30 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
+    <div id="delay-info" class="fixed top-2 right-2 z-50 hidden rounded px-4 py-2 text-sm opacity-30 drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
       ...
     </div>
 
@@ -34,7 +36,16 @@
       <strong>Delay:</strong> <span id="delay-stat">...</span>
       <span class="mx-1">||</span>
       New Delay
-      <input type="number" class="input input-xs input-bordered w-14 text-secondary" placeholder="Delay" value="900" min="0" id="new-delay" />
+      <label class="input input-sm ml-2 w-fit">
+        h:<input required type="text" class="text-secondary w-5" placeholder="hh" value="0" id="new-delay-hour" /> m:<input
+          required
+          type="text"
+          class="text-secondary w-5"
+          placeholder="mm"
+          value="15"
+          id="new-delay-min" />
+        s:<input required type="text" class="text-secondary w-5" placeholder="ss" value="0" id="new-delay-sec" />
+      </label>
       <button class="btn btn-outline btn-secondary btn-xs" onclick="updateDelay()">Update</button>
       <span class="mx-1">||</span>
       <button class="btn btn-outline btn-secondary btn-xs" onclick="adjustDelay(60)">-60s</button>
@@ -46,15 +57,36 @@
       <span class="mx-1">||</span>
     </div>
 
-    <div class="navbar mb-2 mt-10 bg-base-100">
+    <div class="m-auto mt-10 w-fit px-1 text-center">
+      <div class="my-2 w-fit">
+        YouTube Video ID
+        <input required type="text" placeholder="Enter Video ID" class="url-param input text-secondary ml-2 w-32" value="jfKfPfyJRdk" id="video-id" />
+      </div>
+
+      <div class="my-2 w-fit">
+        Starting Delay (minimum 10 min)
+
+        <label class="input ml-2 w-fit">
+          hour:<input required type="number" class="url-param text-secondary w-9" placeholder="hh" value="0" min="0" id="delay-hour" />
+
+          min:<input required type="number" class="url-param text-secondary w-9" placeholder="mm" value="15" min="0" id="delay-min" />
+
+          sec:<input required type="number" class="url-param text-secondary w-9" placeholder="ss" value="0" min="0" id="delay-sec" />
+        </label>
+      </div>
+
+      <button class="btn btn-outline btn-secondary my-2" onclick="loadNewVideo()">Update</button>
+    </div>
+
+    <div class="navbar bg-base-100 mt-10 mb-2">
       <div class="flex-1">
         <a class="btn btn-ghost text-xl" href="/">Delayed YouTube</a>
       </div>
       <div class="flex-none">
         <ul class="menu menu-horizontal px-1">
           <li><a href="/">Home</a></li>
-          <li><a href="/delayed-yt/controls.html" target="_blank">Controls</a></li>
-          <li><a href="https://github.com/live-miracles/delayed-yt/" target="_blank">GitHub</a></li>
+          <li><a href="/delayed-yt/stats/">Stats</a></li>
+          <li><a href="https://github.com/live-miracles/delayed-yt/">GitHub</a></li>
         </ul>
       </div>
     </div>
@@ -73,49 +105,16 @@
         <strong>Note 1:</strong> Due to YouTube limitations, the script only works for streams that started at least 30min ago. For newly started
         streams, the script will not correct the skipping.<br /><br />
 
-        <strong>Note 2:</strong> You can't go to LIVE because the minimum delay is set to 600s (10min). If you click the <b>LIVE</b> button, the
-        script will think that YouTube skipped and will take you back.<br /><br />
+        <strong>Note 2:</strong> You can't go to LIVE because the minimum delay is set to 10min. If you click the <b>LIVE</b> button, the script will
+        think that YouTube skipped and will take you back.
       </p>
     </div>
 
-    <div class="mx-auto my-5 w-[400px]">
-      <div class="flex items-center justify-between border-b p-4">
-        YouTube Video ID
-        <input
-          type="text"
-          placeholder="Enter Video ID"
-          class="input input-bordered float-right w-52 text-secondary"
-          value="jfKfPfyJRdk"
-          id="videoId" />
-      </div>
-
-      <div class="flex items-center justify-between border-b p-4">
-        Starting Delay (sec)
-        <label class="ml-4 inline-flex cursor-pointer items-center">
-          <input
-            type="number"
-            class="input input-bordered float-right w-52 text-secondary"
-            placeholder="Enter Delay"
-            value="900"
-            min="600"
-            id="delay" />
-        </label>
-      </div>
-
-      <div class="flex items-center justify-between p-4">
-        Enhanced Privacy Player
-        <label class="ml-4 inline-flex cursor-pointer items-center">
-          <input type="checkbox" class="checkbox-secondary checkbox float-right" id="privacy" />
-        </label>
-      </div>
-      <button class="btn btn-outline btn-secondary btn-sm my-2" onclick="loadNewVideo()">Update</button>
-    </div>
-
-    <footer class="footer footer-center mt-10 bg-base-300 p-4 text-base-content">
+    <footer class="footer footer-center bg-base-300 text-base-content mt-10 p-4">
       <aside>
         <p>
           For any bug / feature requests, please open an issue in our
-          <a class="link" href="https://github.com/live-miracles/delayed-yt/" target="_blank">GitHub</a> repo (ʃƪ˶˘ ﻬ ˘˶).
+          <a class="link" href="https://github.com/live-miracles/delayed-yt/">GitHub</a> repo (ʃƪ˶˘ ﻬ ˘˶).
         </p>
         <p>Check out our <a class="link" href="/">homepage</a> for more streaming tools (=ↀωↀ=).</p>
       </aside>

@@ -78,7 +78,6 @@ function renderVmixInfo(box) {
         box.querySelector('.vmixInfo').innerHTML = '';
         return;
     }
-    const infoDiv = box.getElementsByClassName('vmix-info');
     const info = vmixInfo.value;
     if (info === null) {
         box.querySelector('.vmixInfo').innerHTML = `vMix unavailable (${vmixInfo.error})`;
@@ -150,7 +149,13 @@ function renderVmixInfo(box) {
                 const duration = getInputDuration(input);
                 return (
                     `<li>` +
-                    `<span class="text-secondary">${i}.</span>&nbsp;` +
+                    `<span class="${
+                        input.number === active.number
+                            ? 'text-success font-semibold'
+                            : input.number === preview.number
+                              ? 'text-warning font-semibold'
+                              : 'text-secondary'
+                    }">${i}.</span>&nbsp;` +
                     `${layers}${layers ? '&nbsp;|&nbsp;' : ''}` +
                     `<span class="italic">${duration}</span>${duration ? '&nbsp;|&nbsp;' : ''}` +
                     `${input.title}` +
@@ -168,16 +173,6 @@ function getBusName(bus, capital = false) {
     const name = { M: 'master', A: 'busA', B: 'busB' }[bus];
     console.assert(name !== undefined, bus);
     return capital ? name.charAt(0).toUpperCase() + name.slice(1) : name;
-}
-
-function formatTimeMMSS(ms) {
-    const totalSeconds = Math.floor(ms / 1000);
-    const hours = Math.floor(totalSeconds / 3600);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
-    const seconds = totalSeconds % 60;
-
-    const pad = (num) => String(num).padStart(2, '0');
-    return `${hours === 0 ? '' : hours + ':'}${pad(minutes)}:${pad(seconds)}`;
 }
 
 function getShortInputProgress(input) {
@@ -209,7 +204,7 @@ function getInputDuration(input) {
 function getVolumeInfo(input) {
     let gain = '';
     if (input.gainDb !== undefined && input.gainDb !== '0') {
-        gain = ' | ' + input.gainDb + 'dB';
+        gain = ' | ' + Math.round(input.gainDb * 100) / 100 + 'dB';
     }
     return Math.round(input.volume) + '%' + gain;
 }

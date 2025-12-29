@@ -73,6 +73,14 @@ const vmixInfos = [];
     showStoredLogs();
     showElements();
 
+    if (window.location.protocol === 'http:') {
+        const navbar = document.querySelector('.navbar');
+        navbar.innerHTML = navbar.innerHTML.replaceAll(
+            'https://github.com/live-miracles/vmix-master/blob/master',
+            '/vmix-master',
+        );
+    }
+
     document
         .querySelectorAll('.url-param')
         .forEach((input) => input.addEventListener('change', updateUrlParams));

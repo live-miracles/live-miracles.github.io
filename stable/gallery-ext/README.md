@@ -1,4 +1,6 @@
-# Gallery Chrome Extension
+# [Gallery Chrome Extension](https://live-miracles.github.io/gallery-ext/)
+
+<img width="400" alt="Gallery Chrome Extension" src="https://github.com/user-attachments/assets/c5bd58c8-836c-49cd-b97c-825182708ff3">
 
 Because of the CORS policy, we can't access the videos with JavaScript directly.
 That is why a Chrome Extension is required to enable VU meters, automatic quality adjustment, always staying on LIVE and other features.
