@@ -25,3 +25,6 @@
 [submodule "multi-lang-qa"]
 	path = multi-lang-qa
 	url = git@github.com:live-miracles/multi-lang-qa.git
+[submodule "key-vault"]
+	path = key-vault
+	url = git@github.com:live-miracles/key-vault.git
