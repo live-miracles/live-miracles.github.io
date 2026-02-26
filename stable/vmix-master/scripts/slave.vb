@@ -1,6 +1,8 @@
 ' Script name: Slave
+'
 ' When master switches to the input n, this script will
 ' cause the current vMix (slave) to follow and switch to input n.
+'
 ' Update the master IP below:
 Dim masterAPI = "http://192.168.x.x:8088/api"
 

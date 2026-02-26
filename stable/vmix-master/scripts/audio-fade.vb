@@ -1,4 +1,5 @@
 ' Script name: AudioFade
+'
 ' By default, when you transition from one input to another, the audio
 ' stops abruptly. This script makes the audio transition smooth.
 ' The script only applies to inputs with "AudioFade" in the title.

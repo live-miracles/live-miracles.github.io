@@ -1,4 +1,5 @@
-' Script name: DuratronTimer
+' Script name: DurationTimer
+'
 ' This script calculates the remaining time of the current input and
 ' updates this time in the GT input named "DurationTimer".
 ' If the current input has no duration, it will start counting up.
@@ -9,7 +10,7 @@
 ' - turn on "Display 00:00:00 when Stopped"
 
 Dim timestamp As String = DateTime.Now.ToString("HH:mm:ss")
-Console.WriteLine(timestamp & " DurationTimer 1.1.0")
+Console.WriteLine(timestamp & " DurationTimer 1.1.1")
 
 Dim gtInputTitle = "DurationTimer"
 Dim position As Double = 0
@@ -24,7 +25,7 @@ Dim textNode As XmlNode = x.SelectSingleNode("//input[@title='" & gtInputTitle &
 
 If textNode Is Nothing Then
     timestamp = DateTime.Now.ToString("HH:mm:ss")
-    Console.WriteLine(timestamp & " DuratronTimer | Could not find a GT input named '" & gtInputTitle & "'.")
+    Console.WriteLine(timestamp & " DurationTimer | Could not find a GT input named '" & gtInputTitle & "'.")
 
     Dim firstTitle As String = Nothing
     Dim inputNodes As System.Xml.XmlNodeList = x.SelectNodes("//input")
