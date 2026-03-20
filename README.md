@@ -54,6 +54,13 @@ Adding new repo:
 $ git submodule add git@github.com:live-miracles/other-repo.git path/inside/your/repo
 ```
 
+Removing repo:
+```sh
+$ git submodule deinit -f submodule
+$ got rm -f submodule
+$ rm -rf .git/modules/submodule
+```
+
 Formatting code:
 
 ```sh
