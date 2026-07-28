@@ -1,0 +1,136 @@
+@import 'tailwindcss';
+@plugin 'daisyui' {
+    themes: dim --default;
+}
+
+@source './index.html';
+@source './assets/**/*.js';
+@source not '../dist';
+
+@layer base {
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        min-height: 100vh;
+        background:
+            radial-gradient(
+                circle at top left,
+                color-mix(in oklab, var(--color-primary) 16%, transparent),
+                transparent 32rem
+            ),
+            radial-gradient(
+                circle at bottom right,
+                color-mix(in oklab, var(--color-secondary) 14%, transparent),
+                transparent 34rem
+            ),
+            var(--color-base-300);
+    }
+}
+
+@layer components {
+    .readme {
+        color: var(--color-base-content);
+    }
+
+    .readme h1,
+    .readme h2,
+    .readme h3 {
+        margin-top: 1.4em;
+        margin-bottom: 0.65em;
+        font-weight: 700;
+        line-height: 1.15;
+    }
+
+    .readme h1 {
+        font-size: clamp(2rem, 4vw, 3.6rem);
+    }
+
+    .readme h2 {
+        border-bottom: 1px solid color-mix(in oklab, var(--color-base-content) 18%, transparent);
+        padding-bottom: 0.35rem;
+        font-size: clamp(1.45rem, 2.5vw, 2rem);
+    }
+
+    .readme h3 {
+        font-size: 1.2rem;
+    }
+
+    .readme p,
+    .readme li {
+        line-height: 1.75;
+    }
+
+    .readme p,
+    .readme ul,
+    .readme ol,
+    .readme blockquote,
+    .readme pre,
+    .readme table {
+        margin-bottom: 1rem;
+    }
+
+    .readme ul,
+    .readme ol {
+        padding-left: 1.4rem;
+    }
+
+    .readme ul {
+        list-style: disc;
+    }
+
+    .readme ol {
+        list-style: decimal;
+    }
+
+    .readme a {
+        color: var(--color-primary);
+        text-decoration: underline;
+        text-underline-offset: 0.18em;
+    }
+
+    .readme img {
+        max-width: 100%;
+        border-radius: var(--radius-box);
+        border: 1px solid color-mix(in oklab, var(--color-base-content) 12%, transparent);
+    }
+
+    .readme blockquote {
+        border-left: 0.25rem solid var(--color-primary);
+        color: color-mix(in oklab, var(--color-base-content) 78%, transparent);
+        padding-left: 1rem;
+    }
+
+    .readme code {
+        border-radius: var(--radius-selector);
+        background: var(--color-base-300);
+        padding: 0.15rem 0.35rem;
+        font-size: 0.92em;
+    }
+
+    .readme pre {
+        overflow-x: auto;
+        border-radius: var(--radius-box);
+        background: color-mix(in oklab, var(--color-base-300) 84%, black);
+        padding: 1rem;
+    }
+
+    .readme pre code {
+        background: transparent;
+        padding: 0;
+    }
+
+    .readme table {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        border-collapse: collapse;
+    }
+
+    .readme th,
+    .readme td {
+        border: 1px solid color-mix(in oklab, var(--color-base-content) 14%, transparent);
+        padding: 0.65rem 0.8rem;
+    }
+}

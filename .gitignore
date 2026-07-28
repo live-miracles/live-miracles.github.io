@@ -4,3 +4,6 @@ bundle.js
 bundle.json
 .vscode
 .idea
+dist
+dev-server*.log
+serve-*.log
