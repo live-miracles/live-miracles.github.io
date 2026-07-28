@@ -77,6 +77,7 @@ const elements = {
     list: document.querySelector('#project-list'),
     links: document.querySelector('#project-links'),
     stats: document.querySelector('#project-stats'),
+    toc: document.querySelector('#readme-toc'),
     readme: document.querySelector('#readme'),
     status: document.querySelector('#status'),
     drawer: document.querySelector('#project-drawer'),
@@ -95,6 +96,7 @@ const icons = {
     download: `<svg xmlns="http://www.w3.org/2000/svg" class="${iconClass}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>`,
     star: `<svg xmlns="http://www.w3.org/2000/svg" class="${iconClass}" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 2.5 2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.31l-5.8 3.05 1.11-6.46-4.7-4.58 6.49-.94L12 2.5Z"/></svg>`,
     fork: `<svg xmlns="http://www.w3.org/2000/svg" class="${iconClass}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="6" cy="4" r="2"/><circle cx="18" cy="4" r="2"/><circle cx="12" cy="20" r="2"/><path d="M6 6v3a3 3 0 0 0 3 3h3m6-6v3a3 3 0 0 1-3 3h-3m0 0v6"/></svg>`,
+    watch: `<svg xmlns="http://www.w3.org/2000/svg" class="${iconClass}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>`,
 };
 
 projects.forEach((project) => {
@@ -152,11 +154,10 @@ async function loadProject(project) {
     try {
         const readme = await fetchReadme(project.id);
         const html = marked.parse(readme.markdown);
-        elements.readme.innerHTML = DOMPurify.sanitize(
-            rewriteRelativeUrls(html, project.id, readme.branch),
-        );
+        renderReadme(rewriteRelativeUrls(html, project.id, readme.branch));
         setStatus();
     } catch (error) {
+        hideReadmeToc();
         elements.readme.innerHTML = `
             <h2>${project.name}</h2>
             <p>${project.summary}</p>
@@ -173,11 +174,13 @@ function showHome() {
     elements.drawer.checked = false;
     elements.links.replaceChildren();
     elements.stats.replaceChildren();
+    hideReadmeToc();
     elements.readme.innerHTML = '';
     setStatus();
 }
 
 function showReadmeSkeleton() {
+    hideReadmeToc();
     elements.readme.innerHTML = `
         <div class="space-y-5" aria-label="Loading README">
             <div class="skeleton h-12 w-full max-w-xl"></div>
@@ -194,6 +197,91 @@ function showReadmeSkeleton() {
             </div>
         </div>
     `;
+}
+
+function renderReadme(html) {
+    elements.readme.innerHTML = DOMPurify.sanitize(html);
+    renderReadmeToc();
+}
+
+function renderReadmeToc() {
+    const headings = [...elements.readme.querySelectorAll('h1, h2, h3')];
+    const slugCounts = new Map();
+    let skippedFirstTitle = false;
+    const tocItems = headings
+        .map((heading) => {
+            const label = heading.textContent.trim();
+
+            if (!label) {
+                return null;
+            }
+
+            const baseSlug = slugify(label);
+            const count = slugCounts.get(baseSlug) || 0;
+            slugCounts.set(baseSlug, count + 1);
+            heading.id = count ? `${baseSlug}-${count + 1}` : baseSlug;
+
+            if (heading.tagName === 'H1' && !skippedFirstTitle) {
+                skippedFirstTitle = true;
+                return null;
+            }
+
+            return {
+                id: heading.id,
+                label,
+                level: Number(heading.tagName.slice(1)),
+            };
+        })
+        .filter(Boolean);
+
+    if (!tocItems.length) {
+        hideReadmeToc();
+        return;
+    }
+
+    elements.toc.classList.remove('hidden');
+    elements.toc.innerHTML = `
+        <p class="mb-3 font-semibold text-base-content/80">Contents</p>
+        <ol class="space-y-2">
+            ${tocItems
+                .map(
+                    (item) => `
+                        <li class="${item.level > 2 ? 'pl-4' : ''}">
+                            <a class="hover:text-primary block leading-5 ${item.level === 2 ? 'font-semibold text-base-content/80' : ''}" href="#${item.id}">${escapeHtml(item.label)}</a>
+                        </li>
+                    `,
+                )
+                .join('')}
+        </ol>
+    `;
+
+    elements.toc.querySelectorAll('a[href^="#"]').forEach((link) => {
+        link.addEventListener('click', (event) => {
+            event.preventDefault();
+            document.querySelector(link.getAttribute('href'))?.scrollIntoView();
+        });
+    });
+}
+
+function hideReadmeToc() {
+    elements.toc.classList.add('hidden');
+    elements.toc.innerHTML = '';
+}
+
+function slugify(value) {
+    const slug = value
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/(^-|-$)/g, '');
+
+    return slug || 'section';
+}
+
+function escapeHtml(value) {
+    const span = document.createElement('span');
+    span.textContent = value;
+    return span.innerHTML;
 }
 
 async function fetchReadme(projectId) {
@@ -272,13 +360,13 @@ async function loadProjectStats(projectId) {
             return;
         }
 
-        showProjectStats(repo.stargazers_count, repo.forks_count);
+        showProjectStats(repo.stargazers_count, repo.forks_count, repo.subscribers_count);
     } catch {
         elements.stats.replaceChildren();
     }
 }
 
-function showProjectStats(stars, forks) {
+function showProjectStats(stars, forks, watchers) {
     const formatter = Intl.NumberFormat(undefined, {
         notation: 'compact',
         maximumFractionDigits: 1,
@@ -287,11 +375,13 @@ function showProjectStats(stars, forks) {
     elements.stats.innerHTML = `
         <span class="inline-flex items-center gap-1">${icons.star}<span>${formatter.format(stars)}</span></span>
         <span class="inline-flex items-center gap-1">${icons.fork}<span>${formatter.format(forks)}</span></span>
+        <span class="inline-flex items-center gap-1">${icons.watch}<span>${formatter.format(watchers)}</span></span>
     `;
 }
 
 function showProjectStatsSkeleton() {
     elements.stats.innerHTML = `
+        <span class="skeleton h-5 w-12"></span>
         <span class="skeleton h-5 w-12"></span>
         <span class="skeleton h-5 w-12"></span>
     `;

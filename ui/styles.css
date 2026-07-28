@@ -38,6 +38,12 @@
     .readme h1,
     .readme h2,
     .readme h3 {
+        scroll-margin-top: 1.5rem;
+    }
+
+    .readme h1,
+    .readme h2,
+    .readme h3 {
         margin-top: 1.4em;
         margin-bottom: 0.65em;
         font-weight: 700;
