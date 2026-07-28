@@ -4,7 +4,8 @@ const projects = [
     {
         id: 'delayed-yt',
         name: 'Delayed YT',
-        summary: 'A YouTube delay workflow for live production review, timing, and playback checks.',
+        summary:
+            'A YouTube delay workflow for live production review, timing, and playback checks.',
         github: `https://github.com/${organization}/delayed-yt`,
         website: `https://${organization}.github.io/delayed-yt/`,
     },
@@ -216,9 +217,13 @@ async function fetchReadme(projectId) {
 function createProjectLinks(project) {
     return [
         createLink('GitHub', project.github, 'btn-primary', icons.github),
-        project.website ? createLink('Website', project.website, 'btn-accent', icons.website) : null,
+        project.website
+            ? createLink('Website', project.website, 'btn-accent', icons.website)
+            : null,
         project.demo ? createLink('Demo', project.demo, 'btn-accent', icons.demo) : null,
-        project.download ? createLink('Download', project.download, 'btn-accent', icons.download) : null,
+        project.download
+            ? createLink('Download', project.download, 'btn-accent', icons.download)
+            : null,
     ].filter(Boolean);
 }
 
