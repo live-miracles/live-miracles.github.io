@@ -30,7 +30,7 @@
         </header>
 
         <main class="mx-auto flex min-h-screen w-full max-w-6xl flex-col gap-8 px-4 py-6 sm:px-6 lg:px-8">
-          <section id="home" class="grid gap-6 pt-4 lg:min-h-[44vh] lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+          <section id="home" class="pt-4 lg:min-h-[36vh]">
             <div>
               <div class="badge badge-primary badge-outline mb-5">Open tools for live teams</div>
               <h1 class="max-w-3xl text-4xl leading-tight font-bold sm:text-5xl lg:text-6xl">Live Miracles</h1>
@@ -43,36 +43,12 @@
                 demo, or download page.
               </p>
             </div>
-
-            <div class="stats stats-vertical border-base-content/10 bg-base-200/72 sm:stats-horizontal lg:stats-vertical border shadow-xl">
-              <div class="stat">
-                <div class="stat-title">Projects</div>
-                <div class="stat-value text-primary">5</div>
-                <div class="stat-desc">One focused hub</div>
-              </div>
-              <div class="stat">
-                <div class="stat-title">Readmes</div>
-                <div class="stat-value text-secondary">Live</div>
-                <div class="stat-desc">Fetched from GitHub</div>
-              </div>
-              <div class="stat">
-                <div class="stat-title">Deploy</div>
-                <div class="stat-value text-accent">Static</div>
-                <div class="stat-desc">Rendered by CI</div>
-              </div>
-            </div>
           </section>
 
-          <section class="rounded-box border-base-content/10 bg-base-200/82 border p-5 shadow-xl sm:p-7">
+          <section id="project-panel" class="rounded-box border-base-content/10 bg-base-200/68 hidden border p-5 shadow-xl backdrop-blur sm:p-7">
             <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-              <div>
-                <p id="project-eyebrow" class="text-primary text-sm font-semibold tracking-wide uppercase">Overview</p>
-                <h2 id="project-title" class="mt-2 text-3xl font-bold">Select a project</h2>
-                <p id="project-summary" class="text-base-content/70 mt-3 max-w-3xl leading-7">
-                  Choose a project from the sidebar to load its current README and related links.
-                </p>
-              </div>
               <div id="project-links" class="flex flex-wrap gap-2"></div>
+              <div id="project-stats" class="text-base-content/58 flex gap-4 text-sm"></div>
             </div>
 
             <div id="status" class="alert mt-6 hidden"></div>
@@ -84,9 +60,12 @@
       <aside class="drawer-side z-30">
         <label for="project-drawer" aria-label="Close projects" class="drawer-overlay"></label>
         <nav class="border-base-content/10 bg-base-200 min-h-full w-80 border-r p-4">
-          <a href="#home" class="rounded-box mb-6 block px-3 py-2">
-            <span class="block text-xl font-bold">Live Miracles</span>
-            <span class="text-base-content/58 text-sm">Project directory</span>
+          <a href="#home" class="rounded-box mb-6 flex items-center gap-3 px-3 py-2">
+            <img src="https://github.com/live-miracles.png" alt="Live Miracles logo" class="size-11 rounded-box" />
+            <span>
+              <span class="block text-xl font-bold">Live Miracles</span>
+              <span class="text-base-content/58 text-sm">Project directory</span>
+            </span>
           </a>
           <div id="project-list" class="flex flex-col gap-2"></div>
         </nav>
