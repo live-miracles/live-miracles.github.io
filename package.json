@@ -2,7 +2,8 @@
     "scripts": {
         "build": "node scripts/build.js && tailwindcss -i ./ui/styles.css -o ./dist/assets/styles.css --minify",
         "dev": "npm run build && serve dist -l 3000",
-        "format": "prettier --write ."
+        "format": "prettier --write .",
+        "format:check": "prettier --check ."
     },
     "devDependencies": {
         "@tailwindcss/cli": "^4.1.3",
