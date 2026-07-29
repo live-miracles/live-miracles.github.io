@@ -15,7 +15,7 @@ const projects = [
         summary:
             'A browser-based media player for folder-oriented playlists and lightweight playback.',
         github: `https://github.com/${organization}/folder-player`,
-        download: `https://${organization}.github.io/folder-player/`,
+        download: `https://github.com/${organization}/folder-player/releases`,
     },
     {
         id: 'key-vault',
@@ -31,14 +31,13 @@ const projects = [
         summary:
             'A gallery tool for live media workflows, previews, and stream-friendly visual organization.',
         github: `https://github.com/${organization}/live-gallery`,
-        website: `https://${organization}.github.io/live-gallery/`,
+        download: `https://github.com/${organization}/live-gallery/releases`,
     },
     {
         id: 'live-generator',
         name: 'Live Generator',
         summary: 'A live workflow generator for preparing reusable production pages and assets.',
         github: `https://github.com/${organization}/live-generator`,
-        website: `https://${organization}.github.io/live-generator/`,
     },
     {
         id: 'multi-lang-qa',
@@ -46,21 +45,19 @@ const projects = [
         summary:
             'A multilingual question-and-answer workflow for teams handling live language support.',
         github: `https://github.com/${organization}/multi-lang-qa`,
-        website: `https://${organization}.github.io/multi-lang-qa/`,
+        demo: `https://${organization}.github.io/multi-lang-qa/`,
     },
     {
         id: 'restream-srs',
         name: 'Restream SRS',
         summary: 'An SRS-based restreaming setup for routing and relaying live video feeds.',
         github: `https://github.com/${organization}/restream-srs`,
-        website: `https://${organization}.github.io/restream-srs/`,
     },
     {
         id: 'srt-bonding-relay',
         name: 'SRT Bonding Relay',
         summary: 'A relay workflow for resilient SRT transport across bonded network paths.',
         github: `https://github.com/${organization}/srt-bonding-relay`,
-        website: `https://${organization}.github.io/srt-bonding-relay/`,
     },
     {
         id: 'vmix-master',
@@ -73,6 +70,8 @@ const projects = [
 
 const elements = {
     home: document.querySelector('#home'),
+    homeStats: document.querySelector('#home-stats'),
+    homeTags: document.querySelector('#home-tags'),
     panel: document.querySelector('#project-panel'),
     list: document.querySelector('#project-list'),
     links: document.querySelector('#project-links'),
@@ -89,6 +88,10 @@ marked.setOptions({
 });
 
 const iconClass = 'size-4 shrink-0';
+const compactFormatter = Intl.NumberFormat(undefined, {
+    notation: 'compact',
+    maximumFractionDigits: 1,
+});
 const icons = {
     github: `<svg xmlns="http://www.w3.org/2000/svg" class="${iconClass}" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.79 23.39c.6.11.82-.26.82-.58v-2.02c-3.34.73-4.04-1.42-4.04-1.42-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.57A12 12 0 0 0 12 .5Z"/></svg>`,
     website: `<svg xmlns="http://www.w3.org/2000/svg" class="${iconClass}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 0 20M12 2a15.3 15.3 0 0 0 0 20"/></svg>`,
@@ -114,6 +117,9 @@ projects.forEach((project) => {
     button.addEventListener('click', () => selectProject(project.id));
     elements.list.append(button);
 });
+
+showHomeStatsSkeleton();
+loadHomeStats();
 
 window.addEventListener('hashchange', handleRoute);
 
@@ -284,6 +290,97 @@ function escapeHtml(value) {
     return span.innerHTML;
 }
 
+async function loadHomeStats() {
+    try {
+        const repos = await Promise.all(projects.map((project) => fetchRepo(project.id)));
+        const totals = repos.reduce(
+            (result, repo) => ({
+                stars: result.stars + repo.stargazers_count,
+                forks: result.forks + repo.forks_count,
+                watchers: result.watchers + repo.subscribers_count,
+            }),
+            { stars: 0, forks: 0, watchers: 0 },
+        );
+        const tags = getPopularTags(repos);
+
+        renderHomeStats(totals, tags);
+    } catch {
+        renderHomeStats({ stars: 0, forks: 0, watchers: 0 }, []);
+    }
+}
+
+async function fetchRepo(projectId) {
+    const response = await fetch(`https://api.github.com/repos/${organization}/${projectId}`);
+
+    if (!response.ok) {
+        throw new Error(`GitHub stats unavailable for ${projectId}`);
+    }
+
+    return response.json();
+}
+
+function showHomeStatsSkeleton() {
+    elements.homeStats.innerHTML = `
+        ${createHomeStatSkeleton('Projects', projects.length)}
+        ${createHomeStatSkeleton('Stars')}
+        ${createHomeStatSkeleton('Watchers')}
+        ${createHomeStatSkeleton('Forks')}
+    `;
+    elements.homeTags.innerHTML = `
+        <span class="skeleton h-6 w-20"></span>
+        <span class="skeleton h-6 w-24"></span>
+        <span class="skeleton h-6 w-16"></span>
+    `;
+}
+
+function createHomeStatSkeleton(label, value) {
+    return `
+        <div class="stat">
+            <div class="stat-title">${label}</div>
+            <div class="stat-value text-2xl">${value ?? '<span class="skeleton inline-block h-8 w-16"></span>'}</div>
+        </div>
+    `;
+}
+
+function renderHomeStats(totals, tags) {
+    elements.homeStats.innerHTML = `
+        ${createHomeStat('Projects', projects.length)}
+        ${createHomeStat('Stars', totals.stars, icons.star)}
+        ${createHomeStat('Watchers', totals.watchers, icons.watch)}
+        ${createHomeStat('Forks', totals.forks, icons.fork)}
+    `;
+
+    elements.homeTags.innerHTML = tags.length
+        ? tags.map((tag) => `<span class="badge badge-outline">${escapeHtml(tag)}</span>`).join('')
+        : '<span class="text-base-content/50 text-sm">No popular tags yet</span>';
+}
+
+function createHomeStat(label, value, icon = '') {
+    return `
+        <div class="stat">
+            <div class="stat-title">${label}</div>
+            <div class="stat-value text-2xl">
+                <span class="inline-flex items-center gap-2">${icon}${compactFormatter.format(value)}</span>
+            </div>
+        </div>
+    `;
+}
+
+function getPopularTags(repos) {
+    const tagCounts = new Map();
+
+    repos
+        .flatMap((repo) => repo.topics || [])
+        .forEach((tag) => {
+            tagCounts.set(tag, (tagCounts.get(tag) || 0) + 1);
+        });
+
+    return [...tagCounts.entries()]
+        .sort((first, second) => second[1] - first[1] || first[0].localeCompare(second[0]))
+        .slice(0, 8)
+        .map(([tag]) => tag);
+}
+
 async function fetchReadme(projectId) {
     const branches = ['master'];
 
@@ -349,13 +446,7 @@ function setActiveProject(projectId) {
 
 async function loadProjectStats(projectId) {
     try {
-        const response = await fetch(`https://api.github.com/repos/${organization}/${projectId}`);
-
-        if (!response.ok) {
-            throw new Error(`GitHub stats unavailable for ${projectId}`);
-        }
-
-        const repo = await response.json();
+        const repo = await fetchRepo(projectId);
         if (window.location.hash !== `#${projectId}`) {
             return;
         }
@@ -367,15 +458,10 @@ async function loadProjectStats(projectId) {
 }
 
 function showProjectStats(stars, forks, watchers) {
-    const formatter = Intl.NumberFormat(undefined, {
-        notation: 'compact',
-        maximumFractionDigits: 1,
-    });
-
     elements.stats.innerHTML = `
-        <span class="inline-flex items-center gap-1">${icons.star}<span>${formatter.format(stars)}</span></span>
-        <span class="inline-flex items-center gap-1">${icons.fork}<span>${formatter.format(forks)}</span></span>
-        <span class="inline-flex items-center gap-1">${icons.watch}<span>${formatter.format(watchers)}</span></span>
+        <span class="inline-flex items-center gap-1">${icons.star}<span>${compactFormatter.format(stars)}</span></span>
+        <span class="inline-flex items-center gap-1">${icons.fork}<span>${compactFormatter.format(forks)}</span></span>
+        <span class="inline-flex items-center gap-1">${icons.watch}<span>${compactFormatter.format(watchers)}</span></span>
     `;
 }
 
