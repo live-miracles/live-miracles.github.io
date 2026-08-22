@@ -257,7 +257,7 @@ function renderReadmeToc() {
         })
         .filter(Boolean);
 
-    if (!tocItems.length) {
+    if (tocItems.length <= 1) {
         hideReadmeToc();
         return;
     }
