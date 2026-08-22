@@ -116,13 +116,15 @@ projects.forEach((project) => {
     button.type = 'button';
     button.dataset.projectId = project.id;
     button.innerHTML = `
-        ${
-            project.icon
-                ? `<img src="${project.icon}" alt="" class="rounded-box size-10 shrink-0 object-cover" data-project-icon />`
-                : ''
-        }
         <span class="flex min-w-0 w-full flex-col items-start gap-1">
-            <span class="text-base font-semibold">${project.name}</span>
+            <span class="flex items-center gap-2">
+                ${
+                    project.icon
+                        ? `<img src="${project.icon}" alt="" class="rounded-box size-6 shrink-0 object-cover" data-project-icon />`
+                        : ''
+                }
+                <span class="text-base font-semibold">${project.name}</span>
+            </span>
             <span class="line-clamp-2 text-xs font-normal leading-5 text-base-content/58">${project.summary}</span>
         </span>
     `;
