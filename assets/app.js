@@ -264,7 +264,6 @@ function renderReadmeToc() {
 
     elements.toc.classList.remove('hidden');
     elements.toc.innerHTML = `
-        <p class="mb-3 font-semibold text-base-content/80">Contents</p>
         <ol class="space-y-2">
             ${tocItems
                 .map(
