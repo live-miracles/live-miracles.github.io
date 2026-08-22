@@ -6,6 +6,7 @@ const projects = [
         name: 'Delayed YT',
         summary:
             'A YouTube delay workflow for live production review, timing, and playback checks.',
+        icon: `https://${organization}.github.io/delayed-yt/logo.png`,
         github: `https://github.com/${organization}/delayed-yt`,
         website: `https://${organization}.github.io/delayed-yt/`,
     },
@@ -14,6 +15,7 @@ const projects = [
         name: 'Folder Player',
         summary:
             'A browser-based media player for folder-oriented playlists and lightweight playback.',
+        icon: './assets/folder-player-logo.png',
         github: `https://github.com/${organization}/folder-player`,
         download: `https://github.com/${organization}/folder-player/releases`,
     },
@@ -22,6 +24,7 @@ const projects = [
         name: 'Key Vault',
         summary:
             'A demo-focused secure key vault interface for storing and previewing secrets safely.',
+        icon: `https://${organization}.github.io/key-vault/logo.png`,
         github: `https://github.com/${organization}/key-vault`,
         demo: `https://${organization}.github.io/key-vault/`,
     },
@@ -30,6 +33,7 @@ const projects = [
         name: 'Live Gallery',
         summary:
             'A gallery tool for live media workflows, previews, and stream-friendly visual organization.',
+        icon: './assets/live-gallery-logo.png',
         github: `https://github.com/${organization}/live-gallery`,
         download: `https://github.com/${organization}/live-gallery/releases`,
     },
@@ -44,6 +48,7 @@ const projects = [
         name: 'Multi Lang QA',
         summary:
             'A multilingual question-and-answer workflow for teams handling live language support.',
+        icon: `https://${organization}.github.io/multi-lang-qa/logo.png`,
         github: `https://github.com/${organization}/multi-lang-qa`,
         demo: `https://${organization}.github.io/multi-lang-qa/`,
     },
@@ -51,6 +56,7 @@ const projects = [
         id: 'restream-srs',
         name: 'Restream SRS',
         summary: 'An SRS-based restreaming setup for routing and relaying live video feeds.',
+        icon: './assets/restream-srs-logo.png',
         github: `https://github.com/${organization}/restream-srs`,
     },
     {
@@ -63,6 +69,7 @@ const projects = [
         id: 'vmix-master',
         name: 'vMix Master',
         summary: 'A web controller for coordinating multiple vMix systems during live production.',
+        icon: `https://${organization}.github.io/vmix-master/logo.svg`,
         github: `https://github.com/${organization}/vmix-master`,
         website: `https://${organization}.github.io/vmix-master/`,
     },
@@ -109,11 +116,19 @@ projects.forEach((project) => {
     button.type = 'button';
     button.dataset.projectId = project.id;
     button.innerHTML = `
-        <span class="flex w-full flex-col items-start gap-1">
+        ${
+            project.icon
+                ? `<img src="${project.icon}" alt="" class="rounded-box size-10 shrink-0 object-cover" data-project-icon />`
+                : ''
+        }
+        <span class="flex min-w-0 w-full flex-col items-start gap-1">
             <span class="text-base font-semibold">${project.name}</span>
             <span class="line-clamp-2 text-xs font-normal leading-5 text-base-content/58">${project.summary}</span>
         </span>
     `;
+    button.querySelector('[data-project-icon]')?.addEventListener('error', (event) => {
+        event.currentTarget.hidden = true;
+    });
     button.addEventListener('click', () => selectProject(project.id));
     elements.list.append(button);
 });
