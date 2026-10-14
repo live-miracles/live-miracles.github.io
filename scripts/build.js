@@ -306,7 +306,7 @@ function sidebar(activeId) {
       </aside>`;
 }
 
-function layout({ title, description, canonicalPath, ogImage, activeId, body, head = '' }) {
+function layout({ title, description, canonicalPath, ogImage, activeId, body }) {
     const canonical = `${siteUrl}${canonicalPath}`;
     const image = ogImage || `${siteUrl}/assets/logo.png`;
     return `<!doctype html>
@@ -326,7 +326,6 @@ function layout({ title, description, canonicalPath, ogImage, activeId, body, he
     <meta name="twitter:card" content="${ogImage ? 'summary_large_image' : 'summary'}" />
     <link rel="icon" href="/assets/logo.png" type="image/png" />
     <link rel="stylesheet" href="/assets/styles.css" />
-    ${head}
   </head>
   <body>
     <div class="drawer lg:drawer-open">
@@ -403,15 +402,6 @@ function homePage(data) {
         })
         .join('');
 
-    // The previous single-page site linked projects as /#<project-id>.
-    const redirect = `<script>
-      (function () {
-        var ids = ${JSON.stringify(projects.map((project) => project.id))};
-        var id = location.hash.slice(1);
-        if (ids.indexOf(id) !== -1) location.replace('/projects/' + id + '/');
-      })();
-    </script>`;
-
     const body = `<section class="flex items-center justify-center pt-10 pb-4 text-center sm:pt-16">
             <div class="flex max-w-3xl flex-col items-center">
               <div class="badge badge-primary badge-outline mb-5">Open tools for live teams</div>
@@ -435,7 +425,6 @@ function homePage(data) {
         canonicalPath: '/',
         activeId: null,
         body,
-        head: redirect,
     });
 }
 
@@ -630,26 +619,6 @@ function docPage({ project, repo, readme, docs }, doc, index) {
     });
 }
 
-// A page at an old URL (a project's former id) that sends visitors and search
-// engines to the current one.
-function redirectPage(target) {
-    const url = `${siteUrl}${target}`;
-    return `<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Moved</title>
-    <link rel="canonical" href="${url}" />
-    <meta name="robots" content="noindex" />
-    <meta http-equiv="refresh" content="0; url=${target}" />
-  </head>
-  <body>
-    <p>This page has moved to <a href="${target}">${url}</a>.</p>
-  </body>
-</html>
-`;
-}
-
 function notFoundPage() {
     return layout({
         title: `Page not found — ${siteName}`,
@@ -757,18 +726,6 @@ async function main() {
             });
         }
         pageCount += 1 + (entry.docs.length ? entry.docs.length + 1 : 0);
-
-        for (const formerId of entry.project.formerIds ?? []) {
-            const current = projectUrl(entry.project);
-            const former = `/projects/${formerId}/`;
-            const targets = [current];
-            if (entry.docs.length) targets.push(docsUrl(entry.project));
-            targets.push(...entry.docs.map((doc) => doc.url));
-            for (const target of targets) {
-                const oldPath = former + target.slice(current.length);
-                writeFile(path.join(oldPath, 'index.html'), redirectPage(target));
-            }
-        }
     }
     writeFile('404.html', notFoundPage());
     writeFile('sitemap.xml', sitemap(data));
