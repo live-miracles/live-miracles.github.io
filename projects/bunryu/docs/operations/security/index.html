@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en" data-theme="dim">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Security — Bunryu</title>
+    <meta name="description" content="Dashboard/API auth is intentionally simple. It&#39;s a single shared password (see Authentication) behind a session cookie — no per-user accounts, no MFA, no CSRF token beyond SameSite=Strict, and the app" />
+    <link rel="canonical" href="https://live-miracles.github.io/projects/bunryu/docs/operations/security/" />
+    <meta property="og:site_name" content="Live Miracles" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Security — Bunryu" />
+    <meta property="og:description" content="Dashboard/API auth is intentionally simple. It&#39;s a single shared password (see Authentication) behind a session cookie — no per-user accounts, no MFA, no CSRF token beyond SameSite=Strict, and the app" />
+    <meta property="og:url" content="https://live-miracles.github.io/projects/bunryu/docs/operations/security/" />
+    <meta property="og:image" content="https://raw.githubusercontent.com/live-miracles/bunryu/master/.github/assets/pipeline-view.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/assets/logo.png" type="image/png" />
+    <link rel="stylesheet" href="/assets/styles.css" />
+    
+  </head>
+  <body>
+    <div class="drawer lg:drawer-open">
+      <input id="project-drawer" type="checkbox" class="drawer-toggle" />
+      <div class="drawer-content min-h-screen">
+        <header class="navbar border-base-content/10 bg-base-300/92 sticky top-0 z-20 border-b px-4 backdrop-blur lg:hidden">
+          <div class="flex-none">
+            <label for="project-drawer" class="btn btn-square btn-ghost" aria-label="Open projects"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /></svg></label>
+          </div>
+          <div class="flex-1">
+            <a href="/" class="btn btn-ghost text-lg font-bold">Live Miracles</a>
+          </div>
+        </header>
+        <main class="mx-auto flex min-h-screen w-full max-w-6xl flex-col gap-8 px-4 py-6 sm:px-6 lg:px-8">
+          <section class="rounded-box border-base-content/10 bg-base-200/68 border p-5 shadow-xl backdrop-blur sm:p-7">
+            <nav class="text-base-content/60 flex flex-wrap items-center gap-2 text-sm" aria-label="Breadcrumb">
+              <a href="/projects/bunryu/" class="hover:text-primary flex items-center gap-2"><img src="/assets/bunryu-logo.png" alt="" class="rounded-box size-5 bg-base-content p-0.5 shrink-0 object-contain" /><span>Bunryu</span></a>
+              <span aria-hidden="true">›</span><a class="hover:text-primary" href="/projects/bunryu/docs/">Documentation</a><span aria-hidden="true">›</span><span>Operations</span>
+            </nav>
+            <h1 class="mt-3 text-3xl font-bold sm:text-4xl">Security</h1>
+            <details class="rounded-box border-base-content/10 bg-base-300/46 mt-6 border p-4 lg:hidden">
+              <summary class="text-base-content/80 cursor-pointer text-sm font-semibold">Documentation menu</summary>
+              <div class="mt-3"><nav class="lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto" aria-label="Bunryu documentation">
+              <ul class="text-sm"><li><a href="/projects/bunryu/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Overview</a></li><li><a href="/projects/bunryu/docs/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Documentation</a></li></ul>
+              <div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Getting started</div>
+                <ul class="text-sm"><li><a href="/projects/bunryu/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Introduction</a></li><li><a href="/projects/bunryu/docs/getting-started/docker/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Docker</a></li><li><a href="/projects/bunryu/docs/getting-started/install/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Native install</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Usage</div>
+                <ul class="text-sm"><li><a href="/projects/bunryu/docs/usage/publishing/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Publishing to a pipeline</a></li><li><a href="/projects/bunryu/docs/usage/outputs/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Outputs</a></li><li><a href="/projects/bunryu/docs/usage/translation/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Translation outputs</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Operations</div>
+                <ul class="text-sm"><li><a href="/projects/bunryu/docs/operations/security/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 bg-base-100 text-primary font-semibold" aria-current="page">Security</a></li><li><a href="/projects/bunryu/docs/operations/remote-access/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Remote access (Cloudflare Tunnel)</a></li><li><a href="/projects/bunryu/docs/operations/configuration/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Configuration</a></li><li><a href="/projects/bunryu/docs/operations/reliability/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Reliability</a></li><li><a href="/projects/bunryu/docs/operations/known-issues/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Known issues</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Reference</div>
+                <ul class="text-sm"><li><a href="/projects/bunryu/docs/reference/api/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">REST API</a></li><li><a href="/projects/bunryu/docs/reference/development/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Development</a></li></ul>
+              </div>
+            </nav></div>
+            </details>
+            <div class="mt-7 grid gap-8 lg:grid-cols-[15rem_minmax(0,1fr)]">
+              <div class="border-base-content/10 hidden lg:block lg:border-r lg:pr-4"><nav class="lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto" aria-label="Bunryu documentation">
+              <ul class="text-sm"><li><a href="/projects/bunryu/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Overview</a></li><li><a href="/projects/bunryu/docs/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Documentation</a></li></ul>
+              <div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Getting started</div>
+                <ul class="text-sm"><li><a href="/projects/bunryu/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Introduction</a></li><li><a href="/projects/bunryu/docs/getting-started/docker/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Docker</a></li><li><a href="/projects/bunryu/docs/getting-started/install/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Native install</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Usage</div>
+                <ul class="text-sm"><li><a href="/projects/bunryu/docs/usage/publishing/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Publishing to a pipeline</a></li><li><a href="/projects/bunryu/docs/usage/outputs/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Outputs</a></li><li><a href="/projects/bunryu/docs/usage/translation/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Translation outputs</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Operations</div>
+                <ul class="text-sm"><li><a href="/projects/bunryu/docs/operations/security/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 bg-base-100 text-primary font-semibold" aria-current="page">Security</a></li><li><a href="/projects/bunryu/docs/operations/remote-access/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Remote access (Cloudflare Tunnel)</a></li><li><a href="/projects/bunryu/docs/operations/configuration/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Configuration</a></li><li><a href="/projects/bunryu/docs/operations/reliability/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Reliability</a></li><li><a href="/projects/bunryu/docs/operations/known-issues/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Known issues</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Reference</div>
+                <ul class="text-sm"><li><a href="/projects/bunryu/docs/reference/api/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">REST API</a></li><li><a href="/projects/bunryu/docs/reference/development/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Development</a></li></ul>
+              </div>
+            </nav></div>
+              <div class="min-w-0"><details class="rounded-box border-base-content/10 bg-base-300/46 text-base-content/68 mb-7 border p-4 text-sm backdrop-blur">
+              <summary class="text-base-content/80 cursor-pointer font-semibold">On this page</summary>
+              <ol class="mt-3 space-y-2">
+                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#authentication">Authentication</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#why-fail2ban-is-not-used">Why fail2ban is not used</a></li>
+              </ol>
+            </details><article class="readme min-w-0"><p><strong>Dashboard/API auth is intentionally simple.</strong> It&#39;s a single shared password
+(see <a href="#authentication">Authentication</a>) behind a session cookie — no
+per-user accounts, no MFA, no CSRF token beyond <code>SameSite=Strict</code>, and the
+app itself never terminates TLS (it&#39;s plain <code>app.listen</code> on 8080; the
+cookie is only marked <code>Secure</code> when TLS is detected). That&#39;s a deliberate tradeoff, not an
+oversight: this app is designed to be reached through a zero-trust tunnel
+(e.g. Cloudflare Tunnel + Cloudflare Access; see <a href="/projects/bunryu/docs/operations/remote-access/">Remote access</a>) rather than exposed to the raw
+internet. The tunnel is expected to provide TLS, identity-based access
+control, and the real perimeter; the built-in password is just a lightweight
+second factor for whoever&#39;s already authenticated through that layer, plus a
+login-rate-limit (see <code>src/api/auth.ts</code>) against brute force if it&#39;s ever
+reached directly. If you expose port 8080 straight to the internet instead
+of through a tunnel, put a real reverse proxy (TLS + rate limiting) in front
+of it rather than relying on the dashboard password alone.</p>
+<p>Hardening that is on by default:</p>
+<ul>
+<li><strong>Sessions:</strong> 7-day lifetime, stored only as SHA-256 hashes; changing the
+password signs out every other session; new passwords must be ≥ 12 characters;
+the cookie gets <code>Secure</code> when the request came over TLS (directly or via
+<code>X-Forwarded-Proto: https</code>). Logins, logouts and password changes are logged
+with the client IP.</li>
+<li><strong>Login rate limit:</strong> 5 failures per minute per client, grouped per IPv6 /64.
+Behind a proxy set <code>trust_proxy</code>, or every user shares the proxy&#39;s address.</li>
+<li><strong>Headers:</strong> <code>X-Frame-Options: DENY</code>, <code>frame-ancestors &#39;none&#39;</code>, <code>nosniff</code>,
+<code>Referrer-Policy: no-referrer</code>. A full CSP is not possible until the dashboard&#39;s
+inline event handlers are removed.</li>
+<li><strong>Logs are not redacted:</strong> journald, the diagnostics files, the output Error
+History and the dashboard keep FFmpeg&#39;s stderr as-is, including full
+destination URLs, stream keys and SRT passphrases. They are private to the
+server and its operators; redact before copying any of it into a commit or
+issue.</li>
+<li><strong>Output destinations and host probes:</strong> the server will not connect to
+link-local/unspecified addresses (cloud metadata such as <code>169.254.169.254</code>), and
+loopback only on the app&#39;s own RTMP/SRT ports (pipeline-to-pipeline restreams).
+Hosts are resolved the way FFmpeg resolves them, so <code>2130706433</code> or <code>0x7f.1</code> are
+treated as loopback. Private LAN ranges and SRT <code>mode=listener</code> outputs are
+deliberately allowed. Outputs saved before the check existed are re-checked at
+startup and stopped, with the reason shown in the dashboard. Host probes never
+probe loopback. DNS that changes between the check and FFmpeg&#39;s own lookup
+cannot be ruled out.</li>
+<li><strong>HLS previews</strong> require the session cookie, and a preview nobody is fetching or
+keeping alive for 20s is stopped (closing the tab stops it at once). A dashboard
+tab left in the background for several minutes loses its preview and shows it
+stopped.</li>
+<li><strong>Input bounds:</strong> names are at most 80 characters with no control characters;
+destination URLs are at most 2048 characters with no whitespace or <code>&lt; &gt; &quot;</code>;
+audio track counts/indexes are 0–49 (preview <code>audioTrackCount</code> 1–50); <code>publicHost</code>
+must be a hostname or IP. The dashboard escapes everything it renders on top of
+this. Existing longer names are kept but must comply when edited.</li>
+<li><strong>Installer ownership:</strong> <code>/opt/bunryu</code> is root-owned and read-only to the
+service user (root runs code from it on every update); the service user writes
+only to the data and config directories. <code>server-reset-password.sh</code> also signs
+out every existing session.</li>
+<li><strong>Hooks:</strong> <code>/api/srs/*</code> is served only on <code>127.0.0.1:&lt;hook_port&gt;</code>; client IPs in
+hook bodies must be IP literals, so a request cannot forge log lines.</li>
+</ul>
+<p><strong>RTMP/SRT ingest ports (21935, 10080, 10081) are different</strong> — they have
+to stay open to the raw internet so OBS/hardware encoders can reach them, so
+they&#39;re hardened at the SRS/relay layer instead:</p>
+<ul>
+<li>SRT (<code>10080</code>, <code>10081</code>) requires a passphrase, checked at the handshake
+before a connection is accepted at all — see
+<a href="/projects/bunryu/docs/getting-started/install/#srs-and-srt-relay-config">SRS and SRT relay config</a>.</li>
+<li>Every publish attempt (RTMP or SRT) is checked against a per-pipeline
+stream key via SRS&#39;s <code>on_publish</code> hook; unknown keys are rejected before
+any restream starts.</li>
+<li><code>on_play</code> rejects any playback request not from loopback, so the public
+ports are ingest-only — nothing can pull a stream back out through SRS
+directly.</li>
+<li>RTMP listens on a non-default port (<code>21935</code>, not <code>1935</code>) to cut down on
+generic scanner noise.</li>
+<li>Rejected publish/play attempts are logged with the attempted stream name
+(repeated rejections of the same key are throttled to one line a minute),
+but this app does not install fail2ban; see <a href="#why-fail2ban-is-not-used">Why fail2ban is not used</a>.</li>
+<li>Rejected publishes also appear in the dashboard under the pipeline list
+(&quot;Rejected publish attempts&quot;, kept for 5 minutes): one row per <code>keyNN</code> label,
+plus one aggregate &quot;Unrecognized&quot; row per protocol for empty or non-key
+stream names. The row shows how many distinct names it combines (counted by
+an in-memory hash, capped at 100); names are never shown or stored. An SRT encoder on a key with no pipeline
+still connects to the relay and can look healthy on its own side while SRS
+refuses the stream.
+Outside <code>on_play</code> rejections are listed too, marked &quot;Play request&quot;: an SRT
+stream id without <code>m=publish</code> is a play request to SRS, so an encoder with an
+incomplete id lands there rather than in <code>on_publish</code>.</li>
+</ul>
+<p>Never expose <code>1985</code> (SRS HTTP API) or <code>8081</code> (relay status) — the app only
+talks to those over loopback.</p>
+<h2 id="authentication">Authentication</h2>
+<p>The dashboard is protected by a password. <code>dashboard_password</code> in <code>bunryu.json</code> is only the <em>initial</em> password: it is hashed into the database on first boot, and ignored whenever the database already has a password. The installer generates a random one on first install and keeps it on reinstall; if the field is absent (e.g. a dev checkout) the initial password is <code>admin</code>. Change it in <strong>Settings → Change Password</strong> after logging in — that updates the database only, not <code>bunryu.json</code>.</p>
+<p>To reset a forgotten password:</p>
+<pre><code class="language-bash">sudo bash /opt/bunryu/scripts/server-reset-password.sh
+</code></pre>
+<p>This clears the stored password and restarts the service, which re-seeds it from <code>dashboard_password</code> in <code>bunryu.json</code> (<code>admin</code> if unset).</p>
+<h2 id="why-fail2ban-is-not-used">Why fail2ban is not used</h2>
+<p>This repo intentionally does not install or manage fail2ban. Earlier versions
+used it as a narrow RTMP/app-hook protection, but it added root-owned config,
+sudo helper scripts, dashboard whitelist/status UI, and extra test surface while
+leaving the most important SRT gap uncovered.</p>
+<p>Neither SRT listener logs a bad-passphrase rejection in a form fail2ban could
+act on:</p>
+<ul>
+<li>SRS&#39;s own SRT server (port <code>10080</code>) rejects handshakes that fail its
+<code>passphrase</code> check — either the peer declares no encryption at all, or
+declares it but <code>SRTO_ENFORCEDENCRYPTION</code> fails the key exchange. Either
+way, the rejection happens <em>inside</em> the SRT handshake, before
+<code>srt_accept()</code> returns, so SRS&#39;s own log (<code>ERROR:UNSECURE</code> / &quot;Password
+required or unexpected&quot;) never records the peer&#39;s IP.</li>
+<li><code>srt-bonding-relay</code>&#39;s listener (port <code>10081</code>) used to log a matchable
+<code>[srt-relay] rejected connection (bad passphrase) from &lt;HOST&gt;</code> line from
+its own <code>srt_accept()</code> KMSTATE check, and a dedicated <code>srt-bonding-relay</code>
+fail2ban jail watched it. As of <code>srt-bonding-relay</code> v2.1.0 that line is no
+longer logged, so a jail would have nothing left to match.</li>
+</ul>
+<p>The app still logs rejected <code>on_publish</code> and <code>on_play</code> attempts (publish
+rejections are throttled per key, so a jail would see fewer lines), which would be
+enough for a fail2ban jail covering repeated bad RTMP stream-key attempts from
+the same IP. That protection is intentionally not included because it is only a
+partial defense: it does not cover SRT bad passphrases, does little against
+distributed attackers, and is not a replacement for a proper edge/firewall
+deployment for high-risk events.</p>
+<p>This is not believed to be a practical brute-force risk: the configured
+passphrase is a long random string, and each guess requires a live SRT handshake
+round trip, so online guessing is computationally infeasible regardless of
+banning. The real effect is possible log/CPU noise from a misconfigured device
+or scanner retrying indefinitely. For small events, keep the deployment simple
+and rely on strong stream keys, a strong SRT passphrase, and the non-default RTMP
+port. For larger or higher-risk events, keep the origin private and put a
+media-aware ingest edge or provider firewall/DDoS layer in front of it.</p>
+</article><a class="link text-base-content/50 mt-6 inline-block text-sm" href="https://github.com/live-miracles/bunryu/blob/master/docs/3-operations/1-security.md">Edit this page on GitHub</a><div class="border-base-content/10 mt-10 grid gap-3 border-t pt-6 sm:grid-cols-2">
+              <a class="rounded-box border-base-content/10 hover:border-primary/50 border p-4" href="/projects/bunryu/docs/usage/translation/"><div class="text-base-content/50 text-xs">Previous</div><div class="font-semibold">Translation outputs</div></a>
+              <a class="rounded-box border-base-content/10 hover:border-primary/50 border p-4 sm:text-right" href="/projects/bunryu/docs/operations/remote-access/"><div class="text-base-content/50 text-xs">Next</div><div class="font-semibold">Remote access (Cloudflare Tunnel)</div></a>
+            </div></div>
+            </div>
+          </section>
+          <footer class="text-base-content/50 border-base-content/10 mt-auto border-t pt-6 pb-2 text-sm">
+            Live Miracles · <a class="link" href="https://github.com/live-miracles">github.com/live-miracles</a>
+          </footer>
+        </main>
+      </div>
+      <aside class="drawer-side z-30">
+        <label for="project-drawer" aria-label="Close projects" class="drawer-overlay"></label>
+        <nav class="border-base-content/10 bg-base-200 min-h-full w-80 border-r p-4" aria-label="Projects">
+          <a href="/" class="rounded-box mb-6 flex items-center gap-3 px-3 py-2">
+            <img src="/assets/logo.png" alt="" class="rounded-box size-11" />
+            <span>
+              <span class="block text-xl font-bold">Live Miracles</span>
+              <span class="text-base-content/58 text-sm">Open tools for live teams</span>
+            </span>
+          </a>
+          <div class="mb-5">
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Streaming &amp; transport</div>
+              <a href="/projects/bunryu/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 bg-base-100 text-primary font-semibold" aria-current="page">
+                <img src="/assets/bunryu-logo.png" alt="" class="rounded-box size-6 bg-base-content p-0.5 shrink-0 object-contain" />
+                <span>Bunryu</span>
+              </a><a href="/projects/srt-bonding-relay/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">S</span>
+                <span>SRT Bonding Relay</span>
+              </a><a href="/projects/delayed-yt/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="https://live-miracles.github.io/delayed-yt/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>Delayed YouTube</span>
+              </a>
+            </div><div class="mb-5">
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">vMix production</div>
+              <a href="/projects/vmix-master/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="https://live-miracles.github.io/vmix-master/logo.svg" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>vMix Master</span>
+              </a><a href="/projects/folder-player/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="/assets/folder-player-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>vMix Folder Player</span>
+              </a>
+            </div><div class="mb-5">
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Monitoring &amp; operations</div>
+              <a href="/projects/live-gallery/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="/assets/live-gallery-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>Live Gallery</span>
+              </a><a href="/projects/wake-up-support/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">W</span>
+                <span>Wake Up Support</span>
+              </a>
+            </div><div class="mb-5">
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Event workflows</div>
+              <a href="/projects/key-vault/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="https://live-miracles.github.io/key-vault/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>Key Vault</span>
+              </a><a href="/projects/live-generator/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">L</span>
+                <span>Live Generator</span>
+              </a><a href="/projects/multi-lang-qa/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="https://live-miracles.github.io/multi-lang-qa/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>Multi Lang QA</span>
+              </a>
+            </div>
+        </nav>
+      </aside>
+    </div>
+  </body>
+</html>

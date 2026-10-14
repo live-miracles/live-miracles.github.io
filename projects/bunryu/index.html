@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en" data-theme="dim">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bunryu — Live Miracles</title>
+    <meta name="description" content="Bunryu (分流, &quot;branching flow&quot;): self-hosted restreaming server. RTMP, SRT and bonded SRT inputs forwarded to many RTMP/SRT destinations, with watchdogs and translation audio mixing." />
+    <link rel="canonical" href="https://live-miracles.github.io/projects/bunryu/" />
+    <meta property="og:site_name" content="Live Miracles" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Bunryu — Live Miracles" />
+    <meta property="og:description" content="Bunryu (分流, &quot;branching flow&quot;): self-hosted restreaming server. RTMP, SRT and bonded SRT inputs forwarded to many RTMP/SRT destinations, with watchdogs and translation audio mixing." />
+    <meta property="og:url" content="https://live-miracles.github.io/projects/bunryu/" />
+    <meta property="og:image" content="https://raw.githubusercontent.com/live-miracles/bunryu/master/.github/assets/pipeline-view.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/assets/logo.png" type="image/png" />
+    <link rel="stylesheet" href="/assets/styles.css" />
+    
+  </head>
+  <body>
+    <div class="drawer lg:drawer-open">
+      <input id="project-drawer" type="checkbox" class="drawer-toggle" />
+      <div class="drawer-content min-h-screen">
+        <header class="navbar border-base-content/10 bg-base-300/92 sticky top-0 z-20 border-b px-4 backdrop-blur lg:hidden">
+          <div class="flex-none">
+            <label for="project-drawer" class="btn btn-square btn-ghost" aria-label="Open projects"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /></svg></label>
+          </div>
+          <div class="flex-1">
+            <a href="/" class="btn btn-ghost text-lg font-bold">Live Miracles</a>
+          </div>
+        </header>
+        <main class="mx-auto flex min-h-screen w-full max-w-6xl flex-col gap-8 px-4 py-6 sm:px-6 lg:px-8">
+          <section class="rounded-box border-base-content/10 bg-base-200/68 border p-5 shadow-xl backdrop-blur sm:p-7">
+            <div class="flex items-start gap-4">
+              <img src="/assets/bunryu-logo.png" alt="" class="rounded-box size-14 bg-base-content p-0.5 shrink-0 object-contain" />
+              <div class="min-w-0">
+                <h1 class="text-3xl font-bold sm:text-4xl">Bunryu</h1>
+                <p class="text-base-content/78 mt-2 text-lg leading-7">Bunryu (分流, &quot;branching flow&quot;): self-hosted restreaming server. RTMP, SRT and bonded SRT inputs forwarded to many RTMP/SRT destinations, with watchdogs and translation audio mixing.</p>
+              </div>
+            </div>
+            <div class="mt-5 flex flex-wrap items-center justify-between gap-4">
+              <div class="flex flex-wrap gap-2"><a class="btn btn-sm btn-primary gap-2" href="https://github.com/live-miracles/bunryu"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.79 23.39c.6.11.82-.26.82-.58v-2.02c-3.34.73-4.04-1.42-4.04-1.42-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.57A12 12 0 0 0 12 .5Z"/></svg><span>GitHub</span></a></div>
+              <div class="text-base-content/58 flex flex-wrap gap-4 text-sm"><span class="inline-flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 2.5 2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.31l-5.8 3.05 1.11-6.46-4.7-4.58 6.49-.94L12 2.5Z"/></svg>5</span><span class="inline-flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="6" cy="4" r="2"/><circle cx="18" cy="4" r="2"/><circle cx="12" cy="20" r="2"/><path d="M6 6v3a3 3 0 0 0 3 3h3m6-6v3a3 3 0 0 1-3 3h-3m0 0v6"/></svg>0</span><span>TypeScript</span><span>MIT license</span><span>Updated 2026-10-14</span></div>
+            </div>
+            <div class="mt-4 flex flex-wrap gap-2"><span class="badge badge-outline badge-sm">bonding</span><span class="badge badge-outline badge-sm">bunryu</span><span class="badge badge-outline badge-sm">daisyui</span><span class="badge badge-outline badge-sm">docker</span><span class="badge badge-outline badge-sm">ffmpeg</span><span class="badge badge-outline badge-sm">live-streaming</span><span class="badge badge-outline badge-sm">livestream</span><span class="badge badge-outline badge-sm">multistreaming</span><span class="badge badge-outline badge-sm">nodejs</span><span class="badge badge-outline badge-sm">obs</span><span class="badge badge-outline badge-sm">restreaming</span><span class="badge badge-outline badge-sm">rtmp</span><span class="badge badge-outline badge-sm">self-hosted</span><span class="badge badge-outline badge-sm">srs</span><span class="badge badge-outline badge-sm">srt</span><span class="badge badge-outline badge-sm">srt-bonding</span><span class="badge badge-outline badge-sm">typescript</span><span class="badge badge-outline badge-sm">youtube-live</span></div>
+            <details class="rounded-box border-base-content/10 bg-base-300/46 mt-6 border p-4 lg:hidden">
+              <summary class="text-base-content/80 cursor-pointer text-sm font-semibold">Documentation menu</summary>
+              <div class="mt-3"><nav class="lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto" aria-label="Bunryu documentation">
+              <ul class="text-sm"><li><a href="/projects/bunryu/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 bg-base-100 text-primary font-semibold" aria-current="page">Overview</a></li><li><a href="/projects/bunryu/docs/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Documentation</a></li></ul>
+              <div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Getting started</div>
+                <ul class="text-sm"><li><a href="/projects/bunryu/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Introduction</a></li><li><a href="/projects/bunryu/docs/getting-started/docker/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Docker</a></li><li><a href="/projects/bunryu/docs/getting-started/install/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Native install</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Usage</div>
+                <ul class="text-sm"><li><a href="/projects/bunryu/docs/usage/publishing/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Publishing to a pipeline</a></li><li><a href="/projects/bunryu/docs/usage/outputs/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Outputs</a></li><li><a href="/projects/bunryu/docs/usage/translation/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Translation outputs</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Operations</div>
+                <ul class="text-sm"><li><a href="/projects/bunryu/docs/operations/security/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Security</a></li><li><a href="/projects/bunryu/docs/operations/remote-access/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Remote access (Cloudflare Tunnel)</a></li><li><a href="/projects/bunryu/docs/operations/configuration/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Configuration</a></li><li><a href="/projects/bunryu/docs/operations/reliability/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Reliability</a></li><li><a href="/projects/bunryu/docs/operations/known-issues/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Known issues</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Reference</div>
+                <ul class="text-sm"><li><a href="/projects/bunryu/docs/reference/api/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">REST API</a></li><li><a href="/projects/bunryu/docs/reference/development/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Development</a></li></ul>
+              </div>
+            </nav></div>
+            </details>
+            <div class="mt-7 grid gap-8 lg:grid-cols-[15rem_minmax(0,1fr)]">
+              <div class="border-base-content/10 hidden lg:block lg:border-r lg:pr-4"><nav class="lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto" aria-label="Bunryu documentation">
+              <ul class="text-sm"><li><a href="/projects/bunryu/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 bg-base-100 text-primary font-semibold" aria-current="page">Overview</a></li><li><a href="/projects/bunryu/docs/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Documentation</a></li></ul>
+              <div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Getting started</div>
+                <ul class="text-sm"><li><a href="/projects/bunryu/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Introduction</a></li><li><a href="/projects/bunryu/docs/getting-started/docker/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Docker</a></li><li><a href="/projects/bunryu/docs/getting-started/install/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Native install</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Usage</div>
+                <ul class="text-sm"><li><a href="/projects/bunryu/docs/usage/publishing/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Publishing to a pipeline</a></li><li><a href="/projects/bunryu/docs/usage/outputs/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Outputs</a></li><li><a href="/projects/bunryu/docs/usage/translation/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Translation outputs</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Operations</div>
+                <ul class="text-sm"><li><a href="/projects/bunryu/docs/operations/security/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Security</a></li><li><a href="/projects/bunryu/docs/operations/remote-access/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Remote access (Cloudflare Tunnel)</a></li><li><a href="/projects/bunryu/docs/operations/configuration/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Configuration</a></li><li><a href="/projects/bunryu/docs/operations/reliability/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Reliability</a></li><li><a href="/projects/bunryu/docs/operations/known-issues/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Known issues</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Reference</div>
+                <ul class="text-sm"><li><a href="/projects/bunryu/docs/reference/api/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">REST API</a></li><li><a href="/projects/bunryu/docs/reference/development/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Development</a></li></ul>
+              </div>
+            </nav></div>
+              <div class="min-w-0"><details class="rounded-box border-base-content/10 bg-base-300/46 text-base-content/68 mb-7 border p-4 text-sm backdrop-blur">
+              <summary class="text-base-content/80 cursor-pointer font-semibold">On this page</summary>
+              <ol class="mt-3 space-y-2">
+                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#features">Features</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#quick-start">Quick start</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#documentation">Documentation</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#license">License</a></li>
+              </ol>
+            </details><article class="readme min-w-0"><p><em>Bunryu (分流, &quot;branching flow&quot;): one live stream, many destinations.</em></p>
+<p><a href="https://github.com/live-miracles/bunryu/actions/workflows/ci.yml"><img src="https://github.com/live-miracles/bunryu/actions/workflows/ci.yml/badge.svg" alt="CI" loading="lazy" /></a>
+<a href="https://github.com/live-miracles/bunryu/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License: MIT" loading="lazy" /></a>
+<a href="https://live-miracles.github.io/projects/bunryu/"><img src="https://img.shields.io/badge/website-live--miracles.github.io-blue.svg" alt="Website" loading="lazy" /></a></p>
+<p><strong>Self-hosted restreaming server for long live events.</strong> Take inputs over RTMP, SRT and bonded SRT, and forward each one to many RTMP/RTMPS/SRT destinations (YouTube, Facebook, Twitch, CDNs) from one Linux server. Watchdogs restart a failed output without affecting the others.</p>
+<p>Built on official <a href="https://github.com/ossrs/srs">SRS</a> for ingest, <a href="https://github.com/live-miracles/srt-bonding-relay"><code>srt-bonding-relay</code></a> for bonded SRT ingress, and FFmpeg for outputs, with a Node.js + TypeScript control plane, web dashboard and REST API.</p>
+<table>
+<thead>
+<tr>
+<th><a href="/projects/bunryu/docs/getting-started/install/">Install</a></th>
+<th><a href="/projects/bunryu/docs/getting-started/docker/">Try with Docker</a></th>
+<th><a href="/projects/bunryu/docs/">Documentation</a></th>
+</tr>
+</thead>
+</table>
+<p><img src="https://raw.githubusercontent.com/live-miracles/bunryu/master/.github/assets/pipeline-view.png" alt="Bunryu dashboard: a pipeline with live preview and seven running outputs" loading="lazy" /></p>
+<h2 id="features">Features</h2>
+<ul>
+<li><a href="/projects/bunryu/docs/usage/publishing/">Ingest</a> over RTMP, SRT and bonded SRT, with stream-key authorization and passphrase-protected SRT.</li>
+<li><a href="/projects/bunryu/docs/usage/outputs/">Forward</a> each input to many RTMP, RTMPS or SRT destinations: up to 50 inputs and 500 outputs per server. Copy-mode (passthrough) outputs cost almost no CPU.</li>
+<li><a href="/projects/bunryu/docs/usage/outputs/#video-encoding">Transcode</a> a few outputs to 720p, 1080p or a rotated vertical feed for Shorts/Reels, and <a href="/projects/bunryu/docs/usage/outputs/#audio">select audio tracks</a> per output, including multi-track SRT outputs.</li>
+<li><a href="/projects/bunryu/docs/usage/translation/">Mix translation audio</a> from an interpreter&#39;s pipeline over the source, with speech detection, ducking, delay and restore timing. If the translator drops, the output continues with source audio.</li>
+<li><a href="/projects/bunryu/docs/operations/reliability/">Recover automatically</a>: stall, socket and memory watchdogs with bounded restarts. One failing destination never affects the others.</li>
+<li>Keep <a href="/projects/bunryu/docs/operations/reliability/#input-timestamp-fault-detection">post-incident evidence</a>: per-output Error History with FFmpeg stderr tails, grouped timestamp warnings, and <a href="/projects/bunryu/docs/operations/configuration/">rotated structured diagnostics</a>.</li>
+<li>Watch everything in a live dashboard: HLS preview, ffprobe media details, bitrates, host and per-process CPU/RAM/network charts, and copy-ready publish URLs.</li>
+<li>Restart safely: SRS accepts publishes only once the control plane is ready, and all configuration persists in SQLite.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Overview</th>
+<th>Translation output</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><img src="https://raw.githubusercontent.com/live-miracles/bunryu/master/.github/assets/overview.png" alt="Overview page with host charts and per-process resources" loading="lazy" /></td>
+<td><img src="https://raw.githubusercontent.com/live-miracles/bunryu/master/.github/assets/translation-output.png" alt="Translation output settings" loading="lazy" /></td>
+</tr>
+</tbody></table>
+<h2 id="quick-start">Quick start</h2>
+<p>Try it with Docker:</p>
+<pre><code class="language-bash">git clone https://github.com/live-miracles/bunryu
+cd bunryu
+docker compose up -d
+docker compose logs bunryu | grep &quot;dashboard password&quot;
+</code></pre>
+<p>Open <code>http://localhost:8080</code>, log in with the printed password, create a pipeline and publish to the URL the dashboard shows.</p>
+<p>Install on a server (Debian/Ubuntu, x86_64, systemd), the recommended setup for production:</p>
+<pre><code class="language-bash">sudo git clone https://github.com/live-miracles/bunryu /opt/bunryu
+sudo bash /opt/bunryu/scripts/server-install.sh
+</code></pre>
+<p>The installer prints the dashboard password. See <a href="/projects/bunryu/docs/getting-started/install/">Native install</a> for firewall ports, updates and the SRT passphrase, and <a href="/projects/bunryu/docs/operations/remote-access/">Remote access</a> for reaching the dashboard securely.</p>
+<h2 id="documentation">Documentation</h2>
+<ul>
+<li><strong>Getting started:</strong> <a href="/projects/bunryu/docs/getting-started/introduction/">Introduction</a> · <a href="/projects/bunryu/docs/getting-started/docker/">Docker</a> · <a href="/projects/bunryu/docs/getting-started/install/">Native install</a></li>
+<li><strong>Usage:</strong> <a href="/projects/bunryu/docs/usage/publishing/">Publishing</a> · <a href="/projects/bunryu/docs/usage/outputs/">Outputs</a> · <a href="/projects/bunryu/docs/usage/translation/">Translation outputs</a></li>
+<li><strong>Operations:</strong> <a href="/projects/bunryu/docs/operations/security/">Security</a> · <a href="/projects/bunryu/docs/operations/remote-access/">Remote access</a> · <a href="/projects/bunryu/docs/operations/configuration/">Configuration</a> · <a href="/projects/bunryu/docs/operations/reliability/">Reliability</a> · <a href="/projects/bunryu/docs/operations/known-issues/">Known issues</a></li>
+<li><strong>Reference:</strong> <a href="/projects/bunryu/docs/reference/api/">REST API</a> · <a href="/projects/bunryu/docs/reference/development/">Development</a></li>
+</ul>
+<h2 id="license">License</h2>
+<p><a href="https://github.com/live-miracles/bunryu/blob/master/LICENSE">MIT</a>. SRS, srt-bonding-relay and FFmpeg are separate projects under their own licenses.</p>
+</article></div>
+            </div>
+          </section>
+          <footer class="text-base-content/50 border-base-content/10 mt-auto border-t pt-6 pb-2 text-sm">
+            Live Miracles · <a class="link" href="https://github.com/live-miracles">github.com/live-miracles</a>
+          </footer>
+        </main>
+      </div>
+      <aside class="drawer-side z-30">
+        <label for="project-drawer" aria-label="Close projects" class="drawer-overlay"></label>
+        <nav class="border-base-content/10 bg-base-200 min-h-full w-80 border-r p-4" aria-label="Projects">
+          <a href="/" class="rounded-box mb-6 flex items-center gap-3 px-3 py-2">
+            <img src="/assets/logo.png" alt="" class="rounded-box size-11" />
+            <span>
+              <span class="block text-xl font-bold">Live Miracles</span>
+              <span class="text-base-content/58 text-sm">Open tools for live teams</span>
+            </span>
+          </a>
+          <div class="mb-5">
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Streaming &amp; transport</div>
+              <a href="/projects/bunryu/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 bg-base-100 text-primary font-semibold" aria-current="page">
+                <img src="/assets/bunryu-logo.png" alt="" class="rounded-box size-6 bg-base-content p-0.5 shrink-0 object-contain" />
+                <span>Bunryu</span>
+              </a><a href="/projects/srt-bonding-relay/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">S</span>
+                <span>SRT Bonding Relay</span>
+              </a><a href="/projects/delayed-yt/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="https://live-miracles.github.io/delayed-yt/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>Delayed YouTube</span>
+              </a>
+            </div><div class="mb-5">
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">vMix production</div>
+              <a href="/projects/vmix-master/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="https://live-miracles.github.io/vmix-master/logo.svg" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>vMix Master</span>
+              </a><a href="/projects/folder-player/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="/assets/folder-player-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>vMix Folder Player</span>
+              </a>
+            </div><div class="mb-5">
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Monitoring &amp; operations</div>
+              <a href="/projects/live-gallery/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="/assets/live-gallery-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>Live Gallery</span>
+              </a><a href="/projects/wake-up-support/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">W</span>
+                <span>Wake Up Support</span>
+              </a>
+            </div><div class="mb-5">
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Event workflows</div>
+              <a href="/projects/key-vault/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="https://live-miracles.github.io/key-vault/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>Key Vault</span>
+              </a><a href="/projects/live-generator/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">L</span>
+                <span>Live Generator</span>
+              </a><a href="/projects/multi-lang-qa/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="https://live-miracles.github.io/multi-lang-qa/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>Multi Lang QA</span>
+              </a>
+            </div>
+        </nav>
+      </aside>
+    </div>
+  </body>
+</html>
