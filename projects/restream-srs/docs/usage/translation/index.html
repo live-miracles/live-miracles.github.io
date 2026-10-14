@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en" data-theme="dim">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Translation outputs — Restream SRS</title>
+    <meta name="description" content="A translation output mixes a live interpreter&#39;s audio into an output. It is configured directly on an output: the output&#39;s own pipeline is the source (it supplies the video and source audio), and a se" />
+    <link rel="canonical" href="https://live-miracles.github.io/projects/restream-srs/docs/usage/translation/" />
+    <meta property="og:site_name" content="Live Miracles" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Translation outputs — Restream SRS" />
+    <meta property="og:description" content="A translation output mixes a live interpreter&#39;s audio into an output. It is configured directly on an output: the output&#39;s own pipeline is the source (it supplies the video and source audio), and a se" />
+    <meta property="og:url" content="https://live-miracles.github.io/projects/restream-srs/docs/usage/translation/" />
+    <meta property="og:image" content="https://raw.githubusercontent.com/live-miracles/restream-srs/master/.github/assets/pipeline-view.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/assets/logo.png" type="image/png" />
+    <link rel="stylesheet" href="/assets/styles.css" />
+    
+  </head>
+  <body>
+    <div class="drawer lg:drawer-open">
+      <input id="project-drawer" type="checkbox" class="drawer-toggle" />
+      <div class="drawer-content min-h-screen">
+        <header class="navbar border-base-content/10 bg-base-300/92 sticky top-0 z-20 border-b px-4 backdrop-blur lg:hidden">
+          <div class="flex-none">
+            <label for="project-drawer" class="btn btn-square btn-ghost" aria-label="Open projects"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /></svg></label>
+          </div>
+          <div class="flex-1">
+            <a href="/" class="btn btn-ghost text-lg font-bold">Live Miracles</a>
+          </div>
+        </header>
+        <main class="mx-auto flex min-h-screen w-full max-w-6xl flex-col gap-8 px-4 py-6 sm:px-6 lg:px-8">
+          <section class="rounded-box border-base-content/10 bg-base-200/68 border p-5 shadow-xl backdrop-blur sm:p-7">
+            <nav class="text-base-content/60 flex flex-wrap items-center gap-2 text-sm" aria-label="Breadcrumb">
+              <a href="/projects/restream-srs/" class="hover:text-primary flex items-center gap-2"><img src="/assets/restream-srs-logo.png" alt="" class="rounded-box size-5 bg-base-content p-0.5 shrink-0 object-contain" /><span>Restream SRS</span></a>
+              <span aria-hidden="true">›</span><a class="hover:text-primary" href="/projects/restream-srs/docs/">Documentation</a><span aria-hidden="true">›</span><span>Usage</span>
+            </nav>
+            <h1 class="mt-3 text-3xl font-bold sm:text-4xl">Translation outputs</h1>
+            <details class="rounded-box border-base-content/10 bg-base-300/46 mt-6 border p-4 lg:hidden">
+              <summary class="text-base-content/80 cursor-pointer text-sm font-semibold">Documentation menu</summary>
+              <div class="mt-3"><nav class="lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto" aria-label="Restream SRS documentation">
+              <ul class="text-sm"><li><a href="/projects/restream-srs/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Overview</a></li><li><a href="/projects/restream-srs/docs/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Documentation</a></li></ul>
+              <div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Getting started</div>
+                <ul class="text-sm"><li><a href="/projects/restream-srs/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Introduction</a></li><li><a href="/projects/restream-srs/docs/getting-started/docker/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Docker</a></li><li><a href="/projects/restream-srs/docs/getting-started/install/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Native install</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Usage</div>
+                <ul class="text-sm"><li><a href="/projects/restream-srs/docs/usage/publishing/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Publishing to a pipeline</a></li><li><a href="/projects/restream-srs/docs/usage/outputs/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Outputs</a></li><li><a href="/projects/restream-srs/docs/usage/translation/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 bg-base-100 text-primary font-semibold" aria-current="page">Translation outputs</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Operations</div>
+                <ul class="text-sm"><li><a href="/projects/restream-srs/docs/operations/security/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Security</a></li><li><a href="/projects/restream-srs/docs/operations/remote-access/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Remote access (Cloudflare Tunnel)</a></li><li><a href="/projects/restream-srs/docs/operations/configuration/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Configuration</a></li><li><a href="/projects/restream-srs/docs/operations/reliability/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Reliability</a></li><li><a href="/projects/restream-srs/docs/operations/known-issues/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Known issues</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Reference</div>
+                <ul class="text-sm"><li><a href="/projects/restream-srs/docs/reference/api/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">REST API</a></li><li><a href="/projects/restream-srs/docs/reference/development/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Development</a></li></ul>
+              </div>
+            </nav></div>
+            </details>
+            <div class="mt-7 grid gap-8 lg:grid-cols-[15rem_minmax(0,1fr)]">
+              <div class="border-base-content/10 hidden lg:block lg:border-r lg:pr-4"><nav class="lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto" aria-label="Restream SRS documentation">
+              <ul class="text-sm"><li><a href="/projects/restream-srs/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Overview</a></li><li><a href="/projects/restream-srs/docs/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Documentation</a></li></ul>
+              <div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Getting started</div>
+                <ul class="text-sm"><li><a href="/projects/restream-srs/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Introduction</a></li><li><a href="/projects/restream-srs/docs/getting-started/docker/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Docker</a></li><li><a href="/projects/restream-srs/docs/getting-started/install/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Native install</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Usage</div>
+                <ul class="text-sm"><li><a href="/projects/restream-srs/docs/usage/publishing/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Publishing to a pipeline</a></li><li><a href="/projects/restream-srs/docs/usage/outputs/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Outputs</a></li><li><a href="/projects/restream-srs/docs/usage/translation/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 bg-base-100 text-primary font-semibold" aria-current="page">Translation outputs</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Operations</div>
+                <ul class="text-sm"><li><a href="/projects/restream-srs/docs/operations/security/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Security</a></li><li><a href="/projects/restream-srs/docs/operations/remote-access/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Remote access (Cloudflare Tunnel)</a></li><li><a href="/projects/restream-srs/docs/operations/configuration/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Configuration</a></li><li><a href="/projects/restream-srs/docs/operations/reliability/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Reliability</a></li><li><a href="/projects/restream-srs/docs/operations/known-issues/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Known issues</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Reference</div>
+                <ul class="text-sm"><li><a href="/projects/restream-srs/docs/reference/api/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">REST API</a></li><li><a href="/projects/restream-srs/docs/reference/development/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Development</a></li></ul>
+              </div>
+            </nav></div>
+              <div class="min-w-0"><details class="rounded-box border-base-content/10 bg-base-300/46 text-base-content/68 mb-7 border p-4 text-sm backdrop-blur">
+              <summary class="text-base-content/80 cursor-pointer font-semibold">On this page</summary>
+              <ol class="mt-3 space-y-2">
+                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#signal-flow-and-timing">Signal flow and timing</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#settings">Settings</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#known-limitations">Known limitations</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#recovery-after-a-translator-srt-disconnect-is-slow">Recovery after a translator SRT disconnect is slow</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#sync-is-only-tight-for-srt-sources">Sync is only tight for SRT sources</a></li>
+              </ol>
+            </details><article class="readme min-w-0"><p>A translation output mixes a live interpreter&#39;s audio into an output. It is
+configured directly on an output: the output&#39;s own pipeline is the <strong>source</strong> (it
+supplies the video and source audio), and a second, user-selected pipeline
+supplies the <strong>translator</strong> audio. The mixer publishes the result to that
+output&#39;s destination, so each output can have its own translator and settings.</p>
+<p>The output must use the <strong>Translation</strong> audio encoding and be started by the
+user. The mixer does not create pipelines or start translator inputs
+automatically. If the translator disconnects or is not live, the output keeps
+publishing source audio only; when the translator becomes live again, the
+translated mix resumes.</p>
+<p>Use SRT for both the source and the translator pipeline: it has fixed,
+predictable latency. RTMP inputs have variable buffering, which works against
+the fixed delay and ducking timing this feature relies on; the dashboard warns on
+an output card when either side is RTMP.</p>
+<p>The dashboard&#39;s <strong>User Manual</strong> (the open-book icon in the navbar) has the same
+guide, so it is at hand during an event.</p>
+<h2 id="signal-flow-and-timing">Signal flow and timing</h2>
+<p>The translator audio is delayed before it is mixed into the output. The mixer
+measures the translator&#39;s undelayed audio to detect speech, then uses that
+advance time to lower the source volume before the translated speech becomes
+audible. This avoids the source staying at full volume during the first part of
+each translated sentence.</p>
+<pre><code>                                     ┌─► meter / voice detection
+Translator pipeline ──audio──────────┤
+                                     └─► delay ───────────────┐
+                                                              │
+Source pipeline ──video───────────────────────────────────────┼─► output
+                 audio ──► source gain / ducking ─────────────┘
+
+Source volume
+───────●                       ●─────────
+        \                     /
+         \                   /
+          \                 /
+           ●───────────────●
+           T1              T2
+
+T1: translator speech is detected; source volume fades down.
+T2: translator has been silent long enough; source restores.
+</code></pre>
+<p>The delay should be long enough for the mixer to detect speech before the
+delayed translator audio reaches the output. It is normally paired with the duck
+fade duration: for example, an 800 ms translation delay and a 900 ms source duck
+fade give the source time to move down smoothly. A longer delay gives more
+warning but also increases translation latency. If the translator starts
+speaking again before the restore fade finishes, ducking takes over immediately
+from the current source level instead of finishing the climb back up first.</p>
+<h2 id="settings">Settings</h2>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Translator Pipeline</td>
+<td>Pipeline carrying the translator audio</td>
+</tr>
+<tr>
+<td>Source Track / Translation Input Track</td>
+<td>Which audio track to use from each pipeline</td>
+</tr>
+<tr>
+<td>Translation Delay (ms)</td>
+<td>Delay applied to the audible translator audio</td>
+</tr>
+<tr>
+<td>Voice Threshold (dB)</td>
+<td>Speech detection threshold; a non-positive value such as <code>-20</code></td>
+</tr>
+<tr>
+<td>Source While Speaking (%)</td>
+<td>Source volume while the translator is speaking</td>
+</tr>
+<tr>
+<td>Duck Fade (ms)</td>
+<td>Time used to lower the source volume when speech starts</td>
+</tr>
+<tr>
+<td>Restore After / Volume / Fade</td>
+<td>Silence required before restoring, the restored source volume, and the fade time</td>
+</tr>
+</tbody></table>
+<p>Volumes are percentages from 0 to 100 and map directly to FFmpeg gain: for
+example, 6 means a gain of 0.06, or 6% of the source amplitude.</p>
+<h2 id="known-limitations">Known limitations</h2>
+<h3 id="recovery-after-a-translator-srt-disconnect-is-slow">Recovery after a translator SRT disconnect is slow</h3>
+<p>When a translation output&#39;s translator input drops, the source&#39;s ducked
+volume does not recover for tens of seconds — sometimes a minute or more.
+Reconnecting the translator is fast by comparison (a few seconds). This
+asymmetry is expected: connecting is an edge-triggered, unambiguous event (a
+new publish is immediately visible), but disconnecting is inferred from
+absence, which SRS can&#39;t trust right away — the app only reacts once its
+health poll observes SRS&#39;s own stream list as gone, and SRS itself only
+concludes an SRT peer is dead after its <code>srt_server.peer_idle_timeout</code>
+elapses with nothing received, confirmed via <code>SRTS_BROKEN</code> in the SRS log
+(see <a href="/projects/restream-srs/docs/operations/known-issues/#srs-logs-srts_broken-errors-for-every-srt-play-disconnect-including-clean-ones">Known issues</a>). In the rarer case where the translation mixer&#39;s own
+FFmpeg process also stalls (rather than just losing the translator leg
+cleanly), recovery instead waits on the coarser output-progress-stalled
+watchdog (<code>stallMs</code>, default 45s) to restart it.</p>
+<p><strong>Why this is not tuned lower.</strong> <code>peer_idle_timeout</code> is a single setting on
+SRS&#39;s shared SRT listener — it applies to every SRT input, not just
+translators, including the main broadcast source. SRT exists specifically to
+tolerate lossy/unstable networks; shortening this timeout to speed up
+translator recovery would risk the main source being torn down on a brief,
+real network blip during a live event. A translator SRT drop is rare, and
+the output degrades gracefully in the meantime (it keeps publishing source
+audio throughout), so that tradeoff is not worth the risk to the primary
+broadcast path.</p>
+<p><strong>Mitigation:</strong> none needed — the output stays up on source audio for the
+entire gap. If translator disconnects become frequent enough to matter,
+investigate the translator&#39;s own network path rather than this timeout.</p>
+<h3 id="sync-is-only-tight-for-srt-sources">Sync is only tight for SRT sources</h3>
+<p>Translation pipelines are meant to use SRT inputs. With an SRT source the
+mixed output keeps the source and translator within a fraction of a second
+(measured ~0 s, or up to ~0.7 s translator-behind when the translator also
+sends video), before the configured translation delay is added. This relies
+on the mixer opening the translator first with a short probe; see the comment
+in <code>buildTranslationMixerArgs</code>.</p>
+<p>An RTMP source still works, but SRS&#39;s GOP cache makes every new RTMP player
+start at the last keyframe, so the source can trail the translation by up to
+its keyframe interval (measured −2.2 s to +0.2 s with a 2 s GOP), varying per
+mixer start. This is not compensated: doing so would mean either disabling
+SRS&#39;s GOP cache globally (slower start/restart for every output and preview)
+or estimating the offset at runtime inside a live process.</p>
+<p><strong>Mitigation:</strong> use SRT for translation sources. If RTMP is unavoidable, a
+1 s keyframe interval on the encoder keeps the error near 1 s.</p>
+</article><a class="link text-base-content/50 mt-6 inline-block text-sm" href="https://github.com/live-miracles/restream-srs/blob/master/docs/2-usage/3-translation.md">Edit this page on GitHub</a><div class="border-base-content/10 mt-10 grid gap-3 border-t pt-6 sm:grid-cols-2">
+              <a class="rounded-box border-base-content/10 hover:border-primary/50 border p-4" href="/projects/restream-srs/docs/usage/outputs/"><div class="text-base-content/50 text-xs">Previous</div><div class="font-semibold">Outputs</div></a>
+              <a class="rounded-box border-base-content/10 hover:border-primary/50 border p-4 sm:text-right" href="/projects/restream-srs/docs/operations/security/"><div class="text-base-content/50 text-xs">Next</div><div class="font-semibold">Security</div></a>
+            </div></div>
+            </div>
+          </section>
+          <footer class="text-base-content/50 border-base-content/10 mt-auto border-t pt-6 pb-2 text-sm">
+            Live Miracles · <a class="link" href="https://github.com/live-miracles">github.com/live-miracles</a>
+          </footer>
+        </main>
+      </div>
+      <aside class="drawer-side z-30">
+        <label for="project-drawer" aria-label="Close projects" class="drawer-overlay"></label>
+        <nav class="border-base-content/10 bg-base-200 min-h-full w-80 border-r p-4" aria-label="Projects">
+          <a href="/" class="rounded-box mb-6 flex items-center gap-3 px-3 py-2">
+            <img src="/assets/logo.png" alt="" class="rounded-box size-11" />
+            <span>
+              <span class="block text-xl font-bold">Live Miracles</span>
+              <span class="text-base-content/58 text-sm">Open tools for live teams</span>
+            </span>
+          </a>
+          <div class="mb-5">
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Streaming &amp; transport</div>
+              <a href="/projects/restream-srs/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 bg-base-100 text-primary font-semibold" aria-current="page">
+                <img src="/assets/restream-srs-logo.png" alt="" class="rounded-box size-6 bg-base-content p-0.5 shrink-0 object-contain" />
+                <span>Restream SRS</span>
+              </a><a href="/projects/srt-bonding-relay/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">S</span>
+                <span>SRT Bonding Relay</span>
+              </a><a href="/projects/delayed-yt/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="https://live-miracles.github.io/delayed-yt/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>Delayed YouTube</span>
+              </a>
+            </div><div class="mb-5">
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">vMix production</div>
+              <a href="/projects/vmix-master/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="https://live-miracles.github.io/vmix-master/logo.svg" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>vMix Master</span>
+              </a><a href="/projects/folder-player/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="/assets/folder-player-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>vMix Folder Player</span>
+              </a>
+            </div><div class="mb-5">
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Monitoring &amp; operations</div>
+              <a href="/projects/live-gallery/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="/assets/live-gallery-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>Live Gallery</span>
+              </a><a href="/projects/wake-up-support/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">W</span>
+                <span>Wake Up Support</span>
+              </a>
+            </div><div class="mb-5">
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Event workflows</div>
+              <a href="/projects/key-vault/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="https://live-miracles.github.io/key-vault/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>Key Vault</span>
+              </a><a href="/projects/live-generator/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">L</span>
+                <span>Live Generator</span>
+              </a><a href="/projects/multi-lang-qa/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="https://live-miracles.github.io/multi-lang-qa/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>Multi Lang QA</span>
+              </a>
+            </div>
+        </nav>
+      </aside>
+    </div>
+  </body>
+</html>

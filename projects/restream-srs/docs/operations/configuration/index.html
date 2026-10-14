@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en" data-theme="dim">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Configuration — Restream SRS</title>
+    <meta name="description" content="The app reads runtime settings from restream.json in the app root." />
+    <link rel="canonical" href="https://live-miracles.github.io/projects/restream-srs/docs/operations/configuration/" />
+    <meta property="og:site_name" content="Live Miracles" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Configuration — Restream SRS" />
+    <meta property="og:description" content="The app reads runtime settings from restream.json in the app root." />
+    <meta property="og:url" content="https://live-miracles.github.io/projects/restream-srs/docs/operations/configuration/" />
+    <meta property="og:image" content="https://raw.githubusercontent.com/live-miracles/restream-srs/master/.github/assets/pipeline-view.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/assets/logo.png" type="image/png" />
+    <link rel="stylesheet" href="/assets/styles.css" />
+    
+  </head>
+  <body>
+    <div class="drawer lg:drawer-open">
+      <input id="project-drawer" type="checkbox" class="drawer-toggle" />
+      <div class="drawer-content min-h-screen">
+        <header class="navbar border-base-content/10 bg-base-300/92 sticky top-0 z-20 border-b px-4 backdrop-blur lg:hidden">
+          <div class="flex-none">
+            <label for="project-drawer" class="btn btn-square btn-ghost" aria-label="Open projects"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /></svg></label>
+          </div>
+          <div class="flex-1">
+            <a href="/" class="btn btn-ghost text-lg font-bold">Live Miracles</a>
+          </div>
+        </header>
+        <main class="mx-auto flex min-h-screen w-full max-w-6xl flex-col gap-8 px-4 py-6 sm:px-6 lg:px-8">
+          <section class="rounded-box border-base-content/10 bg-base-200/68 border p-5 shadow-xl backdrop-blur sm:p-7">
+            <nav class="text-base-content/60 flex flex-wrap items-center gap-2 text-sm" aria-label="Breadcrumb">
+              <a href="/projects/restream-srs/" class="hover:text-primary flex items-center gap-2"><img src="/assets/restream-srs-logo.png" alt="" class="rounded-box size-5 bg-base-content p-0.5 shrink-0 object-contain" /><span>Restream SRS</span></a>
+              <span aria-hidden="true">›</span><a class="hover:text-primary" href="/projects/restream-srs/docs/">Documentation</a><span aria-hidden="true">›</span><span>Operations</span>
+            </nav>
+            <h1 class="mt-3 text-3xl font-bold sm:text-4xl">Configuration</h1>
+            <details class="rounded-box border-base-content/10 bg-base-300/46 mt-6 border p-4 lg:hidden">
+              <summary class="text-base-content/80 cursor-pointer text-sm font-semibold">Documentation menu</summary>
+              <div class="mt-3"><nav class="lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto" aria-label="Restream SRS documentation">
+              <ul class="text-sm"><li><a href="/projects/restream-srs/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Overview</a></li><li><a href="/projects/restream-srs/docs/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Documentation</a></li></ul>
+              <div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Getting started</div>
+                <ul class="text-sm"><li><a href="/projects/restream-srs/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Introduction</a></li><li><a href="/projects/restream-srs/docs/getting-started/docker/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Docker</a></li><li><a href="/projects/restream-srs/docs/getting-started/install/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Native install</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Usage</div>
+                <ul class="text-sm"><li><a href="/projects/restream-srs/docs/usage/publishing/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Publishing to a pipeline</a></li><li><a href="/projects/restream-srs/docs/usage/outputs/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Outputs</a></li><li><a href="/projects/restream-srs/docs/usage/translation/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Translation outputs</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Operations</div>
+                <ul class="text-sm"><li><a href="/projects/restream-srs/docs/operations/security/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Security</a></li><li><a href="/projects/restream-srs/docs/operations/remote-access/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Remote access (Cloudflare Tunnel)</a></li><li><a href="/projects/restream-srs/docs/operations/configuration/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 bg-base-100 text-primary font-semibold" aria-current="page">Configuration</a></li><li><a href="/projects/restream-srs/docs/operations/reliability/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Reliability</a></li><li><a href="/projects/restream-srs/docs/operations/known-issues/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Known issues</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Reference</div>
+                <ul class="text-sm"><li><a href="/projects/restream-srs/docs/reference/api/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">REST API</a></li><li><a href="/projects/restream-srs/docs/reference/development/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Development</a></li></ul>
+              </div>
+            </nav></div>
+            </details>
+            <div class="mt-7 grid gap-8 lg:grid-cols-[15rem_minmax(0,1fr)]">
+              <div class="border-base-content/10 hidden lg:block lg:border-r lg:pr-4"><nav class="lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto" aria-label="Restream SRS documentation">
+              <ul class="text-sm"><li><a href="/projects/restream-srs/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Overview</a></li><li><a href="/projects/restream-srs/docs/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Documentation</a></li></ul>
+              <div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Getting started</div>
+                <ul class="text-sm"><li><a href="/projects/restream-srs/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Introduction</a></li><li><a href="/projects/restream-srs/docs/getting-started/docker/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Docker</a></li><li><a href="/projects/restream-srs/docs/getting-started/install/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Native install</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Usage</div>
+                <ul class="text-sm"><li><a href="/projects/restream-srs/docs/usage/publishing/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Publishing to a pipeline</a></li><li><a href="/projects/restream-srs/docs/usage/outputs/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Outputs</a></li><li><a href="/projects/restream-srs/docs/usage/translation/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Translation outputs</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Operations</div>
+                <ul class="text-sm"><li><a href="/projects/restream-srs/docs/operations/security/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Security</a></li><li><a href="/projects/restream-srs/docs/operations/remote-access/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Remote access (Cloudflare Tunnel)</a></li><li><a href="/projects/restream-srs/docs/operations/configuration/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 bg-base-100 text-primary font-semibold" aria-current="page">Configuration</a></li><li><a href="/projects/restream-srs/docs/operations/reliability/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Reliability</a></li><li><a href="/projects/restream-srs/docs/operations/known-issues/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Known issues</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Reference</div>
+                <ul class="text-sm"><li><a href="/projects/restream-srs/docs/reference/api/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">REST API</a></li><li><a href="/projects/restream-srs/docs/reference/development/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Development</a></li></ul>
+              </div>
+            </nav></div>
+              <div class="min-w-0"><article class="readme min-w-0"><p>The app reads runtime settings from <code>restream.json</code> in the app root.</p>
+<p><code>restream.json</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>port</code></td>
+<td><code>8080</code></td>
+<td>App HTTP port</td>
+</tr>
+<tr>
+<td><code>hook_port</code></td>
+<td><code>8082</code></td>
+<td>Loopback-only port for SRS&#39;s <code>on_publish</code>/<code>on_play</code> hooks. Must match the hook URLs in <code>srs.conf</code></td>
+</tr>
+<tr>
+<td><code>trust_proxy</code></td>
+<td><code>0</code></td>
+<td>Reverse-proxy hops whose <code>X-Forwarded-For</code> is trusted for client IPs (login rate limit, logs). Set <code>1</code> behind cloudflared/nginx; leave <code>0</code> when the port is reachable directly</td>
+</tr>
+<tr>
+<td><code>database_path</code></td>
+<td><code>./db.sqlite</code></td>
+<td>SQLite database path</td>
+</tr>
+<tr>
+<td><code>srs_config_path</code></td>
+<td><code>./srs.conf</code></td>
+<td>SRS config path</td>
+</tr>
+<tr>
+<td><code>ffmpeg_path</code></td>
+<td><code>ffmpeg</code></td>
+<td>FFmpeg binary for outputs and previews</td>
+</tr>
+<tr>
+<td><code>ffprobe_path</code></td>
+<td><code>ffprobe</code></td>
+<td>FFprobe binary for input media probing and validation</td>
+</tr>
+<tr>
+<td><code>dashboard_password</code></td>
+<td><code>admin</code></td>
+<td>Initial dashboard password, used only when the database has no password yet (first boot or after a reset). Stored in plain text; the installer sets the file to mode <code>0600</code></td>
+</tr>
+<tr>
+<td><code>output_watchdog.warmup_ms</code></td>
+<td><code>90000</code></td>
+<td>Warmup before stall checks, shared by the output progress watchdog and the translation-mixer watchdogs below</td>
+</tr>
+<tr>
+<td><code>output_watchdog.stall_ms</code></td>
+<td><code>45000</code></td>
+<td>Output progress stall window before restarting FFmpeg</td>
+</tr>
+<tr>
+<td><code>output_watchdog.translator_meter_stale_ms</code></td>
+<td><code>10000</code></td>
+<td>How long a translation output&#39;s translator audio meter can go quiet (including never producing a sample) before the mixer is restarted</td>
+</tr>
+<tr>
+<td><code>output_watchdog.interval_ms</code></td>
+<td><code>5000</code></td>
+<td>Output watchdog polling interval</td>
+</tr>
+<tr>
+<td><code>output_watchdog.socket_warmup_ms</code></td>
+<td><code>15000</code></td>
+<td>Socket watchdog warmup before socket-state checks</td>
+</tr>
+<tr>
+<td><code>output_watchdog.socket_grace_ms</code></td>
+<td><code>30000</code></td>
+<td>Socket warning grace window before restarting FFmpeg</td>
+</tr>
+<tr>
+<td><code>output_watchdog.memory_limit_mb</code></td>
+<td><code>200</code></td>
+<td>FFmpeg RSS limit (MB) before an output is killed and restarted; applies to <code>copy</code> and any <code>videoEncoding</code> not listed below</td>
+</tr>
+<tr>
+<td><code>output_watchdog.memory_limit_mb_by_encoding</code></td>
+<td><code>{vertical_rotate: 450, &quot;720p&quot;: 650, &quot;1080p&quot;: 950}</code></td>
+<td>Per-<code>videoEncoding</code> RSS limit override (MB); libx264 transcode profiles run at a much higher legitimate baseline than <code>copy</code></td>
+</tr>
+</tbody></table>
+<p>Relative file paths are resolved from the app root. Command names like <code>ffmpeg</code>
+and <code>ffprobe</code> are left as command names.</p>
+<p>SRS values are inferred from <code>srs.conf</code>:</p>
+<ul>
+<li>RTMP pull/publish port from top-level <code>listen</code></li>
+<li>SRT pull/publish port from <code>srt_server { listen ... }</code></li>
+<li>SRS HTTP API port from <code>http_api { listen ... }</code></li>
+<li>SRS log tail path from <code>srs_log_file</code>, if present — otherwise the dashboard
+falls back to <code>journalctl -u srs.service</code> (production&#39;s <code>srs.conf</code> logs to
+console/journald instead of a file; only local dev&#39;s still sets <code>srs_log_file</code>)</li>
+</ul>
+<p>The dashboard&#39;s own log and the relay&#39;s log are always read via
+<code>journalctl -u restream-srs.service</code> / <code>-u srt-bonding-relay.service</code> — both only
+ever log to the journal. All three require <code>restream-srs.service</code>&#39;s
+<code>SupplementaryGroups=systemd-journal</code> (set by <code>server-install.sh</code>); without it,
+the Server Logs view shows no output for whichever service&#39;s journal it can&#39;t read.</p>
+<p>The control plane also writes structured diagnostics to
+<code>/var/lib/restream-srs/diagnostics/</code> in production. The rotated JSONL files keep
+output starts/exits/restarts, SRS and relay transitions, input and bonded-leg
+transitions, and FFmpeg timestamp/media-clock warnings for seven days (the last
+ffmpeg stderr tail at exit is included on the exit event; raw stderr isn&#39;t
+streamed to diagnostics to keep incident volume from crowding out the window;
+timestamp warnings are aggregated as described under
+<a href="/projects/restream-srs/docs/operations/reliability/#input-timestamp-fault-detection">Input timestamp fault detection</a>).
+Once per minute it also stores compact health snapshots containing SRT counters,
+leg rates/health, relay forwarding state, and FFmpeg output progress so an
+incident can be investigated after the live one-hour chart window has passed.
+The snapshots also record resource usage: per-output FFmpeg RSS/CPU and memory
+limit (translation mixers included), CPU and RSS for the Node control plane
+(plus its V8 heap), SRS and the SRT relay (the same samples the dashboard
+shows, up to ~10 s old), and host total/available memory and swap. Separately,
+<code>host-memory-low</code> (available memory under 15% of total) and
+<code>host-memory-recovered</code> (back above 20%) events are logged on transition, the
+former with the five largest processes by RSS.
+Files are
+rotated daily or at 100 MB, whichever comes first, with a 5 GB total diagnostics
+cap that removes the oldest rotated files first. The installer configures
+persistent journald with a seven-day retention limit, 1 GB system journal cap,
+256 MB runtime cap, and one-day journal file rotation.</p>
+<p>Relay ports and status polling are read from <code>srt-bonding-relay.json</code>, located beside <code>srs_config_path</code>.</p>
+<p>Installer/development overrides:</p>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Used by</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>REPO_URL</code></td>
+<td><code>server-install.sh</code></td>
+<td>Repository URL cloned into <code>/opt/restream-srs</code> on first install</td>
+</tr>
+<tr>
+<td><code>SRT_RELEASE_TAG</code></td>
+<td><code>server-install.sh</code></td>
+<td>Relay GitHub release tag to install</td>
+</tr>
+<tr>
+<td><code>SRT_URL</code></td>
+<td><code>server-install.sh</code></td>
+<td>Custom relay release archive URL</td>
+</tr>
+<tr>
+<td><code>SRT_SHA256</code></td>
+<td><code>server-install.sh</code></td>
+<td>Expected SHA256 for the relay archive; blank skips verification</td>
+</tr>
+<tr>
+<td><code>WIPE_DB</code></td>
+<td><code>server-install.sh</code></td>
+<td>Set <code>y</code>/<code>n</code> to force or skip wiping the existing SQLite DB</td>
+</tr>
+<tr>
+<td><code>SRS_LOCAL_BIN</code></td>
+<td><code>dev-server-install.sh</code></td>
+<td>Local executable SRS binary to copy into <code>./objs/srs</code></td>
+</tr>
+</tbody></table>
+</article><a class="link text-base-content/50 mt-6 inline-block text-sm" href="https://github.com/live-miracles/restream-srs/blob/master/docs/3-operations/3-configuration.md">Edit this page on GitHub</a><div class="border-base-content/10 mt-10 grid gap-3 border-t pt-6 sm:grid-cols-2">
+              <a class="rounded-box border-base-content/10 hover:border-primary/50 border p-4" href="/projects/restream-srs/docs/operations/remote-access/"><div class="text-base-content/50 text-xs">Previous</div><div class="font-semibold">Remote access (Cloudflare Tunnel)</div></a>
+              <a class="rounded-box border-base-content/10 hover:border-primary/50 border p-4 sm:text-right" href="/projects/restream-srs/docs/operations/reliability/"><div class="text-base-content/50 text-xs">Next</div><div class="font-semibold">Reliability</div></a>
+            </div></div>
+            </div>
+          </section>
+          <footer class="text-base-content/50 border-base-content/10 mt-auto border-t pt-6 pb-2 text-sm">
+            Live Miracles · <a class="link" href="https://github.com/live-miracles">github.com/live-miracles</a>
+          </footer>
+        </main>
+      </div>
+      <aside class="drawer-side z-30">
+        <label for="project-drawer" aria-label="Close projects" class="drawer-overlay"></label>
+        <nav class="border-base-content/10 bg-base-200 min-h-full w-80 border-r p-4" aria-label="Projects">
+          <a href="/" class="rounded-box mb-6 flex items-center gap-3 px-3 py-2">
+            <img src="/assets/logo.png" alt="" class="rounded-box size-11" />
+            <span>
+              <span class="block text-xl font-bold">Live Miracles</span>
+              <span class="text-base-content/58 text-sm">Open tools for live teams</span>
+            </span>
+          </a>
+          <div class="mb-5">
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Streaming &amp; transport</div>
+              <a href="/projects/restream-srs/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 bg-base-100 text-primary font-semibold" aria-current="page">
+                <img src="/assets/restream-srs-logo.png" alt="" class="rounded-box size-6 bg-base-content p-0.5 shrink-0 object-contain" />
+                <span>Restream SRS</span>
+              </a><a href="/projects/srt-bonding-relay/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">S</span>
+                <span>SRT Bonding Relay</span>
+              </a><a href="/projects/delayed-yt/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="https://live-miracles.github.io/delayed-yt/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>Delayed YouTube</span>
+              </a>
+            </div><div class="mb-5">
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">vMix production</div>
+              <a href="/projects/vmix-master/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="https://live-miracles.github.io/vmix-master/logo.svg" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>vMix Master</span>
+              </a><a href="/projects/folder-player/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="/assets/folder-player-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>vMix Folder Player</span>
+              </a>
+            </div><div class="mb-5">
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Monitoring &amp; operations</div>
+              <a href="/projects/live-gallery/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="/assets/live-gallery-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>Live Gallery</span>
+              </a><a href="/projects/wake-up-support/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">W</span>
+                <span>Wake Up Support</span>
+              </a>
+            </div><div class="mb-5">
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Event workflows</div>
+              <a href="/projects/key-vault/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="https://live-miracles.github.io/key-vault/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>Key Vault</span>
+              </a><a href="/projects/live-generator/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">L</span>
+                <span>Live Generator</span>
+              </a><a href="/projects/multi-lang-qa/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="https://live-miracles.github.io/multi-lang-qa/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>Multi Lang QA</span>
+              </a>
+            </div>
+        </nav>
+      </aside>
+    </div>
+  </body>
+</html>

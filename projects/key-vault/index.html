@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en" data-theme="dim">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Key Vault — Live Miracles</title>
+    <meta name="description" content="A safer way to store and share stream keys for big events, with role-based access, on Google Apps Script." />
+    <link rel="canonical" href="https://live-miracles.github.io/projects/key-vault/" />
+    <meta property="og:site_name" content="Live Miracles" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Key Vault — Live Miracles" />
+    <meta property="og:description" content="A safer way to store and share stream keys for big events, with role-based access, on Google Apps Script." />
+    <meta property="og:url" content="https://live-miracles.github.io/projects/key-vault/" />
+    <meta property="og:image" content="https://live-miracles.github.io/assets/logo.png" />
+    <meta name="twitter:card" content="summary" />
+    <link rel="icon" href="/assets/logo.png" type="image/png" />
+    <link rel="stylesheet" href="/assets/styles.css" />
+    
+  </head>
+  <body>
+    <div class="drawer lg:drawer-open">
+      <input id="project-drawer" type="checkbox" class="drawer-toggle" />
+      <div class="drawer-content min-h-screen">
+        <header class="navbar border-base-content/10 bg-base-300/92 sticky top-0 z-20 border-b px-4 backdrop-blur lg:hidden">
+          <div class="flex-none">
+            <label for="project-drawer" class="btn btn-square btn-ghost" aria-label="Open projects"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /></svg></label>
+          </div>
+          <div class="flex-1">
+            <a href="/" class="btn btn-ghost text-lg font-bold">Live Miracles</a>
+          </div>
+        </header>
+        <main class="mx-auto flex min-h-screen w-full max-w-6xl flex-col gap-8 px-4 py-6 sm:px-6 lg:px-8">
+          <section class="rounded-box border-base-content/10 bg-base-200/68 border p-5 shadow-xl backdrop-blur sm:p-7">
+            <div class="flex items-start gap-4">
+              <img src="https://live-miracles.github.io/key-vault/logo.png" alt="" class="rounded-box size-14  shrink-0 object-contain" />
+              <div class="min-w-0">
+                <h1 class="text-3xl font-bold sm:text-4xl">Key Vault</h1>
+                <p class="text-base-content/78 mt-2 text-lg leading-7">A safer way to store and share stream keys for big events, with role-based access, on Google Apps Script.</p>
+              </div>
+            </div>
+            <div class="mt-5 flex flex-wrap items-center justify-between gap-4">
+              <div class="flex flex-wrap gap-2"><a class="btn btn-sm btn-primary gap-2" href="https://github.com/live-miracles/key-vault"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.79 23.39c.6.11.82-.26.82-.58v-2.02c-3.34.73-4.04-1.42-4.04-1.42-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.57A12 12 0 0 0 12 .5Z"/></svg><span>GitHub</span></a><a class="btn btn-sm btn-accent gap-2" href="https://live-miracles.github.io/key-vault/"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m10 8 6 4-6 4V8Z"/><rect x="3" y="5" width="18" height="14" rx="2"/></svg><span>Demo</span></a></div>
+              <div class="text-base-content/58 flex flex-wrap gap-4 text-sm"><span class="inline-flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 2.5 2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.31l-5.8 3.05 1.11-6.46-4.7-4.58 6.49-.94L12 2.5Z"/></svg>0</span><span class="inline-flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="6" cy="4" r="2"/><circle cx="18" cy="4" r="2"/><circle cx="12" cy="20" r="2"/><path d="M6 6v3a3 3 0 0 0 3 3h3m6-6v3a3 3 0 0 1-3 3h-3m0 0v6"/></svg>0</span><span>TypeScript</span><span>MIT license</span><span>Updated 2026-09-30</span></div>
+            </div>
+            
+            <div class="mt-7"><details class="rounded-box border-base-content/10 bg-base-300/46 text-base-content/68 mb-7 border p-4 text-sm backdrop-blur">
+              <summary class="text-base-content/80 cursor-pointer font-semibold">On this page</summary>
+              <ol class="mt-3 space-y-2">
+                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#project-structure">Project structure</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#local-development">Local development</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#releases">Releases</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#one-time-apps-script-deployment-setup">One-time Apps Script deployment setup</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#deploying-to-google-apps-script-manually">Deploying to Google Apps Script manually</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#roles">Roles</a></li>
+              </ol>
+            </details><article class="readme min-w-0"><p>A safer way to store and manage stream keys for big events.</p>
+<p>This is a Google Apps Script web app backed by a Google Sheet. After creating and configuring the
+Apps Script project, you will be able to:</p>
+<ul>
+<li>Create events.</li>
+<li>Add stream keys for an event.</li>
+<li>Add role-based access controls to restrict which keys each user can access.</li>
+</ul>
+<h2 id="project-structure">Project structure</h2>
+<pre><code class="language-text">├── src/
+│   ├── Code.ts          # Google Apps Script backend source
+│   ├── Index.html       # Generated Apps Script HTML shell
+│   └── appsscript.json  # Apps Script manifest
+├── frontend/
+│   ├── src/*.ts         # Frontend TypeScript source
+│   ├── index.html       # HTML shell template and demo page template
+│   └── input.css        # Tailwind CSS source
+└── build-tools/         # Build and release scripts
+</code></pre>
+<h2 id="local-development">Local development</h2>
+<pre><code class="language-bash">npm install
+npm run dev
+</code></pre>
+<p>This does an initial CSS compile, then serves the app locally at <code>http://localhost:3000</code> with live
+reload.</p>
+<p>To only compile CSS:</p>
+<pre><code class="language-bash">npm run css
+</code></pre>
+<p><code>frontend/output.css</code> is generated from <code>frontend/input.css</code> and is intentionally ignored by git.
+Local development and release builds create it as needed.</p>
+<h2 id="releases">Releases</h2>
+<p>This repo now follows the same release pattern as <code>multi-lang-qa</code>.</p>
+<p>Pushing to <code>master</code> publishes the mock-backed demo frontend to GitHub Pages. Pushing a git tag
+also publishes the latest demo and deploys the production Apps Script build. The Apps Script
+deployment is rebuilt as a self-contained HTML project; it does not load its JavaScript or CSS from
+GitHub Pages.</p>
+<pre><code class="language-bash">npm version 0.3.2
+git push origin master --tags
+</code></pre>
+<p><code>npm version</code> updates <code>package.json</code> and <code>package-lock.json</code>, creates the release commit, and creates
+the git tag. With the default <code>tag-version-prefix</code> of <code>v</code>, <code>npm version 0.3.2</code> creates the tag
+<code>v0.3.2</code>.</p>
+<p>The release tag must match <code>package.json</code>. GitHub Actions checks this before deploying. Run
+<code>npm version</code> from a clean git working tree.</p>
+<p>To build the generated Apps Script project locally:</p>
+<pre><code class="language-bash">npm run css
+npm run apps-script:build
+</code></pre>
+<p>The generated Apps Script files are written to <code>.clasp-build/</code>. <code>Index.html</code> contains the
+frontend CSS and JavaScript inline. The logo and Apps Script favicon use the unversioned GitHub
+Pages logo URL.</p>
+<h3 id="one-time-apps-script-deployment-setup">One-time Apps Script deployment setup</h3>
+<p>Create these GitHub repository secrets before expecting tag releases to update the live Apps Script
+deployment:</p>
+<ul>
+<li><code>APPS_SCRIPT_ID</code>: the script ID from the Apps Script project settings.</li>
+<li><code>APPS_SCRIPT_DEPLOYMENT_ID</code>: the deployment ID of the existing web app deployment that should keep
+the same public URL.</li>
+<li><code>CLASPRC_JSON</code>: the contents of the <code>.clasprc.json</code> file created by <code>npx clasp login</code>.</li>
+</ul>
+<p>Once these are set, a tag like <code>v0.3.2</code> will:</p>
+<ul>
+<li>publish the mock-backed demo site and logo to GitHub Pages</li>
+<li>generate a self-contained Apps Script project in <code>.clasp-build/</code></li>
+<li>push the generated project with <code>clasp</code></li>
+<li>create a new Apps Script version and update the existing deployment to point at it</li>
+</ul>
+<h2 id="deploying-to-google-apps-script-manually">Deploying to Google Apps Script manually</h2>
+<p>If you want to collaborate with others in real time, you will need to create a Google Apps Script
+project.</p>
+<ol>
+<li>Create a spreadsheet with these tabs and columns:
+<code>Role</code>: <code>id</code>, <code>event</code>, <code>email</code>, <code>type</code>, <code>language</code>, <code>remarks</code>
+<code>Event</code>: <code>id</code>, <code>name</code> (<code>id</code> is generated as <code>E01</code>, <code>E02</code>, etc.)
+<code>Language</code>: <code>id</code>, <code>name</code>, <code>order</code> (<code>id</code> should be a string from <code>L01</code> to <code>L99</code>)
+<code>Key</code>: <code>id</code>, <code>event</code>, <code>name</code>, <code>language</code>, <code>server</code>, <code>key</code>, <code>server2</code>, <code>key2</code>, <code>link</code>, <code>color</code>,
+<code>remarks</code></li>
+<li>Create an Apps Script project and add a script property named <code>SPREADSHEET_ID</code>.</li>
+<li>Run <code>npm run css &amp;&amp; npm run apps-script:build</code>.</li>
+<li>Add the generated files from <code>.clasp-build/</code> to the Apps Script project.</li>
+<li>Deploy the project as a web app.</li>
+</ol>
+<h2 id="roles">Roles</h2>
+<ul>
+<li>Owner: can edit or delete events and assign event admins.</li>
+<li>Admin: can add viewers and editors.</li>
+<li>Editor: can edit keys for an event and can be restricted to languages.</li>
+<li>Viewer: can only view an event&#39;s keys and can be restricted to languages.</li>
+</ul>
+</article></div>
+          </section>
+          <footer class="text-base-content/50 border-base-content/10 mt-auto border-t pt-6 pb-2 text-sm">
+            Live Miracles · <a class="link" href="https://github.com/live-miracles">github.com/live-miracles</a>
+          </footer>
+        </main>
+      </div>
+      <aside class="drawer-side z-30">
+        <label for="project-drawer" aria-label="Close projects" class="drawer-overlay"></label>
+        <nav class="border-base-content/10 bg-base-200 min-h-full w-80 border-r p-4" aria-label="Projects">
+          <a href="/" class="rounded-box mb-6 flex items-center gap-3 px-3 py-2">
+            <img src="/assets/logo.png" alt="" class="rounded-box size-11" />
+            <span>
+              <span class="block text-xl font-bold">Live Miracles</span>
+              <span class="text-base-content/58 text-sm">Open tools for live teams</span>
+            </span>
+          </a>
+          <div class="mb-5">
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Streaming &amp; transport</div>
+              <a href="/projects/restream-srs/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="/assets/restream-srs-logo.png" alt="" class="rounded-box size-6 bg-base-content p-0.5 shrink-0 object-contain" />
+                <span>Restream SRS</span>
+              </a><a href="/projects/srt-bonding-relay/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">S</span>
+                <span>SRT Bonding Relay</span>
+              </a><a href="/projects/delayed-yt/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="https://live-miracles.github.io/delayed-yt/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>Delayed YouTube</span>
+              </a>
+            </div><div class="mb-5">
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">vMix production</div>
+              <a href="/projects/vmix-master/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="https://live-miracles.github.io/vmix-master/logo.svg" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>vMix Master</span>
+              </a><a href="/projects/folder-player/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="/assets/folder-player-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>vMix Folder Player</span>
+              </a>
+            </div><div class="mb-5">
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Monitoring &amp; operations</div>
+              <a href="/projects/live-gallery/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="/assets/live-gallery-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>Live Gallery</span>
+              </a><a href="/projects/wake-up-support/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">W</span>
+                <span>Wake Up Support</span>
+              </a>
+            </div><div class="mb-5">
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Event workflows</div>
+              <a href="/projects/key-vault/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 bg-base-100 text-primary font-semibold" aria-current="page">
+                <img src="https://live-miracles.github.io/key-vault/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>Key Vault</span>
+              </a><a href="/projects/live-generator/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">L</span>
+                <span>Live Generator</span>
+              </a><a href="/projects/multi-lang-qa/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="https://live-miracles.github.io/multi-lang-qa/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>Multi Lang QA</span>
+              </a>
+            </div>
+        </nav>
+      </aside>
+    </div>
+  </body>
+</html>

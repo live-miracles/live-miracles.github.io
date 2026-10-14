@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="en" data-theme="dim">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SRT Bonding Relay — Live Miracles</title>
+    <meta name="description" content="Standalone relay that accepts bonded or redundant SRT groups and forwards one deduplicated stream downstream." />
+    <link rel="canonical" href="https://live-miracles.github.io/projects/srt-bonding-relay/" />
+    <meta property="og:site_name" content="Live Miracles" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="SRT Bonding Relay — Live Miracles" />
+    <meta property="og:description" content="Standalone relay that accepts bonded or redundant SRT groups and forwards one deduplicated stream downstream." />
+    <meta property="og:url" content="https://live-miracles.github.io/projects/srt-bonding-relay/" />
+    <meta property="og:image" content="https://live-miracles.github.io/assets/logo.png" />
+    <meta name="twitter:card" content="summary" />
+    <link rel="icon" href="/assets/logo.png" type="image/png" />
+    <link rel="stylesheet" href="/assets/styles.css" />
+    
+  </head>
+  <body>
+    <div class="drawer lg:drawer-open">
+      <input id="project-drawer" type="checkbox" class="drawer-toggle" />
+      <div class="drawer-content min-h-screen">
+        <header class="navbar border-base-content/10 bg-base-300/92 sticky top-0 z-20 border-b px-4 backdrop-blur lg:hidden">
+          <div class="flex-none">
+            <label for="project-drawer" class="btn btn-square btn-ghost" aria-label="Open projects"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /></svg></label>
+          </div>
+          <div class="flex-1">
+            <a href="/" class="btn btn-ghost text-lg font-bold">Live Miracles</a>
+          </div>
+        </header>
+        <main class="mx-auto flex min-h-screen w-full max-w-6xl flex-col gap-8 px-4 py-6 sm:px-6 lg:px-8">
+          <section class="rounded-box border-base-content/10 bg-base-200/68 border p-5 shadow-xl backdrop-blur sm:p-7">
+            <div class="flex items-start gap-4">
+              <span class="rounded-box bg-primary/15 text-primary size-14 grid shrink-0 place-items-center font-bold" aria-hidden="true">S</span>
+              <div class="min-w-0">
+                <h1 class="text-3xl font-bold sm:text-4xl">SRT Bonding Relay</h1>
+                <p class="text-base-content/78 mt-2 text-lg leading-7">Standalone relay that accepts bonded or redundant SRT groups and forwards one deduplicated stream downstream.</p>
+              </div>
+            </div>
+            <div class="mt-5 flex flex-wrap items-center justify-between gap-4">
+              <div class="flex flex-wrap gap-2"><a class="btn btn-sm btn-primary gap-2" href="https://github.com/live-miracles/srt-bonding-relay"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.79 23.39c.6.11.82-.26.82-.58v-2.02c-3.34.73-4.04-1.42-4.04-1.42-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.57A12 12 0 0 0 12 .5Z"/></svg><span>GitHub</span></a></div>
+              <div class="text-base-content/58 flex flex-wrap gap-4 text-sm"><span class="inline-flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 2.5 2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.31l-5.8 3.05 1.11-6.46-4.7-4.58 6.49-.94L12 2.5Z"/></svg>1</span><span class="inline-flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="6" cy="4" r="2"/><circle cx="18" cy="4" r="2"/><circle cx="12" cy="20" r="2"/><path d="M6 6v3a3 3 0 0 0 3 3h3m6-6v3a3 3 0 0 1-3 3h-3m0 0v6"/></svg>0</span><span>C</span><span>MIT license</span><span>Updated 2026-09-29</span></div>
+            </div>
+            <div class="mt-4 flex flex-wrap gap-2"><span class="badge badge-outline badge-sm">bonding</span><span class="badge badge-outline badge-sm">c</span><span class="badge badge-outline badge-sm">libsrt</span><span class="badge badge-outline badge-sm">srt</span></div>
+            <div class="mt-7"><details class="rounded-box border-base-content/10 bg-base-300/46 text-base-content/68 mb-7 border p-4 text-sm backdrop-blur">
+              <summary class="text-base-content/80 cursor-pointer font-semibold">On this page</summary>
+              <ol class="mt-3 space-y-2">
+                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#data-path">Data path</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#design">Design</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#config">Config</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#passphrase-handling">Passphrase handling</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#status--stats-http-api">Status / Stats HTTP API</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#versioning">Versioning</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#local-build">Local Build</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#github-releases">GitHub Releases</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#ci">CI</a></li>
+              </ol>
+            </details><article class="readme min-w-0"><p>Standalone SRT bonding ingress relay. It accepts bonded/redundant SRT groups
+on one listener socket and forwards the deduplicated MPEG-TS payload to a
+downstream SRT target.</p>
+<h2 id="data-path">Data path</h2>
+<pre><code class="language-text">        encoder / publisher
+
+   leg A: SRT caller + streamid
+   leg B: SRT caller + same streamid
+              |
+              v
+   +-----------------------------+
+   | srt-bonding-relay listener |
+   | SRTO_GROUPCONNECT=1        |
+   +-----------------------------+
+              |
+              | SRT group socket
+              | libsrt merges and deduplicates legs
+              v
+   +-----------------------------+
+   | session thread per streamid |
+   | reads one MPEG-TS payload   |
+   +-----------------------------+
+              |
+              +----&gt; srt:// output, same streamid
+</code></pre>
+<h2 id="design">Design</h2>
+<ul>
+<li><strong>Input listener.</strong> A single SRT socket is bound with <code>SRTO_GROUPCONNECT=1</code>
+(<code>mode=listener</code>, <code>transtype=live</code>, <code>latency=240ms</code>). This lets an encoder
+connect multiple redundant network legs (e.g. two NICs/uplinks) as one SRT
+<em>socket group</em>; SRT itself merges and deduplicates packets across legs
+before the relay ever sees them, so the relay always reads one clean
+MPEG-TS stream per group, not per leg.</li>
+<li><strong>Accept loop.</strong> The main thread polls the listener with <code>srt_epoll_uwait</code>.
+Each accepted connection (the first leg of a new group, or a follow-up leg
+joining an existing group in the background) spawns a session thread
+(<code>session_main</code>) tracked in a fixed-size session table
+(<code>MAX_ACTIVE_SESSIONS</code> = 256).</li>
+<li><strong>Streamid-based routing and dedup.</strong> The caller&#39;s SRT <code>streamid</code> is read
+off the accepted socket and used as the key for a shared per-stream state
+slot. It&#39;s also copied verbatim onto the outgoing connection, so one
+listener can multiplex many logical streams to distinct downstream
+destinations/streamids. If a second publisher connects with a streamid
+that&#39;s already active, the relay waits up to 5s for the existing session to
+go quiet; if the existing session has had no input for 5s it&#39;s treated as
+stale and force-closed so the new publisher can take over, otherwise the
+new connection is rejected as a duplicate.</li>
+<li><strong>Forwarding.</strong> Each session thread reads deduplicated payload off the
+group socket with <code>srt_recvmsg2</code> and writes it downstream with
+<code>srt_sendmsg2</code> over the <code>srt://</code> output connection. If the downstream SRT
+target is unreachable or rejects the publish attempt, the session retries
+with backoff (1s, 2s, 4s, 8s, 16s) in the background without dropping the
+encoder&#39;s input connection. When libsrt exposes a downstream reject reason,
+it is included in the stream&#39;s <code>lastError</code>.</li>
+<li><strong>Stats collection.</strong> A per-session sampler (<code>update_stream_srt_counters</code>,
+rate-limited to once/sec/session) pulls counters from libsrt
+(<code>srt_bstats</code>, <code>srt_group_data</code>) under a lock and writes them into the
+shared session state. This runs from the session thread itself — the
+status HTTP thread never touches libsrt directly, it only reads the
+already-collected state.</li>
+<li><strong>Status HTTP server.</strong> A separate thread serves the JSON status snapshot
+described below on its own port, bound to loopback only.</li>
+<li><strong>Bounded logging.</strong> libsrt&#39;s own internal log level is set to <code>LOG_ERR</code>
+at startup, so its per-packet diagnostic chatter (e.g. receive-queue
+pressure warnings under sustained loss/reordering) is never formatted or
+emitted in the first place. A custom log handler (<code>srt_log_handler</code>) is
+installed as a backstop on top of that: a flat cap of 20 lines/second
+across the whole process, regardless of level or message, with a one-line
+&quot;N more suppressed&quot; summary when the cap is hit. This exists because a
+receive-queue backlog once produced ~35 log lines/sec for 16 minutes,
+which was enough CPU/IO load on a small host to starve <code>systemd-journald</code>
+and take the whole machine&#39;s SSH/networking down with it — the cap makes
+that failure mode structurally impossible regardless of what triggers a
+future logging burst.</li>
+</ul>
+<h2 id="config">Config</h2>
+<p>The relay accepts either:</p>
+<ul>
+<li><code>srt-bonding-relay &lt;config.json&gt;</code></li>
+<li><code>srt-bonding-relay &lt;srt-input-uri&gt; &lt;srt-output-uri&gt;</code></li>
+</ul>
+<p>Minimal JSON config:</p>
+<pre><code class="language-json">{
+  &quot;input_host&quot;: &quot;0.0.0.0&quot;,
+  &quot;input_port&quot;: 10081,
+  &quot;output_host&quot;: &quot;127.0.0.1&quot;,
+  &quot;output_port&quot;: 10080,
+  &quot;status_port&quot;: 8081,
+  &quot;passphrase&quot;: &quot;secret-value&quot;
+}
+</code></pre>
+<p>Fields:</p>
+<ul>
+<li><code>input_host</code>: bonded SRT listener host/interface</li>
+<li><code>input_port</code>: bonded SRT listener port</li>
+<li><code>output_host</code>: downstream SRT publish host</li>
+<li><code>output_port</code>: downstream SRT publish port</li>
+<li><code>status_port</code>: local HTTP status endpoint port</li>
+<li><code>passphrase</code>: SRT passphrase applied to the input and to the <code>srt://</code> output.
+Use <code>&quot;&quot;</code> to disable encryption.</li>
+</ul>
+<p>The relay is streamid-agnostic. It accepts any incoming <code>streamid</code> and copies it
+to the downstream SRT publish socket automatically.</p>
+<p>All config fields are required.</p>
+<h2 id="passphrase-handling">Passphrase handling</h2>
+<p>When <code>passphrase</code> is set, the relay configures <code>SRTO_PASSPHRASE</code> on the input
+listener and output connection, then leaves passphrase validation to libsrt&#39;s
+default encrypted-handshake handling.</p>
+<p>Bad-passphrase callers are rejected by libsrt during the handshake, before
+<code>srt_accept()</code> returns a connected socket to the relay. That means the relay
+does not get a peer address for those failed attempts and does not emit a
+relay-owned, fail2ban-ready bad-passphrase log line. Depending on libsrt&#39;s
+runtime logging, journald may still capture internal SRT error messages for
+failed handshakes, but they should be treated as diagnostic noise rather than
+a stable security log format.</p>
+<h2 id="status--stats-http-api">Status / Stats HTTP API</h2>
+<p>The status thread listens on <code>127.0.0.1:&lt;status_port&gt;</code> (loopback only, not
+reachable from other hosts) and returns a JSON snapshot of every active or
+recently-active stream on any request, e.g.:</p>
+<pre><code class="language-bash">curl http://127.0.0.1:8081/status
+</code></pre>
+<pre><code class="language-text">status HTTP thread
+        |
+        v
+copies in-memory session state
+        |
+        +--&gt; never calls libsrt directly
+        |
+        v
+JSON response
+
+session threads
+        |
+        +--&gt; sample srt_bstats() / srt_group_data() at most once per second
+        |
+        v
+shared session state
+</code></pre>
+<p>The response body itself is compact (no pretty-printing) since nothing
+requires this JSON to be human-formatted — pipe it through <code>jq</code>/<code>python3 -m json.tool</code> if you want to read it by eye.</p>
+<p>Top-level fields:</p>
+<ul>
+<li><code>pid</code>, <code>startedAtMs</code>, <code>updatedAtMs</code>: process identity and snapshot timing</li>
+<li><code>lastError</code>: the most recent process-level error, if any</li>
+<li><code>activeStreamIds</code>: streamids with a currently connected input</li>
+<li><code>streamStates</code>: one entry per known stream (see below); entries can briefly
+outlive <code>activeStreamIds</code> while a session is tearing down</li>
+</ul>
+<p>Each <code>streamStates[]</code> entry:</p>
+<ul>
+<li><code>streamId</code>, <code>inputActive</code>, <code>outputConnected</code>, <code>retryFailures</code></li>
+<li><code>forwardedPackets</code>, <code>forwardedBytes</code>, <code>lastPacketAt</code>, <code>lastInputPacketAt</code>:
+relay-tracked forwarding progress</li>
+<li><code>input</code>: everything SRT reports about the (possibly bonded) input — see below</li>
+<li><code>output</code>: everything SRT reports about the single downstream connection
+(output is never bonded) — see below</li>
+<li><code>lastErrorAt</code>, <code>lastError</code>: most recent per-stream error, if any</li>
+</ul>
+<p><code>input</code> fields:</p>
+<ul>
+<li><code>recvPacketsTotal</code>, <code>recvUniquePacketsTotal</code>, and <code>recvDropTotal</code>: group-level
+counters from SRT&#39;s bonded group socket. <code>recvPacketsTotal</code>,
+<code>recvLossTotal</code>, and <code>retransTotal</code> can be <code>null</code>: SRT does not provide a
+deduplicated group-level loss or receive-retransmission counter, and it does
+not always populate <code>recvPacketsTotal</code> for a group. <code>recvUniquePacketsTotal</code>
+is the reliable deduplicated total for group-level throughput. Use the
+per-leg values below for loss and retransmission telemetry; the relay does
+not sum them because that would double-count packets recovered on another
+leg.</li>
+<li><code>rttMs</code>: RTT reported for the input group socket as a whole</li>
+<li><code>latencyMs</code>: negotiated SRT buffering latency for the input, i.e. the
+actual value SRT settled on after the handshake, not just what was
+requested. For a non-bonded input this comes straight from <code>srt_bstats</code>
+(<code>msRcvTsbPdDelay</code>, the same underlying value <code>SRTO_LATENCY</code> reports). A
+bonded group socket&#39;s own <code>srt_bstats</code> never fills that field in, so for a
+real bonded input this is derived as the max <code>latencyMs</code> across <code>legs[]</code>
+instead (see below) — no extra libsrt call needed either way.</li>
+<li><code>bandwidthMbps</code>, <code>recvRateMbps</code>, <code>belatedTotal</code>, <code>belatedAvgMs</code>,
+<code>undecryptTotal</code>, <code>reorderDistance</code>, <code>rcvBufMs</code>: estimated capacity, actual
+receive rate, packets dropped for arriving past their delivery deadline
+(count + average lateness), decryption failures, reordering, and
+receive-buffer occupancy (ms) — all read straight from the same
+<code>srt_bstats</code> call as the fields above. <strong>Only populated for a non-bonded
+input</strong> (<code>null</code> otherwise): like <code>latencyMs</code>, a bonded group&#39;s own
+<code>srt_bstats</code> never fills these in, and there was no reasonable per-leg
+aggregation for most of them (unlike latency, where &quot;max across legs&quot; has
+a clear meaning) — check <code>legs[]</code> for the real per-leg numbers on a bonded
+stream instead.</li>
+<li><code>legs</code>: one entry per individual bonded connection currently in (or
+recently in) the input group, read directly from <code>srt_group_data()</code> +
+<code>srt_bstats()</code> on each member socket — this is real per-leg telemetry from
+libsrt, not something the relay derives or combines:<ul>
+<li><code>ip</code>, <code>port</code>: the leg&#39;s peer (encoder-side) address, as seen by the relay</li>
+<li><code>state</code>: <code>pending</code> | <code>idle</code> | <code>running</code> | <code>broken</code></li>
+<li><code>rttMs</code>, <code>recvPacketsTotal</code>, <code>recvUniquePacketsTotal</code>, <code>recvLossTotal</code>,
+<code>recvDropTotal</code>, <code>retransTotal</code>: stats for that leg only</li>
+<li><code>latencyMs</code>: the negotiated latency for that individual leg&#39;s own socket
+(<code>msRcvTsbPdDelay</code> from the member&#39;s own <code>srt_bstats</code>, not the group), so
+if an encoder ever negotiates a different value per leg it&#39;s visible here</li>
+<li><code>bandwidthMbps</code>, <code>recvRateMbps</code>, <code>belatedTotal</code>, <code>belatedAvgMs</code>,
+<code>undecryptTotal</code>, <code>reorderDistance</code>, <code>rcvBufMs</code>: the same set of extra
+stats as <code>input.*</code> above, but for that leg&#39;s own socket specifically —
+reliably populated per leg even though the group-level <code>input.*</code>
+versions are not</li>
+</ul>
+</li>
+</ul>
+<p><code>output</code> fields:</p>
+<ul>
+<li><code>sentPacketsTotal</code>, <code>sendLossTotal</code>, <code>sendDropTotal</code>, <code>retransTotal</code>:
+send-side counters for the downstream connection</li>
+<li><code>rttMs</code>: RTT for the downstream connection</li>
+<li><code>latencyMs</code>: negotiated latency on the downstream <code>srt://</code> connection the
+relay makes to the output (from <code>srt_bstats</code>&#39; <code>msRcvTsbPdDelay</code>, same value
+as <code>input.latencyMs</code>); the relay&#39;s default <code>build_srt_uri()</code> requests
+<code>latency=200</code> here vs. <code>latency=240</code> on the bonded input listener</li>
+<li><code>bandwidthMbps</code>, <code>sendRateMbps</code>, <code>undecryptTotal</code>, <code>sndBufMs</code>: capacity,
+actual send rate, decryption failures, and send-buffer occupancy (ms) —
+the output socket is never a group, so these are populated after the first
+successful output stats sample while connected</li>
+</ul>
+<p>Example response for a stream bonded over two legs (reformatted here for
+readability — the actual response is one compact line):</p>
+<pre><code class="language-json">{
+  &quot;pid&quot;: 12345,
+  &quot;startedAtMs&quot;: 1783569708552,
+  &quot;updatedAtMs&quot;: 1783569763437,
+  &quot;lastError&quot;: null,
+  &quot;activeStreamIds&quot;: [&quot;camera1/main&quot;],
+  &quot;streamStates&quot;: [
+    {
+      &quot;streamId&quot;: &quot;camera1/main&quot;,
+      &quot;inputActive&quot;: true,
+      &quot;outputConnected&quot;: true,
+      &quot;retryFailures&quot;: 0,
+      &quot;forwardedPackets&quot;: 28,
+      &quot;forwardedBytes&quot;: 36848,
+      &quot;lastPacketAt&quot;: 1783569742530,
+      &quot;lastInputPacketAt&quot;: 1783569742529,
+      &quot;input&quot;: {
+        &quot;recvPacketsTotal&quot;: null,
+        &quot;recvUniquePacketsTotal&quot;: 22,
+        &quot;recvLossTotal&quot;: 0,
+        &quot;recvDropTotal&quot;: 0,
+        &quot;retransTotal&quot;: 0,
+        &quot;rttMs&quot;: null,
+        &quot;latencyMs&quot;: 240,
+        &quot;bandwidthMbps&quot;: null,
+        &quot;recvRateMbps&quot;: null,
+        &quot;belatedTotal&quot;: null,
+        &quot;belatedAvgMs&quot;: null,
+        &quot;undecryptTotal&quot;: null,
+        &quot;reorderDistance&quot;: null,
+        &quot;rcvBufMs&quot;: null,
+        &quot;legs&quot;: [
+          {
+            &quot;ip&quot;: &quot;10.0.1.20&quot;,
+            &quot;port&quot;: 51072,
+            &quot;state&quot;: &quot;running&quot;,
+            &quot;rttMs&quot;: 24.6,
+            &quot;latencyMs&quot;: 240,
+            &quot;recvPacketsTotal&quot;: 26,
+            &quot;recvUniquePacketsTotal&quot;: 26,
+            &quot;recvLossTotal&quot;: 0,
+            &quot;recvDropTotal&quot;: 0,
+            &quot;retransTotal&quot;: 0,
+            &quot;bandwidthMbps&quot;: 12.3,
+            &quot;recvRateMbps&quot;: 0.47,
+            &quot;belatedTotal&quot;: 0,
+            &quot;belatedAvgMs&quot;: 0.0,
+            &quot;undecryptTotal&quot;: 0,
+            &quot;reorderDistance&quot;: 0,
+            &quot;rcvBufMs&quot;: 221
+          },
+          {
+            &quot;ip&quot;: &quot;10.0.2.31&quot;,
+            &quot;port&quot;: 39356,
+            &quot;state&quot;: &quot;running&quot;,
+            &quot;rttMs&quot;: 31.2,
+            &quot;latencyMs&quot;: 240,
+            &quot;recvPacketsTotal&quot;: 25,
+            &quot;recvUniquePacketsTotal&quot;: 25,
+            &quot;recvLossTotal&quot;: 1,
+            &quot;recvDropTotal&quot;: 0,
+            &quot;retransTotal&quot;: 0,
+            &quot;bandwidthMbps&quot;: 9.8,
+            &quot;recvRateMbps&quot;: 0.46,
+            &quot;belatedTotal&quot;: 2,
+            &quot;belatedAvgMs&quot;: 6.4,
+            &quot;undecryptTotal&quot;: 0,
+            &quot;reorderDistance&quot;: 1,
+            &quot;rcvBufMs&quot;: 235
+          }
+        ]
+      },
+      &quot;output&quot;: {
+        &quot;sentPacketsTotal&quot;: 21,
+        &quot;sendLossTotal&quot;: 0,
+        &quot;sendDropTotal&quot;: 0,
+        &quot;retransTotal&quot;: 0,
+        &quot;rttMs&quot;: 0.043,
+        &quot;latencyMs&quot;: 200,
+        &quot;bandwidthMbps&quot;: 11.8,
+        &quot;sendRateMbps&quot;: 0.42,
+        &quot;undecryptTotal&quot;: 0,
+        &quot;sndBufMs&quot;: 1
+      },
+      &quot;lastErrorAt&quot;: 0,
+      &quot;lastError&quot;: null
+    }
+  ]
+}
+</code></pre>
+<h2 id="versioning">Versioning</h2>
+<p>The relay version is stored in the repo&#39;s <code>VERSION</code> file and embedded into the
+binary at build time.</p>
+<h2 id="local-build">Local Build</h2>
+<pre><code class="language-bash">bash scripts/build-local.sh
+</code></pre>
+<p>Check the embedded version:</p>
+<pre><code class="language-bash">./objs/srt-bonding-relay --version
+</code></pre>
+<p>Run it:</p>
+<pre><code class="language-bash">bash scripts/run.sh
+</code></pre>
+<p>Smoke test it locally:</p>
+<pre><code class="language-bash">bash scripts/smoke-test.sh
+</code></pre>
+<p>Format C sources:</p>
+<pre><code class="language-bash">bash scripts/format.sh
+</code></pre>
+<h2 id="github-releases">GitHub Releases</h2>
+<p>Releases are published automatically when a tag matching <code>VERSION</code> is pushed.
+For example, after updating <code>VERSION</code> to <code>v3.0.3</code> and committing it:</p>
+<pre><code class="language-bash">git tag v3.0.3
+git push origin master v3.0.3
+</code></pre>
+<p>The release workflow validates that the tag matches <code>VERSION</code>, builds the
+Linux archive with Docker, and creates the GitHub Release with generated notes.
+It requires the tag to use the same <code>vX.Y.Z</code> value as <code>VERSION</code>.</p>
+<p>To build the release asset locally instead:</p>
+<pre><code class="language-bash">bash scripts/build-release.sh
+</code></pre>
+<p>That produces:</p>
+<pre><code class="language-text">build/srt-bonding-relay-linux-x86_64.tar.gz
+</code></pre>
+<p>Before a release, update <code>VERSION</code> first. The binary version is embedded at
+build time, so changing <code>VERSION</code> after the asset is built will not update the
+already-built archive.</p>
+<p>If a release already exists, the workflow replaces the archive asset. To do
+that manually:</p>
+<pre><code class="language-bash">gh release upload &quot;$(cat VERSION)&quot; build/srt-bonding-relay-linux-x86_64.tar.gz --clobber
+</code></pre>
+<h2 id="ci">CI</h2>
+<p>This repo includes a GitHub Actions workflow that:</p>
+<ul>
+<li>builds the relay with Docker</li>
+<li>checks C formatting with <code>clang-format</code></li>
+<li>checks the usage path</li>
+<li>starts the relay with <code>srt-bonding-relay.json</code></li>
+<li>verifies the local HTTP status endpoint responds</li>
+</ul>
+</article></div>
+          </section>
+          <footer class="text-base-content/50 border-base-content/10 mt-auto border-t pt-6 pb-2 text-sm">
+            Live Miracles · <a class="link" href="https://github.com/live-miracles">github.com/live-miracles</a>
+          </footer>
+        </main>
+      </div>
+      <aside class="drawer-side z-30">
+        <label for="project-drawer" aria-label="Close projects" class="drawer-overlay"></label>
+        <nav class="border-base-content/10 bg-base-200 min-h-full w-80 border-r p-4" aria-label="Projects">
+          <a href="/" class="rounded-box mb-6 flex items-center gap-3 px-3 py-2">
+            <img src="/assets/logo.png" alt="" class="rounded-box size-11" />
+            <span>
+              <span class="block text-xl font-bold">Live Miracles</span>
+              <span class="text-base-content/58 text-sm">Open tools for live teams</span>
+            </span>
+          </a>
+          <div class="mb-5">
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Streaming &amp; transport</div>
+              <a href="/projects/restream-srs/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="/assets/restream-srs-logo.png" alt="" class="rounded-box size-6 bg-base-content p-0.5 shrink-0 object-contain" />
+                <span>Restream SRS</span>
+              </a><a href="/projects/srt-bonding-relay/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 bg-base-100 text-primary font-semibold" aria-current="page">
+                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">S</span>
+                <span>SRT Bonding Relay</span>
+              </a><a href="/projects/delayed-yt/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="https://live-miracles.github.io/delayed-yt/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>Delayed YouTube</span>
+              </a>
+            </div><div class="mb-5">
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">vMix production</div>
+              <a href="/projects/vmix-master/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="https://live-miracles.github.io/vmix-master/logo.svg" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>vMix Master</span>
+              </a><a href="/projects/folder-player/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="/assets/folder-player-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>vMix Folder Player</span>
+              </a>
+            </div><div class="mb-5">
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Monitoring &amp; operations</div>
+              <a href="/projects/live-gallery/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="/assets/live-gallery-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>Live Gallery</span>
+              </a><a href="/projects/wake-up-support/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">W</span>
+                <span>Wake Up Support</span>
+              </a>
+            </div><div class="mb-5">
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Event workflows</div>
+              <a href="/projects/key-vault/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="https://live-miracles.github.io/key-vault/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>Key Vault</span>
+              </a><a href="/projects/live-generator/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">L</span>
+                <span>Live Generator</span>
+              </a><a href="/projects/multi-lang-qa/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="https://live-miracles.github.io/multi-lang-qa/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>Multi Lang QA</span>
+              </a>
+            </div>
+        </nav>
+      </aside>
+    </div>
+  </body>
+</html>

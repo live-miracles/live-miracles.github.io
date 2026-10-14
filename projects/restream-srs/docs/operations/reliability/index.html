@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en" data-theme="dim">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reliability — Restream SRS</title>
+    <meta name="description" content="Restream SRS is designed to keep running through long live events: failures are isolated to one output, recovered automatically where it is safe, and recorded so they can be explained afterwards. This" />
+    <link rel="canonical" href="https://live-miracles.github.io/projects/restream-srs/docs/operations/reliability/" />
+    <meta property="og:site_name" content="Live Miracles" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Reliability — Restream SRS" />
+    <meta property="og:description" content="Restream SRS is designed to keep running through long live events: failures are isolated to one output, recovered automatically where it is safe, and recorded so they can be explained afterwards. This" />
+    <meta property="og:url" content="https://live-miracles.github.io/projects/restream-srs/docs/operations/reliability/" />
+    <meta property="og:image" content="https://raw.githubusercontent.com/live-miracles/restream-srs/master/.github/assets/pipeline-view.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/assets/logo.png" type="image/png" />
+    <link rel="stylesheet" href="/assets/styles.css" />
+    
+  </head>
+  <body>
+    <div class="drawer lg:drawer-open">
+      <input id="project-drawer" type="checkbox" class="drawer-toggle" />
+      <div class="drawer-content min-h-screen">
+        <header class="navbar border-base-content/10 bg-base-300/92 sticky top-0 z-20 border-b px-4 backdrop-blur lg:hidden">
+          <div class="flex-none">
+            <label for="project-drawer" class="btn btn-square btn-ghost" aria-label="Open projects"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /></svg></label>
+          </div>
+          <div class="flex-1">
+            <a href="/" class="btn btn-ghost text-lg font-bold">Live Miracles</a>
+          </div>
+        </header>
+        <main class="mx-auto flex min-h-screen w-full max-w-6xl flex-col gap-8 px-4 py-6 sm:px-6 lg:px-8">
+          <section class="rounded-box border-base-content/10 bg-base-200/68 border p-5 shadow-xl backdrop-blur sm:p-7">
+            <nav class="text-base-content/60 flex flex-wrap items-center gap-2 text-sm" aria-label="Breadcrumb">
+              <a href="/projects/restream-srs/" class="hover:text-primary flex items-center gap-2"><img src="/assets/restream-srs-logo.png" alt="" class="rounded-box size-5 bg-base-content p-0.5 shrink-0 object-contain" /><span>Restream SRS</span></a>
+              <span aria-hidden="true">›</span><a class="hover:text-primary" href="/projects/restream-srs/docs/">Documentation</a><span aria-hidden="true">›</span><span>Operations</span>
+            </nav>
+            <h1 class="mt-3 text-3xl font-bold sm:text-4xl">Reliability</h1>
+            <details class="rounded-box border-base-content/10 bg-base-300/46 mt-6 border p-4 lg:hidden">
+              <summary class="text-base-content/80 cursor-pointer text-sm font-semibold">Documentation menu</summary>
+              <div class="mt-3"><nav class="lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto" aria-label="Restream SRS documentation">
+              <ul class="text-sm"><li><a href="/projects/restream-srs/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Overview</a></li><li><a href="/projects/restream-srs/docs/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Documentation</a></li></ul>
+              <div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Getting started</div>
+                <ul class="text-sm"><li><a href="/projects/restream-srs/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Introduction</a></li><li><a href="/projects/restream-srs/docs/getting-started/docker/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Docker</a></li><li><a href="/projects/restream-srs/docs/getting-started/install/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Native install</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Usage</div>
+                <ul class="text-sm"><li><a href="/projects/restream-srs/docs/usage/publishing/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Publishing to a pipeline</a></li><li><a href="/projects/restream-srs/docs/usage/outputs/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Outputs</a></li><li><a href="/projects/restream-srs/docs/usage/translation/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Translation outputs</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Operations</div>
+                <ul class="text-sm"><li><a href="/projects/restream-srs/docs/operations/security/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Security</a></li><li><a href="/projects/restream-srs/docs/operations/remote-access/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Remote access (Cloudflare Tunnel)</a></li><li><a href="/projects/restream-srs/docs/operations/configuration/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Configuration</a></li><li><a href="/projects/restream-srs/docs/operations/reliability/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 bg-base-100 text-primary font-semibold" aria-current="page">Reliability</a></li><li><a href="/projects/restream-srs/docs/operations/known-issues/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Known issues</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Reference</div>
+                <ul class="text-sm"><li><a href="/projects/restream-srs/docs/reference/api/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">REST API</a></li><li><a href="/projects/restream-srs/docs/reference/development/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Development</a></li></ul>
+              </div>
+            </nav></div>
+            </details>
+            <div class="mt-7 grid gap-8 lg:grid-cols-[15rem_minmax(0,1fr)]">
+              <div class="border-base-content/10 hidden lg:block lg:border-r lg:pr-4"><nav class="lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto" aria-label="Restream SRS documentation">
+              <ul class="text-sm"><li><a href="/projects/restream-srs/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Overview</a></li><li><a href="/projects/restream-srs/docs/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Documentation</a></li></ul>
+              <div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Getting started</div>
+                <ul class="text-sm"><li><a href="/projects/restream-srs/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Introduction</a></li><li><a href="/projects/restream-srs/docs/getting-started/docker/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Docker</a></li><li><a href="/projects/restream-srs/docs/getting-started/install/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Native install</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Usage</div>
+                <ul class="text-sm"><li><a href="/projects/restream-srs/docs/usage/publishing/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Publishing to a pipeline</a></li><li><a href="/projects/restream-srs/docs/usage/outputs/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Outputs</a></li><li><a href="/projects/restream-srs/docs/usage/translation/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Translation outputs</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Operations</div>
+                <ul class="text-sm"><li><a href="/projects/restream-srs/docs/operations/security/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Security</a></li><li><a href="/projects/restream-srs/docs/operations/remote-access/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Remote access (Cloudflare Tunnel)</a></li><li><a href="/projects/restream-srs/docs/operations/configuration/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Configuration</a></li><li><a href="/projects/restream-srs/docs/operations/reliability/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 bg-base-100 text-primary font-semibold" aria-current="page">Reliability</a></li><li><a href="/projects/restream-srs/docs/operations/known-issues/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Known issues</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Reference</div>
+                <ul class="text-sm"><li><a href="/projects/restream-srs/docs/reference/api/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">REST API</a></li><li><a href="/projects/restream-srs/docs/reference/development/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Development</a></li></ul>
+              </div>
+            </nav></div>
+              <div class="min-w-0"><details class="rounded-box border-base-content/10 bg-base-300/46 text-base-content/68 mb-7 border p-4 text-sm backdrop-blur">
+              <summary class="text-base-content/80 cursor-pointer font-semibold">On this page</summary>
+              <ol class="mt-3 space-y-2">
+                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#watchdogs">Watchdogs</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#input-timestamp-fault-detection">Input timestamp fault detection</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#encoder-restarts-do-not-restart-outputs">Encoder restarts do not restart outputs</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#srt-input-output-stalls">SRT-input output stalls</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#ffmpeg-memory-leaks-on-corrupt-input">FFmpeg memory leaks on corrupt input</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#why-the-srt-bonding-relay-exists">Why the SRT bonding relay exists</a></li>
+              </ol>
+            </details><article class="readme min-w-0"><p>Restream SRS is designed to keep running through long live events: failures are
+isolated to one output, recovered automatically where it is safe, and recorded
+so they can be explained afterwards. This page describes the recovery loops and
+the failure modes they handle.</p>
+<h2 id="watchdogs">Watchdogs</h2>
+<p>The app runs these recovery loops:</p>
+<table>
+<thead>
+<tr>
+<th>Watchdog</th>
+<th>Scope</th>
+<th>Restart condition</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Health poll / input recovery</td>
+<td>SRS reachability, live pipeline inputs, desired running outputs</td>
+<td>When SRS and the pipeline input become ready, outputs whose desired state is <code>running</code> are started or restarted with staggered timing</td>
+<td>Computed once every 5s and shared by dashboard clients. Inputs become live from SRS publisher presence; ffprobe fills in media/track metadata and retries every <code>FFPROBE_FAILED_REFRESH_MS</code> until it succeeds, then stops for that publisher.</td>
+</tr>
+<tr>
+<td>Output progress watchdog</td>
+<td>Every running FFmpeg output process</td>
+<td>After warmup, if the input is ready but FFmpeg <code>total_size</code> / <code>out_time_ms</code> stop advancing for the configured stall window</td>
+<td>Protocol-agnostic backstop; covers SRT outputs and local RTMP relays</td>
+</tr>
+<tr>
+<td>Remote RTMP socket watchdog</td>
+<td>Running outputs with a remote RTMP/RTMPS destination</td>
+<td>After socket warmup and grace, if the destination socket is missing or remains in a closing state such as <code>CLOSE-WAIT</code></td>
+<td>Uses one <code>ss -H -tanp</code> snapshot per watchdog interval; a local RTMP/RTMPS destination is ignored because local input/output sockets are ambiguous</td>
+</tr>
+<tr>
+<td>Output memory watchdog</td>
+<td>Every running FFmpeg output process, including translation mixers (checked every 5 s; a mixer over its limit is restarted with a <code>translation-mixer-restart</code> event, reason <code>memory limit exceeded</code>)</td>
+<td>After warmup, if process RSS crosses <code>memory_limit_mb</code> (or its per-encoding override)</td>
+<td>Reads <code>/proc/&lt;pid&gt;/status</code>; unconditional — a leaking process can still show advancing <code>total_size</code>/healthy sockets, so this doesn&#39;t wait on the other two. Once RSS crosses 70% of the limit the output surfaces a yellow &quot;High memory usage&quot; warning in the dashboard, before the watchdog actually restarts it at 100%. The limit is doubled for outputs on a 4K (≥3840px on either dimension) input — the 2x multiplier is a placeholder, not a measured baseline; see <a href="https://github.com/live-miracles/restream-srs/issues/11">#11</a></td>
+</tr>
+<tr>
+<td>Translator audio meter watchdog</td>
+<td>Running translation-mixer outputs</td>
+<td>After the same startup warmup grace as the output progress watchdog, if the translator audio meter has gone quiet for <code>translator_meter_stale_ms</code> (including a translator that never delivered a single sample)</td>
+<td>Watches independently of the SRS live-state poll, so a translator that connects but sends a dead/silent track is still caught. Valid translator silence is not treated as a disconnect — FFmpeg continues emitting silent meter samples in that case — so this only fires when the meter itself stops updating. Restarts the mixer so it attaches to the current translator session.</td>
+</tr>
+</tbody></table>
+<p>All output watchdogs above use the same restart path: they write a detailed
+<code>last_error</code>, kill the stuck FFmpeg process, and let the normal retry loop start a
+fresh process while the output&#39;s desired state remains <code>running</code>. The socket
+watchdog is advisory: if <code>ss</code> fails or times out, it does not restart anything,
+and a socket warning does not prevent the other watchdogs from acting.</p>
+<p>Input media validation is separate from the output watchdogs. The health service
+stays on the regular 5s poll, but ffprobe backs off once a publisher&#39;s probe
+succeeds:</p>
+<table>
+<thead>
+<tr>
+<th>Input check</th>
+<th>Scope</th>
+<th>Cadence</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Media validation</td>
+<td>Connected RTMP/SRT inputs without a successful probe yet for this publisher</td>
+<td>Immediate probe (staggered across pipelines), then retried every <code>FFPROBE_FAILED_REFRESH_MS</code> (30s) while it keeps failing</td>
+<td>Stops re-probing once a probe succeeds for the current publisher; a new probe cycle starts on the next publisher change. Every failed probe is written to diagnostics as <code>media-probe-failed</code> (reason <code>timeout</code>/<code>exit</code>/<code>parse</code>/<code>unusable</code>, elapsed time, exit status, ffprobe stderr tail) and the first failure and the later recovery per publisher are added to the pipeline log (<code>probe_failed</code> / <code>probe_recovered</code>). Input liveness and output recovery do not wait for a valid ffprobe result — ffprobe fills in media/track details when available.</td>
+</tr>
+</tbody></table>
+<h2 id="input-timestamp-fault-detection">Input timestamp fault detection</h2>
+<p>The server detects when an input&#39;s audio/video timestamps become inconsistent
+(for example after an encoder drops and reconnects with its audio and video
+clocks out of step). FFmpeg reports this on every copy output as
+<code>timestamp discontinuity</code> / non-monotonous or invalid DTS warnings, at up to tens
+of lines per second per output, so the control plane groups them instead of
+logging each line:</p>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Trigger</th>
+<th>What is recorded and shown</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Warning</td>
+<td>First timestamp warning of a kind on an output</td>
+<td><code>ffmpeg-timestamp-warning</code> diagnostics event with the FFmpeg line (one per distinct kind per burst, at most 8); the output shows a yellow warning</td>
+</tr>
+<tr>
+<td>Summary</td>
+<td>Further warnings in the same burst</td>
+<td>One <code>ffmpeg-timestamp-warning-summary</code> event every 30 s with the suppressed line count per kind, so the volume stays small while the total stays exact</td>
+</tr>
+<tr>
+<td>Recovered</td>
+<td>No timestamp warning for 30 s</td>
+<td><code>ffmpeg-timestamp-recovered</code> event with duration and total count. If the process exits mid-burst, the burst&#39;s duration and count are added to the <code>ffmpeg-exited</code> event instead</td>
+</tr>
+</tbody></table>
+<p>Decode-error lines (<code>non-existing PPS</code>, <code>decode_slice_header error</code>, <code>corrupt input</code>) go through the same grouping, but are treated as less serious, since
+they also appear briefly when an output joins mid-GOP: FFmpeg probes the
+stream before the next keyframe has delivered SPS/PPS, so for a second or two
+it cannot decode and prints these lines (even in copy mode). This is expected
+and harmless. A decode-only burst shorter than 10 s is treated as this routine
+join noise: it is not shown on the output card and not written to History (the
+diagnostics events still record it). Longer ones are shown and recorded.</p>
+<p>Warnings stay output warnings: there is deliberately no pipeline-level &quot;input is
+unstable&quot; alert, and nothing is written to the pipeline <strong>History</strong> (which is for
+input and pipeline issues only), because the cause (encoder, network, relay or the
+output itself) cannot be told from the warnings alone. Each finished burst (a
+timestamp burst, or a decode-only burst of 10 s or more; stopped after 30 s of
+quiet, or ended with the ffmpeg exit) is recorded in the output&#39;s own <strong>Error
+History</strong> (the error button on the output) as a <code>warning</code> record with the duration,
+warning count and first line. Per output, each class of burst is recorded at most
+once per 10 minutes, and the diagnostics events always carry every burst. That
+history keeps the last 10 records per output, of which at most 5 may be warnings, so
+warnings can never push crashes and stops out; warnings never count as the output&#39;s
+current error. Crashes, watchdog restarts and stops are recorded there as before.</p>
+<p>The warnings that otherwise only show on the output card are recorded the same way,
+once per episode: high memory usage (70 % or more of the output&#39;s limit), an
+unhealthy destination socket, and the FFmpeg media clock running fast. An episode
+logs an <code>ffmpeg-warning-started</code> diagnostics event, and when it clears (or the
+process exits) an <code>ffmpeg-warning-ended</code> event with the duration plus one <code>warning</code>
+record in the output&#39;s Error History. These share the 5 warning slots and the
+10-minute-per-kind limit above. A warning that escalates to a watchdog restart
+therefore appears twice: the build-up as a <code>warning</code>, then the restart as a crash.</p>
+<p>This is detection and reporting only: outputs are not restarted automatically,
+because the offset originates in the incoming stream and restarting would drop
+the destination connections during a live event. The fix is on the encoder side; in the
+observed incident, reconnecting the encoder cleared the condition.</p>
+<h2 id="encoder-restarts-do-not-restart-outputs">Encoder restarts do not restart outputs</h2>
+<p>When an encoder stops and reconnects (for example a manual ffmpeg restart), the
+pipeline&#39;s input reconnects but its <strong>outputs keep running and are not restarted</strong>.
+If the encoder&#39;s timeline restarted (timestamps back near 0), the running outputs
+see a discontinuity and may log timestamp warnings until the condition clears (see
+<a href="#input-timestamp-fault-detection">Input timestamp fault detection</a>); restarting the
+outputs by hand clears it, at the cost of dropping the destination connections.</p>
+<p>Restarting outputs automatically whenever the input restarts is <strong>not implemented</strong>
+because the server cannot reliably tell an encoder restart from a network
+interruption, and restarting after a mere network drop would add downtime to a line
+that would otherwise have recovered on its own. This was tested (SRS 6.0.184 and the
+SRT bonding relay, RTMP, SRT and bonded SRT inputs; network faults simulated with a
+userspace proxy that silently drops traffic, not kernel firewall rules, so RST/ICMP
+failures and NAT remapping were not covered) and <strong>no deterministic signal exists</strong>:</p>
+<ul>
+<li><strong>Source ports do not distinguish them.</strong> Every new connection gets a fresh
+ephemeral source port — on every bonded leg too — whether the encoder was restarted
+or reconnected after an outage. A port only survives when the connection never
+broke (an SRT outage shorter than about 5 s causes no disconnect and no event).</li>
+<li><strong>SRS hooks carry no cause.</strong> <code>on_publish</code> / <code>on_unpublish</code> / <code>on_close</code> include the
+client id, IP, stream and <code>tcUrl</code>, but no port and no reason.</li>
+<li><strong>A killed or crashed encoder looks like a network loss.</strong> For SRT the server sees
+about 5 s of silence followed by <code>6002 SrtTimeout</code> in both cases. (Over RTMP a
+killed process still closes its TCP connection, so it looks like a clean stop, while
+a network loss is only detected after about 18 s.)</li>
+<li><strong>Behind the bonding relay SRS sees nothing useful.</strong> The relay always closes its
+downstream side gracefully, so SRS logs the same <code>6001 SrtIo</code> for every end of a
+bonded stream. Only the relay&#39;s own data differs.</li>
+</ul>
+<p>Only weak, heuristic signals exist: a graceful stop closes within about a second
+whereas a network loss or kill closes after about 5 s (SRT) or about 18 s (RTMP) of
+silence, and on a bonded input a single leg disappearing from the relay&#39;s <code>/status</code>
+while the group stays up points to a network problem on that leg rather than a
+restart. These are not reliable enough to trigger an output restart on. A more
+dependable basis for any future automatic restart would be the media timeline itself
+(did timestamps jump or reset on reconnect?) rather than guessing the cause.</p>
+<h2 id="srt-input-output-stalls">SRT-input output stalls</h2>
+<p>The input is pulled back over its own protocol, so an output on an <strong>SRT input</strong>
+always pulls over SRT. When the destination rejects such a stream (e.g. a wrong
+YouTube stream key) or drops the RTMP connection mid-publish, ffmpeg can get
+stuck instead of exiting. An output on an <strong>RTMP input</strong> (pulled over RTMP)
+usually exits ffmpeg immediately with a clear error (<code>Error opening output files: Input/output error</code>).</p>
+<p>The difference is timing: with RTMP pull, input stream info is available right
+away, so ffmpeg opens the destination immediately and the rejection surfaces at
+<code>write_header</code> time, exiting non-zero. With SRT pull, ffmpeg must first probe the
+MPEG-TS input; by the time it connects, the destination accepts the handshake
+then drops the connection mid-publish, and ffmpeg deadlocks — SRT&#39;s large input
+buffers keep the input thread fed, so the broken-pipe error on the output write
+may not propagate promptly. The process can stay alive while buffering input and
+consuming RAM even though the external output is no longer uploading.</p>
+<p><strong>How it is handled:</strong> the output service tracks ffmpeg&#39;s <code>-progress pipe:1</code>
+fields (<code>total_size</code>, <code>out_time_ms</code>, and <code>bitrate</code>) plus the stderr tail. It also
+takes a single local TCP socket snapshot (<code>ss -H -tanp</code>) every watchdog interval
+and maps RTMP/RTMPS destination sockets back to each ffmpeg pid. After a warmup
+period, an output is marked yellow if its destination socket is missing or in a
+closing state such as <code>CLOSE-WAIT</code>; if that persists past the socket grace
+window, the watchdog records <code>last_error</code>, kills that ffmpeg process, and lets
+the normal retry loop start a fresh output. The same retry path is used when the
+input is live but ffmpeg output bytes/time stop advancing for a sustained window.
+The dashboard shows the warning/restart reason and timestamp; the error details
+include the pid, stall duration, last ffmpeg progress values, and stderr tail.</p>
+<p><strong>Limitation:</strong> the watchdog monitors aggregate ffmpeg output progress and
+pid-level TCP socket state for the process. Local RTMP/RTMPS outputs are excluded
+from the TCP socket check because ffmpeg&#39;s local input pull and local output push
+both connect to local SRS and are ambiguous in <code>ss</code>; those relays are still
+covered by the output-progress watchdog.</p>
+<h2 id="ffmpeg-memory-leaks-on-corrupt-input">FFmpeg memory leaks on corrupt input</h2>
+<p>On a glitchy SRT input (real packet loss/corruption upstream, not a passphrase or
+config issue — see the incident write-up below), FFmpeg&#39;s AAC decoder can
+misparse a corrupted frame as a bogus multichannel layout (logged as <code>[SWR] Full-on remixing from 22.2 has not yet been implemented!</code>). Reinitializing the
+resampler for that bogus layout leaks memory instead of failing cleanly, and RSS
+can grow unbounded — observed reaching 1.5-1.6GB before the kernel OOM-killer
+stepped in.</p>
+<p>That kernel-level kill is the actual danger, not the leak itself: FFmpeg output
+processes share a cgroup with the <code>restream-srs</code> control-plane service, so
+systemd treats any OOM kill inside that cgroup as the whole service failing and
+restarts it — which cascades (via <code>Requires=</code>) into restarting SRS and the SRT
+bonding relay too, forcing every stream on the box to reconnect simultaneously.
+That mass reconnect can reintroduce the same corrupt-resync conditions on another
+output, repeating the cycle. Full timeline and log evidence from the 2026-07-10
+incident: <a href="https://github.com/live-miracles/restream-srs/blob/master/fail-reports/2026-07-10-pipeline1-output-oom-cascade.md"><code>fail-reports/2026-07-10-pipeline1-output-oom-cascade.md</code></a>.</p>
+<p><strong>How it is handled:</strong> two layers. <code>buildFfmpegArgs</code> passes <code>-fflags +discardcorrupt -err_detect crccheck+bitstream</code> so packets already flagged
+broken by the demuxer are dropped before reaching the decoder, reducing (but not
+eliminating) the chance of the misparse happening at all. As a hard backstop,
+the output memory watchdog (see the watchdogs table above) kills and restarts an
+output once its RSS crosses <code>memory_limit_mb</code> (default 200 MB for <code>copy</code>
+outputs, about 2-3x a healthy output&#39;s normal 65-90 MB baseline, with higher
+per-encoding limits for transcoding profiles; far below the 1.5 GB+ range where
+the kernel OOM-killer struck) — well before the kernel ever needs to get
+involved, so the cascading restart doesn&#39;t happen.</p>
+<h2 id="why-the-srt-bonding-relay-exists">Why the SRT bonding relay exists</h2>
+<p>The relay exists to work around two constraints:</p>
+<ol>
+<li><p><strong>ffmpeg cannot accept bonded SRT group connections.</strong> ffmpeg&#39;s SRT handler does not set <code>SRTO_GROUPCONNECT=1</code> on its listener socket, so bonded connection attempts from encoders like AJA Bridge Live are rejected at the handshake level.</p>
+</li>
+<li><p><strong>SRS has no native SRT bonding support.</strong> SRS accepts normal SRT publishers, but it does not accept bonded/redundant SRT groups directly.</p>
+</li>
+</ol>
+<p><strong>How it is fixed:</strong> <code>srt-bonding-relay</code> starts as its own systemd service, listens on <code>10081</code> with <code>SRTO_GROUPCONNECT=1</code>, accepts each bonded source session, reads its incoming <code>streamid</code>, and opens a normal SRT publisher connection to SRS using the same <code>streamid</code>. It only connects to SRS after an encoder connects, so SRS&#39;s idle-publisher timeout is not triggered by an empty boot-time publisher.</p>
+</article><a class="link text-base-content/50 mt-6 inline-block text-sm" href="https://github.com/live-miracles/restream-srs/blob/master/docs/3-operations/4-reliability.md">Edit this page on GitHub</a><div class="border-base-content/10 mt-10 grid gap-3 border-t pt-6 sm:grid-cols-2">
+              <a class="rounded-box border-base-content/10 hover:border-primary/50 border p-4" href="/projects/restream-srs/docs/operations/configuration/"><div class="text-base-content/50 text-xs">Previous</div><div class="font-semibold">Configuration</div></a>
+              <a class="rounded-box border-base-content/10 hover:border-primary/50 border p-4 sm:text-right" href="/projects/restream-srs/docs/operations/known-issues/"><div class="text-base-content/50 text-xs">Next</div><div class="font-semibold">Known issues</div></a>
+            </div></div>
+            </div>
+          </section>
+          <footer class="text-base-content/50 border-base-content/10 mt-auto border-t pt-6 pb-2 text-sm">
+            Live Miracles · <a class="link" href="https://github.com/live-miracles">github.com/live-miracles</a>
+          </footer>
+        </main>
+      </div>
+      <aside class="drawer-side z-30">
+        <label for="project-drawer" aria-label="Close projects" class="drawer-overlay"></label>
+        <nav class="border-base-content/10 bg-base-200 min-h-full w-80 border-r p-4" aria-label="Projects">
+          <a href="/" class="rounded-box mb-6 flex items-center gap-3 px-3 py-2">
+            <img src="/assets/logo.png" alt="" class="rounded-box size-11" />
+            <span>
+              <span class="block text-xl font-bold">Live Miracles</span>
+              <span class="text-base-content/58 text-sm">Open tools for live teams</span>
+            </span>
+          </a>
+          <div class="mb-5">
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Streaming &amp; transport</div>
+              <a href="/projects/restream-srs/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 bg-base-100 text-primary font-semibold" aria-current="page">
+                <img src="/assets/restream-srs-logo.png" alt="" class="rounded-box size-6 bg-base-content p-0.5 shrink-0 object-contain" />
+                <span>Restream SRS</span>
+              </a><a href="/projects/srt-bonding-relay/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">S</span>
+                <span>SRT Bonding Relay</span>
+              </a><a href="/projects/delayed-yt/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="https://live-miracles.github.io/delayed-yt/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>Delayed YouTube</span>
+              </a>
+            </div><div class="mb-5">
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">vMix production</div>
+              <a href="/projects/vmix-master/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="https://live-miracles.github.io/vmix-master/logo.svg" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>vMix Master</span>
+              </a><a href="/projects/folder-player/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="/assets/folder-player-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>vMix Folder Player</span>
+              </a>
+            </div><div class="mb-5">
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Monitoring &amp; operations</div>
+              <a href="/projects/live-gallery/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="/assets/live-gallery-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>Live Gallery</span>
+              </a><a href="/projects/wake-up-support/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">W</span>
+                <span>Wake Up Support</span>
+              </a>
+            </div><div class="mb-5">
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Event workflows</div>
+              <a href="/projects/key-vault/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="https://live-miracles.github.io/key-vault/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>Key Vault</span>
+              </a><a href="/projects/live-generator/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">L</span>
+                <span>Live Generator</span>
+              </a><a href="/projects/multi-lang-qa/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="https://live-miracles.github.io/multi-lang-qa/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>Multi Lang QA</span>
+              </a>
+            </div>
+        </nav>
+      </aside>
+    </div>
+  </body>
+</html>
