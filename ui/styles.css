@@ -3,8 +3,7 @@
     themes: dim --default;
 }
 
-@source './index.html';
-@source './assets/**/*.js';
+@source '../scripts/*.js';
 @source not '../dist';
 
 @layer base {
@@ -99,6 +98,8 @@
     }
 
     .readme img {
+        display: inline-block;
+        vertical-align: middle;
         max-width: 100%;
         border-radius: var(--radius-box);
         border: 1px solid color-mix(in oklab, var(--color-base-content) 12%, transparent);

@@ -5,6 +5,10 @@ on:
         branches:
             - master
     workflow_dispatch:
+    # Project pages are built from each repository's README, so rebuild daily to
+    # pick up README changes made in the project repositories.
+    schedule:
+        - cron: '17 3 * * *'
 
 permissions:
     contents: write
@@ -32,6 +36,8 @@ jobs:
 
             - name: Build
               run: npm run build
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Publish to gh-pages
               uses: peaceiris/actions-gh-pages@v4

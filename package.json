@@ -8,6 +8,7 @@
     "devDependencies": {
         "@tailwindcss/cli": "^4.1.3",
         "daisyui": "^5.0.17",
+        "marked": "12.0.2",
         "prettier": "^3.2.4",
         "prettier-plugin-tailwindcss": "^0.6.11",
         "serve": "^14.2.6",
