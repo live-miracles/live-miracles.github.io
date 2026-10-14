@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en" data-theme="dim">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Introduction — vMix Master</title>
+    <meta name="description" content="vMix Master is a web control panel for vMix. It runs entirely in your browser: there is no server and nothing to install. You open the page, enter the address of one or more vMix systems, and control " />
+    <link rel="canonical" href="https://live-miracles.github.io/projects/vmix-master/docs/getting-started/introduction/" />
+    <meta property="og:site_name" content="Live Miracles" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Introduction — vMix Master" />
+    <meta property="og:description" content="vMix Master is a web control panel for vMix. It runs entirely in your browser: there is no server and nothing to install. You open the page, enter the address of one or more vMix systems, and control " />
+    <meta property="og:url" content="https://live-miracles.github.io/projects/vmix-master/docs/getting-started/introduction/" />
+    <meta property="og:image" content="https://raw.githubusercontent.com/live-miracles/vmix-master/master/docs/demo.gif" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/assets/logo.png" type="image/png" />
+    <link rel="stylesheet" href="/assets/styles.css" />
+  </head>
+  <body>
+    <div class="drawer lg:drawer-open">
+      <input id="project-drawer" type="checkbox" class="drawer-toggle" />
+      <div class="drawer-content min-h-screen">
+        <header class="navbar border-base-content/10 bg-base-300/92 sticky top-0 z-20 border-b px-4 backdrop-blur lg:hidden">
+          <div class="flex-none">
+            <label for="project-drawer" class="btn btn-square btn-ghost" aria-label="Open projects"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /></svg></label>
+          </div>
+          <div class="flex-1">
+            <a href="/" class="btn btn-ghost text-lg font-bold">Live Miracles</a>
+          </div>
+        </header>
+        <main class="mx-auto flex min-h-screen w-full max-w-6xl flex-col gap-8 px-4 py-6 sm:px-6 lg:px-8">
+          <section class="rounded-box border-base-content/10 bg-base-200/68 border p-5 shadow-xl backdrop-blur sm:p-7">
+            <nav class="text-base-content/60 flex flex-wrap items-center gap-2 text-sm" aria-label="Breadcrumb">
+              <a href="/projects/vmix-master/" class="hover:text-primary flex items-center gap-2"><img src="https://live-miracles.github.io/vmix-master/logo.svg" alt="" class="rounded-box size-5  shrink-0 object-contain" /><span>vMix Master</span></a>
+              <span aria-hidden="true">›</span><a class="hover:text-primary" href="/projects/vmix-master/docs/">Documentation</a><span aria-hidden="true">›</span><span>Getting started</span>
+            </nav>
+            <h1 class="mt-3 text-3xl font-bold sm:text-4xl">Introduction</h1>
+            <details class="rounded-box border-base-content/10 bg-base-300/46 mt-6 border p-4 lg:hidden">
+              <summary class="text-base-content/80 cursor-pointer text-sm font-semibold">Documentation menu</summary>
+              <div class="mt-3"><nav class="lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto" aria-label="vMix Master documentation">
+              <ul class="text-sm"><li><a href="/projects/vmix-master/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Overview</a></li><li><a href="/projects/vmix-master/docs/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Documentation</a></li></ul>
+              <div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Getting started</div>
+                <ul class="text-sm"><li><a href="/projects/vmix-master/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 bg-base-100 text-primary font-semibold" aria-current="page">Introduction</a></li><li><a href="/projects/vmix-master/docs/getting-started/connect-vmix/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Connect to vMix</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Scripts</div>
+                <ul class="text-sm"><li><a href="/projects/vmix-master/docs/scripts/overview/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">vMix scripts overview</a></li><li><a href="/projects/vmix-master/docs/scripts/slave/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Slave</a></li><li><a href="/projects/vmix-master/docs/scripts/name-slave/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">NameSlave</a></li><li><a href="/projects/vmix-master/docs/scripts/preview-next/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">PreviewNext</a></li><li><a href="/projects/vmix-master/docs/scripts/translator/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Translator</a></li><li><a href="/projects/vmix-master/docs/scripts/auto-gain/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">AutoGain</a></li><li><a href="/projects/vmix-master/docs/scripts/audio-fade/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">AudioFade</a></li><li><a href="/projects/vmix-master/docs/scripts/duration-timer/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">DurationTimer</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Reference</div>
+                <ul class="text-sm"><li><a href="/projects/vmix-master/docs/reference/audio-levels/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Audio levels</a></li></ul>
+              </div>
+            </nav></div>
+            </details>
+            <div class="mt-7 grid gap-8 lg:grid-cols-[15rem_minmax(0,1fr)]">
+              <div class="border-base-content/10 hidden lg:block lg:border-r lg:pr-4"><nav class="lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto" aria-label="vMix Master documentation">
+              <ul class="text-sm"><li><a href="/projects/vmix-master/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Overview</a></li><li><a href="/projects/vmix-master/docs/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Documentation</a></li></ul>
+              <div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Getting started</div>
+                <ul class="text-sm"><li><a href="/projects/vmix-master/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 bg-base-100 text-primary font-semibold" aria-current="page">Introduction</a></li><li><a href="/projects/vmix-master/docs/getting-started/connect-vmix/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Connect to vMix</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Scripts</div>
+                <ul class="text-sm"><li><a href="/projects/vmix-master/docs/scripts/overview/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">vMix scripts overview</a></li><li><a href="/projects/vmix-master/docs/scripts/slave/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Slave</a></li><li><a href="/projects/vmix-master/docs/scripts/name-slave/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">NameSlave</a></li><li><a href="/projects/vmix-master/docs/scripts/preview-next/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">PreviewNext</a></li><li><a href="/projects/vmix-master/docs/scripts/translator/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Translator</a></li><li><a href="/projects/vmix-master/docs/scripts/auto-gain/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">AutoGain</a></li><li><a href="/projects/vmix-master/docs/scripts/audio-fade/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">AudioFade</a></li><li><a href="/projects/vmix-master/docs/scripts/duration-timer/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">DurationTimer</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Reference</div>
+                <ul class="text-sm"><li><a href="/projects/vmix-master/docs/reference/audio-levels/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Audio levels</a></li></ul>
+              </div>
+            </nav></div>
+              <div class="min-w-0"><details class="rounded-box border-base-content/10 bg-base-300/46 text-base-content/68 mb-7 border p-4 text-sm backdrop-blur">
+              <summary class="text-base-content/80 cursor-pointer font-semibold">On this page</summary>
+              <ol class="mt-3 space-y-2">
+                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#how-it-works">How it works</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#terms">Terms</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#where-your-setup-is-stored">Where your setup is stored</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#scripts">Scripts</a></li>
+              </ol>
+            </details><article class="readme min-w-0"><p>vMix Master is a web control panel for <a href="https://www.vmix.com/">vMix</a>. It runs entirely in
+your browser: there is no server and nothing to install. You open the page, enter the
+address of one or more vMix systems, and control them from there.</p>
+<p>It works for a single vMix, where it shows every input by name with program and preview,
+audio buses with level meters, overlays, playback controls, and any vMix function. When a
+production uses several vMix machines, such as a main stream plus translated streams, a hot
+backup, or several rooms that must switch together, you group them and every action goes to
+all of them.</p>
+<p>You can try everything without vMix in the
+<a href="https://live-miracles.github.io/vmix-master/?demo">demo</a>, which runs three simulated
+systems inside the page.</p>
+<h2 id="how-it-works">How it works</h2>
+<pre><code> Your browser                      vMix machines
+┌─────────────────┐ status (XML) ┌──────────────────┐
+│ vMix Master     │◄──────────── │ vMix (master)    │
+│ (a static page) │─ commands ──►│ &lt;ip&gt;:8088/api/   │
+│                 │              ├──────────────────┤
+│                 │─ commands ──►│ vMix (group)     │
+└─────────────────┘              └──────────────────┘
+</code></pre>
+<p>The page talks to each vMix directly over its Web Controller API:</p>
+<ul>
+<li><strong>Status:</strong> every refresh interval it fetches <code>http://&lt;ip&gt;:8088/api/</code>, which returns the
+state of the whole vMix as XML (inputs, program and preview, audio, overlays), and redraws
+the dashboard. The interval is the <strong>Refresh rate</strong> in Settings, one second by default.</li>
+<li><strong>Commands:</strong> a click sends a vMix API function, for example
+<code>http://&lt;ip&gt;:8088/api/?Function=Cut&amp;Input=5</code>. A command goes to the master and to every
+group member, and the affected systems are refreshed shortly afterwards so you see the
+result straight away.</li>
+</ul>
+<p>Nothing goes through a third party. The hosted page only delivers the code, and your
+browser sends the requests to your vMix machines.</p>
+<h2 id="terms">Terms</h2>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Box</td>
+<td>One vMix system in the row at the top. It shows a status dot, the name, the address, and what is on program and preview.</td>
+</tr>
+<tr>
+<td>Master</td>
+<td>The box whose status the panel below shows, and that actions are sent from. Click a box to make it the master.</td>
+</tr>
+<tr>
+<td>Group</td>
+<td>The boxes with the group button switched on. When the master is in the group, every action goes to the master and to all other group members.</td>
+</tr>
+<tr>
+<td>Panel</td>
+<td>Everything below the boxes: program and preview, audio buses, and the inputs.</td>
+</tr>
+<tr>
+<td>Function buttons</td>
+<td>The cards under the panel for outputs, transitions, audio, playback, timers, scripts, and a raw request box for any vMix function.</td>
+</tr>
+</tbody></table>
+<p>A group master is shown with a <strong>MASTER</strong> label on its group button and a green outline. A
+master that is not in a group only controls itself.</p>
+<h2 id="where-your-setup-is-stored">Where your setup is stored</h2>
+<p>Your boxes are stored in the page address, so you can bookmark it or send it to a colleague:</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Holds</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>boxes</code></td>
+<td>Name and address of each box, separated by <code>¦</code></td>
+<td><code>Main.192.168.1.20¦Hindi.192.168.1.21</code></td>
+</tr>
+<tr>
+<td><code>group</code></td>
+<td>The numbers of the boxes that are in the group</td>
+<td><code>1 2</code></td>
+</tr>
+<tr>
+<td><code>master</code></td>
+<td>The number of the master box</td>
+<td><code>1</code></td>
+</tr>
+<tr>
+<td><code>refresh-rate</code></td>
+<td>Seconds between status refreshes</td>
+<td><code>1</code></td>
+</tr>
+</tbody></table>
+<p>The saved address suggestions from Settings are stored in your browser. Because the boxes
+are kept in the address, avoid <code>.</code> and <code>¦</code> in box names.</p>
+<h2 id="scripts">Scripts</h2>
+<p>vMix Master controls vMix from the outside. For things that must happen inside vMix, such as
+making a second vMix follow the master or lowering the program audio while a translator
+speaks, there are ready-to-use <a href="/projects/vmix-master/docs/scripts/overview/">vMix scripts</a>.</p>
+<p>Next: <a href="/projects/vmix-master/docs/getting-started/connect-vmix/">connect to vMix</a>.</p>
+</article><a class="link text-base-content/50 mt-6 inline-block text-sm" href="https://github.com/live-miracles/vmix-master/blob/master/docs/1-getting-started/1-introduction.md">Edit this page on GitHub</a><div class="border-base-content/10 mt-10 grid gap-3 border-t pt-6 sm:grid-cols-2">
+              <span></span>
+              <a class="rounded-box border-base-content/10 hover:border-primary/50 border p-4 sm:text-right" href="/projects/vmix-master/docs/getting-started/connect-vmix/"><div class="text-base-content/50 text-xs">Next</div><div class="font-semibold">Connect to vMix</div></a>
+            </div></div>
+            </div>
+          </section>
+          <footer class="text-base-content/50 border-base-content/10 mt-auto border-t pt-6 pb-2 text-sm">
+            Live Miracles · <a class="link" href="https://github.com/live-miracles">github.com/live-miracles</a>
+          </footer>
+        </main>
+      </div>
+      <aside class="drawer-side z-30">
+        <label for="project-drawer" aria-label="Close projects" class="drawer-overlay"></label>
+        <nav class="border-base-content/10 bg-base-200 min-h-full w-80 border-r p-4" aria-label="Projects">
+          <a href="/" class="rounded-box mb-6 flex items-center gap-3 px-3 py-2">
+            <img src="/assets/logo.png" alt="" class="rounded-box size-11" />
+            <span>
+              <span class="block text-xl font-bold">Live Miracles</span>
+              <span class="text-base-content/58 text-sm">Open tools for live teams</span>
+            </span>
+          </a>
+          <div class="mb-5">
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Streaming &amp; transport</div>
+              <a href="/projects/bunryu/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="/assets/bunryu-logo.png" alt="" class="rounded-box size-6 bg-base-content p-0.5 shrink-0 object-contain" />
+                <span>Bunryu</span>
+              </a><a href="/projects/srt-bonding-relay/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">S</span>
+                <span>SRT Bonding Relay</span>
+              </a><a href="/projects/delayed-yt/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="https://live-miracles.github.io/delayed-yt/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>Delayed YouTube</span>
+              </a>
+            </div><div class="mb-5">
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">vMix production</div>
+              <a href="/projects/vmix-master/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 bg-base-100 text-primary font-semibold" aria-current="page">
+                <img src="https://live-miracles.github.io/vmix-master/logo.svg" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>vMix Master</span>
+              </a><a href="/projects/folder-player/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="/assets/folder-player-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>vMix Folder Player</span>
+              </a>
+            </div><div class="mb-5">
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Monitoring &amp; operations</div>
+              <a href="/projects/live-gallery/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="/assets/live-gallery-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>Live Gallery</span>
+              </a><a href="/projects/wake-up-support/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">W</span>
+                <span>Wake Up Support</span>
+              </a>
+            </div><div class="mb-5">
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Event workflows</div>
+              <a href="/projects/key-vault/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="https://live-miracles.github.io/key-vault/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>Key Vault</span>
+              </a><a href="/projects/live-generator/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">L</span>
+                <span>Live Generator</span>
+              </a><a href="/projects/multi-lang-qa/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="https://live-miracles.github.io/multi-lang-qa/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>Multi Lang QA</span>
+              </a>
+            </div>
+        </nav>
+      </aside>
+    </div>
+  </body>
+</html>

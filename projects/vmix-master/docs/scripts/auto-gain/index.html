@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en" data-theme="dim">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AutoGain — vMix Master</title>
+    <meta name="description" content="AutoGain watches a microphone, or a call, and adjusts its gain by itself. It lowers the gain when the signal clips, and raises it when the voice has been too quiet for a while, so a speaker who moves " />
+    <link rel="canonical" href="https://live-miracles.github.io/projects/vmix-master/docs/scripts/auto-gain/" />
+    <meta property="og:site_name" content="Live Miracles" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="AutoGain — vMix Master" />
+    <meta property="og:description" content="AutoGain watches a microphone, or a call, and adjusts its gain by itself. It lowers the gain when the signal clips, and raises it when the voice has been too quiet for a while, so a speaker who moves " />
+    <meta property="og:url" content="https://live-miracles.github.io/projects/vmix-master/docs/scripts/auto-gain/" />
+    <meta property="og:image" content="https://raw.githubusercontent.com/live-miracles/vmix-master/master/docs/demo.gif" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/assets/logo.png" type="image/png" />
+    <link rel="stylesheet" href="/assets/styles.css" />
+  </head>
+  <body>
+    <div class="drawer lg:drawer-open">
+      <input id="project-drawer" type="checkbox" class="drawer-toggle" />
+      <div class="drawer-content min-h-screen">
+        <header class="navbar border-base-content/10 bg-base-300/92 sticky top-0 z-20 border-b px-4 backdrop-blur lg:hidden">
+          <div class="flex-none">
+            <label for="project-drawer" class="btn btn-square btn-ghost" aria-label="Open projects"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /></svg></label>
+          </div>
+          <div class="flex-1">
+            <a href="/" class="btn btn-ghost text-lg font-bold">Live Miracles</a>
+          </div>
+        </header>
+        <main class="mx-auto flex min-h-screen w-full max-w-6xl flex-col gap-8 px-4 py-6 sm:px-6 lg:px-8">
+          <section class="rounded-box border-base-content/10 bg-base-200/68 border p-5 shadow-xl backdrop-blur sm:p-7">
+            <nav class="text-base-content/60 flex flex-wrap items-center gap-2 text-sm" aria-label="Breadcrumb">
+              <a href="/projects/vmix-master/" class="hover:text-primary flex items-center gap-2"><img src="https://live-miracles.github.io/vmix-master/logo.svg" alt="" class="rounded-box size-5  shrink-0 object-contain" /><span>vMix Master</span></a>
+              <span aria-hidden="true">›</span><a class="hover:text-primary" href="/projects/vmix-master/docs/">Documentation</a><span aria-hidden="true">›</span><span>Scripts</span>
+            </nav>
+            <h1 class="mt-3 text-3xl font-bold sm:text-4xl">AutoGain</h1>
+            <details class="rounded-box border-base-content/10 bg-base-300/46 mt-6 border p-4 lg:hidden">
+              <summary class="text-base-content/80 cursor-pointer text-sm font-semibold">Documentation menu</summary>
+              <div class="mt-3"><nav class="lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto" aria-label="vMix Master documentation">
+              <ul class="text-sm"><li><a href="/projects/vmix-master/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Overview</a></li><li><a href="/projects/vmix-master/docs/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Documentation</a></li></ul>
+              <div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Getting started</div>
+                <ul class="text-sm"><li><a href="/projects/vmix-master/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Introduction</a></li><li><a href="/projects/vmix-master/docs/getting-started/connect-vmix/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Connect to vMix</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Scripts</div>
+                <ul class="text-sm"><li><a href="/projects/vmix-master/docs/scripts/overview/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">vMix scripts overview</a></li><li><a href="/projects/vmix-master/docs/scripts/slave/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Slave</a></li><li><a href="/projects/vmix-master/docs/scripts/name-slave/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">NameSlave</a></li><li><a href="/projects/vmix-master/docs/scripts/preview-next/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">PreviewNext</a></li><li><a href="/projects/vmix-master/docs/scripts/translator/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Translator</a></li><li><a href="/projects/vmix-master/docs/scripts/auto-gain/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 bg-base-100 text-primary font-semibold" aria-current="page">AutoGain</a></li><li><a href="/projects/vmix-master/docs/scripts/audio-fade/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">AudioFade</a></li><li><a href="/projects/vmix-master/docs/scripts/duration-timer/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">DurationTimer</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Reference</div>
+                <ul class="text-sm"><li><a href="/projects/vmix-master/docs/reference/audio-levels/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Audio levels</a></li></ul>
+              </div>
+            </nav></div>
+            </details>
+            <div class="mt-7 grid gap-8 lg:grid-cols-[15rem_minmax(0,1fr)]">
+              <div class="border-base-content/10 hidden lg:block lg:border-r lg:pr-4"><nav class="lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto" aria-label="vMix Master documentation">
+              <ul class="text-sm"><li><a href="/projects/vmix-master/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Overview</a></li><li><a href="/projects/vmix-master/docs/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Documentation</a></li></ul>
+              <div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Getting started</div>
+                <ul class="text-sm"><li><a href="/projects/vmix-master/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Introduction</a></li><li><a href="/projects/vmix-master/docs/getting-started/connect-vmix/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Connect to vMix</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Scripts</div>
+                <ul class="text-sm"><li><a href="/projects/vmix-master/docs/scripts/overview/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">vMix scripts overview</a></li><li><a href="/projects/vmix-master/docs/scripts/slave/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Slave</a></li><li><a href="/projects/vmix-master/docs/scripts/name-slave/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">NameSlave</a></li><li><a href="/projects/vmix-master/docs/scripts/preview-next/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">PreviewNext</a></li><li><a href="/projects/vmix-master/docs/scripts/translator/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Translator</a></li><li><a href="/projects/vmix-master/docs/scripts/auto-gain/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 bg-base-100 text-primary font-semibold" aria-current="page">AutoGain</a></li><li><a href="/projects/vmix-master/docs/scripts/audio-fade/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">AudioFade</a></li><li><a href="/projects/vmix-master/docs/scripts/duration-timer/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">DurationTimer</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Reference</div>
+                <ul class="text-sm"><li><a href="/projects/vmix-master/docs/reference/audio-levels/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Audio levels</a></li></ul>
+              </div>
+            </nav></div>
+              <div class="min-w-0"><details class="rounded-box border-base-content/10 bg-base-300/46 text-base-content/68 mb-7 border p-4 text-sm backdrop-blur">
+              <summary class="text-base-content/80 cursor-pointer font-semibold">On this page</summary>
+              <ol class="mt-3 space-y-2">
+                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#set-up">Set up</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#settings">Settings</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#how-it-works">How it works</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#good-to-know">Good to know</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#log-messages">Log messages</a></li>
+              </ol>
+            </details><article class="readme min-w-0"><p>AutoGain watches a microphone, or a call, and adjusts its <strong>gain</strong> by itself. It lowers the
+gain when the signal clips, and raises it when the voice has been too quiet for a while, so
+a speaker who moves closer or further away stays at a usable level without anyone touching
+the input.</p>
+<h2 id="set-up">Set up</h2>
+<ol>
+<li>Add the script to the vMix that has the microphone, see
+<a href="/projects/vmix-master/docs/scripts/overview/#add-a-script-to-vmix">adding a script</a>.</li>
+<li>Start the script. The defaults suit most voices.</li>
+</ol>
+<p>The input it adjusts is the first of these that exists:</p>
+<ol>
+<li>An input with <code>AutoGain</code> in its title.</li>
+<li>The first input of type <strong>Audio</strong>.</li>
+<li>The first input of type <strong>VideoCall</strong>.</li>
+</ol>
+<p>Put <code>AutoGain</code> in the title of the right input to be certain. If none is found, the script
+prints <code>No inputs have &#39;AutoGain&#39; in the name or have Audio or VideoCall type.</code> and looks
+again after five seconds. A muted input is left alone.</p>
+<h2 id="settings">Settings</h2>
+<p>Levels are the <code>meterF1</code> value of the input, which is an amplitude from 0 to 1. See
+<a href="/projects/vmix-master/docs/reference/audio-levels/">Audio levels</a> for the decibel equivalents. Times are in
+milliseconds.</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>LOOP_TIME</code></td>
+<td><code>50</code></td>
+<td>How often the script reads the level</td>
+</tr>
+<tr>
+<td><code>CLIP_THRESHOLD</code></td>
+<td><code>0.9</code></td>
+<td>A level above this, about -1 dB, counts as clipping</td>
+</tr>
+<tr>
+<td><code>GAIN_DOWN_TIME</code></td>
+<td><code>1000</code></td>
+<td>The shortest time between two gain decreases</td>
+</tr>
+<tr>
+<td><code>PEAK_THRESHOLD</code></td>
+<td><code>0.45</code></td>
+<td>A level above this, about -7 dB, counts as loud enough</td>
+</tr>
+<tr>
+<td><code>PEAK_WAIT</code></td>
+<td><code>5000</code></td>
+<td>How long there must be no loud-enough peak before the gain may be raised</td>
+</tr>
+<tr>
+<td><code>GAIN_UP_TIME</code></td>
+<td><code>3000</code></td>
+<td>The shortest time between two gain increases</td>
+</tr>
+<tr>
+<td><code>VOICE_THRESHOLD</code></td>
+<td><code>0.1</code></td>
+<td>A level above this, about -20 dB, counts as a voice</td>
+</tr>
+<tr>
+<td><code>VOICE_DURATION</code></td>
+<td><code>250</code></td>
+<td>How long the voice level must last without a break to count as speaking, so short noises are ignored</td>
+</tr>
+<tr>
+<td><code>VOICE_WAIT</code></td>
+<td><code>5000</code></td>
+<td>When there has been no voice for this long, the script stops changing the gain</td>
+</tr>
+</tbody></table>
+<h2 id="how-it-works">How it works</h2>
+<p>The script changes the input&#39;s gain in steps of 1 dB, between <strong>0 and 24 dB</strong>.</p>
+<ul>
+<li><strong>Down.</strong> When the level goes above <code>CLIP_THRESHOLD</code>, the gain is lowered by 1 dB. This
+happens at most once per <code>GAIN_DOWN_TIME</code>.</li>
+<li><strong>Up.</strong> When no peak above <code>PEAK_THRESHOLD</code> has been seen for <code>PEAK_WAIT</code>, the gain is
+raised by 1 dB. This happens at most once per <code>GAIN_UP_TIME</code>. So a speaker who is too quiet
+gets about one more decibel every three seconds, until peaks reach the target.</li>
+<li><strong>Only while someone speaks.</strong> A voice is detected when the level stays above
+<code>VOICE_THRESHOLD</code> for <code>VOICE_DURATION</code>. When there has been no voice for <code>VOICE_WAIT</code>, the
+script makes no changes. Gain does not creep up during silence, and a clean pause does not
+turn a quiet room into loud noise.</li>
+</ul>
+<h2 id="good-to-know">Good to know</h2>
+<ul>
+<li>It adjusts a single input. With several microphones, put <code>AutoGain</code> in the title of the one
+that matters, usually the main speaker.</li>
+<li>It only changes the <strong>gain</strong>. The input&#39;s volume and the bus volumes are not touched.</li>
+<li>The gain moves slowly on purpose. After a change in the speaker or the microphone position it
+takes some seconds to settle.</li>
+<li>With <a href="/projects/vmix-master/docs/scripts/translator/">Translator</a> on the same vMix, give the two inputs titles with
+<code>Translator</code> and <code>AutoGain</code>, so each script picks the input you mean.</li>
+</ul>
+<h2 id="log-messages">Log messages</h2>
+<p>The script is quiet while it works. It prints its start-up lines, the missing-input notice,
+and <code>AutoGain | Unexpected error: ...</code> when a read fails.</p>
+</article><a class="link text-base-content/50 mt-6 inline-block text-sm" href="https://github.com/live-miracles/vmix-master/blob/master/docs/2-scripts/6-auto-gain.md">Edit this page on GitHub</a><div class="border-base-content/10 mt-10 grid gap-3 border-t pt-6 sm:grid-cols-2">
+              <a class="rounded-box border-base-content/10 hover:border-primary/50 border p-4" href="/projects/vmix-master/docs/scripts/translator/"><div class="text-base-content/50 text-xs">Previous</div><div class="font-semibold">Translator</div></a>
+              <a class="rounded-box border-base-content/10 hover:border-primary/50 border p-4 sm:text-right" href="/projects/vmix-master/docs/scripts/audio-fade/"><div class="text-base-content/50 text-xs">Next</div><div class="font-semibold">AudioFade</div></a>
+            </div></div>
+            </div>
+          </section>
+          <footer class="text-base-content/50 border-base-content/10 mt-auto border-t pt-6 pb-2 text-sm">
+            Live Miracles · <a class="link" href="https://github.com/live-miracles">github.com/live-miracles</a>
+          </footer>
+        </main>
+      </div>
+      <aside class="drawer-side z-30">
+        <label for="project-drawer" aria-label="Close projects" class="drawer-overlay"></label>
+        <nav class="border-base-content/10 bg-base-200 min-h-full w-80 border-r p-4" aria-label="Projects">
+          <a href="/" class="rounded-box mb-6 flex items-center gap-3 px-3 py-2">
+            <img src="/assets/logo.png" alt="" class="rounded-box size-11" />
+            <span>
+              <span class="block text-xl font-bold">Live Miracles</span>
+              <span class="text-base-content/58 text-sm">Open tools for live teams</span>
+            </span>
+          </a>
+          <div class="mb-5">
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Streaming &amp; transport</div>
+              <a href="/projects/bunryu/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="/assets/bunryu-logo.png" alt="" class="rounded-box size-6 bg-base-content p-0.5 shrink-0 object-contain" />
+                <span>Bunryu</span>
+              </a><a href="/projects/srt-bonding-relay/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">S</span>
+                <span>SRT Bonding Relay</span>
+              </a><a href="/projects/delayed-yt/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="https://live-miracles.github.io/delayed-yt/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>Delayed YouTube</span>
+              </a>
+            </div><div class="mb-5">
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">vMix production</div>
+              <a href="/projects/vmix-master/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 bg-base-100 text-primary font-semibold" aria-current="page">
+                <img src="https://live-miracles.github.io/vmix-master/logo.svg" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>vMix Master</span>
+              </a><a href="/projects/folder-player/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="/assets/folder-player-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>vMix Folder Player</span>
+              </a>
+            </div><div class="mb-5">
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Monitoring &amp; operations</div>
+              <a href="/projects/live-gallery/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="/assets/live-gallery-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>Live Gallery</span>
+              </a><a href="/projects/wake-up-support/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">W</span>
+                <span>Wake Up Support</span>
+              </a>
+            </div><div class="mb-5">
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Event workflows</div>
+              <a href="/projects/key-vault/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="https://live-miracles.github.io/key-vault/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>Key Vault</span>
+              </a><a href="/projects/live-generator/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">L</span>
+                <span>Live Generator</span>
+              </a><a href="/projects/multi-lang-qa/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="https://live-miracles.github.io/multi-lang-qa/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>Multi Lang QA</span>
+              </a>
+            </div>
+        </nav>
+      </aside>
+    </div>
+  </body>
+</html>

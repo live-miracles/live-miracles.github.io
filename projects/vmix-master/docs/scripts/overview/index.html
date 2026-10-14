@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en" data-theme="dim">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>vMix scripts overview — vMix Master</title>
+    <meta name="description" content="vMix Master controls vMix from the outside, through its Web Controller. Some jobs have to happen inside vMix itself, such as making a second vMix follow the first, or lowering the program audio while " />
+    <link rel="canonical" href="https://live-miracles.github.io/projects/vmix-master/docs/scripts/overview/" />
+    <meta property="og:site_name" content="Live Miracles" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="vMix scripts overview — vMix Master" />
+    <meta property="og:description" content="vMix Master controls vMix from the outside, through its Web Controller. Some jobs have to happen inside vMix itself, such as making a second vMix follow the first, or lowering the program audio while " />
+    <meta property="og:url" content="https://live-miracles.github.io/projects/vmix-master/docs/scripts/overview/" />
+    <meta property="og:image" content="https://raw.githubusercontent.com/live-miracles/vmix-master/master/docs/demo.gif" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/assets/logo.png" type="image/png" />
+    <link rel="stylesheet" href="/assets/styles.css" />
+  </head>
+  <body>
+    <div class="drawer lg:drawer-open">
+      <input id="project-drawer" type="checkbox" class="drawer-toggle" />
+      <div class="drawer-content min-h-screen">
+        <header class="navbar border-base-content/10 bg-base-300/92 sticky top-0 z-20 border-b px-4 backdrop-blur lg:hidden">
+          <div class="flex-none">
+            <label for="project-drawer" class="btn btn-square btn-ghost" aria-label="Open projects"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /></svg></label>
+          </div>
+          <div class="flex-1">
+            <a href="/" class="btn btn-ghost text-lg font-bold">Live Miracles</a>
+          </div>
+        </header>
+        <main class="mx-auto flex min-h-screen w-full max-w-6xl flex-col gap-8 px-4 py-6 sm:px-6 lg:px-8">
+          <section class="rounded-box border-base-content/10 bg-base-200/68 border p-5 shadow-xl backdrop-blur sm:p-7">
+            <nav class="text-base-content/60 flex flex-wrap items-center gap-2 text-sm" aria-label="Breadcrumb">
+              <a href="/projects/vmix-master/" class="hover:text-primary flex items-center gap-2"><img src="https://live-miracles.github.io/vmix-master/logo.svg" alt="" class="rounded-box size-5  shrink-0 object-contain" /><span>vMix Master</span></a>
+              <span aria-hidden="true">›</span><a class="hover:text-primary" href="/projects/vmix-master/docs/">Documentation</a><span aria-hidden="true">›</span><span>Scripts</span>
+            </nav>
+            <h1 class="mt-3 text-3xl font-bold sm:text-4xl">vMix scripts overview</h1>
+            <details class="rounded-box border-base-content/10 bg-base-300/46 mt-6 border p-4 lg:hidden">
+              <summary class="text-base-content/80 cursor-pointer text-sm font-semibold">Documentation menu</summary>
+              <div class="mt-3"><nav class="lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto" aria-label="vMix Master documentation">
+              <ul class="text-sm"><li><a href="/projects/vmix-master/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Overview</a></li><li><a href="/projects/vmix-master/docs/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Documentation</a></li></ul>
+              <div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Getting started</div>
+                <ul class="text-sm"><li><a href="/projects/vmix-master/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Introduction</a></li><li><a href="/projects/vmix-master/docs/getting-started/connect-vmix/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Connect to vMix</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Scripts</div>
+                <ul class="text-sm"><li><a href="/projects/vmix-master/docs/scripts/overview/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 bg-base-100 text-primary font-semibold" aria-current="page">vMix scripts overview</a></li><li><a href="/projects/vmix-master/docs/scripts/slave/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Slave</a></li><li><a href="/projects/vmix-master/docs/scripts/name-slave/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">NameSlave</a></li><li><a href="/projects/vmix-master/docs/scripts/preview-next/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">PreviewNext</a></li><li><a href="/projects/vmix-master/docs/scripts/translator/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Translator</a></li><li><a href="/projects/vmix-master/docs/scripts/auto-gain/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">AutoGain</a></li><li><a href="/projects/vmix-master/docs/scripts/audio-fade/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">AudioFade</a></li><li><a href="/projects/vmix-master/docs/scripts/duration-timer/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">DurationTimer</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Reference</div>
+                <ul class="text-sm"><li><a href="/projects/vmix-master/docs/reference/audio-levels/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Audio levels</a></li></ul>
+              </div>
+            </nav></div>
+            </details>
+            <div class="mt-7 grid gap-8 lg:grid-cols-[15rem_minmax(0,1fr)]">
+              <div class="border-base-content/10 hidden lg:block lg:border-r lg:pr-4"><nav class="lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto" aria-label="vMix Master documentation">
+              <ul class="text-sm"><li><a href="/projects/vmix-master/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Overview</a></li><li><a href="/projects/vmix-master/docs/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Documentation</a></li></ul>
+              <div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Getting started</div>
+                <ul class="text-sm"><li><a href="/projects/vmix-master/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Introduction</a></li><li><a href="/projects/vmix-master/docs/getting-started/connect-vmix/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Connect to vMix</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Scripts</div>
+                <ul class="text-sm"><li><a href="/projects/vmix-master/docs/scripts/overview/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 bg-base-100 text-primary font-semibold" aria-current="page">vMix scripts overview</a></li><li><a href="/projects/vmix-master/docs/scripts/slave/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Slave</a></li><li><a href="/projects/vmix-master/docs/scripts/name-slave/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">NameSlave</a></li><li><a href="/projects/vmix-master/docs/scripts/preview-next/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">PreviewNext</a></li><li><a href="/projects/vmix-master/docs/scripts/translator/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Translator</a></li><li><a href="/projects/vmix-master/docs/scripts/auto-gain/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">AutoGain</a></li><li><a href="/projects/vmix-master/docs/scripts/audio-fade/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">AudioFade</a></li><li><a href="/projects/vmix-master/docs/scripts/duration-timer/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">DurationTimer</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Reference</div>
+                <ul class="text-sm"><li><a href="/projects/vmix-master/docs/reference/audio-levels/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Audio levels</a></li></ul>
+              </div>
+            </nav></div>
+              <div class="min-w-0"><details class="rounded-box border-base-content/10 bg-base-300/46 text-base-content/68 mb-7 border p-4 text-sm backdrop-blur">
+              <summary class="text-base-content/80 cursor-pointer font-semibold">On this page</summary>
+              <ol class="mt-3 space-y-2">
+                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#which-script-do-i-need">Which script do I need?</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#requirements">Requirements</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#add-a-script-to-vmix">Add a script to vMix</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#how-the-scripts-behave">How the scripts behave</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#master-and-slave">Master and slave</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#combining-scripts">Combining scripts</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#updating-a-script">Updating a script</a></li>
+              </ol>
+            </details><article class="readme min-w-0"><p>vMix Master controls vMix from the outside, through its Web Controller. Some jobs have to
+happen inside vMix itself, such as making a second vMix follow the first, or lowering the
+program audio while an interpreter speaks. For those there are ready-to-use scripts in the
+<a href="https://github.com/live-miracles/vmix-master/tree/master/vmix-scripts"><code>vmix-scripts/</code></a> folder.
+They are written in VB.NET for vMix&#39;s built-in scripting.</p>
+<table>
+<thead>
+<tr>
+<th>Script</th>
+<th>What it does</th>
+<th>Runs on</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="/projects/vmix-master/docs/scripts/slave/">Slave</a></td>
+<td>Follows a master vMix: program, preview and playback position, by input number</td>
+<td>Each follower</td>
+</tr>
+<tr>
+<td><a href="/projects/vmix-master/docs/scripts/name-slave/">NameSlave</a></td>
+<td>Follows a master vMix by input name instead of number</td>
+<td>Each follower</td>
+</tr>
+<tr>
+<td><a href="/projects/vmix-master/docs/scripts/preview-next/">PreviewNext</a></td>
+<td>Puts the next input into preview after each transition</td>
+<td>The vMix you operate</td>
+</tr>
+<tr>
+<td><a href="/projects/vmix-master/docs/scripts/translator/">Translator</a></td>
+<td>Lowers the program audio while a translator speaks</td>
+<td>The vMix that mixes the audio</td>
+</tr>
+<tr>
+<td><a href="/projects/vmix-master/docs/scripts/auto-gain/">AutoGain</a></td>
+<td>Keeps a microphone out of clipping and not too quiet</td>
+<td>The vMix with the microphone</td>
+</tr>
+<tr>
+<td><a href="/projects/vmix-master/docs/scripts/audio-fade/">AudioFade</a></td>
+<td>Fades the audio of media inputs in and out on transitions</td>
+<td>The vMix that plays the media</td>
+</tr>
+<tr>
+<td><a href="/projects/vmix-master/docs/scripts/duration-timer/">DurationTimer</a></td>
+<td>Writes the time left of the current input into a title</td>
+<td>The vMix that shows the title</td>
+</tr>
+</tbody></table>
+<h2 id="which-script-do-i-need">Which script do I need?</h2>
+<table>
+<thead>
+<tr>
+<th>I want to...</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Make another vMix take the same program and preview as a master</td>
+<td><a href="/projects/vmix-master/docs/scripts/slave/">Slave</a> if the input numbers match, <a href="/projects/vmix-master/docs/scripts/name-slave/">NameSlave</a> if the names match</td>
+</tr>
+<tr>
+<td>Keep a video on the follower at the same position as on the master</td>
+<td><a href="/projects/vmix-master/docs/scripts/slave/">Slave</a></td>
+</tr>
+<tr>
+<td>Always have the next input ready in preview</td>
+<td><a href="/projects/vmix-master/docs/scripts/preview-next/">PreviewNext</a></td>
+</tr>
+<tr>
+<td>Duck the program audio while an interpreter speaks</td>
+<td><a href="/projects/vmix-master/docs/scripts/translator/">Translator</a></td>
+</tr>
+<tr>
+<td>Stop a speaker&#39;s level from clipping or sitting too low</td>
+<td><a href="/projects/vmix-master/docs/scripts/auto-gain/">AutoGain</a></td>
+</tr>
+<tr>
+<td>Avoid abrupt audio on clips, music and jingles</td>
+<td><a href="/projects/vmix-master/docs/scripts/audio-fade/">AudioFade</a></td>
+</tr>
+<tr>
+<td>Show a countdown of the current clip</td>
+<td><a href="/projects/vmix-master/docs/scripts/duration-timer/">DurationTimer</a></td>
+</tr>
+</tbody></table>
+<h2 id="requirements">Requirements</h2>
+<p>Scripting is a feature of the 4K and Pro editions of vMix. See vMix&#39;s own guide,
+<a href="https://1.vmix.com/help27/ScriptingandAutomation.html">Scripting and Automation</a>, for the
+details of the editor.</p>
+<h2 id="add-a-script-to-vmix">Add a script to vMix</h2>
+<ol>
+<li>Open the script&#39;s <code>.vb</code> file from the
+<a href="https://github.com/live-miracles/vmix-master/tree/master/vmix-scripts"><code>vmix-scripts/</code></a>
+folder and copy all of it.</li>
+<li>In vMix, open <strong>Settings</strong> and the <strong>Scripting</strong> tab, and create a new script. Give it a
+unique name, make sure the language is VB.NET, and paste the code.</li>
+<li>Edit the settings at the top of the script, under <code>&#39; ===== Configurations =====</code>. The
+follower scripts also need the master&#39;s address, see <a href="/projects/vmix-master/docs/scripts/slave/">Slave</a>.</li>
+<li>Start the script. The way vMix describes it is to create a shortcut whose function is
+<code>ScriptStart</code> and whose value is the script&#39;s name. Stopping uses <code>ScriptStop</code>.</li>
+</ol>
+<p>vMix Master has these two functions under <strong>Scripts</strong> in the function buttons, so you can start
+and stop a script on the master and on every group member with one click. Type the script&#39;s
+name in the box next to the button.</p>
+<p>A script can be global, working with every preset, or local, loaded only with the preset it
+belongs to. Tick <strong>Local Script (This Preset Only)</strong> in the editor to make it local. A script
+that belongs to one show, such as <a href="/projects/vmix-master/docs/scripts/slave/">Slave</a>, can be local so it only loads with that
+preset. If two scripts have the same name, vMix uses the first one in the list.</p>
+<h2 id="how-the-scripts-behave">How the scripts behave</h2>
+<p>All of them follow the same conventions, so once you have used one the rest look familiar.</p>
+<ul>
+<li><p><strong>Settings are constants at the top.</strong> Times are in milliseconds unless the comment says
+otherwise. You edit them in the script, and they take effect the next time it starts.</p>
+</li>
+<li><p><strong>They announce themselves.</strong> At start each script prints its name and version, for example
+<code>12:30:01 Slave 1.4.3</code>, and then a short line for everything it does, such as
+<code>Slave | New active: 5</code>.</p>
+</li>
+<li><p><strong>They check for updates.</strong> After starting, each script asks
+<a href="https://live-miracles.github.io/vmix-master/versions.json"><code>versions.json</code></a> for the latest
+version and prints <code>Update available</code> if yours is older. This needs internet access on the
+vMix machine. When it fails, the script prints <code>Could not check for updates</code> and carries on.
+The <strong>vMix Scripts</strong> menu in vMix Master lists the same versions.</p>
+</li>
+<li><p><strong>Errors do not stop them.</strong> A failed request or an unexpected input state is printed as
+<code>Unexpected error: ...</code> and the script tries again on the next pass.</p>
+</li>
+<li><p><strong>They find inputs by name or type.</strong> Scripts that act on a particular input look for a
+keyword in its title:</p>
+<table>
+<thead>
+<tr>
+<th>Script</th>
+<th>Input it uses</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="/projects/vmix-master/docs/scripts/translator/">Translator</a></td>
+<td>An input with <code>Translator</code> in the title, else the first Audio input, else the first VideoCall input</td>
+</tr>
+<tr>
+<td><a href="/projects/vmix-master/docs/scripts/auto-gain/">AutoGain</a></td>
+<td>An input with <code>AutoGain</code> in the title, else the first Audio input, else the first VideoCall input</td>
+</tr>
+<tr>
+<td><a href="/projects/vmix-master/docs/scripts/audio-fade/">AudioFade</a></td>
+<td>Every input with <code>AudioFade</code> in the title</td>
+</tr>
+<tr>
+<td><a href="/projects/vmix-master/docs/scripts/duration-timer/">DurationTimer</a></td>
+<td>The title input named <code>DurationTimer</code></td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<h2 id="master-and-slave">Master and slave</h2>
+<p>The two follower scripts run on a vMix that should copy another one. The vMix being copied is
+the <strong>master</strong>, and the one running the script is the <strong>slave</strong>. The slave asks the master for
+its status every 300 ms and catches up.</p>
+<pre><code>vMix A (master) ◄─ status, every 300 ms ─ vMix B (slave)
+you operate this                          runs Slave
+</code></pre>
+<p>This is separate from a group in vMix Master. In a group, every click in the web page goes to
+all members at once. A follower script keeps working when someone operates the master in
+vMix itself, from a shortcut or a control surface, without going through the page, and
+<a href="/projects/vmix-master/docs/scripts/slave/">Slave</a> also pulls a video back into time when it drifts. The two combine well:
+group the systems in the page for instant control, and run the script on the followers as
+the safety net.</p>
+<h2 id="combining-scripts">Combining scripts</h2>
+<ul>
+<li>Run only one of <a href="/projects/vmix-master/docs/scripts/slave/">Slave</a> and <a href="/projects/vmix-master/docs/scripts/name-slave/">NameSlave</a> on a vMix. Both change
+the program, so they would fight.</li>
+<li>Run <a href="/projects/vmix-master/docs/scripts/preview-next/">PreviewNext</a> on the master only. The followers get their preview
+from the master anyway.</li>
+<li><a href="/projects/vmix-master/docs/scripts/translator/">Translator</a> and <a href="/projects/vmix-master/docs/scripts/auto-gain/">AutoGain</a> can share a vMix, but they pick
+their input by title first and then by type. Put <code>Translator</code> and <code>AutoGain</code> in the titles of
+their inputs so each finds the right one.</li>
+</ul>
+<h2 id="updating-a-script">Updating a script</h2>
+<p>Copy the new version over the old one in vMix. This replaces your settings and the master&#39;s
+address with the defaults, so enter them again. The <code>SCRIPT_VERSION</code> line at the top tells you
+which version you have.</p>
+</article><a class="link text-base-content/50 mt-6 inline-block text-sm" href="https://github.com/live-miracles/vmix-master/blob/master/docs/2-scripts/1-overview.md">Edit this page on GitHub</a><div class="border-base-content/10 mt-10 grid gap-3 border-t pt-6 sm:grid-cols-2">
+              <a class="rounded-box border-base-content/10 hover:border-primary/50 border p-4" href="/projects/vmix-master/docs/getting-started/connect-vmix/"><div class="text-base-content/50 text-xs">Previous</div><div class="font-semibold">Connect to vMix</div></a>
+              <a class="rounded-box border-base-content/10 hover:border-primary/50 border p-4 sm:text-right" href="/projects/vmix-master/docs/scripts/slave/"><div class="text-base-content/50 text-xs">Next</div><div class="font-semibold">Slave</div></a>
+            </div></div>
+            </div>
+          </section>
+          <footer class="text-base-content/50 border-base-content/10 mt-auto border-t pt-6 pb-2 text-sm">
+            Live Miracles · <a class="link" href="https://github.com/live-miracles">github.com/live-miracles</a>
+          </footer>
+        </main>
+      </div>
+      <aside class="drawer-side z-30">
+        <label for="project-drawer" aria-label="Close projects" class="drawer-overlay"></label>
+        <nav class="border-base-content/10 bg-base-200 min-h-full w-80 border-r p-4" aria-label="Projects">
+          <a href="/" class="rounded-box mb-6 flex items-center gap-3 px-3 py-2">
+            <img src="/assets/logo.png" alt="" class="rounded-box size-11" />
+            <span>
+              <span class="block text-xl font-bold">Live Miracles</span>
+              <span class="text-base-content/58 text-sm">Open tools for live teams</span>
+            </span>
+          </a>
+          <div class="mb-5">
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Streaming &amp; transport</div>
+              <a href="/projects/bunryu/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="/assets/bunryu-logo.png" alt="" class="rounded-box size-6 bg-base-content p-0.5 shrink-0 object-contain" />
+                <span>Bunryu</span>
+              </a><a href="/projects/srt-bonding-relay/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">S</span>
+                <span>SRT Bonding Relay</span>
+              </a><a href="/projects/delayed-yt/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="https://live-miracles.github.io/delayed-yt/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>Delayed YouTube</span>
+              </a>
+            </div><div class="mb-5">
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">vMix production</div>
+              <a href="/projects/vmix-master/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 bg-base-100 text-primary font-semibold" aria-current="page">
+                <img src="https://live-miracles.github.io/vmix-master/logo.svg" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>vMix Master</span>
+              </a><a href="/projects/folder-player/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="/assets/folder-player-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>vMix Folder Player</span>
+              </a>
+            </div><div class="mb-5">
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Monitoring &amp; operations</div>
+              <a href="/projects/live-gallery/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="/assets/live-gallery-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>Live Gallery</span>
+              </a><a href="/projects/wake-up-support/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">W</span>
+                <span>Wake Up Support</span>
+              </a>
+            </div><div class="mb-5">
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Event workflows</div>
+              <a href="/projects/key-vault/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="https://live-miracles.github.io/key-vault/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>Key Vault</span>
+              </a><a href="/projects/live-generator/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">L</span>
+                <span>Live Generator</span>
+              </a><a href="/projects/multi-lang-qa/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="https://live-miracles.github.io/multi-lang-qa/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>Multi Lang QA</span>
+              </a>
+            </div>
+        </nav>
+      </aside>
+    </div>
+  </body>
+</html>

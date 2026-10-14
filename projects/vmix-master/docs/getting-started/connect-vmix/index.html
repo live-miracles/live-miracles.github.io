@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en" data-theme="dim">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Connect to vMix — vMix Master</title>
+    <meta name="description" content="vMix Master talks to vMix through its Web Controller, so that has to be on for every system you want to control." />
+    <link rel="canonical" href="https://live-miracles.github.io/projects/vmix-master/docs/getting-started/connect-vmix/" />
+    <meta property="og:site_name" content="Live Miracles" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Connect to vMix — vMix Master" />
+    <meta property="og:description" content="vMix Master talks to vMix through its Web Controller, so that has to be on for every system you want to control." />
+    <meta property="og:url" content="https://live-miracles.github.io/projects/vmix-master/docs/getting-started/connect-vmix/" />
+    <meta property="og:image" content="https://raw.githubusercontent.com/live-miracles/vmix-master/master/docs/demo.gif" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/assets/logo.png" type="image/png" />
+    <link rel="stylesheet" href="/assets/styles.css" />
+  </head>
+  <body>
+    <div class="drawer lg:drawer-open">
+      <input id="project-drawer" type="checkbox" class="drawer-toggle" />
+      <div class="drawer-content min-h-screen">
+        <header class="navbar border-base-content/10 bg-base-300/92 sticky top-0 z-20 border-b px-4 backdrop-blur lg:hidden">
+          <div class="flex-none">
+            <label for="project-drawer" class="btn btn-square btn-ghost" aria-label="Open projects"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /></svg></label>
+          </div>
+          <div class="flex-1">
+            <a href="/" class="btn btn-ghost text-lg font-bold">Live Miracles</a>
+          </div>
+        </header>
+        <main class="mx-auto flex min-h-screen w-full max-w-6xl flex-col gap-8 px-4 py-6 sm:px-6 lg:px-8">
+          <section class="rounded-box border-base-content/10 bg-base-200/68 border p-5 shadow-xl backdrop-blur sm:p-7">
+            <nav class="text-base-content/60 flex flex-wrap items-center gap-2 text-sm" aria-label="Breadcrumb">
+              <a href="/projects/vmix-master/" class="hover:text-primary flex items-center gap-2"><img src="https://live-miracles.github.io/vmix-master/logo.svg" alt="" class="rounded-box size-5  shrink-0 object-contain" /><span>vMix Master</span></a>
+              <span aria-hidden="true">›</span><a class="hover:text-primary" href="/projects/vmix-master/docs/">Documentation</a><span aria-hidden="true">›</span><span>Getting started</span>
+            </nav>
+            <h1 class="mt-3 text-3xl font-bold sm:text-4xl">Connect to vMix</h1>
+            <details class="rounded-box border-base-content/10 bg-base-300/46 mt-6 border p-4 lg:hidden">
+              <summary class="text-base-content/80 cursor-pointer text-sm font-semibold">Documentation menu</summary>
+              <div class="mt-3"><nav class="lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto" aria-label="vMix Master documentation">
+              <ul class="text-sm"><li><a href="/projects/vmix-master/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Overview</a></li><li><a href="/projects/vmix-master/docs/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Documentation</a></li></ul>
+              <div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Getting started</div>
+                <ul class="text-sm"><li><a href="/projects/vmix-master/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Introduction</a></li><li><a href="/projects/vmix-master/docs/getting-started/connect-vmix/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 bg-base-100 text-primary font-semibold" aria-current="page">Connect to vMix</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Scripts</div>
+                <ul class="text-sm"><li><a href="/projects/vmix-master/docs/scripts/overview/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">vMix scripts overview</a></li><li><a href="/projects/vmix-master/docs/scripts/slave/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Slave</a></li><li><a href="/projects/vmix-master/docs/scripts/name-slave/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">NameSlave</a></li><li><a href="/projects/vmix-master/docs/scripts/preview-next/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">PreviewNext</a></li><li><a href="/projects/vmix-master/docs/scripts/translator/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Translator</a></li><li><a href="/projects/vmix-master/docs/scripts/auto-gain/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">AutoGain</a></li><li><a href="/projects/vmix-master/docs/scripts/audio-fade/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">AudioFade</a></li><li><a href="/projects/vmix-master/docs/scripts/duration-timer/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">DurationTimer</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Reference</div>
+                <ul class="text-sm"><li><a href="/projects/vmix-master/docs/reference/audio-levels/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Audio levels</a></li></ul>
+              </div>
+            </nav></div>
+            </details>
+            <div class="mt-7 grid gap-8 lg:grid-cols-[15rem_minmax(0,1fr)]">
+              <div class="border-base-content/10 hidden lg:block lg:border-r lg:pr-4"><nav class="lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto" aria-label="vMix Master documentation">
+              <ul class="text-sm"><li><a href="/projects/vmix-master/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Overview</a></li><li><a href="/projects/vmix-master/docs/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Documentation</a></li></ul>
+              <div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Getting started</div>
+                <ul class="text-sm"><li><a href="/projects/vmix-master/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Introduction</a></li><li><a href="/projects/vmix-master/docs/getting-started/connect-vmix/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 bg-base-100 text-primary font-semibold" aria-current="page">Connect to vMix</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Scripts</div>
+                <ul class="text-sm"><li><a href="/projects/vmix-master/docs/scripts/overview/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">vMix scripts overview</a></li><li><a href="/projects/vmix-master/docs/scripts/slave/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Slave</a></li><li><a href="/projects/vmix-master/docs/scripts/name-slave/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">NameSlave</a></li><li><a href="/projects/vmix-master/docs/scripts/preview-next/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">PreviewNext</a></li><li><a href="/projects/vmix-master/docs/scripts/translator/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Translator</a></li><li><a href="/projects/vmix-master/docs/scripts/auto-gain/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">AutoGain</a></li><li><a href="/projects/vmix-master/docs/scripts/audio-fade/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">AudioFade</a></li><li><a href="/projects/vmix-master/docs/scripts/duration-timer/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">DurationTimer</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Reference</div>
+                <ul class="text-sm"><li><a href="/projects/vmix-master/docs/reference/audio-levels/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Audio levels</a></li></ul>
+              </div>
+            </nav></div>
+              <div class="min-w-0"><details class="rounded-box border-base-content/10 bg-base-300/46 text-base-content/68 mb-7 border p-4 text-sm backdrop-blur">
+              <summary class="text-base-content/80 cursor-pointer font-semibold">On this page</summary>
+              <ol class="mt-3 space-y-2">
+                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#enable-the-web-controller">Enable the Web Controller</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#add-a-system">Add a system</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#chrome-and-your-local-network">Chrome and your local network</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#when-a-box-says-unavailable">When a box says Unavailable</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#try-it-without-vmix">Try it without vMix</a></li>
+              </ol>
+            </details><article class="readme min-w-0"><h2 id="enable-the-web-controller">Enable the Web Controller</h2>
+<p>vMix Master talks to vMix through its Web Controller, so that has to be on for every system
+you want to control.</p>
+<ol>
+<li>In vMix, open <strong>Settings</strong> and select the <strong>vMix Web Controller</strong> tab.</li>
+<li>Tick the box at the top to enable it.</li>
+<li>Note the port. The default is <code>8088</code>, and you should only change it if you know why.</li>
+</ol>
+<p>The computer that opens vMix Master must be able to reach the vMix machine on that port, so
+it needs to be on the same network, and the vMix machine&#39;s firewall must allow it.</p>
+<p>If you set a password for the Web Controller, vMix Master does not send one. Check that
+the system still shows as connected after you add it.</p>
+<h2 id="add-a-system">Add a system</h2>
+<ol>
+<li>Open <a href="https://live-miracles.github.io/vmix-master/">vMix Master</a> in Chrome.</li>
+<li>Use the <strong>+</strong> button in the top bar. A new box appears with its address field open.</li>
+<li>Type the address of the vMix machine and press <strong>Enter</strong>.</li>
+</ol>
+<p>The address can be written in any of these ways:</p>
+<table>
+<thead>
+<tr>
+<th>You type</th>
+<th>It is used as</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>192.168.1.20</code></td>
+<td><code>http://192.168.1.20:8088/api/</code></td>
+</tr>
+<tr>
+<td><code>192.168.1.20:8090</code></td>
+<td><code>http://192.168.1.20:8090/api/</code></td>
+</tr>
+<tr>
+<td><code>vmix-main.local</code></td>
+<td><code>http://vmix-main.local:8088/api/</code></td>
+</tr>
+<tr>
+<td><code>https://vmix.example.com:8443/api</code></td>
+<td><code>https://vmix.example.com:8443/api/</code></td>
+</tr>
+</tbody></table>
+<p>The scheme defaults to <code>http://</code>, the port to <code>8088</code>, and the path to <code>/api/</code>. If you leave out
+the port it is added even for an <code>https://</code> address, so write the port when you use one.</p>
+<p>To change a name or an address later, double-click it in the box. A click on the group
+button adds the box to the group, and a click on the box makes it the master. The trash
+button removes a box after asking you to confirm, and an <strong>Undo</strong> button appears afterwards
+for a few seconds.</p>
+<p>You can keep a list of addresses under <strong>Settings → Host / API URL Suggestions</strong>. They are
+offered while you type an address.</p>
+<h2 id="chrome-and-your-local-network">Chrome and your local network</h2>
+<p>The hosted page is served over HTTPS, while vMix answers over plain HTTP on your local
+network. Chrome allows this, and the first time you connect it asks whether the site may
+access devices on your local network. Choose <strong>Allow</strong>. The page only talks to the addresses
+you enter.</p>
+<p>If you would rather not use the hosted page, you can run a copy offline: download the ZIP of
+the <a href="https://github.com/live-miracles/vmix-master/tree/gh-pages"><code>gh-pages</code> branch</a>, extract
+it, and open <code>index.html</code> in Chrome.</p>
+<h2 id="when-a-box-says-unavailable">When a box says Unavailable</h2>
+<p>The dot in front of the name shows the state, and hovering it gives the detail.</p>
+<table>
+<thead>
+<tr>
+<th>Dot</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Green</td>
+<td>Connected</td>
+</tr>
+<tr>
+<td>Red</td>
+<td>Unreachable. The tooltip has the reason, for example <code>Failed to fetch</code></td>
+</tr>
+<tr>
+<td>Grey</td>
+<td>No address entered</td>
+</tr>
+<tr>
+<td>Pulsing grey</td>
+<td>Waiting for the first answer</td>
+</tr>
+</tbody></table>
+<p>Things to check when a system will not connect:</p>
+<ul>
+<li>The Web Controller is enabled in vMix and the port matches the address.</li>
+<li>You can open <code>http://&lt;ip&gt;:8088/api/</code> in the same browser and see XML. If you do not, it is
+a network or firewall problem, not a vMix Master problem.</li>
+<li>&quot;Not a vMix API response&quot; means something answered at that address, but it is not vMix,
+for example another web server on the same port.</li>
+<li>You allowed the local network prompt in Chrome. You can change it under the site
+settings of the page.</li>
+</ul>
+<h2 id="try-it-without-vmix">Try it without vMix</h2>
+<p>Use the host names <code>demo</code>, <code>demo2</code> and <code>demo3</code> for simulated systems that never touch the
+network, or open <a href="https://live-miracles.github.io/vmix-master/?demo"><code>?demo</code></a> to get three
+grouped ones. A banner at the top shows while demo systems are in use.</p>
+<p>Next: <a href="/projects/vmix-master/docs/scripts/overview/">vMix scripts</a>.</p>
+</article><a class="link text-base-content/50 mt-6 inline-block text-sm" href="https://github.com/live-miracles/vmix-master/blob/master/docs/1-getting-started/2-connect-vmix.md">Edit this page on GitHub</a><div class="border-base-content/10 mt-10 grid gap-3 border-t pt-6 sm:grid-cols-2">
+              <a class="rounded-box border-base-content/10 hover:border-primary/50 border p-4" href="/projects/vmix-master/docs/getting-started/introduction/"><div class="text-base-content/50 text-xs">Previous</div><div class="font-semibold">Introduction</div></a>
+              <a class="rounded-box border-base-content/10 hover:border-primary/50 border p-4 sm:text-right" href="/projects/vmix-master/docs/scripts/overview/"><div class="text-base-content/50 text-xs">Next</div><div class="font-semibold">vMix scripts overview</div></a>
+            </div></div>
+            </div>
+          </section>
+          <footer class="text-base-content/50 border-base-content/10 mt-auto border-t pt-6 pb-2 text-sm">
+            Live Miracles · <a class="link" href="https://github.com/live-miracles">github.com/live-miracles</a>
+          </footer>
+        </main>
+      </div>
+      <aside class="drawer-side z-30">
+        <label for="project-drawer" aria-label="Close projects" class="drawer-overlay"></label>
+        <nav class="border-base-content/10 bg-base-200 min-h-full w-80 border-r p-4" aria-label="Projects">
+          <a href="/" class="rounded-box mb-6 flex items-center gap-3 px-3 py-2">
+            <img src="/assets/logo.png" alt="" class="rounded-box size-11" />
+            <span>
+              <span class="block text-xl font-bold">Live Miracles</span>
+              <span class="text-base-content/58 text-sm">Open tools for live teams</span>
+            </span>
+          </a>
+          <div class="mb-5">
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Streaming &amp; transport</div>
+              <a href="/projects/bunryu/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="/assets/bunryu-logo.png" alt="" class="rounded-box size-6 bg-base-content p-0.5 shrink-0 object-contain" />
+                <span>Bunryu</span>
+              </a><a href="/projects/srt-bonding-relay/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">S</span>
+                <span>SRT Bonding Relay</span>
+              </a><a href="/projects/delayed-yt/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="https://live-miracles.github.io/delayed-yt/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>Delayed YouTube</span>
+              </a>
+            </div><div class="mb-5">
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">vMix production</div>
+              <a href="/projects/vmix-master/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 bg-base-100 text-primary font-semibold" aria-current="page">
+                <img src="https://live-miracles.github.io/vmix-master/logo.svg" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>vMix Master</span>
+              </a><a href="/projects/folder-player/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="/assets/folder-player-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>vMix Folder Player</span>
+              </a>
+            </div><div class="mb-5">
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Monitoring &amp; operations</div>
+              <a href="/projects/live-gallery/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="/assets/live-gallery-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>Live Gallery</span>
+              </a><a href="/projects/wake-up-support/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">W</span>
+                <span>Wake Up Support</span>
+              </a>
+            </div><div class="mb-5">
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Event workflows</div>
+              <a href="/projects/key-vault/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="https://live-miracles.github.io/key-vault/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>Key Vault</span>
+              </a><a href="/projects/live-generator/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">L</span>
+                <span>Live Generator</span>
+              </a><a href="/projects/multi-lang-qa/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="https://live-miracles.github.io/multi-lang-qa/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>Multi Lang QA</span>
+              </a>
+            </div>
+        </nav>
+      </aside>
+    </div>
+  </body>
+</html>

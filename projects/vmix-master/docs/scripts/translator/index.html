@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en" data-theme="dim">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Translator — vMix Master</title>
+    <meta name="description" content="Translator lowers the program audio while a translator, or interpreter, is speaking, and brings it back up when they stop. It is a sidechain: it watches the level of the translator&#39;s microphone and ad" />
+    <link rel="canonical" href="https://live-miracles.github.io/projects/vmix-master/docs/scripts/translator/" />
+    <meta property="og:site_name" content="Live Miracles" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Translator — vMix Master" />
+    <meta property="og:description" content="Translator lowers the program audio while a translator, or interpreter, is speaking, and brings it back up when they stop. It is a sidechain: it watches the level of the translator&#39;s microphone and ad" />
+    <meta property="og:url" content="https://live-miracles.github.io/projects/vmix-master/docs/scripts/translator/" />
+    <meta property="og:image" content="https://raw.githubusercontent.com/live-miracles/vmix-master/master/docs/demo.gif" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/assets/logo.png" type="image/png" />
+    <link rel="stylesheet" href="/assets/styles.css" />
+  </head>
+  <body>
+    <div class="drawer lg:drawer-open">
+      <input id="project-drawer" type="checkbox" class="drawer-toggle" />
+      <div class="drawer-content min-h-screen">
+        <header class="navbar border-base-content/10 bg-base-300/92 sticky top-0 z-20 border-b px-4 backdrop-blur lg:hidden">
+          <div class="flex-none">
+            <label for="project-drawer" class="btn btn-square btn-ghost" aria-label="Open projects"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /></svg></label>
+          </div>
+          <div class="flex-1">
+            <a href="/" class="btn btn-ghost text-lg font-bold">Live Miracles</a>
+          </div>
+        </header>
+        <main class="mx-auto flex min-h-screen w-full max-w-6xl flex-col gap-8 px-4 py-6 sm:px-6 lg:px-8">
+          <section class="rounded-box border-base-content/10 bg-base-200/68 border p-5 shadow-xl backdrop-blur sm:p-7">
+            <nav class="text-base-content/60 flex flex-wrap items-center gap-2 text-sm" aria-label="Breadcrumb">
+              <a href="/projects/vmix-master/" class="hover:text-primary flex items-center gap-2"><img src="https://live-miracles.github.io/vmix-master/logo.svg" alt="" class="rounded-box size-5  shrink-0 object-contain" /><span>vMix Master</span></a>
+              <span aria-hidden="true">›</span><a class="hover:text-primary" href="/projects/vmix-master/docs/">Documentation</a><span aria-hidden="true">›</span><span>Scripts</span>
+            </nav>
+            <h1 class="mt-3 text-3xl font-bold sm:text-4xl">Translator</h1>
+            <details class="rounded-box border-base-content/10 bg-base-300/46 mt-6 border p-4 lg:hidden">
+              <summary class="text-base-content/80 cursor-pointer text-sm font-semibold">Documentation menu</summary>
+              <div class="mt-3"><nav class="lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto" aria-label="vMix Master documentation">
+              <ul class="text-sm"><li><a href="/projects/vmix-master/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Overview</a></li><li><a href="/projects/vmix-master/docs/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Documentation</a></li></ul>
+              <div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Getting started</div>
+                <ul class="text-sm"><li><a href="/projects/vmix-master/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Introduction</a></li><li><a href="/projects/vmix-master/docs/getting-started/connect-vmix/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Connect to vMix</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Scripts</div>
+                <ul class="text-sm"><li><a href="/projects/vmix-master/docs/scripts/overview/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">vMix scripts overview</a></li><li><a href="/projects/vmix-master/docs/scripts/slave/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Slave</a></li><li><a href="/projects/vmix-master/docs/scripts/name-slave/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">NameSlave</a></li><li><a href="/projects/vmix-master/docs/scripts/preview-next/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">PreviewNext</a></li><li><a href="/projects/vmix-master/docs/scripts/translator/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 bg-base-100 text-primary font-semibold" aria-current="page">Translator</a></li><li><a href="/projects/vmix-master/docs/scripts/auto-gain/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">AutoGain</a></li><li><a href="/projects/vmix-master/docs/scripts/audio-fade/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">AudioFade</a></li><li><a href="/projects/vmix-master/docs/scripts/duration-timer/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">DurationTimer</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Reference</div>
+                <ul class="text-sm"><li><a href="/projects/vmix-master/docs/reference/audio-levels/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Audio levels</a></li></ul>
+              </div>
+            </nav></div>
+            </details>
+            <div class="mt-7 grid gap-8 lg:grid-cols-[15rem_minmax(0,1fr)]">
+              <div class="border-base-content/10 hidden lg:block lg:border-r lg:pr-4"><nav class="lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto" aria-label="vMix Master documentation">
+              <ul class="text-sm"><li><a href="/projects/vmix-master/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Overview</a></li><li><a href="/projects/vmix-master/docs/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Documentation</a></li></ul>
+              <div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Getting started</div>
+                <ul class="text-sm"><li><a href="/projects/vmix-master/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Introduction</a></li><li><a href="/projects/vmix-master/docs/getting-started/connect-vmix/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Connect to vMix</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Scripts</div>
+                <ul class="text-sm"><li><a href="/projects/vmix-master/docs/scripts/overview/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">vMix scripts overview</a></li><li><a href="/projects/vmix-master/docs/scripts/slave/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Slave</a></li><li><a href="/projects/vmix-master/docs/scripts/name-slave/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">NameSlave</a></li><li><a href="/projects/vmix-master/docs/scripts/preview-next/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">PreviewNext</a></li><li><a href="/projects/vmix-master/docs/scripts/translator/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 bg-base-100 text-primary font-semibold" aria-current="page">Translator</a></li><li><a href="/projects/vmix-master/docs/scripts/auto-gain/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">AutoGain</a></li><li><a href="/projects/vmix-master/docs/scripts/audio-fade/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">AudioFade</a></li><li><a href="/projects/vmix-master/docs/scripts/duration-timer/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">DurationTimer</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Reference</div>
+                <ul class="text-sm"><li><a href="/projects/vmix-master/docs/reference/audio-levels/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Audio levels</a></li></ul>
+              </div>
+            </nav></div>
+              <div class="min-w-0"><details class="rounded-box border-base-content/10 bg-base-300/46 text-base-content/68 mb-7 border p-4 text-sm backdrop-blur">
+              <summary class="text-base-content/80 cursor-pointer font-semibold">On this page</summary>
+              <ol class="mt-3 space-y-2">
+                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#set-up-the-audio">Set up the audio</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#set-up-the-script">Set up the script</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#settings">Settings</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#how-it-works">How it works</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#tuning">Tuning</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#log-messages">Log messages</a></li>
+              </ol>
+            </details><article class="readme min-w-0"><p>Translator lowers the program audio while a translator, or interpreter, is speaking, and
+brings it back up when they stop. It is a <strong>sidechain</strong>: it watches the level of the
+translator&#39;s microphone and adjusts the volume of another bus, the <strong>chain bus</strong>, that
+carries the program audio.</p>
+<p>It is built for a stream where an interpreter speaks over the original audio. Without it, the
+operator has to ride a fader all event.</p>
+<h2 id="set-up-the-audio">Set up the audio</h2>
+<p>The script works with this routing. The numbers are the defaults.</p>
+<ol>
+<li>The <strong>program audio</strong> goes to the chain bus, <code>B</code> by default. Set <code>CHAIN_BUS</code> to the bus
+you use.</li>
+<li>The <strong>translator&#39;s input</strong> goes to bus <strong>C</strong> only, with <strong>Master</strong> switched off for that
+input.</li>
+<li>Add a <strong>sound delay of 800 ms</strong> to bus C. The audio is mixed 800 ms late, which gives the
+script time to lower the program before the translation is heard.</li>
+<li>Send both buses to the master.</li>
+</ol>
+<pre><code>Translator input ─┬─► level meter ─► Translator script
+                  └─► Bus C (800 ms delay) ─┐
+                                            ├─► Master
+Program audio ─► chain bus (B), set by script ┘
+</code></pre>
+<p>The translator&#39;s input is the first of these that exists:</p>
+<ol>
+<li>An input with <code>Translator</code> in its title.</li>
+<li>The first input of type <strong>Audio</strong>.</li>
+<li>The first input of type <strong>VideoCall</strong>.</li>
+</ol>
+<p>Add <code>Translator</code> to the title of the input to be sure the right one is used.</p>
+<h2 id="set-up-the-script">Set up the script</h2>
+<ol>
+<li>Add the script to the vMix that mixes the audio, see
+<a href="/projects/vmix-master/docs/scripts/overview/#add-a-script-to-vmix">adding a script</a>.</li>
+<li>Check <code>CHAIN_BUS</code>, and the times below if your setup differs.</li>
+<li>Start the script.</li>
+</ol>
+<p>If it cannot find an input, it prints <code>No mic / vMix Call input detected.</code> and looks again
+after five seconds.</p>
+<h2 id="settings">Settings</h2>
+<p>All times are in milliseconds.</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>LOOP_TIME</code></td>
+<td><code>50</code></td>
+<td>How often the script checks the translator&#39;s level</td>
+</tr>
+<tr>
+<td><code>VOICE_THRESHOLD</code></td>
+<td><code>0.1</code></td>
+<td>The level that counts as speech. <code>0.1</code> is about -20 dB. See <a href="/projects/vmix-master/docs/reference/audio-levels/">Audio levels</a></td>
+</tr>
+<tr>
+<td><code>CHAIN_BUS</code></td>
+<td><code>&quot;B&quot;</code></td>
+<td>The bus whose volume is adjusted, <code>&quot;A&quot;</code> to <code>&quot;G&quot;</code></td>
+</tr>
+<tr>
+<td><code>VOLUME_DOWN_TIME</code></td>
+<td><code>900</code></td>
+<td>How long the fade down takes when the translator starts</td>
+</tr>
+<tr>
+<td><code>VOLUME_REDUCED</code></td>
+<td><code>50</code></td>
+<td>The volume of the chain bus while the translator speaks, 0 to 100</td>
+</tr>
+<tr>
+<td><code>SILENCE_LIMIT</code></td>
+<td><code>2000</code></td>
+<td>How long the translator must be silent before the volume comes up the first time</td>
+</tr>
+<tr>
+<td><code>VOLUME_UP_TIME</code></td>
+<td><code>1000</code></td>
+<td>How long the first raise takes</td>
+</tr>
+<tr>
+<td><code>VOLUME_FULL</code></td>
+<td><code>75</code></td>
+<td>The volume after the first raise</td>
+</tr>
+<tr>
+<td><code>SILENCE_LIMIT2</code></td>
+<td><code>4000</code></td>
+<td>How long the translator must be silent before the volume comes up the second time</td>
+</tr>
+<tr>
+<td><code>VOLUME_UP_TIME2</code></td>
+<td><code>2000</code></td>
+<td>How long the second raise takes</td>
+</tr>
+<tr>
+<td><code>VOLUME_FULL2</code></td>
+<td><code>85</code></td>
+<td>The volume after the second raise</td>
+</tr>
+</tbody></table>
+<p><code>VOLUME_DOWN_TIME = 900</code> fits the 800 ms delay. If the translator goes straight to the
+master without a delay, use <code>350</code> so the program is already low when the voice is heard.</p>
+<h2 id="how-it-works">How it works</h2>
+<pre><code>Chain bus volume
+| ──────●                                   ●─────
+|        \                                 /
+|         \                               /
+|          \                             /
+|           \                 ●──────●
+|            \                /
+|             ●────────●──────●
++----+----+----+----+----+----+----+----+----+----→ Time
+          T1          T2     T3
+</code></pre>
+<ul>
+<li><strong>T1.</strong> The translator starts speaking, meaning the level is above <code>VOICE_THRESHOLD</code> and the
+input is not muted. The chain bus fades down to <code>VOLUME_REDUCED</code> over <code>VOLUME_DOWN_TIME</code>.
+While the translator keeps speaking the fade is sent again at most once per
+<code>VOLUME_DOWN_TIME</code>.</li>
+<li><strong>T2.</strong> The translator stops speaking.</li>
+<li><strong>T3.</strong> After <code>SILENCE_LIMIT</code> of silence the volume comes up to <code>VOLUME_FULL</code>, and after
+<code>SILENCE_LIMIT2</code> it comes up again to <code>VOLUME_FULL2</code>. Raising it in two steps is smoother
+than one jump, and it fits a translation where the interpreter is almost always speaking,
+so the program never returns to full volume between sentences.</li>
+</ul>
+<p>The volume is never raised before the translator has spoken for the first time since the
+script started. This keeps it from changing the bus when you start it.</p>
+<h2 id="tuning">Tuning</h2>
+<ul>
+<li>If the program also contains music or other parts that should be at full volume, set
+<code>VOLUME_FULL2</code> to <code>100</code>, so the program returns to full after a longer silence.</li>
+<li>If the script reacts to breathing or room noise, raise <code>VOICE_THRESHOLD</code>. If it misses quiet
+speech, lower it. The script reads the left channel of the input&#39;s meter.</li>
+<li><code>VOLUME_REDUCED</code> is a percentage on vMix&#39;s volume scale, which is not linear. 50 on the
+scale is much quieter than half the loudness, see
+<a href="/projects/vmix-master/docs/reference/audio-levels/">Audio levels</a>.</li>
+</ul>
+<h2 id="log-messages">Log messages</h2>
+<p>The script only prints its start-up lines, a missing-input notice, and
+<code>Translator | Unexpected error: ...</code> when a read fails, so it stays quiet while it works.</p>
+</article><a class="link text-base-content/50 mt-6 inline-block text-sm" href="https://github.com/live-miracles/vmix-master/blob/master/docs/2-scripts/5-translator.md">Edit this page on GitHub</a><div class="border-base-content/10 mt-10 grid gap-3 border-t pt-6 sm:grid-cols-2">
+              <a class="rounded-box border-base-content/10 hover:border-primary/50 border p-4" href="/projects/vmix-master/docs/scripts/preview-next/"><div class="text-base-content/50 text-xs">Previous</div><div class="font-semibold">PreviewNext</div></a>
+              <a class="rounded-box border-base-content/10 hover:border-primary/50 border p-4 sm:text-right" href="/projects/vmix-master/docs/scripts/auto-gain/"><div class="text-base-content/50 text-xs">Next</div><div class="font-semibold">AutoGain</div></a>
+            </div></div>
+            </div>
+          </section>
+          <footer class="text-base-content/50 border-base-content/10 mt-auto border-t pt-6 pb-2 text-sm">
+            Live Miracles · <a class="link" href="https://github.com/live-miracles">github.com/live-miracles</a>
+          </footer>
+        </main>
+      </div>
+      <aside class="drawer-side z-30">
+        <label for="project-drawer" aria-label="Close projects" class="drawer-overlay"></label>
+        <nav class="border-base-content/10 bg-base-200 min-h-full w-80 border-r p-4" aria-label="Projects">
+          <a href="/" class="rounded-box mb-6 flex items-center gap-3 px-3 py-2">
+            <img src="/assets/logo.png" alt="" class="rounded-box size-11" />
+            <span>
+              <span class="block text-xl font-bold">Live Miracles</span>
+              <span class="text-base-content/58 text-sm">Open tools for live teams</span>
+            </span>
+          </a>
+          <div class="mb-5">
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Streaming &amp; transport</div>
+              <a href="/projects/bunryu/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="/assets/bunryu-logo.png" alt="" class="rounded-box size-6 bg-base-content p-0.5 shrink-0 object-contain" />
+                <span>Bunryu</span>
+              </a><a href="/projects/srt-bonding-relay/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">S</span>
+                <span>SRT Bonding Relay</span>
+              </a><a href="/projects/delayed-yt/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="https://live-miracles.github.io/delayed-yt/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>Delayed YouTube</span>
+              </a>
+            </div><div class="mb-5">
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">vMix production</div>
+              <a href="/projects/vmix-master/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 bg-base-100 text-primary font-semibold" aria-current="page">
+                <img src="https://live-miracles.github.io/vmix-master/logo.svg" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>vMix Master</span>
+              </a><a href="/projects/folder-player/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="/assets/folder-player-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>vMix Folder Player</span>
+              </a>
+            </div><div class="mb-5">
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Monitoring &amp; operations</div>
+              <a href="/projects/live-gallery/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="/assets/live-gallery-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>Live Gallery</span>
+              </a><a href="/projects/wake-up-support/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">W</span>
+                <span>Wake Up Support</span>
+              </a>
+            </div><div class="mb-5">
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Event workflows</div>
+              <a href="/projects/key-vault/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="https://live-miracles.github.io/key-vault/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>Key Vault</span>
+              </a><a href="/projects/live-generator/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">L</span>
+                <span>Live Generator</span>
+              </a><a href="/projects/multi-lang-qa/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <img src="https://live-miracles.github.io/multi-lang-qa/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span>Multi Lang QA</span>
+              </a>
+            </div>
+        </nav>
+      </aside>
+    </div>
+  </body>
+</html>
