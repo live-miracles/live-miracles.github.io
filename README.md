@@ -30,13 +30,13 @@ docs/
 Each page's first `# Heading` is its title. Link between pages with normal
 relative links (`../2-usage/1-publishing.md#section`); they work on GitHub and
 are rewritten to site URLs here. See
-[restream-srs](https://github.com/live-miracles/restream-srs/tree/master/docs)
+[bunryu](https://github.com/live-miracles/bunryu/tree/master/docs)
 for an example.
 
 To preview a project's README and docs from a local checkout before pushing:
 
 ```sh
-LOCAL_PROJECTS=restream-srs=../restream-srs npm run build && npm run dev
+LOCAL_PROJECTS=bunryu=../bunryu npm run build && npm run dev
 ```
 
 ## Adding a project

@@ -1,6 +1,7 @@
 // The project directory. Each project gets a static page at /projects/<id>/
 // built from its README on the master branch. `id` must match the repository
-// name. Repositories that host their own app on GitHub Pages already own
+// name; `formerIds` lists earlier names whose pages redirect to the current
+// ones. Repositories that host their own app on GitHub Pages already own
 // /<id>/, which is why project pages live under /projects/.
 
 const organization = 'live-miracles';
@@ -31,12 +32,14 @@ const categories = [
 
 const projects = [
     {
-        id: 'restream-srs',
-        name: 'Restream SRS',
+        id: 'bunryu',
+        name: 'Bunryu',
+        // Earlier repository names; their pages redirect here.
+        formerIds: ['restream-srs'],
         category: 'streaming',
         summary:
-            'Self-hosted restreaming server: RTMP, SRT and bonded SRT inputs forwarded to many RTMP/SRT destinations, with watchdogs and translation audio mixing.',
-        icon: '/assets/restream-srs-logo.png',
+            'Bunryu (分流, "branching flow"): self-hosted restreaming server. RTMP, SRT and bonded SRT inputs forwarded to many RTMP/SRT destinations, with watchdogs and translation audio mixing.',
+        icon: '/assets/bunryu-logo.png',
         iconOnLight: true,
     },
     {
