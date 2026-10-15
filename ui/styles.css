@@ -143,3 +143,52 @@
         padding: 0.65rem 0.8rem;
     }
 }
+
+@layer components {
+    .readme img.zoomable {
+        cursor: zoom-in;
+    }
+
+    .lightbox {
+        width: 100%;
+        height: 100%;
+        max-width: none;
+        max-height: none;
+        margin: 0;
+        padding: 1rem;
+        background: transparent;
+        color: var(--color-base-content);
+        overflow: auto;
+    }
+
+    .lightbox::backdrop {
+        background: rgb(0 0 0 / 0.85);
+    }
+
+    .lightbox-close {
+        position: fixed;
+        top: 1rem;
+        right: 1rem;
+        z-index: 1;
+    }
+
+    /* Auto margins on the image keep an oversized image scrollable from its left edge. */
+    .lightbox-frame {
+        display: flex;
+        min-height: 100%;
+    }
+
+    .lightbox-frame img {
+        margin: auto;
+        max-width: 100%;
+        max-height: calc(100vh - 2rem);
+        border-radius: var(--radius-box);
+        cursor: zoom-in;
+    }
+
+    .lightbox-frame img.actual {
+        max-width: none;
+        max-height: none;
+        cursor: zoom-out;
+    }
+}
