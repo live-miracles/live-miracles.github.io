@@ -38,6 +38,7 @@ const icons = {
     download: `<svg xmlns="http://www.w3.org/2000/svg" class="${iconClass}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>`,
     star: `<svg xmlns="http://www.w3.org/2000/svg" class="${iconClass}" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 2.5 2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.31l-5.8 3.05 1.11-6.46-4.7-4.58 6.49-.94L12 2.5Z"/></svg>`,
     fork: `<svg xmlns="http://www.w3.org/2000/svg" class="${iconClass}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="6" cy="4" r="2"/><circle cx="18" cy="4" r="2"/><circle cx="12" cy="20" r="2"/><path d="M6 6v3a3 3 0 0 0 3 3h3m6-6v3a3 3 0 0 1-3 3h-3m0 0v6"/></svg>`,
+    collapse: `<svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M11 17l-5-5 5-5M18 17l-5-5 5-5" /></svg>`,
     menu: `<svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /></svg>`,
 };
 
@@ -271,21 +272,25 @@ function linkButtons(project) {
         .join('');
 }
 
+// Wide screens show the sidebar in full or as a slim rail of project icons (the
+// `data-rail` attribute on the drawer, see layout()); small screens always get
+// the full drawer. Names stay in `title` and `aria-label` for the rail.
 function sidebar(activeId) {
     const groups = categories
-        .map((category) => {
+        .map((category, index) => {
             const items = projects
                 .filter((project) => project.category === category.id)
                 .map((project) => {
                     const active = project.id === activeId;
-                    return `<a href="${projectUrl(project)}" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ${active ? 'bg-base-100 text-primary font-semibold' : ''}"${active ? ' aria-current="page"' : ''}>
+                    return `<a href="${projectUrl(project)}" title="${escapeHtml(project.name)}" aria-label="${escapeHtml(project.name)}" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ${active ? 'bg-base-100 text-primary font-semibold' : ''}"${active ? ' aria-current="page"' : ''}>
                 ${projectIcon(project, 'size-6')}
-                <span>${escapeHtml(project.name)}</span>
+                <span class="lg:group-data-[rail]/drawer:hidden">${escapeHtml(project.name)}</span>
               </a>`;
                 })
                 .join('');
-            return `<div class="mb-5">
-              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">${escapeHtml(category.name)}</div>
+            return `<div class="mb-5 lg:group-data-[rail]/drawer:mb-3">
+              ${index ? '<hr class="border-base-content/10 mb-3 hidden lg:group-data-[rail]/drawer:block" />' : ''}
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase lg:group-data-[rail]/drawer:hidden">${escapeHtml(category.name)}</div>
               ${items}
             </div>`;
         })
@@ -293,20 +298,34 @@ function sidebar(activeId) {
 
     return `<aside class="drawer-side z-30">
         <label for="project-drawer" aria-label="Close projects" class="drawer-overlay"></label>
-        <nav class="border-base-content/10 bg-base-200 min-h-full w-80 border-r p-4" aria-label="Projects">
-          <a href="/" class="rounded-box mb-6 flex items-center gap-3 px-3 py-2">
-            <img src="/assets/logo.png" alt="" class="rounded-box size-11" />
-            <span>
-              <span class="block text-xl font-bold">${siteName}</span>
-              <span class="text-base-content/58 text-sm">Open tools for live teams</span>
-            </span>
-          </a>
+        <nav class="border-base-content/10 bg-base-200 min-h-full w-80 border-r p-4 lg:group-data-[rail]/drawer:w-16 lg:group-data-[rail]/drawer:p-2" aria-label="Projects">
+          <div class="mb-6 flex items-center justify-between gap-2 lg:group-data-[rail]/drawer:flex-col lg:group-data-[rail]/drawer:gap-3">
+            <a href="/" title="${siteName}" aria-label="${siteName}" class="rounded-box flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:p-0">
+              <img src="/assets/logo.png" alt="" class="rounded-box size-11" />
+              <span class="lg:group-data-[rail]/drawer:hidden">
+                <span class="block text-xl font-bold">${siteName}</span>
+                <span class="text-base-content/58 text-sm">Open tools for live teams</span>
+              </span>
+            </a>
+            <button type="button" id="sidebar-toggle" class="btn btn-ghost btn-sm btn-square hidden lg:inline-flex lg:group-data-[rail]/drawer:rotate-180" aria-label="Collapse projects to icons">${icons.collapse}</button>
+          </div>
           ${groups}
         </nav>
       </aside>`;
 }
 
-function layout({ title, description, canonicalPath, ogImage, activeId, body }) {
+// The projects sidebar's full/rail state is remembered per browser; `railByDefault`
+// applies until the visitor has chosen. An inline script right after the drawer
+// opens sets the state before the sidebar renders, so the page does not jump.
+function layout({
+    title,
+    description,
+    canonicalPath,
+    ogImage,
+    activeId,
+    body,
+    railByDefault = false,
+}) {
     const canonical = `${siteUrl}${canonicalPath}`;
     const image = ogImage || `${siteUrl}/assets/logo.png`;
     return `<!doctype html>
@@ -328,7 +347,24 @@ function layout({ title, description, canonicalPath, ogImage, activeId, body }) 
     <link rel="stylesheet" href="/assets/styles.css" />
   </head>
   <body>
-    <div class="drawer lg:drawer-open">
+    <div class="group/drawer drawer lg:drawer-open">
+      <script>
+        window.setSidebarRail = function (rail) {
+          document.querySelector('.drawer').toggleAttribute('data-rail', rail);
+          var toggle = document.getElementById('sidebar-toggle');
+          if (toggle) {
+            toggle.setAttribute('aria-label', rail ? 'Expand projects' : 'Collapse projects to icons');
+          }
+        };
+        window.sidebarRail = function () {
+          try {
+            var saved = localStorage.getItem('sidebar-rail');
+            if (saved) return saved === '1';
+          } catch (e) {}
+          return ${railByDefault};
+        };
+        window.setSidebarRail(window.sidebarRail());
+      </script>
       <input id="project-drawer" type="checkbox" class="drawer-toggle" />
       <div class="drawer-content min-h-screen">
         <header class="navbar border-base-content/10 bg-base-300/92 sticky top-0 z-20 border-b px-4 backdrop-blur lg:hidden">
@@ -347,6 +383,16 @@ function layout({ title, description, canonicalPath, ogImage, activeId, body }) 
         </main>
       </div>
       ${sidebar(activeId)}
+      <script>
+        window.setSidebarRail(window.sidebarRail());
+        document.getElementById('sidebar-toggle').addEventListener('click', function () {
+          var rail = !window.sidebarRail();
+          try {
+            localStorage.setItem('sidebar-rail', rail ? '1' : '0');
+          } catch (e) {}
+          window.setSidebarRail(rail);
+        });
+      </script>
     </div>
   </body>
 </html>
@@ -443,8 +489,8 @@ function contentsBox(toc) {
             </details>`;
 }
 
-// The project's own navigation: overview (README) plus its docs pages grouped
-// by section. Shown beside the content on wide screens and above it otherwise.
+// The docs pages grouped by section. Shown beside the content on docs pages on
+// wide screens and above it otherwise.
 function docsNav(project, docs, activeUrl) {
     if (!docs.length) return '';
     const item = (url, label) => {
@@ -458,10 +504,9 @@ function docsNav(project, docs, activeUrl) {
         else groups.push({ section: doc.section, docs: [doc] });
     }
     return `<nav class="lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto" aria-label="${escapeHtml(project.name)} documentation">
-              <ul class="text-sm">${item(projectUrl(project), 'Overview')}${item(docsUrl(project), 'Documentation')}</ul>
               ${groups
                   .map(
-                      (group) => `<div class="mt-4">
+                      (group, i) => `<div class="${i ? 'mt-4' : ''}">
                 ${group.section ? `<div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">${escapeHtml(group.section)}</div>` : ''}
                 <ul class="text-sm">${group.docs.map((doc) => item(doc.url, doc.title)).join('')}</ul>
               </div>`,
@@ -488,10 +533,24 @@ function projectFacts(repo) {
     return facts.join('');
 }
 
+// Overview and Documentation tabs under the project header. Docs pages stay
+// under the Documentation tab.
+function projectTabs(project, docs, activeTab) {
+    if (!docs.length) return '';
+    const tab = (id, url, label) =>
+        `<a role="tab" href="${url}" class="tab ${activeTab === id ? 'tab-active font-semibold' : ''}"${activeTab === id ? ' aria-current="page"' : ''}>${label}</a>`;
+    return `<div role="tablist" class="tabs tabs-border mt-6" aria-label="${escapeHtml(project.name)} sections">
+              ${tab('overview', projectUrl(project), 'Overview')}${tab('docs', docsUrl(project), 'Documentation')}
+            </div>`;
+}
+
 // Shared frame for a project's overview, docs index and docs pages: header,
-// optional docs navigation, then the content.
+// Overview/Documentation tabs, then the content. Docs pages also get the docs
+// navigation beside the content.
 function projectFrame({ project, repo, docs, activeUrl, header, content }) {
-    const nav = docsNav(project, docs, activeUrl);
+    const isDocs = activeUrl !== projectUrl(project);
+    const tabs = projectTabs(project, docs, isDocs ? 'docs' : 'overview');
+    const nav = isDocs ? docsNav(project, docs, activeUrl) : '';
     // Wide screens show the navigation beside the content; small screens get it
     // collapsed above the content so the page starts with the text.
     const main = nav
@@ -506,6 +565,7 @@ function projectFrame({ project, repo, docs, activeUrl, header, content }) {
         : `<div class="mt-7">${content}</div>`;
     return `<section class="rounded-box border-base-content/10 bg-base-200/68 border p-5 shadow-xl backdrop-blur sm:p-7">
             ${header}
+            ${tabs}
             ${main}
           </section>`;
 }
@@ -580,6 +640,7 @@ function docsIndexPage({ project, repo, readme, docs, docsIndex }) {
         description: `Documentation for ${project.name}: ${project.summary}`,
         canonicalPath: docsUrl(project),
         ogImage: readme?.ogImage,
+        railByDefault: true,
         activeId: project.id,
         body: projectFrame({
             project,
@@ -607,6 +668,7 @@ function docPage({ project, repo, readme, docs }, doc, index) {
         description: doc.description || `${doc.title}: ${project.name} documentation.`,
         canonicalPath: doc.url,
         ogImage: doc.rendered.ogImage || readme?.ogImage,
+        railByDefault: true,
         activeId: project.id,
         body: projectFrame({
             project,
