@@ -17,7 +17,24 @@
     <link rel="stylesheet" href="/assets/styles.css" />
   </head>
   <body>
-    <div class="drawer lg:drawer-open">
+    <div class="group/drawer drawer lg:drawer-open">
+      <script>
+        window.setSidebarRail = function (rail) {
+          document.querySelector('.drawer').toggleAttribute('data-rail', rail);
+          var toggle = document.getElementById('sidebar-toggle');
+          if (toggle) {
+            toggle.setAttribute('aria-label', rail ? 'Expand projects' : 'Collapse projects to icons');
+          }
+        };
+        window.sidebarRail = function () {
+          try {
+            var saved = localStorage.getItem('sidebar-rail');
+            if (saved) return saved === '1';
+          } catch (e) {}
+          return true;
+        };
+        window.setSidebarRail(window.sidebarRail());
+      </script>
       <input id="project-drawer" type="checkbox" class="drawer-toggle" />
       <div class="drawer-content min-h-screen">
         <header class="navbar border-base-content/10 bg-base-300/92 sticky top-0 z-20 border-b px-4 backdrop-blur lg:hidden">
@@ -35,11 +52,13 @@
               <span aria-hidden="true">›</span><a class="hover:text-primary" href="/projects/vmix-master/docs/">Documentation</a><span aria-hidden="true">›</span><span>Scripts</span>
             </nav>
             <h1 class="mt-3 text-3xl font-bold sm:text-4xl">NameSlave</h1>
+            <div role="tablist" class="tabs tabs-border mt-6" aria-label="vMix Master sections">
+              <a role="tab" href="/projects/vmix-master/" class="tab ">Overview</a><a role="tab" href="/projects/vmix-master/docs/" class="tab tab-active font-semibold" aria-current="page">Documentation</a>
+            </div>
             <details class="rounded-box border-base-content/10 bg-base-300/46 mt-6 border p-4 lg:hidden">
               <summary class="text-base-content/80 cursor-pointer text-sm font-semibold">Documentation menu</summary>
               <div class="mt-3"><nav class="lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto" aria-label="vMix Master documentation">
-              <ul class="text-sm"><li><a href="/projects/vmix-master/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Overview</a></li><li><a href="/projects/vmix-master/docs/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Documentation</a></li></ul>
-              <div class="mt-4">
+              <div class="">
                 <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Getting started</div>
                 <ul class="text-sm"><li><a href="/projects/vmix-master/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Introduction</a></li><li><a href="/projects/vmix-master/docs/getting-started/connect-vmix/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Connect to vMix</a></li></ul>
               </div><div class="mt-4">
@@ -53,8 +72,7 @@
             </details>
             <div class="mt-7 grid gap-8 lg:grid-cols-[15rem_minmax(0,1fr)]">
               <div class="border-base-content/10 hidden lg:block lg:border-r lg:pr-4"><nav class="lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto" aria-label="vMix Master documentation">
-              <ul class="text-sm"><li><a href="/projects/vmix-master/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Overview</a></li><li><a href="/projects/vmix-master/docs/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Documentation</a></li></ul>
-              <div class="mt-4">
+              <div class="">
                 <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Getting started</div>
                 <ul class="text-sm"><li><a href="/projects/vmix-master/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Introduction</a></li><li><a href="/projects/vmix-master/docs/getting-started/connect-vmix/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Connect to vMix</a></li></ul>
               </div><div class="mt-4">
@@ -179,59 +197,126 @@ you can open the master&#39;s API address in a browser on this machine.</li>
       </div>
       <aside class="drawer-side z-30">
         <label for="project-drawer" aria-label="Close projects" class="drawer-overlay"></label>
-        <nav class="border-base-content/10 bg-base-200 min-h-full w-80 border-r p-4" aria-label="Projects">
-          <a href="/" class="rounded-box mb-6 flex items-center gap-3 px-3 py-2">
-            <img src="/assets/logo.png" alt="" class="rounded-box size-11" />
-            <span>
-              <span class="block text-xl font-bold">Live Miracles</span>
-              <span class="text-base-content/58 text-sm">Open tools for live teams</span>
-            </span>
-          </a>
-          <div class="mb-5">
-              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Streaming &amp; transport</div>
-              <a href="/projects/bunryu/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+        <nav class="border-base-content/10 bg-base-200 min-h-full w-80 border-r p-4 lg:group-data-[rail]/drawer:w-16 lg:group-data-[rail]/drawer:p-2" aria-label="Projects">
+          <div class="mb-6 flex items-center justify-between gap-2 lg:group-data-[rail]/drawer:flex-col lg:group-data-[rail]/drawer:gap-3">
+            <a href="/" title="Live Miracles" aria-label="Live Miracles" class="rounded-box flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:p-0">
+              <img src="/assets/logo.png" alt="" class="rounded-box size-11" />
+              <span class="lg:group-data-[rail]/drawer:hidden">
+                <span class="block text-xl font-bold">Live Miracles</span>
+                <span class="text-base-content/58 text-sm">Open tools for live teams</span>
+              </span>
+            </a>
+            <button type="button" id="sidebar-toggle" class="btn btn-ghost btn-sm btn-square hidden lg:inline-flex lg:group-data-[rail]/drawer:rotate-180" aria-label="Collapse projects to icons"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M11 17l-5-5 5-5M18 17l-5-5 5-5" /></svg></button>
+          </div>
+          <div class="mb-5 lg:group-data-[rail]/drawer:mb-3">
+              
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase lg:group-data-[rail]/drawer:hidden">Streaming &amp; transport</div>
+              <a href="/projects/bunryu/" title="Bunryu" aria-label="Bunryu" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
                 <img src="/assets/bunryu-logo.png" alt="" class="rounded-box size-6 bg-base-content p-0.5 shrink-0 object-contain" />
-                <span>Bunryu</span>
-              </a><a href="/projects/srt-bonding-relay/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <span class="lg:group-data-[rail]/drawer:hidden">Bunryu</span>
+              </a><a href="/projects/srt-bonding-relay/" title="SRT Bonding Relay" aria-label="SRT Bonding Relay" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
                 <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">S</span>
-                <span>SRT Bonding Relay</span>
-              </a><a href="/projects/delayed-yt/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <span class="lg:group-data-[rail]/drawer:hidden">SRT Bonding Relay</span>
+              </a><a href="/projects/delayed-yt/" title="Delayed YouTube" aria-label="Delayed YouTube" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
                 <img src="https://live-miracles.github.io/delayed-yt/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
-                <span>Delayed YouTube</span>
+                <span class="lg:group-data-[rail]/drawer:hidden">Delayed YouTube</span>
               </a>
-            </div><div class="mb-5">
-              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">vMix production</div>
-              <a href="/projects/vmix-master/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 bg-base-100 text-primary font-semibold" aria-current="page">
+            </div><div class="mb-5 lg:group-data-[rail]/drawer:mb-3">
+              <hr class="border-base-content/10 mb-3 hidden lg:group-data-[rail]/drawer:block" />
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase lg:group-data-[rail]/drawer:hidden">vMix production</div>
+              <a href="/projects/vmix-master/" title="vMix Master" aria-label="vMix Master" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 bg-base-100 text-primary font-semibold" aria-current="page">
                 <img src="https://live-miracles.github.io/vmix-master/logo.svg" alt="" class="rounded-box size-6  shrink-0 object-contain" />
-                <span>vMix Master</span>
-              </a><a href="/projects/folder-player/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <span class="lg:group-data-[rail]/drawer:hidden">vMix Master</span>
+              </a><a href="/projects/folder-player/" title="vMix Folder Player" aria-label="vMix Folder Player" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
                 <img src="/assets/folder-player-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
-                <span>vMix Folder Player</span>
+                <span class="lg:group-data-[rail]/drawer:hidden">vMix Folder Player</span>
               </a>
-            </div><div class="mb-5">
-              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Monitoring &amp; operations</div>
-              <a href="/projects/live-gallery/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+            </div><div class="mb-5 lg:group-data-[rail]/drawer:mb-3">
+              <hr class="border-base-content/10 mb-3 hidden lg:group-data-[rail]/drawer:block" />
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase lg:group-data-[rail]/drawer:hidden">Monitoring &amp; operations</div>
+              <a href="/projects/live-gallery/" title="Live Gallery" aria-label="Live Gallery" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
                 <img src="/assets/live-gallery-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
-                <span>Live Gallery</span>
-              </a><a href="/projects/wake-up-support/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <span class="lg:group-data-[rail]/drawer:hidden">Live Gallery</span>
+              </a><a href="/projects/wake-up-support/" title="Wake Up Support" aria-label="Wake Up Support" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
                 <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">W</span>
-                <span>Wake Up Support</span>
+                <span class="lg:group-data-[rail]/drawer:hidden">Wake Up Support</span>
               </a>
-            </div><div class="mb-5">
-              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Event workflows</div>
-              <a href="/projects/key-vault/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+            </div><div class="mb-5 lg:group-data-[rail]/drawer:mb-3">
+              <hr class="border-base-content/10 mb-3 hidden lg:group-data-[rail]/drawer:block" />
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase lg:group-data-[rail]/drawer:hidden">Event workflows</div>
+              <a href="/projects/key-vault/" title="Key Vault" aria-label="Key Vault" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
                 <img src="https://live-miracles.github.io/key-vault/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
-                <span>Key Vault</span>
-              </a><a href="/projects/live-generator/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <span class="lg:group-data-[rail]/drawer:hidden">Key Vault</span>
+              </a><a href="/projects/live-generator/" title="Live Generator" aria-label="Live Generator" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
                 <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">L</span>
-                <span>Live Generator</span>
-              </a><a href="/projects/multi-lang-qa/" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 ">
+                <span class="lg:group-data-[rail]/drawer:hidden">Live Generator</span>
+              </a><a href="/projects/multi-lang-qa/" title="Multi Lang QA" aria-label="Multi Lang QA" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
                 <img src="https://live-miracles.github.io/multi-lang-qa/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
-                <span>Multi Lang QA</span>
+                <span class="lg:group-data-[rail]/drawer:hidden">Multi Lang QA</span>
               </a>
             </div>
         </nav>
       </aside>
+      <script>
+        window.setSidebarRail(window.sidebarRail());
+        document.getElementById('sidebar-toggle').addEventListener('click', function () {
+          var rail = !window.sidebarRail();
+          try {
+            localStorage.setItem('sidebar-rail', rail ? '1' : '0');
+          } catch (e) {}
+          window.setSidebarRail(rail);
+        });
+      </script>
     </div>
+    <dialog id="lightbox" class="lightbox" aria-label="Enlarged image">
+      <button type="button" class="btn btn-circle btn-sm lightbox-close" aria-label="Close image"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg></button>
+      <div class="lightbox-frame"><img alt="" /></div>
+    </dialog>
+    <script>
+      (function () {
+        var dialog = document.getElementById('lightbox');
+        if (!dialog || !dialog.showModal) return;
+        var shown = dialog.querySelector('img');
+        function zoomable(img) {
+          return !img.closest('a') && img.naturalWidth >= 300 && img.naturalHeight >= 100;
+        }
+        function mark(img) {
+          if (img.dataset.zoom || !zoomable(img)) return;
+          img.dataset.zoom = '1';
+          img.classList.add('zoomable');
+          img.tabIndex = 0;
+          img.setAttribute('role', 'button');
+          img.setAttribute('aria-label', 'Enlarge image: ' + (img.alt || 'screenshot'));
+        }
+        function open(img) {
+          shown.src = img.currentSrc || img.src;
+          shown.alt = img.alt;
+          shown.classList.remove('actual');
+          dialog.showModal();
+          dialog.scrollTo(0, 0);
+        }
+        document.querySelectorAll('.readme img').forEach(function (img) {
+          if (img.complete) mark(img);
+          else img.addEventListener('load', function () { mark(img); }, { once: true });
+        });
+        document.addEventListener('click', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom) open(img);
+        });
+        document.addEventListener('keydown', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom && (event.key === 'Enter' || event.key === ' ')) {
+            event.preventDefault();
+            open(img);
+          }
+        });
+        shown.addEventListener('click', function () {
+          shown.classList.toggle('actual');
+        });
+        dialog.addEventListener('click', function (event) {
+          if (event.target !== shown) dialog.close();
+        });
+      })();
+    </script>
   </body>
 </html>
