@@ -40,11 +40,12 @@ const projects = [
         iconOnLight: true,
     },
     {
-        id: 'srt-bonding-relay',
-        name: 'SRT Bonding Relay',
+        id: 'goryu',
+        name: 'Goryu',
         category: 'streaming',
         summary:
-            'Standalone relay that accepts bonded or redundant SRT groups and forwards one deduplicated stream downstream.',
+            'Goryu (合流, "confluence"): standalone SRT relay that accepts bonded or redundant SRT groups, or a plain SRT link, and forwards one deduplicated stream downstream.',
+        icon: '/assets/goryu-logo.png',
     },
     {
         id: 'delayed-yt',
