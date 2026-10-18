@@ -48,7 +48,7 @@
         <main class="mx-auto flex min-h-screen w-full max-w-6xl flex-col gap-8 px-4 py-6 sm:px-6 lg:px-8">
           <section class="rounded-box border-base-content/10 bg-base-200/68 border p-5 shadow-xl backdrop-blur sm:p-7">
             <nav class="text-base-content/60 flex flex-wrap items-center gap-2 text-sm" aria-label="Breadcrumb">
-              <a href="/projects/bunryu/" class="hover:text-primary flex items-center gap-2"><img src="/assets/bunryu-logo.png" alt="" class="rounded-box size-5 bg-base-content p-0.5 shrink-0 object-contain" /><span>Bunryu</span></a>
+              <a href="/projects/bunryu/" class="hover:text-primary flex items-center gap-2"><img src="/assets/bunryu-logo.png" alt="" class="rounded-box size-5  shrink-0 object-contain" /><span>Bunryu</span></a>
               <span aria-hidden="true">›</span><a class="hover:text-primary" href="/projects/bunryu/docs/">Documentation</a><span aria-hidden="true">›</span><span>Reference</span>
             </nav>
             <h1 class="mt-3 text-3xl font-bold sm:text-4xl">Development</h1>
@@ -60,7 +60,7 @@
               <div class="mt-3"><nav class="lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto" aria-label="Bunryu documentation">
               <div class="">
                 <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Getting started</div>
-                <ul class="text-sm"><li><a href="/projects/bunryu/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Introduction</a></li><li><a href="/projects/bunryu/docs/getting-started/docker/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Docker</a></li><li><a href="/projects/bunryu/docs/getting-started/install/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Native install</a></li></ul>
+                <ul class="text-sm"><li><a href="/projects/bunryu/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Introduction</a></li><li><a href="/projects/bunryu/docs/getting-started/docker/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Docker</a></li><li><a href="/projects/bunryu/docs/getting-started/install/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Native install</a></li><li><a href="/projects/bunryu/docs/getting-started/sizing/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Sizing a server</a></li></ul>
               </div><div class="mt-4">
                 <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Usage</div>
                 <ul class="text-sm"><li><a href="/projects/bunryu/docs/usage/publishing/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Publishing to a pipeline</a></li><li><a href="/projects/bunryu/docs/usage/outputs/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Outputs</a></li><li><a href="/projects/bunryu/docs/usage/translation/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Translation outputs</a></li></ul>
@@ -77,7 +77,7 @@
               <div class="border-base-content/10 hidden lg:block lg:border-r lg:pr-4"><nav class="lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto" aria-label="Bunryu documentation">
               <div class="">
                 <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Getting started</div>
-                <ul class="text-sm"><li><a href="/projects/bunryu/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Introduction</a></li><li><a href="/projects/bunryu/docs/getting-started/docker/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Docker</a></li><li><a href="/projects/bunryu/docs/getting-started/install/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Native install</a></li></ul>
+                <ul class="text-sm"><li><a href="/projects/bunryu/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Introduction</a></li><li><a href="/projects/bunryu/docs/getting-started/docker/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Docker</a></li><li><a href="/projects/bunryu/docs/getting-started/install/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Native install</a></li><li><a href="/projects/bunryu/docs/getting-started/sizing/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Sizing a server</a></li></ul>
               </div><div class="mt-4">
                 <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Usage</div>
                 <ul class="text-sm"><li><a href="/projects/bunryu/docs/usage/publishing/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Publishing to a pipeline</a></li><li><a href="/projects/bunryu/docs/usage/outputs/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Outputs</a></li><li><a href="/projects/bunryu/docs/usage/translation/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Translation outputs</a></li></ul>
@@ -94,18 +94,18 @@
 <pre><code class="language-bash">npm install
 npm run dev-install   # downloads SRS and pinned FFmpeg into ./objs
 </code></pre>
-<p>Rerunning <code>npm run dev-install</code> also refreshes the sibling <code>../srt-bonding-relay</code>
-repo when it has no local changes and rebuilds <code>./objs/srt-bonding-relay</code>.</p>
+<p>Rerunning <code>npm run dev-install</code> also refreshes the sibling <code>../goryu</code>
+repo when it has no local changes and rebuilds <code>./objs/goryu</code>.</p>
 <p>To use a local SRS binary:</p>
 <pre><code class="language-bash">SRS_LOCAL_BIN=./build/srs npm run dev-install
 </code></pre>
-<p>The standalone relay now lives in the sibling <code>../srt-bonding-relay</code> repo during development and in <code>live-miracles/srt-bonding-relay</code> GitHub Releases for production installs.</p>
+<p>The standalone relay now lives in the sibling <code>../goryu</code> repo during development and in <code>live-miracles/goryu</code> GitHub Releases for production installs.</p>
 <p><strong>2. Start SRS</strong> (terminal 1):</p>
 <pre><code class="language-bash">npm run srs           # runs ./objs/srs -c srs.conf in the foreground
 </code></pre>
-<p><strong>3. Start the SRT bonding relay</strong> (terminal 2):</p>
-<pre><code class="language-bash">npm run relay         # runs the ./objs/srt-bonding-relay binary built by dev-install
-npm run relay:update   # pulls the latest ../srt-bonding-relay source and rebuilds ./objs/srt-bonding-relay
+<p><strong>3. Start Goryu</strong> (terminal 2):</p>
+<pre><code class="language-bash">npm run relay         # runs the ./objs/goryu binary built by dev-install
+npm run relay:update   # pulls the latest ../goryu source and rebuilds ./objs/goryu
 </code></pre>
 <p>The relay also exposes a local HTTP status endpoint on the default
 <code>status_port</code> (<code>127.0.0.1:8081</code>) in development. The dashboard backend polls
@@ -151,11 +151,11 @@ developer&#39;s own <code>npm run dev</code>. It is documented in
               
               <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase lg:group-data-[rail]/drawer:hidden">Streaming &amp; transport</div>
               <a href="/projects/bunryu/" title="Bunryu" aria-label="Bunryu" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 bg-base-100 text-primary font-semibold" aria-current="page">
-                <img src="/assets/bunryu-logo.png" alt="" class="rounded-box size-6 bg-base-content p-0.5 shrink-0 object-contain" />
+                <img src="/assets/bunryu-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
                 <span class="lg:group-data-[rail]/drawer:hidden">Bunryu</span>
-              </a><a href="/projects/srt-bonding-relay/" title="SRT Bonding Relay" aria-label="SRT Bonding Relay" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
-                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">S</span>
-                <span class="lg:group-data-[rail]/drawer:hidden">SRT Bonding Relay</span>
+              </a><a href="/projects/goryu/" title="Goryu" aria-label="Goryu" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+                <img src="/assets/goryu-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span class="lg:group-data-[rail]/drawer:hidden">Goryu</span>
               </a><a href="/projects/delayed-yt/" title="Delayed YouTube" aria-label="Delayed YouTube" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
                 <img src="https://live-miracles.github.io/delayed-yt/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
                 <span class="lg:group-data-[rail]/drawer:hidden">Delayed YouTube</span>

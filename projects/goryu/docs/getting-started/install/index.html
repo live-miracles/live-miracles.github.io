@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en" data-theme="dim">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Install — Goryu</title>
+    <meta name="description" content="Goryu runs as a single process. Each release publishes one archive, goryu-linux-x86_64.tar.gz, containing the binary and the shared libraries it needs (libsrt 1.5.6 built with bonding, OpenSSL&#39;s libcr" />
+    <link rel="canonical" href="https://live-miracles.github.io/projects/goryu/docs/getting-started/install/" />
+    <meta property="og:site_name" content="Live Miracles" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Install — Goryu" />
+    <meta property="og:description" content="Goryu runs as a single process. Each release publishes one archive, goryu-linux-x86_64.tar.gz, containing the binary and the shared libraries it needs (libsrt 1.5.6 built with bonding, OpenSSL&#39;s libcr" />
+    <meta property="og:url" content="https://live-miracles.github.io/projects/goryu/docs/getting-started/install/" />
+    <meta property="og:image" content="https://raw.githubusercontent.com/live-miracles/goryu/master/.github/assets/logo.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/assets/logo.png" type="image/png" />
+    <link rel="stylesheet" href="/assets/styles.css" />
+  </head>
+  <body>
+    <div class="group/drawer drawer lg:drawer-open">
+      <script>
+        window.setSidebarRail = function (rail) {
+          document.querySelector('.drawer').toggleAttribute('data-rail', rail);
+          var toggle = document.getElementById('sidebar-toggle');
+          if (toggle) {
+            toggle.setAttribute('aria-label', rail ? 'Expand projects' : 'Collapse projects to icons');
+          }
+        };
+        window.sidebarRail = function () {
+          try {
+            var saved = localStorage.getItem('sidebar-rail');
+            if (saved) return saved === '1';
+          } catch (e) {}
+          return true;
+        };
+        window.setSidebarRail(window.sidebarRail());
+      </script>
+      <input id="project-drawer" type="checkbox" class="drawer-toggle" />
+      <div class="drawer-content min-h-screen">
+        <header class="navbar border-base-content/10 bg-base-300/92 sticky top-0 z-20 border-b px-4 backdrop-blur lg:hidden">
+          <div class="flex-none">
+            <label for="project-drawer" class="btn btn-square btn-ghost" aria-label="Open projects"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /></svg></label>
+          </div>
+          <div class="flex-1">
+            <a href="/" class="btn btn-ghost text-lg font-bold">Live Miracles</a>
+          </div>
+        </header>
+        <main class="mx-auto flex min-h-screen w-full max-w-6xl flex-col gap-8 px-4 py-6 sm:px-6 lg:px-8">
+          <section class="rounded-box border-base-content/10 bg-base-200/68 border p-5 shadow-xl backdrop-blur sm:p-7">
+            <nav class="text-base-content/60 flex flex-wrap items-center gap-2 text-sm" aria-label="Breadcrumb">
+              <a href="/projects/goryu/" class="hover:text-primary flex items-center gap-2"><img src="/assets/goryu-logo.png" alt="" class="rounded-box size-5  shrink-0 object-contain" /><span>Goryu</span></a>
+              <span aria-hidden="true">›</span><a class="hover:text-primary" href="/projects/goryu/docs/">Documentation</a><span aria-hidden="true">›</span><span>Getting started</span>
+            </nav>
+            <h1 class="mt-3 text-3xl font-bold sm:text-4xl">Install</h1>
+            <div role="tablist" class="tabs tabs-border mt-6" aria-label="Goryu sections">
+              <a role="tab" href="/projects/goryu/" class="tab ">Overview</a><a role="tab" href="/projects/goryu/docs/" class="tab tab-active font-semibold" aria-current="page">Documentation</a>
+            </div>
+            <details class="rounded-box border-base-content/10 bg-base-300/46 mt-6 border p-4 lg:hidden">
+              <summary class="text-base-content/80 cursor-pointer text-sm font-semibold">Documentation menu</summary>
+              <div class="mt-3"><nav class="lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto" aria-label="Goryu documentation">
+              <div class="">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Getting started</div>
+                <ul class="text-sm"><li><a href="/projects/goryu/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Introduction</a></li><li><a href="/projects/goryu/docs/getting-started/install/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 bg-base-100 text-primary font-semibold" aria-current="page">Install</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Usage</div>
+                <ul class="text-sm"><li><a href="/projects/goryu/docs/usage/configuration/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Configuration</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Operations</div>
+                <ul class="text-sm"><li><a href="/projects/goryu/docs/operations/reliability/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Reliability</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Reference</div>
+                <ul class="text-sm"><li><a href="/projects/goryu/docs/reference/status-api/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Status API</a></li><li><a href="/projects/goryu/docs/reference/architecture/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Architecture</a></li><li><a href="/projects/goryu/docs/reference/development/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Development</a></li></ul>
+              </div>
+            </nav></div>
+            </details>
+            <div class="mt-7 grid gap-8 lg:grid-cols-[15rem_minmax(0,1fr)]">
+              <div class="border-base-content/10 hidden lg:block lg:border-r lg:pr-4"><nav class="lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto" aria-label="Goryu documentation">
+              <div class="">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Getting started</div>
+                <ul class="text-sm"><li><a href="/projects/goryu/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Introduction</a></li><li><a href="/projects/goryu/docs/getting-started/install/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 bg-base-100 text-primary font-semibold" aria-current="page">Install</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Usage</div>
+                <ul class="text-sm"><li><a href="/projects/goryu/docs/usage/configuration/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Configuration</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Operations</div>
+                <ul class="text-sm"><li><a href="/projects/goryu/docs/operations/reliability/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Reliability</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Reference</div>
+                <ul class="text-sm"><li><a href="/projects/goryu/docs/reference/status-api/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Status API</a></li><li><a href="/projects/goryu/docs/reference/architecture/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Architecture</a></li><li><a href="/projects/goryu/docs/reference/development/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Development</a></li></ul>
+              </div>
+            </nav></div>
+              <div class="min-w-0"><details class="rounded-box border-base-content/10 bg-base-300/46 text-base-content/68 mb-7 border p-4 text-sm backdrop-blur">
+              <summary class="text-base-content/80 cursor-pointer font-semibold">On this page</summary>
+              <ol class="mt-3 space-y-2">
+                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#download">Download</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#run">Run</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#systemd">systemd</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#firewall">Firewall</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#bunryu">Bunryu</a></li>
+              </ol>
+            </details><article class="readme min-w-0"><p>Goryu runs as a single process. Each release publishes one archive,
+<code>goryu-linux-x86_64.tar.gz</code>, containing the binary and the shared libraries it
+needs (libsrt 1.5.6 built with bonding, OpenSSL&#39;s libcrypto, libstdc++,
+libgcc), so it does not depend on the host&#39;s libsrt.</p>
+<h2 id="download">Download</h2>
+<pre><code class="language-bash">curl -fsSL -o goryu.tar.gz https://github.com/live-miracles/goryu/releases/latest/download/goryu-linux-x86_64.tar.gz
+mkdir goryu &amp;&amp; tar -xzf goryu.tar.gz -C goryu
+</code></pre>
+<p>The archive unpacks to <code>bin/goryu</code> and <code>lib/</code>. To pin a version, replace
+<code>latest/download</code> with <code>download/vX.Y.Z</code>. Check what you have with:</p>
+<pre><code class="language-bash">LD_LIBRARY_PATH=goryu/lib goryu/bin/goryu --version
+</code></pre>
+<h2 id="run">Run</h2>
+<p>Write a <a href="/projects/goryu/docs/usage/configuration/"><code>goryu.json</code></a>, then:</p>
+<pre><code class="language-bash">LD_LIBRARY_PATH=goryu/lib goryu/bin/goryu goryu.json
+curl http://127.0.0.1:8081/status
+</code></pre>
+<p>Set <code>LD_LIBRARY_PATH</code> on the goryu command only, as above. Exporting it for
+the whole shell makes other tools (<code>curl</code>, for one) load the bundled
+<code>libcrypto</code> and fail.</p>
+<h2 id="systemd">systemd</h2>
+<p>A minimal unit, assuming the archive is unpacked to <code>/opt/goryu</code> and the config
+is at <code>/etc/goryu/goryu.json</code>:</p>
+<pre><code class="language-ini">[Unit]
+Description=Goryu SRT bonding relay
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+Environment=LD_LIBRARY_PATH=/opt/goryu/lib
+ExecStart=/opt/goryu/bin/goryu /etc/goryu/goryu.json
+Restart=always
+RestartSec=2
+LimitNOFILE=1048576
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
+</code></pre>
+<p>Add <code>User=</code> and <code>Group=</code> to run it as an unprivileged account; the input port
+is above 1024 and needs no special privileges. Goryu only reads its config at
+startup, so restart the service after changing <code>goryu.json</code>.</p>
+<h2 id="firewall">Firewall</h2>
+<p>Open the encoder-facing port (<code>input_port</code>) for <strong>UDP</strong>. The status port is
+bound to <code>127.0.0.1</code> and must stay closed to the network.</p>
+<h2 id="bunryu">Bunryu</h2>
+<p>If you use Bunryu you do not install Goryu by hand: Bunryu&#39;s installer
+downloads a pinned release and sets up <code>goryu.service</code>, and its Docker image
+bundles it.</p>
+</article><a class="link text-base-content/50 mt-6 inline-block text-sm" href="https://github.com/live-miracles/goryu/blob/master/docs/1-getting-started/2-install.md">Edit this page on GitHub</a><div class="border-base-content/10 mt-10 grid gap-3 border-t pt-6 sm:grid-cols-2">
+              <a class="rounded-box border-base-content/10 hover:border-primary/50 border p-4" href="/projects/goryu/docs/getting-started/introduction/"><div class="text-base-content/50 text-xs">Previous</div><div class="font-semibold">Introduction</div></a>
+              <a class="rounded-box border-base-content/10 hover:border-primary/50 border p-4 sm:text-right" href="/projects/goryu/docs/usage/configuration/"><div class="text-base-content/50 text-xs">Next</div><div class="font-semibold">Configuration</div></a>
+            </div></div>
+            </div>
+          </section>
+          <footer class="text-base-content/50 border-base-content/10 mt-auto border-t pt-6 pb-2 text-sm">
+            Live Miracles · <a class="link" href="https://github.com/live-miracles">github.com/live-miracles</a>
+          </footer>
+        </main>
+      </div>
+      <aside class="drawer-side z-30">
+        <label for="project-drawer" aria-label="Close projects" class="drawer-overlay"></label>
+        <nav class="border-base-content/10 bg-base-200 min-h-full w-80 border-r p-4 lg:group-data-[rail]/drawer:w-16 lg:group-data-[rail]/drawer:p-2" aria-label="Projects">
+          <div class="mb-6 flex items-center justify-between gap-2 lg:group-data-[rail]/drawer:flex-col lg:group-data-[rail]/drawer:gap-3">
+            <a href="/" title="Live Miracles" aria-label="Live Miracles" class="rounded-box flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:p-0">
+              <img src="/assets/logo.png" alt="" class="rounded-box size-11" />
+              <span class="lg:group-data-[rail]/drawer:hidden">
+                <span class="block text-xl font-bold">Live Miracles</span>
+                <span class="text-base-content/58 text-sm">Open tools for live teams</span>
+              </span>
+            </a>
+            <button type="button" id="sidebar-toggle" class="btn btn-ghost btn-sm btn-square hidden lg:inline-flex lg:group-data-[rail]/drawer:rotate-180" aria-label="Collapse projects to icons"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M11 17l-5-5 5-5M18 17l-5-5 5-5" /></svg></button>
+          </div>
+          <div class="mb-5 lg:group-data-[rail]/drawer:mb-3">
+              
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase lg:group-data-[rail]/drawer:hidden">Streaming &amp; transport</div>
+              <a href="/projects/bunryu/" title="Bunryu" aria-label="Bunryu" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+                <img src="/assets/bunryu-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span class="lg:group-data-[rail]/drawer:hidden">Bunryu</span>
+              </a><a href="/projects/goryu/" title="Goryu" aria-label="Goryu" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 bg-base-100 text-primary font-semibold" aria-current="page">
+                <img src="/assets/goryu-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span class="lg:group-data-[rail]/drawer:hidden">Goryu</span>
+              </a><a href="/projects/delayed-yt/" title="Delayed YouTube" aria-label="Delayed YouTube" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+                <img src="https://live-miracles.github.io/delayed-yt/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span class="lg:group-data-[rail]/drawer:hidden">Delayed YouTube</span>
+              </a>
+            </div><div class="mb-5 lg:group-data-[rail]/drawer:mb-3">
+              <hr class="border-base-content/10 mb-3 hidden lg:group-data-[rail]/drawer:block" />
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase lg:group-data-[rail]/drawer:hidden">vMix production</div>
+              <a href="/projects/vmix-master/" title="vMix Master" aria-label="vMix Master" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+                <img src="https://live-miracles.github.io/vmix-master/logo.svg" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span class="lg:group-data-[rail]/drawer:hidden">vMix Master</span>
+              </a><a href="/projects/folder-player/" title="vMix Folder Player" aria-label="vMix Folder Player" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+                <img src="/assets/folder-player-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span class="lg:group-data-[rail]/drawer:hidden">vMix Folder Player</span>
+              </a>
+            </div><div class="mb-5 lg:group-data-[rail]/drawer:mb-3">
+              <hr class="border-base-content/10 mb-3 hidden lg:group-data-[rail]/drawer:block" />
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase lg:group-data-[rail]/drawer:hidden">Monitoring &amp; operations</div>
+              <a href="/projects/live-gallery/" title="Live Gallery" aria-label="Live Gallery" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+                <img src="/assets/live-gallery-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span class="lg:group-data-[rail]/drawer:hidden">Live Gallery</span>
+              </a><a href="/projects/wake-up-support/" title="Wake Up Support" aria-label="Wake Up Support" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">W</span>
+                <span class="lg:group-data-[rail]/drawer:hidden">Wake Up Support</span>
+              </a>
+            </div><div class="mb-5 lg:group-data-[rail]/drawer:mb-3">
+              <hr class="border-base-content/10 mb-3 hidden lg:group-data-[rail]/drawer:block" />
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase lg:group-data-[rail]/drawer:hidden">Event workflows</div>
+              <a href="/projects/key-vault/" title="Key Vault" aria-label="Key Vault" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+                <img src="https://live-miracles.github.io/key-vault/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span class="lg:group-data-[rail]/drawer:hidden">Key Vault</span>
+              </a><a href="/projects/live-generator/" title="Live Generator" aria-label="Live Generator" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">L</span>
+                <span class="lg:group-data-[rail]/drawer:hidden">Live Generator</span>
+              </a><a href="/projects/multi-lang-qa/" title="Multi Lang QA" aria-label="Multi Lang QA" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+                <img src="https://live-miracles.github.io/multi-lang-qa/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span class="lg:group-data-[rail]/drawer:hidden">Multi Lang QA</span>
+              </a>
+            </div>
+        </nav>
+      </aside>
+      <script>
+        window.setSidebarRail(window.sidebarRail());
+        document.getElementById('sidebar-toggle').addEventListener('click', function () {
+          var rail = !window.sidebarRail();
+          try {
+            localStorage.setItem('sidebar-rail', rail ? '1' : '0');
+          } catch (e) {}
+          window.setSidebarRail(rail);
+        });
+      </script>
+    </div>
+    <dialog id="lightbox" class="lightbox" aria-label="Enlarged image">
+      <button type="button" class="btn btn-circle btn-sm lightbox-close" aria-label="Close image"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg></button>
+      <div class="lightbox-frame"><img alt="" /></div>
+    </dialog>
+    <script>
+      (function () {
+        var dialog = document.getElementById('lightbox');
+        if (!dialog || !dialog.showModal) return;
+        var shown = dialog.querySelector('img');
+        function zoomable(img) {
+          return !img.closest('a') && img.naturalWidth >= 300 && img.naturalHeight >= 100;
+        }
+        function mark(img) {
+          if (img.dataset.zoom || !zoomable(img)) return;
+          img.dataset.zoom = '1';
+          img.classList.add('zoomable');
+          img.tabIndex = 0;
+          img.setAttribute('role', 'button');
+          img.setAttribute('aria-label', 'Enlarge image: ' + (img.alt || 'screenshot'));
+        }
+        function open(img) {
+          shown.src = img.currentSrc || img.src;
+          shown.alt = img.alt;
+          shown.classList.remove('actual');
+          dialog.showModal();
+          dialog.scrollTo(0, 0);
+        }
+        document.querySelectorAll('.readme img').forEach(function (img) {
+          if (img.complete) mark(img);
+          else img.addEventListener('load', function () { mark(img); }, { once: true });
+        });
+        document.addEventListener('click', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom) open(img);
+        });
+        document.addEventListener('keydown', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom && (event.key === 'Enter' || event.key === ' ')) {
+            event.preventDefault();
+            open(img);
+          }
+        });
+        shown.addEventListener('click', function () {
+          shown.classList.toggle('actual');
+        });
+        dialog.addEventListener('click', function (event) {
+          if (event.target !== shown) dialog.close();
+        });
+      })();
+    </script>
+  </body>
+</html>
