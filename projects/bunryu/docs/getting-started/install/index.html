@@ -69,7 +69,7 @@
                 <ul class="text-sm"><li><a href="/projects/bunryu/docs/operations/security/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Security</a></li><li><a href="/projects/bunryu/docs/operations/remote-access/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Remote access (Cloudflare Tunnel)</a></li><li><a href="/projects/bunryu/docs/operations/configuration/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Configuration</a></li><li><a href="/projects/bunryu/docs/operations/reliability/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Reliability</a></li><li><a href="/projects/bunryu/docs/operations/known-issues/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Known issues</a></li></ul>
               </div><div class="mt-4">
                 <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Reference</div>
-                <ul class="text-sm"><li><a href="/projects/bunryu/docs/reference/api/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">REST API</a></li><li><a href="/projects/bunryu/docs/reference/development/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Development</a></li></ul>
+                <ul class="text-sm"><li><a href="/projects/bunryu/docs/reference/api/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">REST API</a></li><li><a href="/projects/bunryu/docs/reference/development/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Development</a></li><li><a href="/projects/bunryu/docs/reference/design-decisions/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Design decisions</a></li></ul>
               </div>
             </nav></div>
             </details>
@@ -86,7 +86,7 @@
                 <ul class="text-sm"><li><a href="/projects/bunryu/docs/operations/security/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Security</a></li><li><a href="/projects/bunryu/docs/operations/remote-access/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Remote access (Cloudflare Tunnel)</a></li><li><a href="/projects/bunryu/docs/operations/configuration/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Configuration</a></li><li><a href="/projects/bunryu/docs/operations/reliability/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Reliability</a></li><li><a href="/projects/bunryu/docs/operations/known-issues/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Known issues</a></li></ul>
               </div><div class="mt-4">
                 <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Reference</div>
-                <ul class="text-sm"><li><a href="/projects/bunryu/docs/reference/api/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">REST API</a></li><li><a href="/projects/bunryu/docs/reference/development/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Development</a></li></ul>
+                <ul class="text-sm"><li><a href="/projects/bunryu/docs/reference/api/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">REST API</a></li><li><a href="/projects/bunryu/docs/reference/development/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Development</a></li><li><a href="/projects/bunryu/docs/reference/design-decisions/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Design decisions</a></li></ul>
               </div>
             </nav></div>
               <div class="min-w-0"><details class="rounded-box border-base-content/10 bg-base-300/46 text-base-content/68 mb-7 border p-4 text-sm backdrop-blur">
@@ -116,7 +116,7 @@ targets Debian/Ubuntu on x86_64 and sets up three systemd services:</p>
 <td>Node.js dashboard/API, started from <code>/opt/bunryu/dist/index.js</code></td>
 </tr>
 </tbody></table>
-<p>The installer downloads an SRS 6.0 release binary built from <a href="https://github.com/live-miracles/srs/blob/bunryu/6.0/BUNRYU.md"><code>live-miracles/srs</code></a> (upstream SRS 6.0 with a few fixes that are also proposed upstream) and a pinned <code>srt-bonding-relay</code> binary from the standalone <a href="https://github.com/live-miracles/srt-bonding-relay"><code>live-miracles/srt-bonding-relay</code></a> GitHub releases.</p>
+<p>The installer downloads the official SRS release binary and a pinned <code>srt-bonding-relay</code> binary from the standalone <a href="https://github.com/live-miracles/srt-bonding-relay"><code>live-miracles/srt-bonding-relay</code></a> GitHub releases.</p>
 <p>Startup is ordered so the Node.js control plane is reachable before SRS accepts
 publishes. <code>srs.service</code> waits for the unauthenticated readiness endpoint
 <code>http://127.0.0.1:8080/api/ready</code> before starting; this prevents SRS publish
@@ -166,7 +166,7 @@ the dashboard securely from outside, see <a href="/projects/bunryu/docs/operatio
 <tr>
 <td>10081</td>
 <td>UDP</td>
-<td>SRT bonding input (passphrase required)</td>
+<td>SRT bonding input, also accepts plain SRT (passphrase required)</td>
 </tr>
 <tr>
 <td>8080</td>

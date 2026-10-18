@@ -69,7 +69,7 @@
                 <ul class="text-sm"><li><a href="/projects/bunryu/docs/operations/security/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Security</a></li><li><a href="/projects/bunryu/docs/operations/remote-access/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Remote access (Cloudflare Tunnel)</a></li><li><a href="/projects/bunryu/docs/operations/configuration/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Configuration</a></li><li><a href="/projects/bunryu/docs/operations/reliability/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Reliability</a></li><li><a href="/projects/bunryu/docs/operations/known-issues/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Known issues</a></li></ul>
               </div><div class="mt-4">
                 <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Reference</div>
-                <ul class="text-sm"><li><a href="/projects/bunryu/docs/reference/api/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">REST API</a></li><li><a href="/projects/bunryu/docs/reference/development/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Development</a></li></ul>
+                <ul class="text-sm"><li><a href="/projects/bunryu/docs/reference/api/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">REST API</a></li><li><a href="/projects/bunryu/docs/reference/development/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Development</a></li><li><a href="/projects/bunryu/docs/reference/design-decisions/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Design decisions</a></li></ul>
               </div>
             </nav></div>
             </details>
@@ -86,13 +86,13 @@
                 <ul class="text-sm"><li><a href="/projects/bunryu/docs/operations/security/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Security</a></li><li><a href="/projects/bunryu/docs/operations/remote-access/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Remote access (Cloudflare Tunnel)</a></li><li><a href="/projects/bunryu/docs/operations/configuration/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Configuration</a></li><li><a href="/projects/bunryu/docs/operations/reliability/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Reliability</a></li><li><a href="/projects/bunryu/docs/operations/known-issues/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Known issues</a></li></ul>
               </div><div class="mt-4">
                 <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Reference</div>
-                <ul class="text-sm"><li><a href="/projects/bunryu/docs/reference/api/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">REST API</a></li><li><a href="/projects/bunryu/docs/reference/development/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Development</a></li></ul>
+                <ul class="text-sm"><li><a href="/projects/bunryu/docs/reference/api/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">REST API</a></li><li><a href="/projects/bunryu/docs/reference/development/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Development</a></li><li><a href="/projects/bunryu/docs/reference/design-decisions/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Design decisions</a></li></ul>
               </div>
             </nav></div>
               <div class="min-w-0"><details class="rounded-box border-base-content/10 bg-base-300/46 text-base-content/68 mb-7 border p-4 text-sm backdrop-blur">
               <summary class="text-base-content/80 cursor-pointer font-semibold">On this page</summary>
               <ol class="mt-3 space-y-2">
-                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#test-commands">Test commands</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#checking-the-input">Checking the input</a></li>
+                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#test-commands">Test commands</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#checking-the-input">Checking the input</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#preview">Preview</a></li>
               </ol>
             </details><article class="readme min-w-0"><p>A <strong>pipeline</strong> is one live input. Creating a pipeline assigns it a stream key;
 the pipeline panel in the dashboard shows ready-to-copy publish URLs for every
@@ -130,6 +130,12 @@ bonded SRT for encoders that send the same stream over several network links
 (for example cellular bonding units); the
 <a href="https://github.com/live-miracles/srt-bonding-relay"><code>srt-bonding-relay</code></a>
 merges the links before SRS sees the stream.</p>
+<p>The bonded port also accepts an ordinary single-link SRT connection: use the
+bonded URL without <code>grouptype=broadcast</code>. The dashboard then shows it as an
+&quot;SRT input via relay&quot; with the encoder&#39;s IP, instead of a bonded group. This is
+optional. Plain SRT sent straight to port 10080 avoids the relay&#39;s extra hop
+(about 200 ms) and keeps the stream independent of the relay process; see
+<a href="/projects/bunryu/docs/reference/design-decisions/#srt-ingest">SRT ingest</a>.</p>
 <h2 id="test-commands">Test commands</h2>
 <p>These <code>ffmpeg</code> commands publish a looping file. Replace <code>localhost</code> with the
 server address, and <code>&lt;stream-key&gt;</code> / <code>&lt;passphrase&gt;</code> with the values from the
@@ -158,7 +164,28 @@ dashboard.</p>
 <h2 id="checking-the-input">Checking the input</h2>
 <p>Once a publisher connects, the pipeline turns live and the dashboard shows the
 input&#39;s codec, resolution, frame rate, bitrate and audio tracks (from <code>ffprobe</code>).
-<strong>Preview</strong> starts an HLS preview in the browser.</p>
+<strong>Preview</strong> plays the input in the dashboard.</p>
+<h3 id="preview">Preview</h3>
+<p>The preview is an HLS stream made by the server&#39;s FFmpeg. The input&#39;s video is
+copied unchanged, and only the audio is re-encoded to AAC.</p>
+<ul>
+<li><strong>Browser:</strong> only Chrome is supported. HEVC inputs play only where Chrome can
+decode HEVC; otherwise you get audio without picture.</li>
+<li><strong>Server cost:</strong> a few percent of one core per open preview (about 9% for a
+1080p input with two audio tracks). Previewing is fine even on a 2 vCPU server.</li>
+<li><strong>Bandwidth:</strong> each viewer receives the input&#39;s full bitrate, for example about
+6 Mbps for a typical 1080p input, through the dashboard (and the Cloudflare
+Tunnel, if used).</li>
+<li><strong>Audio tracks:</strong> an input with several audio tracks gets a track selector; the
+switch happens in the browser, without restarting the preview.</li>
+<li><strong>Delay:</strong> segments start on the input&#39;s keyframes, so an encoder with a long
+keyframe interval (e.g. 6–10 s) makes the preview start slower and run further
+behind live. A 2 s keyframe interval, which platforms recommend anyway, keeps it
+short.</li>
+<li><strong>Stopping:</strong> a preview stops when you press Stop or close the tab, and on its
+own about 20 s after nobody is watching (see
+<a href="/projects/bunryu/docs/operations/security/">Security</a>).</li>
+</ul>
 <p>Publishes with an unknown stream key are rejected by SRS before any output
 starts. Recent rejected attempts are listed under the pipeline list (&quot;Rejected
 publish attempts&quot;), which helps when an encoder is configured with a stale key;

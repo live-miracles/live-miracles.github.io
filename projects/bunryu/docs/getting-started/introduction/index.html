@@ -69,7 +69,7 @@
                 <ul class="text-sm"><li><a href="/projects/bunryu/docs/operations/security/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Security</a></li><li><a href="/projects/bunryu/docs/operations/remote-access/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Remote access (Cloudflare Tunnel)</a></li><li><a href="/projects/bunryu/docs/operations/configuration/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Configuration</a></li><li><a href="/projects/bunryu/docs/operations/reliability/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Reliability</a></li><li><a href="/projects/bunryu/docs/operations/known-issues/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Known issues</a></li></ul>
               </div><div class="mt-4">
                 <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Reference</div>
-                <ul class="text-sm"><li><a href="/projects/bunryu/docs/reference/api/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">REST API</a></li><li><a href="/projects/bunryu/docs/reference/development/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Development</a></li></ul>
+                <ul class="text-sm"><li><a href="/projects/bunryu/docs/reference/api/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">REST API</a></li><li><a href="/projects/bunryu/docs/reference/development/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Development</a></li><li><a href="/projects/bunryu/docs/reference/design-decisions/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Design decisions</a></li></ul>
               </div>
             </nav></div>
             </details>
@@ -86,7 +86,7 @@
                 <ul class="text-sm"><li><a href="/projects/bunryu/docs/operations/security/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Security</a></li><li><a href="/projects/bunryu/docs/operations/remote-access/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Remote access (Cloudflare Tunnel)</a></li><li><a href="/projects/bunryu/docs/operations/configuration/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Configuration</a></li><li><a href="/projects/bunryu/docs/operations/reliability/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Reliability</a></li><li><a href="/projects/bunryu/docs/operations/known-issues/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Known issues</a></li></ul>
               </div><div class="mt-4">
                 <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Reference</div>
-                <ul class="text-sm"><li><a href="/projects/bunryu/docs/reference/api/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">REST API</a></li><li><a href="/projects/bunryu/docs/reference/development/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Development</a></li></ul>
+                <ul class="text-sm"><li><a href="/projects/bunryu/docs/reference/api/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">REST API</a></li><li><a href="/projects/bunryu/docs/reference/development/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Development</a></li><li><a href="/projects/bunryu/docs/reference/design-decisions/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Design decisions</a></li></ul>
               </div>
             </nav></div>
               <div class="min-w-0"><details class="rounded-box border-base-content/10 bg-base-300/46 text-base-content/68 mb-7 border p-4 text-sm backdrop-blur">
@@ -177,6 +177,9 @@ roughly a full core&#39;s worth of work. <strong>Only a handful of outputs shoul
 encoding at any one time</strong>; everything else should be <code>copy</code>. Putting many outputs
 into custom-encoding mode will saturate the CPU long before the 500-output ceiling
 and starve the <code>copy</code> outputs and the dashboard alike.</p>
+<p><strong>Previews</strong> copy the input&#39;s video, so an open preview costs only a few percent
+of one core, but each viewer receives the input&#39;s full bitrate. See
+<a href="/projects/bunryu/docs/usage/publishing/#preview">Preview</a>.</p>
 <p><strong>Parallel dashboard clients.</strong> Health is computed once every 5s and shared by
 all clients, so extra browser tabs do not multiply SRS/SRT-FFprobe work. API
 responses are gzip-compressed, and config changes from another session are

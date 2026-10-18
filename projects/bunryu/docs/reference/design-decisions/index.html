@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="en" data-theme="dim">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Design decisions — Bunryu</title>
+    <meta name="description" content="Why Bunryu is built the way it is, and why some obvious alternatives are not used. Each entry gives the decision, the reasons, the evidence behind them, and what would make it worth revisiting. Most o" />
+    <link rel="canonical" href="https://live-miracles.github.io/projects/bunryu/docs/reference/design-decisions/" />
+    <meta property="og:site_name" content="Live Miracles" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Design decisions — Bunryu" />
+    <meta property="og:description" content="Why Bunryu is built the way it is, and why some obvious alternatives are not used. Each entry gives the decision, the reasons, the evidence behind them, and what would make it worth revisiting. Most o" />
+    <meta property="og:url" content="https://live-miracles.github.io/projects/bunryu/docs/reference/design-decisions/" />
+    <meta property="og:image" content="https://raw.githubusercontent.com/live-miracles/bunryu/master/.github/assets/pipeline-view.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/assets/logo.png" type="image/png" />
+    <link rel="stylesheet" href="/assets/styles.css" />
+  </head>
+  <body>
+    <div class="group/drawer drawer lg:drawer-open">
+      <script>
+        window.setSidebarRail = function (rail) {
+          document.querySelector('.drawer').toggleAttribute('data-rail', rail);
+          var toggle = document.getElementById('sidebar-toggle');
+          if (toggle) {
+            toggle.setAttribute('aria-label', rail ? 'Expand projects' : 'Collapse projects to icons');
+          }
+        };
+        window.sidebarRail = function () {
+          try {
+            var saved = localStorage.getItem('sidebar-rail');
+            if (saved) return saved === '1';
+          } catch (e) {}
+          return true;
+        };
+        window.setSidebarRail(window.sidebarRail());
+      </script>
+      <input id="project-drawer" type="checkbox" class="drawer-toggle" />
+      <div class="drawer-content min-h-screen">
+        <header class="navbar border-base-content/10 bg-base-300/92 sticky top-0 z-20 border-b px-4 backdrop-blur lg:hidden">
+          <div class="flex-none">
+            <label for="project-drawer" class="btn btn-square btn-ghost" aria-label="Open projects"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /></svg></label>
+          </div>
+          <div class="flex-1">
+            <a href="/" class="btn btn-ghost text-lg font-bold">Live Miracles</a>
+          </div>
+        </header>
+        <main class="mx-auto flex min-h-screen w-full max-w-6xl flex-col gap-8 px-4 py-6 sm:px-6 lg:px-8">
+          <section class="rounded-box border-base-content/10 bg-base-200/68 border p-5 shadow-xl backdrop-blur sm:p-7">
+            <nav class="text-base-content/60 flex flex-wrap items-center gap-2 text-sm" aria-label="Breadcrumb">
+              <a href="/projects/bunryu/" class="hover:text-primary flex items-center gap-2"><img src="/assets/bunryu-logo.png" alt="" class="rounded-box size-5 bg-base-content p-0.5 shrink-0 object-contain" /><span>Bunryu</span></a>
+              <span aria-hidden="true">›</span><a class="hover:text-primary" href="/projects/bunryu/docs/">Documentation</a><span aria-hidden="true">›</span><span>Reference</span>
+            </nav>
+            <h1 class="mt-3 text-3xl font-bold sm:text-4xl">Design decisions</h1>
+            <div role="tablist" class="tabs tabs-border mt-6" aria-label="Bunryu sections">
+              <a role="tab" href="/projects/bunryu/" class="tab ">Overview</a><a role="tab" href="/projects/bunryu/docs/" class="tab tab-active font-semibold" aria-current="page">Documentation</a>
+            </div>
+            <details class="rounded-box border-base-content/10 bg-base-300/46 mt-6 border p-4 lg:hidden">
+              <summary class="text-base-content/80 cursor-pointer text-sm font-semibold">Documentation menu</summary>
+              <div class="mt-3"><nav class="lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto" aria-label="Bunryu documentation">
+              <div class="">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Getting started</div>
+                <ul class="text-sm"><li><a href="/projects/bunryu/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Introduction</a></li><li><a href="/projects/bunryu/docs/getting-started/docker/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Docker</a></li><li><a href="/projects/bunryu/docs/getting-started/install/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Native install</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Usage</div>
+                <ul class="text-sm"><li><a href="/projects/bunryu/docs/usage/publishing/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Publishing to a pipeline</a></li><li><a href="/projects/bunryu/docs/usage/outputs/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Outputs</a></li><li><a href="/projects/bunryu/docs/usage/translation/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Translation outputs</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Operations</div>
+                <ul class="text-sm"><li><a href="/projects/bunryu/docs/operations/security/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Security</a></li><li><a href="/projects/bunryu/docs/operations/remote-access/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Remote access (Cloudflare Tunnel)</a></li><li><a href="/projects/bunryu/docs/operations/configuration/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Configuration</a></li><li><a href="/projects/bunryu/docs/operations/reliability/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Reliability</a></li><li><a href="/projects/bunryu/docs/operations/known-issues/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Known issues</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Reference</div>
+                <ul class="text-sm"><li><a href="/projects/bunryu/docs/reference/api/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">REST API</a></li><li><a href="/projects/bunryu/docs/reference/development/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Development</a></li><li><a href="/projects/bunryu/docs/reference/design-decisions/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 bg-base-100 text-primary font-semibold" aria-current="page">Design decisions</a></li></ul>
+              </div>
+            </nav></div>
+            </details>
+            <div class="mt-7 grid gap-8 lg:grid-cols-[15rem_minmax(0,1fr)]">
+              <div class="border-base-content/10 hidden lg:block lg:border-r lg:pr-4"><nav class="lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto" aria-label="Bunryu documentation">
+              <div class="">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Getting started</div>
+                <ul class="text-sm"><li><a href="/projects/bunryu/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Introduction</a></li><li><a href="/projects/bunryu/docs/getting-started/docker/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Docker</a></li><li><a href="/projects/bunryu/docs/getting-started/install/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Native install</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Usage</div>
+                <ul class="text-sm"><li><a href="/projects/bunryu/docs/usage/publishing/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Publishing to a pipeline</a></li><li><a href="/projects/bunryu/docs/usage/outputs/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Outputs</a></li><li><a href="/projects/bunryu/docs/usage/translation/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Translation outputs</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Operations</div>
+                <ul class="text-sm"><li><a href="/projects/bunryu/docs/operations/security/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Security</a></li><li><a href="/projects/bunryu/docs/operations/remote-access/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Remote access (Cloudflare Tunnel)</a></li><li><a href="/projects/bunryu/docs/operations/configuration/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Configuration</a></li><li><a href="/projects/bunryu/docs/operations/reliability/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Reliability</a></li><li><a href="/projects/bunryu/docs/operations/known-issues/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Known issues</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Reference</div>
+                <ul class="text-sm"><li><a href="/projects/bunryu/docs/reference/api/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">REST API</a></li><li><a href="/projects/bunryu/docs/reference/development/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Development</a></li><li><a href="/projects/bunryu/docs/reference/design-decisions/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 bg-base-100 text-primary font-semibold" aria-current="page">Design decisions</a></li></ul>
+              </div>
+            </nav></div>
+              <div class="min-w-0"><details class="rounded-box border-base-content/10 bg-base-300/46 text-base-content/68 mb-7 border p-4 text-sm backdrop-blur">
+              <summary class="text-base-content/80 cursor-pointer font-semibold">On this page</summary>
+              <ol class="mt-3 space-y-2">
+                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#current-architecture-in-one-paragraph">Current architecture in one paragraph</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#media-server">Media server</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#use-srs-for-ingest-from-the-official-release">Use SRS for ingest, from the official release</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#keep-srss-srt_to_rtmp-off-ffmpeg-converts-srt-inputs">Keep SRS&#39;s srt_to_rtmp off; FFmpeg converts SRT inputs</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-use-srss-built-in-forwarding-for-outputs">Don&#39;t use SRS&#39;s built-in forwarding for outputs</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-use-mediamtx-for-srt-ingest-or-srtrtmp-conversion">Don&#39;t use MediaMTX for SRT ingest or SRT→RTMP conversion</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-build-our-own-media-server">Don&#39;t build our own media server</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#srt-ingest">SRT ingest</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#plain-srt-goes-directly-to-srs-by-default-the-relay-also-accepts-it">Plain SRT goes directly to SRS by default; the relay also accepts it</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#outputs-pull-from-srs-not-from-the-relay">Outputs pull from SRS, not from the relay</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#keep-srt-bonding-relay-in-its-own-repository">Keep srt-bonding-relay in its own repository</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#outputs-and-preview">Outputs and preview</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#one-ffmpeg-process-per-output">One FFmpeg process per output</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#each-output-re-encodes-its-own-audio-shared-renditions-under-consideration">Each output re-encodes its own audio (shared renditions under consideration)</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#preview-copies-the-video-only-audio-is-encoded">Preview copies the video; only audio is encoded</a></li>
+              </ol>
+            </details><article class="readme min-w-0"><p>Why Bunryu is built the way it is, and why some obvious alternatives are not
+used. Each entry gives the decision, the reasons, the evidence behind them, and
+what would make it worth revisiting. Most of the evidence comes from tests run
+in October 2026 against SRS 6.0-r2, MediaMTX v1.21.2 and the pinned FFmpeg 7.1.</p>
+<h2 id="current-architecture-in-one-paragraph">Current architecture in one paragraph</h2>
+<p>SRS accepts RTMP and plain SRT publishes and authorizes them through its HTTP
+hooks. Bonded SRT goes through <code>srt-bonding-relay</code>, which merges the legs and
+forwards one SRT stream to SRS. Every output is its own FFmpeg process that
+pulls its input from SRS over loopback, in the input&#39;s own protocol, and pushes
+to one destination. The diagram is in the
+<a href="/projects/bunryu/docs/getting-started/introduction/#how-it-works">Introduction</a>.</p>
+<h2 id="media-server">Media server</h2>
+<h3 id="use-srs-for-ingest-from-the-official-release">Use SRS for ingest, from the official release</h3>
+<p><strong>Decision:</strong> SRS handles RTMP ingest, plain SRT ingest, the publish/play hooks,
+the stream API and the local fan-out to outputs. The installer pins the official
+release binary (currently v6.0-r2) by SHA-256.</p>
+<p><strong>Why:</strong></p>
+<ul>
+<li>These are SRS&#39;s core features: widely deployed, and stable in production here.</li>
+<li>v6.0-r2 bundles libsrt 1.5.6, which fixes CVE-2026-55868/55869.</li>
+<li>A custom build was tried (a 6.0 branch with one patch, built by CI). It was
+dropped once its only patch turned out to be in a feature Bunryu doesn&#39;t use
+(<code>srt_to_rtmp</code>, below).</li>
+</ul>
+<p><strong>Revisit when:</strong> Bunryu needs an SRS change before upstream releases it, for
+example per-client SRT stats (ossrs/srs#4769). The release pipeline for a
+patched build still exists (<code>bunryu/6.0</code> in <code>live-miracles/srs</code>).</p>
+<h3 id="keep-srss-srt_to_rtmp-off-ffmpeg-converts-srt-inputs">Keep SRS&#39;s <code>srt_to_rtmp</code> off; FFmpeg converts SRT inputs</h3>
+<p><strong>Decision:</strong> SRT inputs stay native MPEG-TS inside SRS. Anything that needs RTMP
+from an SRT input gets it from FFmpeg, not from SRS&#39;s built-in bridge.</p>
+<p><strong>Why:</strong> the bridge failed in several independent ways (tested on the official
+v6.0-r2):</p>
+<ul>
+<li><strong>Video frames dropped.</strong> A plain H.264 + AAC SRT stream came out at about
+13 fps instead of 25, with regular gaps over 200 ms. The same stream pulled
+over SRT, and the same source published over RTMP, both kept 25 fps.</li>
+<li><strong>Multiple audio tracks are interleaved</strong> into the single RTMP audio track,
+producing garbage audio. They aren&#39;t reduced to one track.</li>
+<li><strong>Non-AAC audio</strong> (MP2, as many hardware encoders send) gives a silent RTMP
+side, and SRS logs about 8 warnings a second for as long as the input is live.</li>
+<li><strong>48 kHz AAC got wrong frame timestamps</strong>, which broke the audio. A fix was
+submitted upstream (ossrs/srs#4765, backport #4774) but isn&#39;t in a release.</li>
+</ul>
+<p>FFmpeg&#39;s MPEG-TS demuxer handled all of these cases correctly, including
+HEVC and a 33-bit timestamp wrap.</p>
+<p><strong>The bridge looks immature.</strong> These aren&#39;t corner cases: a 48 kHz AAC track, a
+second audio track or MP2 audio are ordinary encoder output.</p>
+<ul>
+<li>The 48 kHz bug has been present since the SRS 5.0 SRT rewrite.</li>
+<li>Its audio is only audibly broken where players place audio by timestamp (HLS in
+a browser, YouTube ingest). Players such as ffplay and the HTTP-FLV web player
+hide it.</li>
+</ul>
+<p>This suggests few people run the bridge in production. FFmpeg&#39;s MPEG-TS demuxer,
+by contrast, handles damaged broadcast streams every day, in Bunryu&#39;s own outputs
+too.</p>
+<p><strong>Revisit when:</strong> a release fixes the issues above and passes the same tests:
+frame count, two audio tracks, MP2/AC-3, HEVC, timestamp wrap.</p>
+<h3 id="dont-use-srss-built-in-forwarding-for-outputs">Don&#39;t use SRS&#39;s built-in forwarding for outputs</h3>
+<p><strong>Decision:</strong> outputs are FFmpeg processes, not SRS <code>forward</code> destinations.</p>
+<p><strong>Why:</strong></p>
+<ul>
+<li>SRS 6.0 can&#39;t add or remove a forward destination on a live stream without
+kicking the publisher, which cuts every other destination. A runtime API was
+proposed upstream (ossrs/srs#4760) and declined.</li>
+<li>A forward runs inside the SRS process, so a bug there affects every stream.
+An FFmpeg output can only fail on its own.</li>
+</ul>
+<h3 id="dont-use-mediamtx-for-srt-ingest-or-srtrtmp-conversion">Don&#39;t use MediaMTX for SRT ingest or SRT→RTMP conversion</h3>
+<p><strong>Decision:</strong> MediaMTX isn&#39;t in the ingest path.</p>
+<p><strong>Why:</strong></p>
+<ul>
+<li><strong>Its SRT stack is gosrt,</strong> which is much less used and maintained than
+Haivision&#39;s libsrt (used by SRS, FFmpeg and the relay). On public ingest, SRT&#39;s
+loss recovery is the part that matters most.</li>
+<li><strong>Its SRT→RTMP conversion was tested behind the libsrt relay</strong>, so MediaMTX
+only ever saw a clean loopback connection. Results:<ul>
+<li><strong>Readers are disconnected under realistic loss.</strong> With 80 ms one-way delay
+and 5–10% loss, MediaMTX closed the RTMP reader within seconds (<code>too many reordered frames</code>). It rebuilds DTS from the H.264 bitstream for RTMP output,
+and missing frames break that calculation. Every output of the pipeline would
+reconnect at once. The FFmpeg path stayed connected through 10% loss.</li>
+<li><strong>HEVC video is dropped</strong> for RTMP readers that don&#39;t announce enhanced-RTMP
+codecs. FFmpeg 7.1 can&#39;t announce them when reading.</li>
+<li><strong>An MP2 audio track makes the whole RTMP read fail</strong>, video included.</li>
+<li>It cleanly kept the first of two audio tracks and handled a timestamp wrap.</li>
+</ul>
+</li>
+<li><strong>Less mature than FFmpeg on damaged input.</strong> With realistic packet loss, holes
+remain in the MPEG-TS stream after SRT&#39;s retransmissions; this is common for
+SRT over real networks. MediaMTX&#39;s conversion did worse than FFmpeg&#39;s in every
+loss test:<ul>
+<li>it disconnected readers under random loss, where FFmpeg kept going;</li>
+<li>after long outages it passed on more out-of-order timestamps (9 against 1);</li>
+<li>it logged nothing about the holes.</li>
+</ul>
+</li>
+</ul>
+<h3 id="dont-build-our-own-media-server">Don&#39;t build our own media server</h3>
+<p><strong>Decision:</strong> no in-house RTMP/SRT server, and no adoption of new projects as the
+core server until they have production history.</p>
+<p><strong>Why:</strong> a small server is feasible in line count, but the cost is in encoder
+compatibility (RTMP handshake and command variants, chunking, extended
+timestamps, enhanced RTMP) and behavior on bad networks, which only show up in
+real use. A new server carries every input at once, so its bugs reach every
+stream.</p>
+<h2 id="srt-ingest">SRT ingest</h2>
+<h3 id="plain-srt-goes-directly-to-srs-by-default-the-relay-also-accepts-it">Plain SRT goes directly to SRS by default; the relay also accepts it</h3>
+<p><strong>Decision:</strong> encoders publish plain SRT to SRS&#39;s SRT port by default. The
+relay&#39;s listener accepts a plain single-link SRT caller as well as a bonded
+group, so an operator can choose to send plain SRT through the relay. The
+dashboard shows such an input as a single link with the encoder&#39;s address
+(<code>input.peer</code> in the relay&#39;s <code>/status</code>), without the bonded-leg redundancy
+warnings.</p>
+<p><strong>Why direct stays the default, and what choosing the relay costs:</strong></p>
+<ul>
+<li>SRS&#39;s SRT is also libsrt, so a bad network is handled by the same retransmission
+code either way.</li>
+<li>Through the relay, SRS would only see <code>127.0.0.1</code>. That hides the encoder&#39;s IP
+from the publish hook, the dashboard and rejected-publish tracking, and turns
+SRS&#39;s per-client SRT stats into stats of the loopback hop.</li>
+<li>It would add ~200 ms of latency and a second process every SRT input depends on;
+a relay restart would drop all SRT inputs instead of only the bonded ones.</li>
+</ul>
+<h3 id="outputs-pull-from-srs-not-from-the-relay">Outputs pull from SRS, not from the relay</h3>
+<p><strong>Decision:</strong> the relay stays a byte-level pipe (one input, one downstream SRT
+connection) and doesn&#39;t serve readers.</p>
+<p><strong>Why:</strong></p>
+<ul>
+<li>Serving pulls would make the relay a media server. It would need fan-out with
+isolation for slow readers, play authorization, a stream registry for health
+checks, and the ability to kick publishers.</li>
+<li>RTMP inputs would still be on SRS, so the control plane would track streams in
+two places.</li>
+</ul>
+<p><strong>Cost of the SRS hop:</strong> about 200 ms per SRT hop, and CPU in SRS. One 3 Mbps
+stream with 50 copy readers measured 17% CPU and 68 MB for SRT readers, against
+5% and 30 MB for RTMP readers.</p>
+<p><strong>Revisit when:</strong> SRT fan-out in SRS becomes a measured bottleneck. The cheaper
+fix is then one FFmpeg remux per SRT input published back into SRS as RTMP, not a
+relay fan-out.</p>
+<h3 id="keep-srt-bonding-relay-in-its-own-repository">Keep <code>srt-bonding-relay</code> in its own repository</h3>
+<p><strong>Decision:</strong> the relay stays a separate repository with its own releases, and
+Bunryu pins a release binary like it pins SRS and FFmpeg.</p>
+<p><strong>Why:</strong></p>
+<ul>
+<li>It&#39;s a different toolchain (C, libsrt, a Docker build) from Bunryu&#39;s Node.js
+and TypeScript.</li>
+<li>It&#39;s useful on its own as a bonding relay.</li>
+<li>It changes much less often than Bunryu.</li>
+<li>Each release bundles its own libsrt (v3.0.6 and later have 1.5.6, which fixes
+CVE-2026-55868/55869), so a libsrt security fix needs a relay release and a
+pin bump here.</li>
+</ul>
+<p>The coupling is the relay&#39;s config file and its <code>/status</code> JSON. Treat <code>/status</code>
+as a contract: add fields, and bump the relay&#39;s major version for anything
+else.</p>
+<h2 id="outputs-and-preview">Outputs and preview</h2>
+<h3 id="one-ffmpeg-process-per-output">One FFmpeg process per output</h3>
+<p><strong>Decision:</strong> each output runs in its own FFmpeg process with its own watchdogs.</p>
+<p><strong>Why:</strong></p>
+<ul>
+<li>A stalled destination, a corrupt input frame or a memory blow-up affects only
+that output, and it can be restarted on its own (see
+<a href="/projects/bunryu/docs/operations/reliability/">Reliability</a>).</li>
+<li>FFmpeg also does every transcode, audio-track selection and translation mix.</li>
+</ul>
+<p><strong>Cost:</strong> roughly 12–16 MB of RAM per copy-mode output, and a full core per
+custom video encoding. That&#39;s acceptable within the supported envelope
+(<a href="/projects/bunryu/docs/getting-started/introduction/#capacity-and-limits">Introduction</a>).</p>
+<p><strong>Not planned: a MediaMTX forwarding hub for copy outputs.</strong> It used about 10x
+less RAM but about 1.5x more CPU than FFmpeg for RTMP→RTMP copy outputs. It
+would mean a second media server in the output path, while FFmpeg would still be
+needed for every transcode, SRT destination and translation mix. Outputs stay on
+FFmpeg.</p>
+<h3 id="each-output-re-encodes-its-own-audio-shared-renditions-under-consideration">Each output re-encodes its own audio (shared renditions under consideration)</h3>
+<p><strong>Current behavior:</strong></p>
+<ul>
+<li>An output that selects an audio track re-encodes that track to AAC on its own,
+with timestamp smoothing for SRT inputs.</li>
+<li>This is the recommended setting for SRT inputs forwarded to RTMP (see
+<a href="/projects/bunryu/docs/usage/outputs/">Outputs</a>).</li>
+<li>N such outputs mean N identical encodes and N SRT pulls.</li>
+<li>Custom video encodings are also per output.</li>
+</ul>
+<p><strong>Under consideration:</strong></p>
+<ul>
+<li>One FFmpeg per pipeline and recipe (video encoding plus audio selection)
+publishes the result into SRS as an internal RTMP stream.</li>
+<li>Outputs with that recipe then pull it in copy mode.</li>
+<li>That would encode once instead of N times, make the pulls cheaper, and remove
+today&#39;s workaround of looping an SRT pipeline into a second pipeline.</li>
+<li><strong>Tradeoff:</strong> a failed rendition affects every output that shares it.</li>
+</ul>
+<h3 id="preview-copies-the-video-only-audio-is-encoded">Preview copies the video; only audio is encoded</h3>
+<p><strong>Decision:</strong> the dashboard preview is an HLS stream made by FFmpeg that copies
+the input&#39;s video unchanged and re-encodes only the audio to AAC (one rendition
+per audio track). Only Chrome is supported. Previews are stopped automatically
+when no viewer remains.</p>
+<p><strong>Why:</strong></p>
+<ul>
+<li><strong>CPU:</strong> the previous 480p video transcode took about 80% of a core per open
+preview for a 1080p input, which made previews unusable on a 2 vCPU server.
+With video copy the same preview takes about 9% (3% for a single-track input).</li>
+<li><strong>Audio is still encoded</strong> because it&#39;s cheap and keeps the timestamp
+smoothing for SRT inputs, MP2/AC-3 inputs playable in the browser, and audio
+track switching.</li>
+<li><strong>Same pipeline for RTMP and SRT inputs,</strong> played by the existing hls.js player.</li>
+<li><strong>No SRS feature needed:</strong> SRS&#39;s native HLS was used briefly but depended on
+<code>srt_to_rtmp</code> for SRT inputs.</li>
+</ul>
+<p><strong>Costs:</strong></p>
+<ul>
+<li><strong>Bandwidth:</strong> each viewer receives the source bitrate (e.g. 6 Mbps for a
+1080p input instead of ~1 Mbps).</li>
+<li><strong>Keyframe interval:</strong> HLS segments can only start on a keyframe, so an input
+with a long keyframe interval starts slower and runs further behind live.</li>
+<li><strong>HEVC</strong> inputs preview only where Chrome can decode HEVC; there is no
+transcode fallback.</li>
+</ul>
+</article><a class="link text-base-content/50 mt-6 inline-block text-sm" href="https://github.com/live-miracles/bunryu/blob/master/docs/4-reference/3-design-decisions.md">Edit this page on GitHub</a><div class="border-base-content/10 mt-10 grid gap-3 border-t pt-6 sm:grid-cols-2">
+              <a class="rounded-box border-base-content/10 hover:border-primary/50 border p-4" href="/projects/bunryu/docs/reference/development/"><div class="text-base-content/50 text-xs">Previous</div><div class="font-semibold">Development</div></a>
+              
+            </div></div>
+            </div>
+          </section>
+          <footer class="text-base-content/50 border-base-content/10 mt-auto border-t pt-6 pb-2 text-sm">
+            Live Miracles · <a class="link" href="https://github.com/live-miracles">github.com/live-miracles</a>
+          </footer>
+        </main>
+      </div>
+      <aside class="drawer-side z-30">
+        <label for="project-drawer" aria-label="Close projects" class="drawer-overlay"></label>
+        <nav class="border-base-content/10 bg-base-200 min-h-full w-80 border-r p-4 lg:group-data-[rail]/drawer:w-16 lg:group-data-[rail]/drawer:p-2" aria-label="Projects">
+          <div class="mb-6 flex items-center justify-between gap-2 lg:group-data-[rail]/drawer:flex-col lg:group-data-[rail]/drawer:gap-3">
+            <a href="/" title="Live Miracles" aria-label="Live Miracles" class="rounded-box flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:p-0">
+              <img src="/assets/logo.png" alt="" class="rounded-box size-11" />
+              <span class="lg:group-data-[rail]/drawer:hidden">
+                <span class="block text-xl font-bold">Live Miracles</span>
+                <span class="text-base-content/58 text-sm">Open tools for live teams</span>
+              </span>
+            </a>
+            <button type="button" id="sidebar-toggle" class="btn btn-ghost btn-sm btn-square hidden lg:inline-flex lg:group-data-[rail]/drawer:rotate-180" aria-label="Collapse projects to icons"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M11 17l-5-5 5-5M18 17l-5-5 5-5" /></svg></button>
+          </div>
+          <div class="mb-5 lg:group-data-[rail]/drawer:mb-3">
+              
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase lg:group-data-[rail]/drawer:hidden">Streaming &amp; transport</div>
+              <a href="/projects/bunryu/" title="Bunryu" aria-label="Bunryu" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 bg-base-100 text-primary font-semibold" aria-current="page">
+                <img src="/assets/bunryu-logo.png" alt="" class="rounded-box size-6 bg-base-content p-0.5 shrink-0 object-contain" />
+                <span class="lg:group-data-[rail]/drawer:hidden">Bunryu</span>
+              </a><a href="/projects/srt-bonding-relay/" title="SRT Bonding Relay" aria-label="SRT Bonding Relay" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">S</span>
+                <span class="lg:group-data-[rail]/drawer:hidden">SRT Bonding Relay</span>
+              </a><a href="/projects/delayed-yt/" title="Delayed YouTube" aria-label="Delayed YouTube" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+                <img src="https://live-miracles.github.io/delayed-yt/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span class="lg:group-data-[rail]/drawer:hidden">Delayed YouTube</span>
+              </a>
+            </div><div class="mb-5 lg:group-data-[rail]/drawer:mb-3">
+              <hr class="border-base-content/10 mb-3 hidden lg:group-data-[rail]/drawer:block" />
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase lg:group-data-[rail]/drawer:hidden">vMix production</div>
+              <a href="/projects/vmix-master/" title="vMix Master" aria-label="vMix Master" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+                <img src="https://live-miracles.github.io/vmix-master/logo.svg" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span class="lg:group-data-[rail]/drawer:hidden">vMix Master</span>
+              </a><a href="/projects/folder-player/" title="vMix Folder Player" aria-label="vMix Folder Player" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+                <img src="/assets/folder-player-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span class="lg:group-data-[rail]/drawer:hidden">vMix Folder Player</span>
+              </a>
+            </div><div class="mb-5 lg:group-data-[rail]/drawer:mb-3">
+              <hr class="border-base-content/10 mb-3 hidden lg:group-data-[rail]/drawer:block" />
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase lg:group-data-[rail]/drawer:hidden">Monitoring &amp; operations</div>
+              <a href="/projects/live-gallery/" title="Live Gallery" aria-label="Live Gallery" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+                <img src="/assets/live-gallery-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span class="lg:group-data-[rail]/drawer:hidden">Live Gallery</span>
+              </a><a href="/projects/wake-up-support/" title="Wake Up Support" aria-label="Wake Up Support" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">W</span>
+                <span class="lg:group-data-[rail]/drawer:hidden">Wake Up Support</span>
+              </a>
+            </div><div class="mb-5 lg:group-data-[rail]/drawer:mb-3">
+              <hr class="border-base-content/10 mb-3 hidden lg:group-data-[rail]/drawer:block" />
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase lg:group-data-[rail]/drawer:hidden">Event workflows</div>
+              <a href="/projects/key-vault/" title="Key Vault" aria-label="Key Vault" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+                <img src="https://live-miracles.github.io/key-vault/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span class="lg:group-data-[rail]/drawer:hidden">Key Vault</span>
+              </a><a href="/projects/live-generator/" title="Live Generator" aria-label="Live Generator" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">L</span>
+                <span class="lg:group-data-[rail]/drawer:hidden">Live Generator</span>
+              </a><a href="/projects/multi-lang-qa/" title="Multi Lang QA" aria-label="Multi Lang QA" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+                <img src="https://live-miracles.github.io/multi-lang-qa/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span class="lg:group-data-[rail]/drawer:hidden">Multi Lang QA</span>
+              </a>
+            </div>
+        </nav>
+      </aside>
+      <script>
+        window.setSidebarRail(window.sidebarRail());
+        document.getElementById('sidebar-toggle').addEventListener('click', function () {
+          var rail = !window.sidebarRail();
+          try {
+            localStorage.setItem('sidebar-rail', rail ? '1' : '0');
+          } catch (e) {}
+          window.setSidebarRail(rail);
+        });
+      </script>
+    </div>
+    <dialog id="lightbox" class="lightbox" aria-label="Enlarged image">
+      <button type="button" class="btn btn-circle btn-sm lightbox-close" aria-label="Close image"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg></button>
+      <div class="lightbox-frame"><img alt="" /></div>
+    </dialog>
+    <script>
+      (function () {
+        var dialog = document.getElementById('lightbox');
+        if (!dialog || !dialog.showModal) return;
+        var shown = dialog.querySelector('img');
+        function zoomable(img) {
+          return !img.closest('a') && img.naturalWidth >= 300 && img.naturalHeight >= 100;
+        }
+        function mark(img) {
+          if (img.dataset.zoom || !zoomable(img)) return;
+          img.dataset.zoom = '1';
+          img.classList.add('zoomable');
+          img.tabIndex = 0;
+          img.setAttribute('role', 'button');
+          img.setAttribute('aria-label', 'Enlarge image: ' + (img.alt || 'screenshot'));
+        }
+        function open(img) {
+          shown.src = img.currentSrc || img.src;
+          shown.alt = img.alt;
+          shown.classList.remove('actual');
+          dialog.showModal();
+          dialog.scrollTo(0, 0);
+        }
+        document.querySelectorAll('.readme img').forEach(function (img) {
+          if (img.complete) mark(img);
+          else img.addEventListener('load', function () { mark(img); }, { once: true });
+        });
+        document.addEventListener('click', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom) open(img);
+        });
+        document.addEventListener('keydown', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom && (event.key === 'Enter' || event.key === ' ')) {
+            event.preventDefault();
+            open(img);
+          }
+        });
+        shown.addEventListener('click', function () {
+          shown.classList.toggle('actual');
+        });
+        dialog.addEventListener('click', function (event) {
+          if (event.target !== shown) dialog.close();
+        });
+      })();
+    </script>
+  </body>
+</html>
