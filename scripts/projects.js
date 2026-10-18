@@ -37,7 +37,6 @@ const projects = [
         summary:
             'Bunryu (分流, "branching flow"): self-hosted restreaming server. RTMP, SRT and bonded SRT inputs forwarded to many RTMP/SRT destinations, with watchdogs and translation audio mixing.',
         icon: '/assets/bunryu-logo.png',
-        iconOnLight: true,
     },
     {
         id: 'goryu',
