@@ -11,7 +11,7 @@
     <meta property="og:title" content="Development — Bunryu" />
     <meta property="og:description" content="Prerequisites: Node.js 22+ plus curl, unzip, tar, and xz-utils." />
     <meta property="og:url" content="https://live-miracles.github.io/projects/bunryu/docs/reference/development/" />
-    <meta property="og:image" content="https://raw.githubusercontent.com/live-miracles/bunryu/master/.github/assets/pipeline-view.png" />
+    <meta property="og:image" content="https://raw.githubusercontent.com/live-miracles/bunryu/master/public/logo.png" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="/assets/logo.png" type="image/png" />
     <link rel="stylesheet" href="/assets/styles.css" />
@@ -117,6 +117,7 @@ bonded-input status.</p>
 <h2 id="tests">Tests</h2>
 <pre><code class="language-bash">npm test              # unit and integration tests
 npm run typecheck
+npm run lint          # ESLint: unhandled promises, dead code
 npm run format:check
 </code></pre>
 <p><code>scripts/test-stack.sh</code> starts an isolated local stack (its own SRS, control

@@ -11,7 +11,7 @@
     <meta property="og:title" content="Introduction — Bunryu" />
     <meta property="og:description" content="Bunryu is a self-hosted restreaming server for long live events. It takes live inputs over RTMP, SRT and bonded SRT, manages each one as a pipeline, and forwards every pipeline to any number of RTMP, " />
     <meta property="og:url" content="https://live-miracles.github.io/projects/bunryu/docs/getting-started/introduction/" />
-    <meta property="og:image" content="https://raw.githubusercontent.com/live-miracles/bunryu/master/.github/assets/pipeline-view.png" />
+    <meta property="og:image" content="https://raw.githubusercontent.com/live-miracles/bunryu/master/public/logo.png" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="/assets/logo.png" type="image/png" />
     <link rel="stylesheet" href="/assets/styles.css" />
@@ -171,13 +171,14 @@ not a target to exceed :)</p>
 FFmpeg processes (one per output, plus one per shared encode) to become the limiting factors well before the
 dashboard or API does.</p>
 <p><strong>Keep almost all outputs in <code>copy</code> mode.</strong> A <code>copy</code> output is a passthrough — it
-remuxes the input and forwards it for a small fraction of a core (about 0.5% of a
-vCPU on an RTMP input, 2–3% on an SRT input), so hundreds can run on modest
-hardware. Selecting an audio track re-encodes the audio, a few percent more per
-output. A custom encoding (<code>720p</code>, <code>1080p</code>, <code>vertical_rotate</code>, …) makes FFmpeg
-transcode the video, which is CPU-intensive: 0.6–2.5 vCPUs per encode on a GCP <code>n2</code>,
-depending on the profile and the content. On a 4-vCPU machine one <code>1080p</code> encode
-alone takes about two thirds of the host. See <a href="/projects/bunryu/docs/getting-started/sizing/">Sizing a server</a> for
+remuxes the input without decoding it, but sending still costs CPU in proportion to
+the bitrate: on production about 4% of a vCPU per 8 Mbps output, so 100 such outputs
+take around 4 vCPUs and 800 Mbps of egress (more with an SRT input). Selecting an
+audio track re-encodes the audio, which roughly doubles that per output unless
+outputs share the encode. A custom encoding (<code>720p</code>, <code>1080p</code>, <code>vertical_rotate</code>, …) makes FFmpeg
+transcode the video, which is CPU-intensive: on a GCP <code>n2</code> with 50 fps feeds about 2
+vCPUs for <code>720p</code> and 1.2 for <code>vertical_rotate</code> from a 1080p input, and <code>1080p</code> from a
+4K input does not keep up on 4 vCPUs. See <a href="/projects/bunryu/docs/getting-started/sizing/">Sizing a server</a> for
 the measured costs and example VM sizes. Outputs on the same pipeline with the same
 encode (the same video encoding and the same single audio track) share <strong>one</strong>
 <a href="/projects/bunryu/docs/usage/outputs/#shared-encodes">shared encode</a>, so CPU is counted once per

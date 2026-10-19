@@ -11,7 +11,7 @@
     <meta property="og:title" content="Outputs — Bunryu" />
     <meta property="og:description" content="An output forwards one pipeline to one destination. Each output is a separate FFmpeg process, so a destination that fails or stalls never affects the others. Outputs that need the same encode also sha" />
     <meta property="og:url" content="https://live-miracles.github.io/projects/bunryu/docs/usage/outputs/" />
-    <meta property="og:image" content="https://raw.githubusercontent.com/live-miracles/bunryu/master/.github/assets/pipeline-view.png" />
+    <meta property="og:image" content="https://raw.githubusercontent.com/live-miracles/bunryu/master/public/logo.png" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="/assets/logo.png" type="image/png" />
     <link rel="stylesheet" href="/assets/styles.css" />
@@ -119,22 +119,22 @@ second pipeline from an output of the first. See
 <tbody><tr>
 <td><code>copy</code></td>
 <td>Passthrough: the video is forwarded as received</td>
-<td>Under 0.05 vCPU per output</td>
+<td>About 0.04 vCPU per 8 Mbps output</td>
 </tr>
 <tr>
 <td><code>720p</code></td>
-<td>Scales to 1280×720, H.264 (<code>veryfast</code>, 3 Mbps)</td>
-<td>1.1–1.7 vCPUs per encode</td>
+<td>Scales to 1280×720, H.264 (<code>veryfast</code>, 3 Mbps); meant for down-converting a 1080p input</td>
+<td>About 2 vCPUs per encode (1080p50 input)</td>
 </tr>
 <tr>
 <td><code>1080p</code></td>
-<td>Scales to 1920×1080, H.264 (<code>veryfast</code>, 5 Mbps)</td>
-<td>1.5–2.5 vCPUs per encode</td>
+<td>Scales to 1920×1080, H.264 (<code>veryfast</code>, 5 Mbps); meant for down-converting a 4K input</td>
+<td>More than 4 vCPUs from a 4K50 input: does not keep up on a 4-vCPU host</td>
 </tr>
 <tr>
 <td><code>vertical_rotate</code></td>
-<td>Scales to 720 px wide and rotates 90° for vertical platforms (Shorts, Reels)</td>
-<td>0.6–0.8 vCPU per encode</td>
+<td>Scales to 720 px wide and rotates 90° for vertical platforms (Shorts, Reels); usually applied to a 1080p input</td>
+<td>About 1.2 vCPUs per encode (1080p50 input)</td>
 </tr>
 </tbody></table>
 <p>Keep almost all outputs in <code>copy</code> mode and only a few distinct encodes on a
