@@ -112,7 +112,7 @@ RTMP input → RTMP pull), so there is no pull-method setting.</p>
 <tr>
 <td>GET</td>
 <td><code>/api/health</code></td>
-<td>Live input/output status snapshot (refreshed every 5s)</td>
+<td>Live input/output status snapshot (refreshed every 5s). An output has <code>warningReason</code> and <code>warningSinceMs</code> (when that warning began); each pipeline alert has <code>sinceMs</code>, the time its current episode started, which stays the same while the alert lasts. An alert is one episode until it has been absent for six polls (~30 s)</td>
 </tr>
 <tr>
 <td>GET</td>
@@ -126,13 +126,23 @@ RTMP input → RTMP pull), so there is no pull-method setting.</p>
 </tr>
 <tr>
 <td>GET</td>
+<td><code>/api/metrics/history</code></td>
+<td>System metric samples every 5 s for the last 2 hours; <code>?after=&lt;ms&gt;</code> returns only newer samples</td>
+</tr>
+<tr>
+<td>GET</td>
 <td><code>/api/metrics/system</code></td>
-<td>Host CPU, RAM, disk and network stats</td>
+<td>Host CPU, RAM, disk and network stats (RAM used is total minus <code>MemAvailable</code>, so reclaimable page cache does not count)</td>
 </tr>
 <tr>
 <td>GET</td>
 <td><code>/api/srs-logs</code></td>
 <td>Recent SRS up/down events and log tails for SRS, the dashboard, and the relay</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/host-probes</code></td>
+<td>Host reachability probe targets and their samples, <code>?hours=</code> up to 6 (default 6)</td>
 </tr>
 <tr>
 <td>GET</td>
@@ -163,6 +173,11 @@ RTMP input → RTMP pull), so there is no pull-method setting.</p>
 <td>GET</td>
 <td><code>/api/pipelines/:id/logs</code></td>
 <td>Pipeline online/offline event log</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/health/pipelines/:id/legs/history</code></td>
+<td>Per-leg SRT history of a bonded input (state, health, rate, RTT, loss), 5 s samples for up to 30 min; <code>?from=</code>, <code>?to=</code>, <code>?after=</code> in ms</td>
 </tr>
 <tr>
 <td>POST</td>
@@ -197,7 +212,7 @@ RTMP input → RTMP pull), so there is no pull-method setting.</p>
 <tr>
 <td>POST</td>
 <td><code>/api/pipelines/:id/outputs/:outId</code></td>
-<td>Update output (same body as create). A running output accepts only <code>{ name }</code> — any other field gives 409, even with an unchanged value — and a shared encode always gives 409</td>
+<td>Update output (same body as create; a field left out keeps its stored value). A running output accepts only <code>{ name }</code> — any other field gives 409, even with an unchanged value — and a shared encode always gives 409</td>
 </tr>
 <tr>
 <td>DELETE</td>
@@ -241,8 +256,23 @@ RTMP input → RTMP pull), so there is no pull-method setting.</p>
 </tr>
 <tr>
 <td>POST</td>
-<td><code>/api/settings</code></td>
-<td>Update settings <code>{ name, publicHost }</code></td>
+<td><code>/api/settings/general</code></td>
+<td>Update the server name and public host <code>{ name, publicHost? }</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/settings/host-probes</code></td>
+<td>Replace the host probe targets <code>{ hostProbeTargets: [{ slot, label, host, port }] }</code>; a target resolving to a blocked address is refused with 400</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/settings/layout-order</code></td>
+<td>Save the dashboard&#39;s pipeline and output order <code>{ order: [{ id, outs: [outputId] }] }</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/settings/pipeline-groups</code></td>
+<td>Replace the sidebar pipeline groups <code>{ groups: [{ id?, name }] }</code></td>
 </tr>
 <tr>
 <td>POST</td>
@@ -263,6 +293,11 @@ RTMP input → RTMP pull), so there is no pull-method setting.</p>
 <td>POST</td>
 <td><code>/api/auth/change-password</code></td>
 <td>Change password <code>{ currentPassword, newPassword }</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/srs/on_play</code></td>
+<td>SRS play hook (on the loopback-only <code>hook_port</code>). Only plays from loopback (the app&#39;s own FFmpeg) are accepted; others are refused and listed in <code>/api/rejected-publishes</code></td>
 </tr>
 <tr>
 <td>POST</td>

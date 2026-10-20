@@ -4,12 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AutoGain — vMix Master</title>
-    <meta name="description" content="AutoGain watches a microphone, or a call, and adjusts its gain by itself. It keeps the top peaks of the voice in a range you set: it lowers the gain when a peak goes above the range or the signal clip" />
+    <meta name="description" content="AutoGain watches a microphone, or a call, and adjusts its gain by itself. It keeps the top peaks of the voice in a range you set: it looks at the highest peak of the last few seconds, lowers the gain " />
     <link rel="canonical" href="https://live-miracles.github.io/projects/vmix-master/docs/scripts/auto-gain/" />
     <meta property="og:site_name" content="Live Miracles" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="AutoGain — vMix Master" />
-    <meta property="og:description" content="AutoGain watches a microphone, or a call, and adjusts its gain by itself. It keeps the top peaks of the voice in a range you set: it lowers the gain when a peak goes above the range or the signal clip" />
+    <meta property="og:description" content="AutoGain watches a microphone, or a call, and adjusts its gain by itself. It keeps the top peaks of the voice in a range you set: it looks at the highest peak of the last few seconds, lowers the gain " />
     <meta property="og:url" content="https://live-miracles.github.io/projects/vmix-master/docs/scripts/auto-gain/" />
     <meta property="og:image" content="https://raw.githubusercontent.com/live-miracles/vmix-master/master/docs/demo.gif" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -89,10 +89,10 @@
                 <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#set-up">Set up</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#settings">Settings</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#how-it-works">How it works</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#good-to-know">Good to know</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#log-messages">Log messages</a></li>
               </ol>
             </details><article class="readme min-w-0"><p>AutoGain watches a microphone, or a call, and adjusts its <strong>gain</strong> by itself. It keeps the
-<strong>top peaks</strong> of the voice in a range you set: it lowers the gain when a peak goes above the
-range or the signal clips, and raises it when no peak has reached the range for a while. A
-speaker who moves closer or further away stays at a usable level without anyone touching the
-input.</p>
+<strong>top peaks</strong> of the voice in a range you set: it looks at the highest peak of the last few
+seconds, lowers the gain when that peak is above the range and raises it when it is below. A clip
+lowers the gain at once. A speaker who moves closer or further away stays at a usable level
+without anyone touching the input.</p>
 <h2 id="set-up">Set up</h2>
 <ol>
 <li>Add the script to the vMix that has the microphone, see
@@ -138,22 +138,17 @@ vMix scales. Times are in milliseconds.</p>
 <tr>
 <td><code>PEAK_HIGH_DB</code></td>
 <td><code>-5</code></td>
-<td>The top of the peak range. A peak above it lowers the gain</td>
+<td>The top of the peak range. When the highest peak of the window is above it, the gain is lowered</td>
 </tr>
 <tr>
 <td><code>PEAK_LOW_DB</code></td>
 <td><code>-6</code></td>
-<td>The bottom of the peak range. Peaks must reach it, or the gain is raised</td>
+<td>The bottom of the peak range. When the highest peak of the window is below it, the gain is raised</td>
 </tr>
 <tr>
-<td><code>PEAK_WAIT</code></td>
+<td><code>PEAK_WINDOW</code></td>
 <td><code>5000</code></td>
-<td>How long there must be no peak above <code>PEAK_LOW_DB</code> before the gain may be raised</td>
-</tr>
-<tr>
-<td><code>GAIN_CHANGE_TIME</code></td>
-<td><code>3000</code></td>
-<td>After any gain change, how long the peak range waits before it raises or lowers the gain again</td>
+<td>How long the script collects readings before it judges the highest peak. The range changes the gain at most this often</td>
 </tr>
 <tr>
 <td><code>VOICE_THRESHOLD_DB</code></td>
@@ -175,20 +170,29 @@ vMix scales. Times are in milliseconds.</p>
 <p>The script changes the input&#39;s gain in steps of 1 dB, between <strong>0 and 24 dB</strong>. It aims to keep
 the loudest peaks between <code>PEAK_LOW_DB</code> and <code>PEAK_HIGH_DB</code>.</p>
 <ul>
-<li><strong>Clip.</strong> When the level goes above <code>CLIP_THRESHOLD_DB</code>, the gain is lowered by 1 dB at
-once, whatever happened before. This happens at most once per <code>CLIP_DOWN_TIME</code>.</li>
-<li><strong>Down.</strong> When a peak goes above <code>PEAK_HIGH_DB</code>, the gain is lowered by 1 dB. Only a peak
-since the last gain change counts, so one loud syllable lowers the gain once.</li>
-<li><strong>Up.</strong> When no peak above <code>PEAK_LOW_DB</code> has been seen for <code>PEAK_WAIT</code>, the gain is
-raised by 1 dB. So a speaker who is too quiet gets about one more decibel every three seconds,
-until peaks reach the range.</li>
-<li><strong>Pace.</strong> After any gain change, including a clip, the range waits <code>GAIN_CHANGE_TIME</code> before
-it raises or lowers the gain again, so the meter shows the new gain first.</li>
-<li><strong>In range.</strong> While the peaks stay between the two thresholds, the gain is left alone.</li>
-<li><strong>Only while someone speaks.</strong> A voice is detected when the level stays above
+<li><p><strong>Window.</strong> The script keeps the highest reading of the current window of <code>PEAK_WINDOW</code>.
+When the window is full, it judges that peak:</p>
+<ul>
+<li>above <code>PEAK_HIGH_DB</code>: the gain is lowered by 1 dB;</li>
+<li>below <code>PEAK_LOW_DB</code>: the gain is raised by 1 dB;</li>
+<li>in between: the gain is left alone.</li>
+</ul>
+<p>  Then the next window starts from zero, so a peak is judged only once.</p>
+</li>
+<li><p><strong>New window after a change.</strong> The meter shows the level after the gain, so after any gain
+change, including a clip, the window is restarted and a full new window is collected at the
+new gain. Every decision is made on <code>PEAK_WINDOW</code> of speech at the current gain, and the range
+changes the gain at most once per <code>PEAK_WINDOW</code>. A speaker who is too quiet gets about one more
+decibel every five seconds, until the peaks reach the range.</p>
+</li>
+<li><p><strong>Clip.</strong> When the level goes above <code>CLIP_THRESHOLD_DB</code>, the gain is lowered by 1 dB at
+once, without waiting for the window. This happens at most once per <code>CLIP_DOWN_TIME</code>.</p>
+</li>
+<li><p><strong>Only while someone speaks.</strong> A voice is detected when the level stays above
 <code>VOICE_THRESHOLD_DB</code> for <code>VOICE_DURATION</code>. When there has been no voice for <code>VOICE_WAIT</code>, the
 script makes no changes. Gain does not creep up during silence, and a clean pause does not
-turn a quiet room into loud noise.</li>
+turn a quiet room into loud noise.</p>
+</li>
 </ul>
 <h2 id="good-to-know">Good to know</h2>
 <ul>
@@ -198,8 +202,11 @@ that matters, usually the main speaker.</li>
 <li>The gain moves slowly on purpose. After a change in the speaker or the microphone position it
 takes some seconds to settle.</li>
 <li>A narrow range keeps the peaks close to one level, but the gain changes often. If the gain
-goes up and down too much, widen the range, for example <code>-9</code> to <code>-5</code>. Keep <code>PEAK_LOW_DB</code> below
-<code>PEAK_HIGH_DB</code>, and both below <code>CLIP_THRESHOLD_DB</code>.</li>
+goes up and down too much, widen the range, for example <code>-9</code> to <code>-5</code>, or make <code>PEAK_WINDOW</code>
+longer. A shorter window reacts faster, but judges each change on less speech. Keep
+<code>PEAK_LOW_DB</code> below <code>PEAK_HIGH_DB</code>, and both below <code>CLIP_THRESHOLD_DB</code>.</li>
+<li>A muted input is not measured. When it is unmuted, the script collects a full window before
+it changes the gain.</li>
 <li>The script only adjusts while it hears a voice above <code>VOICE_THRESHOLD_DB</code>. This is set high on
 purpose, so noise does not count as a voice. If a speaker is too quiet to be detected, raise
 the gain by hand until the script picks the voice up.</li>

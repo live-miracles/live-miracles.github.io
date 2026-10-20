@@ -92,7 +92,7 @@
               <div class="min-w-0"><details class="rounded-box border-base-content/10 bg-base-300/46 text-base-content/68 mb-7 border p-4 text-sm backdrop-blur">
               <summary class="text-base-content/80 cursor-pointer font-semibold">On this page</summary>
               <ol class="mt-3 space-y-2">
-                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#watchdogs">Watchdogs</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#shared-encodes">Shared encodes</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#input-timestamp-fault-detection">Input timestamp fault detection</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#encoder-restarts-do-not-restart-outputs">Encoder restarts do not restart outputs</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#srt-input-output-stalls">SRT-input output stalls</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#ffmpeg-memory-leaks-on-corrupt-input">FFmpeg memory leaks on corrupt input</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#why-goryu-exists">Why Goryu exists</a></li>
+                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#watchdogs">Watchdogs</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#falling-behind-realtime">Falling behind realtime</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#shared-encodes">Shared encodes</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#input-timestamp-fault-detection">Input timestamp fault detection</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#input-frame-rate">Input frame rate</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#flapping-inputs">Flapping inputs</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#encoder-restarts-do-not-restart-outputs">Encoder restarts do not restart outputs</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#srt-input-output-stalls">SRT-input output stalls</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#ffmpeg-memory-leaks-on-corrupt-input">FFmpeg memory leaks on corrupt input</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#why-goryu-exists">Why Goryu exists</a></li>
               </ol>
             </details><article class="readme min-w-0"><p>Bunryu is designed to keep running through long live events: failures are
 isolated to one output, recovered automatically where it is safe, and recorded
@@ -151,13 +151,25 @@ the failure modes they handle.</p>
 fresh process while the output&#39;s desired state remains <code>running</code>. The socket
 watchdog is advisory: if <code>ss</code> fails or times out, it does not restart anything,
 and a socket warning does not prevent the other watchdogs from acting.</p>
-<p><strong>Outputs that never stay up.</strong> An output retries indefinitely (back-off 1, 2, 4, 8
-then 16 s). If it is stopped after 5 failed attempts in a row, none of which stayed
-up for 60 s, the stop is recorded with the count and the last failure (&quot;Stopped
-after 5 failed attempts. Last error: Connection refused&quot;), the output&#39;s card keeps
-showing that line in red, and its History button stays red, until the output is
-started again. A plain stop, or a run that lasted at least 60 s, leaves no such
-mark. The stop also writes an <code>output-stopped-after-failures</code> diagnostics event.</p>
+<p><strong>Retries.</strong> An output retries indefinitely. The wait grows with the number of
+failed attempts in a row that never stayed up for 60 s: 1, 2, 4, 8, then 16 s. A
+run that lasted at least 60 s starts the sequence over, so a drop late in a long
+event is retried after about a second. Each wait is shortened by up to a quarter
+at random, so outputs that fail together (a platform ingest blip) do not respawn
+in lockstep.</p>
+<p>Every 30 s a backstop also looks for outputs that should be running on a live
+input but have no process, no pending retry and no start in progress, and starts
+them (staggered, with an <code>output-restarted-by-backstop</code> diagnostics event). An
+output has to look that way on two checks in a row, so it does not race the
+normal staggered start when an input comes online. Normally nothing matches; it
+exists for unexpected errors, such as a start that threw.</p>
+<p><strong>Outputs that never stay up.</strong> If an output is stopped after 5 failed attempts in a
+row, none of which stayed up for 60 s, the stop is recorded with the count and the
+last failure (&quot;Stopped after 5 failed attempts. Last error: Connection refused&quot;),
+the output&#39;s card keeps showing that line in red, and its History button stays red,
+until the output is started again. A plain stop, or a run that lasted at least 60 s,
+leaves no such mark. The stop also writes an <code>output-stopped-after-failures</code>
+diagnostics event.</p>
 <p>Input media validation is separate from the output watchdogs. The health service
 stays on the regular 5s poll, but ffprobe backs off once a publisher&#39;s probe
 succeeds:</p>
@@ -177,11 +189,56 @@ succeeds:</p>
 <td>Stops re-probing once a probe succeeds for the current publisher; a new probe cycle starts on the next publisher change. Every failed probe is written to diagnostics as <code>media-probe-failed</code> (reason <code>timeout</code>/<code>exit</code>/<code>parse</code>/<code>unusable</code>, elapsed time, exit status, ffprobe stderr tail) and the first failure and the later recovery per publisher are added to the pipeline log (<code>probe_failed</code> / <code>probe_recovered</code>). Input liveness and output recovery do not wait for a valid ffprobe result — ffprobe fills in media/track details when available.</td>
 </tr>
 </tbody></table>
+<p><strong>Control-plane errors.</strong> The health poll, the output watchdog and the host probes
+each catch errors from their own tick and run again on the next one. They log the
+first failure (and any new error) and a recovery event with the count, not one line
+per tick. An error that escapes everything else is logged as
+<code>uncaught-exception</code> / <code>unhandled-rejection</code> and the process keeps running, because
+exiting would stop every output. A startup failure is the exception: if the hook or
+dashboard port cannot be bound, the app writes <code>server-start-failed</code> and exits so
+systemd restarts it, instead of running without a dashboard. A diagnostics write
+failure (disk full, directory unwritable) drops and counts events instead of
+crashing; see
+<a href="/projects/bunryu/docs/operations/configuration/">Configuration</a>.</p>
+<p><strong>Service restarts.</strong> The three systemd units restart a process 2 s after it exits
+(<code>Restart=always</code>, <code>RestartSec=2</code>) and set <code>StartLimitIntervalSec=0</code>. Without it,
+systemd&#39;s default start limit (5 starts in 10 s) marks a unit that keeps failing
+right after it starts as failed and stops restarting it until someone runs
+<code>systemctl start</code>. With it, the unit keeps retrying every 2 s until the cause is
+gone. The Docker image&#39;s supervisor behaves the same way.</p>
+<p>The exception is a failure that needs an operator. If the database was written by a
+build with another schema version (<code>PRAGMA user_version</code>; see
+<a href="/projects/bunryu/docs/operations/configuration/#database-schema-version">Configuration</a>), <code>bunryu.service</code> prints
+why and exits with status 78, and <code>RestartPreventExitStatus=78</code> leaves it failed
+instead of restarting it every 2 s. SRS and the relay <code>Require</code> it, so they do not
+start either, which keeps the server from accepting publishes it cannot authorize. The
+Docker image has no such stop: its supervisor restarts the app every 2 s and repeats
+the message until <code>/data/db.sqlite</code> is removed.</p>
+<h2 id="falling-behind-realtime">Falling behind realtime</h2>
+<p>An output that processes media slower than realtime falls further behind live every
+second: a slow encode or destination, or an input delivering slowly. The output
+service measures the output&#39;s media clock (<code>out_time</code> from FFmpeg&#39;s progress) against
+wall time over windows of 30 s, and when two windows in a row run below 0.9x the card
+shows &quot;Output is running at 0.62x realtime and falling behind live&quot;. One good window
+clears it. It is a warning only: nothing is restarted, and it is recorded like the
+other card warnings (an <code>ffmpeg-warning-started</code> / <code>ffmpeg-warning-ended</code> pair of
+diagnostics events with <code>kind: falling-behind</code>, and an Error History record when it
+ends). The card shows when the warning began (&quot;since 09:18&quot;).</p>
+<ul>
+<li><strong>Why not FFmpeg&#39;s own <code>speed=</code> or <code>fps=</code>:</strong> both are averages over the whole run,
+so after hours of healthy output a sudden slowdown would barely move them.</li>
+<li><strong>Why two windows:</strong> one slow window is what a brief input hiccup looks like, and
+the warning would flicker. A gap with no progress at all (more than 10 s) restarts
+the measurement instead, because a stall is the progress watchdog&#39;s case.</li>
+<li><strong>Many outputs at once:</strong> when the input itself delivers slowly, every output of
+that pipeline reads slowly and each shows the warning; for an RTMP input the
+pipeline&#39;s <code>input-low-framerate</code> alert says which side it is.</li>
+</ul>
 <h2 id="shared-encodes">Shared encodes</h2>
 <p>Outputs on one pipeline that need the same encode share one FFmpeg, a <em>shared
 encode</em> (see <a href="/projects/bunryu/docs/usage/outputs/#shared-encodes">Outputs</a>). It is an ordinary
 output row, so it is supervised exactly like one: the same retry back-off
-(1, 2, 4, 8, then 16 s, without limit), output progress, memory and socket
+(see <a href="#watchdogs">Retries</a>), output progress, memory and socket
 watchdogs (with the memory limit of its video encoding), Error History and
 diagnostics. The outputs that read it are ordinary outputs that copy from it.</p>
 <ul>
@@ -306,13 +363,60 @@ therefore appears twice: the build-up as a <code>warning</code>, then the restar
 because the offset originates in the incoming stream and restarting would drop
 the destination connections during a live event. The fix is on the encoder side; in the
 observed incident, reconnecting the encoder cleared the condition.</p>
+<h2 id="input-frame-rate">Input frame rate</h2>
+<p>The health poll watches the video frame counter SRS keeps for an RTMP input. When
+the rate over the last 2 minutes is more than 10 % below the frame rate ffprobe
+reported for that input (an encoder dropping frames while the bitrate still looks
+normal), the pipeline gets an <code>input-low-framerate</code> warning alert; more than 10 %
+above gives <code>input-high-framerate</code> (bursts after a stall, or an encoder sending
+more frames than it declares). It is reporting only, like the other alerts: it shows
+in the dashboard and as <code>pipeline-alert-started</code> / <code>pipeline-alert-ended</code>
+diagnostics events, and nothing is restarted.</p>
+<p>Limits: SRS 6.0 adds frames to the counter in batches of about 5 s and starts
+counting roughly 20 s after the publish begins. A window is therefore off by up to
+5 s of frames at each end (about ±4 % over 2 minutes), which is why the window is
+long and the band is ±10 %; a shorter window or a tighter band would raise false
+alarms on a steady encoder. The first alert can come about 2 minutes after the
+publish, and a new publisher restarts the measurement. SRT inputs are not checked:
+with <code>srt_to_rtmp off</code> SRS does not count their frames (<code>frames</code> stays 0). An SRT
+input through Goryu has loss, drop and retransmission alerts from the relay; one
+sent straight to SRS port 10080 has no link-quality alerts today.</p>
+<h2 id="flapping-inputs">Flapping inputs</h2>
+<p>When an input disconnects 3 or more times within 5 minutes (a bad uplink, a
+crashing encoder), the pipeline gets an <code>input-flapping</code> warning alert saying how
+many times. It is reporting only, like the other alerts, and it clears once fewer
+than 3 disconnects remain inside the window. Each disconnect is still its own line in
+the pipeline log; the alert is what makes a pattern visible without reading it.</p>
+<p>Input alerts (<code>input-flapping</code>, <code>input-low-framerate</code>, <code>input-high-framerate</code>) belong
+to the input itself, so they show on every input, RTMP included: the pipeline&#39;s
+status icon and the Inputs table&#39;s status and Issues column turn to warning, with the
+time the alert began. The SRT link-quality alerts (loss, drops, retransmissions,
+latency, forwarding) stay with the SRT relay views.</p>
 <h2 id="encoder-restarts-do-not-restart-outputs">Encoder restarts do not restart outputs</h2>
 <p>When an encoder stops and reconnects (for example a manual ffmpeg restart), the
-pipeline&#39;s input reconnects but its <strong>outputs keep running and are not restarted</strong>.
-If the encoder&#39;s timeline restarted (timestamps back near 0), the running outputs
+pipeline&#39;s input reconnects but its <strong>outputs keep running and are not restarted</strong>,
+unless the format changed (see below). If the encoder&#39;s timeline restarted (timestamps back near 0), the running outputs
 see a discontinuity and may log timestamp warnings until the condition clears (see
 <a href="#input-timestamp-fault-detection">Input timestamp fault detection</a>); restarting the
 outputs by hand clears it, at the cost of dropping the destination connections.</p>
+<p><strong>Exception: a changed format.</strong> When the encoder reconnects with a different video
+codec, resolution or number of audio tracks, the running outputs cannot carry it (an
+output copying the stream cannot change its codec parameters mid-stream), so they are
+restarted. This needs no guess about why the encoder reconnected: the ffprobe result of
+the new publisher is compared with the last successful one for that pipeline.</p>
+<ul>
+<li>Only outputs that were already running before the new publisher connected are
+restarted, 200 ms apart; one that started afterwards already reads the new stream.
+Readers of a shared encode restart with it.</li>
+<li>A failed probe restarts nothing, and the comparison keeps the last good format. The
+first probe after a server start only records one.</li>
+<li>Frame rate and bitrate changes do not count.</li>
+<li>At most one such restart per pipeline per minute, so an encoder that alternates
+formats cannot start a restart storm; a change inside that window is only reported.</li>
+<li>Each restart is an <code>input-format-changed</code> diagnostics event (outputs restarted,
+<code>suppressed</code>), a line in the pipeline log, and a &quot;Restarted: input format changed
+from … to …&quot; record in each output&#39;s Error History (a deliberate stop, not a crash).</li>
+</ul>
 <p>Restarting outputs automatically whenever the input restarts is <strong>not implemented</strong>
 because the server cannot reliably tell an encoder restart from a network
 interruption, and restarting after a mere network drop would add downtime to a line

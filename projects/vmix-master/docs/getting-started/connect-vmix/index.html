@@ -86,7 +86,7 @@
               <div class="min-w-0"><details class="rounded-box border-base-content/10 bg-base-300/46 text-base-content/68 mb-7 border p-4 text-sm backdrop-blur">
               <summary class="text-base-content/80 cursor-pointer font-semibold">On this page</summary>
               <ol class="mt-3 space-y-2">
-                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#enable-the-web-controller">Enable the Web Controller</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#add-a-system">Add a system</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#chrome-and-your-local-network">Chrome and your local network</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#when-a-box-says-unavailable">When a box says Unavailable</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#try-it-without-vmix">Try it without vMix</a></li>
+                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#enable-the-web-controller">Enable the Web Controller</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#add-a-system">Add a system</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#chrome-and-your-local-network">Chrome and your local network</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#when-a-box-says-unavailable">When a box says Unavailable</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#known-issues">Known issues</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#try-it-without-vmix">Try it without vMix</a></li>
               </ol>
             </details><article class="readme min-w-0"><h2 id="enable-the-web-controller">Enable the Web Controller</h2>
 <p>vMix Master talks to vMix through its Web Controller, so that has to be on for every system
@@ -182,6 +182,14 @@ a network or firewall problem, not a vMix Master problem.</li>
 for example another web server on the same port.</li>
 <li>You allowed the local network prompt in Chrome. You can change it under the site
 settings of the page.</li>
+</ul>
+<h2 id="known-issues">Known issues</h2>
+<ul>
+<li><strong><code>localhost</code> and <code>127.0.0.1</code> can show Unavailable</strong> even though the vMix on the same computer
+answers on its network address, for example <code>192.168.1.20</code>. Chrome asks for a separate
+permission to reach the device the page runs on, apart from the local network one, and
+it may not have been granted. Use the computer&#39;s network address instead, or allow the
+permission under the site settings of the page.</li>
 </ul>
 <h2 id="try-it-without-vmix">Try it without vMix</h2>
 <p>Use the host names <code>demo</code>, <code>demo2</code> and <code>demo3</code> for simulated systems that never touch the

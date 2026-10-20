@@ -92,7 +92,7 @@
               <div class="min-w-0"><details class="rounded-box border-base-content/10 bg-base-300/46 text-base-content/68 mb-7 border p-4 text-sm backdrop-blur">
               <summary class="text-base-content/80 cursor-pointer font-semibold">On this page</summary>
               <ol class="mt-3 space-y-2">
-                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#current-architecture-in-one-paragraph">Current architecture in one paragraph</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#media-server">Media server</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#use-srs-for-ingest-from-the-official-release">Use SRS for ingest, from the official release</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#keep-srss-srt_to_rtmp-off-ffmpeg-converts-srt-inputs">Keep SRS&#39;s srt_to_rtmp off; FFmpeg converts SRT inputs</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-use-srss-built-in-forwarding-for-outputs">Don&#39;t use SRS&#39;s built-in forwarding for outputs</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-use-mediamtx-for-srt-ingest-or-srtrtmp-conversion">Don&#39;t use MediaMTX for SRT ingest or SRT→RTMP conversion</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-build-our-own-media-server">Don&#39;t build our own media server</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#srt-ingest">SRT ingest</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#plain-srt-goes-directly-to-srs-by-default-the-relay-also-accepts-it">Plain SRT goes directly to SRS by default; the relay also accepts it</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#outputs-pull-from-srs-not-from-the-relay">Outputs pull from SRS, not from the relay</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#keep-goryu-in-its-own-repository">Keep goryu in its own repository</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#outputs-and-preview">Outputs and preview</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#one-ffmpeg-process-per-output">One FFmpeg process per output</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#outputs-with-the-same-encode-share-one-ffmpeg-shared-encodes">Outputs with the same encode share one FFmpeg (shared encodes)</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#preview-copies-the-video-only-audio-is-encoded">Preview copies the video; only audio is encoded</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#sizing">Sizing</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#sizing-guidance-is-a-measured-table-not-a-calculator">Sizing guidance is a measured table, not a calculator</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#tooling">Tooling</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#eslint-checks-promise-handling-prettier-stays-the-formatter">ESLint checks promise handling; Prettier stays the formatter</a></li>
+                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#current-architecture-in-one-paragraph">Current architecture in one paragraph</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#media-server">Media server</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#use-srs-for-ingest-from-the-official-release">Use SRS for ingest, from the official release</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#keep-srss-srt_to_rtmp-off-ffmpeg-converts-srt-inputs">Keep SRS&#39;s srt_to_rtmp off; FFmpeg converts SRT inputs</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-use-srss-built-in-forwarding-for-outputs">Don&#39;t use SRS&#39;s built-in forwarding for outputs</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-use-mediamtx-for-srt-ingest-or-srtrtmp-conversion">Don&#39;t use MediaMTX for SRT ingest or SRT→RTMP conversion</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-build-our-own-media-server">Don&#39;t build our own media server</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#srt-ingest">SRT ingest</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#plain-srt-goes-directly-to-srs-by-default-the-relay-also-accepts-it">Plain SRT goes directly to SRS by default; the relay also accepts it</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#outputs-pull-from-srs-not-from-the-relay">Outputs pull from SRS, not from the relay</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#keep-goryu-in-its-own-repository">Keep goryu in its own repository</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#outputs-and-preview">Outputs and preview</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#one-ffmpeg-process-per-output">One FFmpeg process per output</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#outputs-with-the-same-encode-share-one-ffmpeg-shared-encodes">Outputs with the same encode share one FFmpeg (shared encodes)</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#preview-copies-the-video-only-audio-is-encoded">Preview copies the video; only audio is encoded</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#sizing">Sizing</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#sizing-guidance-is-a-measured-table-not-a-calculator">Sizing guidance is a measured table, not a calculator</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#tooling">Tooling</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#eslint-checks-promise-handling-prettier-stays-the-formatter">ESLint checks promise handling; Prettier stays the formatter</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#logging-and-diagnostics">Logging and diagnostics</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#keep-the-process-running-after-an-uncaught-error">Keep the process running after an uncaught error</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#diagnostics-ideas-taken-from-srs-mediamtx-and-restream-krsna">Diagnostics ideas taken from SRS, MediaMTX and restream-krsna</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#warn-when-an-output-falls-behind-realtime-measured-from-its-media-clock">Warn when an output falls behind realtime, measured from its media clock</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#failures-that-need-an-operator-exit-with-status-78-which-systemd-does-not-restart">Failures that need an operator exit with status 78, which systemd does not restart</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#hints-are-a-dashboard-lookup-not-an-api-field">Hints are a dashboard lookup, not an API field</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#restart-outputs-when-a-reconnecting-encoder-changes-format-not-when-it-merely-reconnects">Restart outputs when a reconnecting encoder changes format, not when it merely reconnects</a></li>
               </ol>
             </details><article class="readme min-w-0"><p>Why Bunryu is built the way it is, and why some obvious alternatives are not
 used. Each entry gives the decision, the reasons, the evidence behind them, and
@@ -503,6 +503,130 @@ and small cleanups.</p>
 churn working code.</p>
 <p><strong>Revisit when:</strong> the lint run gets slow enough that people skip it, or a bug
 reaches production that a rule would have caught.</p>
+<h2 id="logging-and-diagnostics">Logging and diagnostics</h2>
+<h3 id="keep-the-process-running-after-an-uncaught-error">Keep the process running after an uncaught error</h3>
+<p><strong>Decision:</strong> <code>uncaughtException</code> and <code>unhandledRejection</code> are logged (journal and
+a diagnostics event) and the process keeps running. Each background loop (health
+poll, output watchdog, host probes) also catches its own errors and logs the
+first failure and the recovery. The diagnostics writer handles its own stream
+errors.</p>
+<p><strong>Why:</strong></p>
+<ul>
+<li><strong>Exiting kills every output.</strong> The FFmpeg processes exit by SIGPIPE when the
+control plane dies (by design, so none are orphaned). A bug in one timer or a
+full disk would otherwise end every forward of a live event, and systemd&#39;s
+restart would not bring them back for several seconds.</li>
+<li><strong>The loops are independent.</strong> A throw in the health poll leaves the output
+processes and their watchdog untouched. The next tick starts from fresh state.</li>
+</ul>
+<p><strong>Evidence:</strong> before this, nothing listened for errors on the diagnostics
+<code>WriteStream</code>, so a full disk would have crashed the app, and so would an
+unwritable diagnostics directory at startup. The health poll and host-probe loops
+had <code>try</code>/<code>finally</code> with no <code>catch</code>, the same pattern the ffprobe fix (see the
+ESLint entry above) removed. Regression tests cover a write-stream error, an
+unwritable directory and a throwing health poll.</p>
+<p><strong>Revisit when:</strong> an incident shows the process kept running in a broken state
+after an uncaught error. Then exit on <code>uncaughtException</code> and rely on systemd.</p>
+<h3 id="diagnostics-ideas-taken-from-srs-mediamtx-and-restream-krsna">Diagnostics ideas taken from SRS, MediaMTX and restream-krsna</h3>
+<p><strong>Decision (October 2026):</strong> adopted:</p>
+<ul>
+<li>a per-run id on every output event (SRS tags every line, hook and API entry
+of a connection with one context id);</li>
+<li>the first occurrence plus a count of the rest for repeating events (SRS&#39;s
+error pithy print, MediaMTX&#39;s 1 s counter dumpers), applied to rejected
+publishes, loop failures and repeated exit stderr tails;</li>
+<li>alert episodes with a start and an end, derived from the 5 s poll (krsna
+derives alerts from its health snapshot);</li>
+<li>a random id per server start (SRS&#39;s heartbeat <code>service_id</code>).</li>
+</ul>
+<p>Not adopted:</p>
+<ul>
+<li><strong>A Prometheus <code>/metrics</code> endpoint</strong> (both SRS and MediaMTX have one). Nothing
+scrapes it yet, and it would be a new port or route to secure.</li>
+<li><strong>Delivery ratio</strong> (destination-acknowledged bytes ÷ offered bytes) and
+<strong>layered root-cause diagnosis</strong> (krsna). Both are useful, but each needs new
+state and UI.</li>
+<li><strong>Logs in SQLite</strong> (krsna). JSONL plus journald is enough at this size.</li>
+</ul>
+<p><strong>Revisit when:</strong> someone wants external alerting (add <code>/metrics</code>, loopback-only),
+or an incident shows outputs connected but not keeping up (add the delivery
+ratio; <code>outputSockets.ts</code> already reads <code>ss</code>).</p>
+<h3 id="warn-when-an-output-falls-behind-realtime-measured-from-its-media-clock">Warn when an output falls behind realtime, measured from its media clock</h3>
+<p><strong>Decision (October 2026):</strong> every output gets a &quot;falling behind&quot; card warning when
+its media clock runs below 0.9x wall time over two 30 s windows in a row. The speed
+is computed from FFmpeg&#39;s <code>out_time</code> progress, not read from its <code>speed=</code> or <code>fps=</code>.
+It is a warning only, like the other card warnings.</p>
+<p><strong>Why:</strong></p>
+<ul>
+<li><strong>The existing watchdogs miss it.</strong> The progress watchdog fires only when progress
+stops for 45 s, and the socket watchdog only when the socket is gone. An output
+whose destination or encode accepts data slower than realtime has both, yet gets
+further behind live every second until SRS&#39;s play queue drops data.</li>
+<li><strong><code>speed=</code> and <code>fps=</code> are whole-run averages</strong> (measured with the pinned FFmpeg
+on a copy output: <code>speed</code> and <code>fps</code> after 2.5 s still carried the initial burst).
+After hours of healthy running a slowdown would barely move them.</li>
+<li><strong>Two windows, and a gap resets.</strong> One slow window is what an input hiccup looks
+like. A pause of more than 10 s is a stall, which the progress watchdog owns.</li>
+<li><strong>Warn, never restart.</strong> A restart does not fix a slow destination or a slow
+encode, and would drop the platform session for nothing.</li>
+</ul>
+<p><strong>Not adopted:</strong> killing a slow output; a per-output <code>speed</code> field in the API (the
+warning text carries the number).</p>
+<p><strong>Revisit when:</strong> the warning fires on healthy outputs (then widen the window or
+lower the threshold), or operators want to see the speed continuously.</p>
+<h3 id="failures-that-need-an-operator-exit-with-status-78-which-systemd-does-not-restart">Failures that need an operator exit with status 78, which systemd does not restart</h3>
+<p><strong>Decision (October 2026):</strong> a database stamped with another schema version makes
+the app print why and exit with status 78 (<code>EX_CONFIG</code>). <code>bunryu.service</code> sets
+<code>RestartPreventExitStatus=78</code>, so it stays failed instead of restarting.</p>
+<p><strong>Why:</strong> the units set <code>StartLimitIntervalSec=0</code> so a crashing service always comes
+back, and that would turn an error only a person can fix into a restart every 2 s,
+filling the 1 GB journal with the same message and pushing out older, useful logs.
+Verified on systemd 259 with throwaway units: exit 78 stays <code>failed</code> with no
+restarts, and any other exit keeps restarting. SRS and the relay <code>Require</code> the app,
+so they stay down too, and nothing accepts a publish it cannot authorize.</p>
+<p><strong>Not adopted:</strong> a migration path, which AGENTS.md rules out; the schema version
+only turns a confusing failure into a clear one. The Docker supervisor does not
+stop on 78 (evaluation only, the message repeats until the volume&#39;s <code>db.sqlite</code> is
+removed).</p>
+<p><strong>Revisit when:</strong> a second failure class needs the same treatment, or the Docker
+image is used for real deployments.</p>
+<h3 id="hints-are-a-dashboard-lookup-not-an-api-field">Hints are a dashboard lookup, not an API field</h3>
+<p><strong>Decision (October 2026):</strong> the &quot;Hint:&quot; lines under known errors, warnings and
+alerts come from patterns in <code>public/ts/core/hints.ts</code>, matched against the text the
+server already sends. There is no <code>hint</code> or <code>recommendedAction</code> field in the API.</p>
+<p><strong>Why:</strong> the advice is presentation (it can change wording without touching the
+server or its diagnostics), and an API field would be one more thing to document and
+keep stable. Matching the stderr text is as fragile as the FFmpeg messages it matches,
+so an unmatched error is shown as it was, with no hint, which costs nothing.</p>
+<p><strong>Not adopted:</strong> restream-krsna&#39;s <code>evidence</code> and <code>recommended_action</code> on every alert,
+which needs structured causes the server does not have for FFmpeg output errors.</p>
+<p><strong>Revisit when:</strong> a client other than the dashboard needs the advice, or a hint
+should depend on state the dashboard does not have.</p>
+<h3 id="restart-outputs-when-a-reconnecting-encoder-changes-format-not-when-it-merely-reconnects">Restart outputs when a reconnecting encoder changes format, not when it merely reconnects</h3>
+<p><strong>Decision (October 2026):</strong> after a new publisher&#39;s ffprobe succeeds, its format
+(video codec, resolution, audio track count) is compared with the pipeline&#39;s last
+successful probe. If they differ, the outputs that were running before that publisher
+connected are restarted, 200 ms apart, at most once per pipeline per minute. Outputs are
+still not restarted for a plain reconnect.</p>
+<p><strong>Why:</strong></p>
+<ul>
+<li><strong>It is a deterministic signal.</strong> The decision to never restart on a reconnect rests on
+there being no reliable way to tell an encoder restart from a network drop (see
+<a href="/projects/bunryu/docs/operations/reliability/#encoder-restarts-do-not-restart-outputs">Reliability</a>).
+A different format needs no such guess; a stream copy cannot follow it, so a restart
+repairs something already broken instead of dropping a working destination.</li>
+<li><strong>It reuses the existing re-probe</strong>, which already runs once per new publisher, so
+there is no new polling.</li>
+<li><strong>Failed probes and the first probe never trigger it</strong>, since neither shows a change.</li>
+<li><strong>The cooldown bounds it</strong>, so an encoder that alternates formats does not cause a
+restart storm; the skipped change is still reported.</li>
+</ul>
+<p><strong>Not adopted:</strong> restarting on a frame-rate or bitrate change (copy outputs carry both);
+restarting every output on every new publisher (the rejected approach above); a
+<code>bunryu.json</code> switch (the restart only fires on a stream that was already breaking).</p>
+<p><strong>Revisit when:</strong> a format change turns out not to need a restart for some destination
+type, or probes after a reconnect prove unreliable enough to report a change that did
+not happen.</p>
 </article><a class="link text-base-content/50 mt-6 inline-block text-sm" href="https://github.com/live-miracles/bunryu/blob/master/docs/4-reference/3-design-decisions.md">Edit this page on GitHub</a><div class="border-base-content/10 mt-10 grid gap-3 border-t pt-6 sm:grid-cols-2">
               <a class="rounded-box border-base-content/10 hover:border-primary/50 border p-4" href="/projects/bunryu/docs/reference/development/"><div class="text-base-content/50 text-xs">Previous</div><div class="font-semibold">Development</div></a>
               

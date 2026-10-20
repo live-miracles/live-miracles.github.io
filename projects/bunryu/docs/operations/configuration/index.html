@@ -213,12 +213,53 @@ limit (translation mixers included), CPU and RSS for the Node control plane
 shows, up to ~10 s old), and host total/available memory and swap. Separately,
 <code>host-memory-low</code> (available memory under 15% of total) and
 <code>host-memory-recovered</code> (back above 20%) events are logged on transition, the
-former with the five largest processes by RSS.
-Files are
+former with the five largest processes by RSS.</p>
+<p>Other things the diagnostics record so an incident can be pieced together:</p>
+<ul>
+<li><strong>Restarts:</strong> <code>server-started</code> (version, pid, a random <code>instanceId</code> per start),
+<code>server-shutdown</code> (signal, uptime, the outputs it killed — their own
+<code>ffmpeg-exited</code> events are not written during a shutdown) and
+<code>server-start-failed</code> (for example the dashboard port already in use).</li>
+<li><strong>One output run:</strong> every output event carries <code>outputId</code>, <code>pipelineId</code>, the
+FFmpeg <code>pid</code> and a <code>runId</code> (<code>&lt;outputId&gt;#&lt;n&gt;</code>, counted from the server start),
+so grepping a <code>runId</code> gives that run&#39;s start, warnings, restart, exit and the
+retry that followed. <code>ffmpeg-exited</code> also has <code>ranMs</code>. When an exit&#39;s stderr
+tail is identical to the previous exit&#39;s (a retry loop against a dead
+destination), it is replaced by <code>stderrTailSameAsPrevious: true</code>.</li>
+<li><strong>Pipeline alerts:</strong> <code>pipeline-alert-started</code> and <code>pipeline-alert-ended</code>
+(duration, number of polls it was active, last message). An alert absent for
+six polls (~30 s) ends its episode, so a flickering condition is one episode. The
+dashboard shows the episode&#39;s start (&quot;since 09:18&quot;) next to the alert.</li>
+<li><strong>Publish hooks:</strong> <code>publish-allowed</code>, and <code>publish-rejected</code> for each rejection
+that is logged. Repeats are throttled to one journal line per minute per key.
+The number not logged goes on the next line, or, if the attempts stopped, on a
+summary line once the minute is over (written on the next hook call or
+dashboard refresh).</li>
+<li><strong>Control-plane errors:</strong> a background loop (health poll, output watchdog,
+host probes) that throws writes <code>&lt;loop&gt;-failed</code> on its first failure or a new
+error, and <code>&lt;loop&gt;-recovered</code> with the count; an error nothing else caught is
+written as <code>uncaught-exception</code> or <code>unhandled-rejection</code>. The process keeps
+running in both cases.</li>
+<li><strong>Stopped outputs are left out</strong> of the per-minute snapshot.</li>
+</ul>
+<p>Writing diagnostics is best effort and never stops the control plane: if a write
+fails (disk full, directory unwritable) events are dropped for a minute and the
+file is reopened; past 16 MB of unwritten events in memory, new events are
+dropped. In both cases the next record written is <code>diagnostics-events-dropped</code>
+with the count and the error. A shutdown waits up to 2 s for the file to flush.</p>
+<p>Files are
 rotated daily or at 100 MB, whichever comes first, with a 5 GB total diagnostics
 cap that removes the oldest rotated files first. The installer configures
 persistent journald with a seven-day retention limit, 1 GB system journal cap,
 256 MB runtime cap, and one-day journal file rotation.</p>
+<h3 id="database-schema-version">Database schema version</h3>
+<p>The SQLite database carries a schema version (<code>PRAGMA user_version</code>, <code>SCHEMA_VERSION</code>
+in <code>src/db/schema.ts</code>). There are no migrations, so a change to a table or column
+bumps it, and a database stamped with another version is refused at startup with a
+message saying so, instead of failing later on a query. The fix is to recreate the
+database: re-run the installer and answer <code>n</code> to &quot;Preserve it?&quot; (or set <code>WIPE_DB=y</code>),
+which keeps a <code>db.sqlite.&lt;timestamp&gt;.bak</code> copy to re-create pipelines from. A database
+from before the stamp existed is accepted and stamped, since its schema is version 1.</p>
 <p>Relay ports and status polling are read from <code>goryu.json</code>, located beside <code>srs_config_path</code>.</p>
 <p>Installer/development overrides:</p>
 <table>
@@ -252,7 +293,7 @@ persistent journald with a seven-day retention limit, 1 GB system journal cap,
 <tr>
 <td><code>WIPE_DB</code></td>
 <td><code>server-install.sh</code></td>
-<td>Set <code>y</code>/<code>n</code> to force or skip wiping the existing SQLite DB</td>
+<td>Set <code>y</code>/<code>n</code> to force or skip wiping the existing SQLite DB. A wipe first copies it to <code>db.sqlite.&lt;timestamp&gt;.bak</code> (owner-only, it holds stream keys and destination URLs)</td>
 </tr>
 <tr>
 <td><code>SRS_LOCAL_BIN</code></td>

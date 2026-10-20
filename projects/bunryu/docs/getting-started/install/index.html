@@ -120,7 +120,9 @@ targets Debian/Ubuntu on x86_64 and sets up three systemd services:</p>
 <p>Startup is ordered so the Node.js control plane is reachable before SRS accepts
 publishes. <code>srs.service</code> waits for the unauthenticated readiness endpoint
 <code>http://127.0.0.1:8080/api/ready</code> before starting; this prevents SRS publish
-hooks from racing the dashboard/API process during boot.</p>
+hooks from racing the dashboard/API process during boot. All three units restart
+their process 2 s after it exits and never give up (<code>StartLimitIntervalSec=0</code>); see
+<a href="/projects/bunryu/docs/operations/reliability/#watchdogs">Reliability</a>.</p>
 <p><strong>Production install:</strong></p>
 <pre><code class="language-bash">sudo apt-get update -q &amp;&amp; sudo apt-get install -y -q git  # in case git is not installed
 sudo git clone https://github.com/live-miracles/bunryu /opt/bunryu
@@ -136,6 +138,11 @@ sudo bash /opt/bunryu/scripts/server-install.sh
 <p><strong>Update an installed server:</strong></p>
 <pre><code class="language-bash">sudo bash /opt/bunryu/scripts/server-install.sh
 </code></pre>
+<p>The installer pulls the latest code before anything else and, if the installer
+itself changed, restarts itself from the new copy, so one run applies the new
+pinned versions, config and units. (An installer older than this behavior pulls
+its own replacement halfway through and keeps running the old steps; run it a second
+time once to move past it.)</p>
 <p><strong>Stop services:</strong></p>
 <pre><code class="language-bash">sudo bash /opt/bunryu/scripts/server-down.sh
 </code></pre>
