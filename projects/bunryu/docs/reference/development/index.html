@@ -104,8 +104,8 @@ repo when it has no local changes and rebuilds <code>./objs/goryu</code>.</p>
 <pre><code class="language-bash">npm run srs           # runs ./objs/srs -c srs.conf in the foreground
 </code></pre>
 <p><strong>3. Start Goryu</strong> (terminal 2):</p>
-<pre><code class="language-bash">npm run relay         # runs the ./objs/goryu binary built by dev-install
-npm run relay:update   # pulls the latest ../goryu source and rebuilds ./objs/goryu
+<pre><code class="language-bash">npm run goryu          # runs the ./objs/goryu binary built by dev-install
+npm run goryu:update   # pulls the latest ../goryu source and rebuilds ./objs/goryu
 </code></pre>
 <p>The relay also exposes a local HTTP status endpoint on the default
 <code>status_port</code> (<code>127.0.0.1:8081</code>) in development. The dashboard backend polls

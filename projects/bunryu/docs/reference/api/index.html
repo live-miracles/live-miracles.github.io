@@ -197,7 +197,7 @@ RTMP input → RTMP pull), so there is no pull-method setting.</p>
 <tr>
 <td>POST</td>
 <td><code>/api/pipelines/:id/outputs/:outId</code></td>
-<td>Update output (same body as create) — 409 unless stopped, and always 409 for a shared encode</td>
+<td>Update output (same body as create). A running output accepts only <code>{ name }</code> — any other field gives 409, even with an unchanged value — and a shared encode always gives 409</td>
 </tr>
 <tr>
 <td>DELETE</td>

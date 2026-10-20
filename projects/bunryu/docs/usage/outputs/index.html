@@ -129,7 +129,7 @@ second pipeline from an output of the first. See
 <tr>
 <td><code>1080p</code></td>
 <td>Scales to 1920×1080, H.264 (<code>veryfast</code>, 5 Mbps); meant for down-converting a 4K input</td>
-<td>More than 4 vCPUs from a 4K50 input: does not keep up on a 4-vCPU host</td>
+<td>About 6 vCPUs from a 4K50 input (does not keep up on 4)</td>
 </tr>
 <tr>
 <td><code>vertical_rotate</code></td>
@@ -246,7 +246,9 @@ encode … failed: …&quot; naming the cause, so its card explains the reconnec
 recipes, other pipelines and outputs that read the input directly are not
 affected. See <a href="/projects/bunryu/docs/operations/reliability/#shared-encodes">Reliability</a>.</p>
 <p><strong>Changing the configuration while outputs are running.</strong> An output decides how it
-runs when it <em>starts</em> and never switches while running.</p>
+runs when it <em>starts</em> and never switches while running. For that reason the
+editor of a running output disables the destination, encodings and translation
+settings and lets you change only its name; stop the output to change the rest.</p>
 <ul>
 <li>If an output was already running alone and you add a second output with the same
 recipe, the shared encode starts at once, but the first output keeps encoding on

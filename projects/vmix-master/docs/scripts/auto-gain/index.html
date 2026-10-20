@@ -4,12 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AutoGain — vMix Master</title>
-    <meta name="description" content="AutoGain watches a microphone, or a call, and adjusts its gain by itself. It lowers the gain when the signal clips, and raises it when the voice has been too quiet for a while, so a speaker who moves " />
+    <meta name="description" content="AutoGain watches a microphone, or a call, and adjusts its gain by itself. It keeps the top peaks of the voice in a range you set: it lowers the gain when a peak goes above the range or the signal clip" />
     <link rel="canonical" href="https://live-miracles.github.io/projects/vmix-master/docs/scripts/auto-gain/" />
     <meta property="og:site_name" content="Live Miracles" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="AutoGain — vMix Master" />
-    <meta property="og:description" content="AutoGain watches a microphone, or a call, and adjusts its gain by itself. It lowers the gain when the signal clips, and raises it when the voice has been too quiet for a while, so a speaker who moves " />
+    <meta property="og:description" content="AutoGain watches a microphone, or a call, and adjusts its gain by itself. It keeps the top peaks of the voice in a range you set: it lowers the gain when a peak goes above the range or the signal clip" />
     <meta property="og:url" content="https://live-miracles.github.io/projects/vmix-master/docs/scripts/auto-gain/" />
     <meta property="og:image" content="https://raw.githubusercontent.com/live-miracles/vmix-master/master/docs/demo.gif" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -88,10 +88,11 @@
               <ol class="mt-3 space-y-2">
                 <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#set-up">Set up</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#settings">Settings</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#how-it-works">How it works</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#good-to-know">Good to know</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#log-messages">Log messages</a></li>
               </ol>
-            </details><article class="readme min-w-0"><p>AutoGain watches a microphone, or a call, and adjusts its <strong>gain</strong> by itself. It lowers the
-gain when the signal clips, and raises it when the voice has been too quiet for a while, so
-a speaker who moves closer or further away stays at a usable level without anyone touching
-the input.</p>
+            </details><article class="readme min-w-0"><p>AutoGain watches a microphone, or a call, and adjusts its <strong>gain</strong> by itself. It keeps the
+<strong>top peaks</strong> of the voice in a range you set: it lowers the gain when a peak goes above the
+range or the signal clips, and raises it when no peak has reached the range for a while. A
+speaker who moves closer or further away stays at a usable level without anyone touching the
+input.</p>
 <h2 id="set-up">Set up</h2>
 <ol>
 <li>Add the script to the vMix that has the microphone, see
@@ -105,12 +106,12 @@ the input.</p>
 <li>The first input of type <strong>VideoCall</strong>.</li>
 </ol>
 <p>Put <code>AutoGain</code> in the title of the right input to be certain. If none is found, the script
-prints <code>No inputs have &#39;AutoGain&#39; in the name or have Audio or VideoCall type.</code> and looks
-again after five seconds. A muted input is left alone.</p>
+prints <code>AutoGain | No input found. Looked for an input with &#39;AutoGain&#39; in its title, then an input of type Audio, then an input of type VideoCall. Trying again in 5 seconds.</code>
+and looks again after five seconds. A muted input is left alone.</p>
 <h2 id="settings">Settings</h2>
-<p>Levels are the <code>meterF1</code> value of the input, which is an amplitude from 0 to 1. See
-<a href="/projects/vmix-master/docs/reference/audio-levels/">Audio levels</a> for the decibel equivalents. Times are in
-milliseconds.</p>
+<p>Levels are in decibels of the input&#39;s <code>meterF1</code> meter, where 0 dB is the loudest possible
+signal. See <a href="/projects/vmix-master/docs/reference/audio-levels/">Audio levels</a> for how they relate to the other
+vMix scales. Times are in milliseconds.</p>
 <table>
 <thead>
 <tr>
@@ -125,34 +126,39 @@ milliseconds.</p>
 <td>How often the script reads the level</td>
 </tr>
 <tr>
-<td><code>CLIP_THRESHOLD</code></td>
-<td><code>0.9</code></td>
-<td>A level above this, about -1 dB, counts as clipping</td>
+<td><code>CLIP_THRESHOLD_DB</code></td>
+<td><code>-1</code></td>
+<td>A level above this counts as clipping</td>
 </tr>
 <tr>
-<td><code>GAIN_DOWN_TIME</code></td>
+<td><code>CLIP_DOWN_TIME</code></td>
 <td><code>1000</code></td>
-<td>The shortest time between two gain decreases</td>
+<td>The shortest time between two gain decreases caused by clipping</td>
 </tr>
 <tr>
-<td><code>PEAK_THRESHOLD</code></td>
-<td><code>0.45</code></td>
-<td>A level above this, about -7 dB, counts as loud enough</td>
+<td><code>PEAK_HIGH_DB</code></td>
+<td><code>-5</code></td>
+<td>The top of the peak range. A peak above it lowers the gain</td>
+</tr>
+<tr>
+<td><code>PEAK_LOW_DB</code></td>
+<td><code>-6</code></td>
+<td>The bottom of the peak range. Peaks must reach it, or the gain is raised</td>
 </tr>
 <tr>
 <td><code>PEAK_WAIT</code></td>
 <td><code>5000</code></td>
-<td>How long there must be no loud-enough peak before the gain may be raised</td>
+<td>How long there must be no peak above <code>PEAK_LOW_DB</code> before the gain may be raised</td>
 </tr>
 <tr>
-<td><code>GAIN_UP_TIME</code></td>
+<td><code>GAIN_CHANGE_TIME</code></td>
 <td><code>3000</code></td>
-<td>The shortest time between two gain increases</td>
+<td>After any gain change, how long the peak range waits before it raises or lowers the gain again</td>
 </tr>
 <tr>
-<td><code>VOICE_THRESHOLD</code></td>
-<td><code>0.1</code></td>
-<td>A level above this, about -20 dB, counts as a voice</td>
+<td><code>VOICE_THRESHOLD_DB</code></td>
+<td><code>-20</code></td>
+<td>A level above this counts as a voice</td>
 </tr>
 <tr>
 <td><code>VOICE_DURATION</code></td>
@@ -166,15 +172,21 @@ milliseconds.</p>
 </tr>
 </tbody></table>
 <h2 id="how-it-works">How it works</h2>
-<p>The script changes the input&#39;s gain in steps of 1 dB, between <strong>0 and 24 dB</strong>.</p>
+<p>The script changes the input&#39;s gain in steps of 1 dB, between <strong>0 and 24 dB</strong>. It aims to keep
+the loudest peaks between <code>PEAK_LOW_DB</code> and <code>PEAK_HIGH_DB</code>.</p>
 <ul>
-<li><strong>Down.</strong> When the level goes above <code>CLIP_THRESHOLD</code>, the gain is lowered by 1 dB. This
-happens at most once per <code>GAIN_DOWN_TIME</code>.</li>
-<li><strong>Up.</strong> When no peak above <code>PEAK_THRESHOLD</code> has been seen for <code>PEAK_WAIT</code>, the gain is
-raised by 1 dB. This happens at most once per <code>GAIN_UP_TIME</code>. So a speaker who is too quiet
-gets about one more decibel every three seconds, until peaks reach the target.</li>
+<li><strong>Clip.</strong> When the level goes above <code>CLIP_THRESHOLD_DB</code>, the gain is lowered by 1 dB at
+once, whatever happened before. This happens at most once per <code>CLIP_DOWN_TIME</code>.</li>
+<li><strong>Down.</strong> When a peak goes above <code>PEAK_HIGH_DB</code>, the gain is lowered by 1 dB. Only a peak
+since the last gain change counts, so one loud syllable lowers the gain once.</li>
+<li><strong>Up.</strong> When no peak above <code>PEAK_LOW_DB</code> has been seen for <code>PEAK_WAIT</code>, the gain is
+raised by 1 dB. So a speaker who is too quiet gets about one more decibel every three seconds,
+until peaks reach the range.</li>
+<li><strong>Pace.</strong> After any gain change, including a clip, the range waits <code>GAIN_CHANGE_TIME</code> before
+it raises or lowers the gain again, so the meter shows the new gain first.</li>
+<li><strong>In range.</strong> While the peaks stay between the two thresholds, the gain is left alone.</li>
 <li><strong>Only while someone speaks.</strong> A voice is detected when the level stays above
-<code>VOICE_THRESHOLD</code> for <code>VOICE_DURATION</code>. When there has been no voice for <code>VOICE_WAIT</code>, the
+<code>VOICE_THRESHOLD_DB</code> for <code>VOICE_DURATION</code>. When there has been no voice for <code>VOICE_WAIT</code>, the
 script makes no changes. Gain does not creep up during silence, and a clean pause does not
 turn a quiet room into loud noise.</li>
 </ul>
@@ -185,12 +197,19 @@ that matters, usually the main speaker.</li>
 <li>It only changes the <strong>gain</strong>. The input&#39;s volume and the bus volumes are not touched.</li>
 <li>The gain moves slowly on purpose. After a change in the speaker or the microphone position it
 takes some seconds to settle.</li>
+<li>A narrow range keeps the peaks close to one level, but the gain changes often. If the gain
+goes up and down too much, widen the range, for example <code>-9</code> to <code>-5</code>. Keep <code>PEAK_LOW_DB</code> below
+<code>PEAK_HIGH_DB</code>, and both below <code>CLIP_THRESHOLD_DB</code>.</li>
+<li>The script only adjusts while it hears a voice above <code>VOICE_THRESHOLD_DB</code>. This is set high on
+purpose, so noise does not count as a voice. If a speaker is too quiet to be detected, raise
+the gain by hand until the script picks the voice up.</li>
 <li>With <a href="/projects/vmix-master/docs/scripts/translator/">Translator</a> on the same vMix, give the two inputs titles with
 <code>Translator</code> and <code>AutoGain</code>, so each script picks the input you mean.</li>
 </ul>
 <h2 id="log-messages">Log messages</h2>
-<p>The script is quiet while it works. It prints its start-up lines, the missing-input notice,
-and <code>AutoGain | Unexpected error: ...</code> when a read fails.</p>
+<p>The script is quiet while it works. It prints its start-up lines, the missing-input notice, and
+<code>AutoGain | Unexpected error: ...</code> when a read fails. It does not log gain changes; watch the
+input&#39;s gain in vMix to follow them.</p>
 </article><a class="link text-base-content/50 mt-6 inline-block text-sm" href="https://github.com/live-miracles/vmix-master/blob/master/docs/2-scripts/6-auto-gain.md">Edit this page on GitHub</a><div class="border-base-content/10 mt-10 grid gap-3 border-t pt-6 sm:grid-cols-2">
               <a class="rounded-box border-base-content/10 hover:border-primary/50 border p-4" href="/projects/vmix-master/docs/scripts/translator/"><div class="text-base-content/50 text-xs">Previous</div><div class="font-semibold">Translator</div></a>
               <a class="rounded-box border-base-content/10 hover:border-primary/50 border p-4 sm:text-right" href="/projects/vmix-master/docs/scripts/audio-fade/"><div class="text-base-content/50 text-xs">Next</div><div class="font-semibold">AudioFade</div></a>

@@ -86,7 +86,7 @@
               <div class="min-w-0"><details class="rounded-box border-base-content/10 bg-base-300/46 text-base-content/68 mb-7 border p-4 text-sm backdrop-blur">
               <summary class="text-base-content/80 cursor-pointer font-semibold">On this page</summary>
               <ol class="mt-3 space-y-2">
-                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#the-scales">The scales</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#converting-between-them">Converting between them</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#examples">Examples</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#what-to-keep-in-mind">What to keep in mind</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#thresholds-in-the-scripts">Thresholds in the scripts</a></li>
+                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#the-scales">The scales</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#converting-between-them">Converting between them</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#examples">Examples</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#volumes-in-decibels">Volumes in decibels</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#what-to-keep-in-mind">What to keep in mind</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#thresholds-in-the-scripts">Thresholds in the scripts</a></li>
               </ol>
             </details><article class="readme min-w-0"><p>vMix describes audio on several different scales, and the numbers in its API are not the ones
 on the faders. This page explains them, because the thresholds of the
@@ -278,6 +278,66 @@ voice that arrives at -18 dB FS.</p>
 </tr>
 </tbody></table>
 <p>* For a usual incoming voice signal of -18 dB FS.</p>
+<h2 id="volumes-in-decibels">Volumes in decibels</h2>
+<p>The volume bar can also be described in decibels, as the change it makes to the signal:
+<code>Decibels = 20 * Math.Log10(Amplitude)</code>, which together with the conversions above gives</p>
+<pre><code>Volume   = 100 * 10 ^ (Decibels / 80)
+Decibels = 80 * Math.Log10(Volume / 100)
+</code></pre>
+<p>The <a href="/projects/vmix-master/docs/scripts/translator/">Translator</a> settings use this, because a decibel is the same
+change of loudness anywhere on the scale, and a step of 1 on the volume scale is not.</p>
+<table>
+<thead>
+<tr>
+<th>Decibels</th>
+<th>Volume (%)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>100</td>
+</tr>
+<tr>
+<td>-3</td>
+<td>91.7</td>
+</tr>
+<tr>
+<td>-6</td>
+<td>84.1</td>
+</tr>
+<tr>
+<td>-9</td>
+<td>77.2</td>
+</tr>
+<tr>
+<td>-12</td>
+<td>70.8</td>
+</tr>
+<tr>
+<td>-15</td>
+<td>64.9</td>
+</tr>
+<tr>
+<td>-18</td>
+<td>59.6</td>
+</tr>
+<tr>
+<td>-24</td>
+<td>50.1</td>
+</tr>
+<tr>
+<td>-30</td>
+<td>42.2</td>
+</tr>
+<tr>
+<td>-36</td>
+<td>35.5</td>
+</tr>
+<tr>
+<td>-48</td>
+<td>25.1</td>
+</tr>
+</tbody></table>
 <h2 id="what-to-keep-in-mind">What to keep in mind</h2>
 <ul>
 <li>A <strong>meter</strong> at 100 % is 0 dB FS, the loudest possible signal. A <strong>volume bar</strong> at 100 % is
@@ -291,28 +351,33 @@ to the signal, and not <strong>to</strong> -24 dB.</li>
 <tr>
 <th>Setting</th>
 <th>Value</th>
-<th>In decibels</th>
+<th>Equivalent</th>
 </tr>
 </thead>
 <tbody><tr>
-<td><a href="/projects/vmix-master/docs/scripts/translator/">Translator</a> <code>VOICE_THRESHOLD</code></td>
-<td><code>0.1</code></td>
-<td>-20 dB</td>
+<td><a href="/projects/vmix-master/docs/scripts/translator/">Translator</a> <code>VOICE_THRESHOLD_DB</code></td>
+<td><code>-20</code> dB</td>
+<td>0.1 amplitude</td>
 </tr>
 <tr>
-<td><a href="/projects/vmix-master/docs/scripts/auto-gain/">AutoGain</a> <code>VOICE_THRESHOLD</code></td>
-<td><code>0.1</code></td>
-<td>-20 dB</td>
+<td><a href="/projects/vmix-master/docs/scripts/auto-gain/">AutoGain</a> <code>VOICE_THRESHOLD_DB</code></td>
+<td><code>-20</code> dB</td>
+<td>0.1 amplitude</td>
 </tr>
 <tr>
-<td><a href="/projects/vmix-master/docs/scripts/auto-gain/">AutoGain</a> <code>PEAK_THRESHOLD</code></td>
-<td><code>0.45</code></td>
-<td>about -7 dB</td>
+<td><a href="/projects/vmix-master/docs/scripts/auto-gain/">AutoGain</a> <code>PEAK_LOW_DB</code></td>
+<td><code>-6</code> dB</td>
+<td>0.5 amplitude</td>
 </tr>
 <tr>
-<td><a href="/projects/vmix-master/docs/scripts/auto-gain/">AutoGain</a> <code>CLIP_THRESHOLD</code></td>
-<td><code>0.9</code></td>
-<td>about -1 dB</td>
+<td><a href="/projects/vmix-master/docs/scripts/auto-gain/">AutoGain</a> <code>PEAK_HIGH_DB</code></td>
+<td><code>-5</code> dB</td>
+<td>about 0.56 amplitude</td>
+</tr>
+<tr>
+<td><a href="/projects/vmix-master/docs/scripts/auto-gain/">AutoGain</a> <code>CLIP_THRESHOLD_DB</code></td>
+<td><code>-1</code> dB</td>
+<td>about 0.9 amplitude</td>
 </tr>
 </tbody></table>
 <p>To pick your own threshold, take the level you want in decibels and use

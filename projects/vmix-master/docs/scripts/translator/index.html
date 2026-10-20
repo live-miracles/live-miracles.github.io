@@ -124,10 +124,12 @@ Program audio ─► chain bus (B), set by script ┘
 <li>Check <code>CHAIN_BUS</code>, and the times below if your setup differs.</li>
 <li>Start the script.</li>
 </ol>
-<p>If it cannot find an input, it prints <code>No mic / vMix Call input detected.</code> and looks again
-after five seconds.</p>
+<p>If it cannot find an input, it prints
+<code>Translator | No input found. Looked for an input with &#39;Translator&#39; in its title, then an input of type Audio, then an input of type VideoCall. Trying again in 5 seconds.</code>
+and looks again after five seconds.</p>
 <h2 id="settings">Settings</h2>
-<p>All times are in milliseconds.</p>
+<p>All times are in milliseconds. Volumes are in decibels, see
+<a href="/projects/vmix-master/docs/reference/audio-levels/#volumes-in-decibels">Audio levels</a>.</p>
 <table>
 <thead>
 <tr>
@@ -142,9 +144,9 @@ after five seconds.</p>
 <td>How often the script checks the translator&#39;s level</td>
 </tr>
 <tr>
-<td><code>VOICE_THRESHOLD</code></td>
-<td><code>0.1</code></td>
-<td>The level that counts as speech. <code>0.1</code> is about -20 dB. See <a href="/projects/vmix-master/docs/reference/audio-levels/">Audio levels</a></td>
+<td><code>VOICE_THRESHOLD_DB</code></td>
+<td><code>-20</code></td>
+<td>The level of the translator&#39;s input that counts as speech, in dB. Raise it towards <code>0</code> to be less sensitive</td>
 </tr>
 <tr>
 <td><code>CHAIN_BUS</code></td>
@@ -157,39 +159,24 @@ after five seconds.</p>
 <td>How long the fade down takes when the translator starts</td>
 </tr>
 <tr>
-<td><code>VOLUME_REDUCED</code></td>
-<td><code>50</code></td>
-<td>The volume of the chain bus while the translator speaks, 0 to 100</td>
+<td><code>VOLUME_REDUCED_DB</code></td>
+<td><code>-24</code></td>
+<td>The volume of the chain bus while the translator speaks, in dB. <code>-24</code> is 50 on vMix&#39;s volume scale</td>
 </tr>
 <tr>
 <td><code>SILENCE_LIMIT</code></td>
 <td><code>2000</code></td>
-<td>How long the translator must be silent before the volume comes up the first time</td>
+<td>How long the translator must be silent before the volume starts to come up</td>
 </tr>
 <tr>
 <td><code>VOLUME_UP_TIME</code></td>
-<td><code>1000</code></td>
-<td>How long the first raise takes</td>
+<td><code>5000</code></td>
+<td>How long the raise takes</td>
 </tr>
 <tr>
-<td><code>VOLUME_FULL</code></td>
-<td><code>75</code></td>
-<td>The volume after the first raise</td>
-</tr>
-<tr>
-<td><code>SILENCE_LIMIT2</code></td>
-<td><code>4000</code></td>
-<td>How long the translator must be silent before the volume comes up the second time</td>
-</tr>
-<tr>
-<td><code>VOLUME_UP_TIME2</code></td>
-<td><code>2000</code></td>
-<td>How long the second raise takes</td>
-</tr>
-<tr>
-<td><code>VOLUME_FULL2</code></td>
-<td><code>85</code></td>
-<td>The volume after the second raise</td>
+<td><code>VOLUME_FULL_DB</code></td>
+<td><code>-6</code></td>
+<td>The volume after the raise, in dB. <code>-6</code> is 84 on vMix&#39;s volume scale, and <code>0</code> is full volume</td>
 </tr>
 </tbody></table>
 <p><code>VOLUME_DOWN_TIME = 900</code> fits the 800 ms delay. If the translator goes straight to the
@@ -200,34 +187,34 @@ master without a delay, use <code>350</code> so the program is already low when 
 |        \                                 /
 |         \                               /
 |          \                             /
-|           \                 ●──────●
-|            \                /
-|             ●────────●──────●
+|           \                           /
+|            \                         /
+|             ●─────────●─────────────●
 +----+----+----+----+----+----+----+----+----+----→ Time
-          T1          T2     T3
+          T1             T2           T3
 </code></pre>
 <ul>
-<li><strong>T1.</strong> The translator starts speaking, meaning the level is above <code>VOICE_THRESHOLD</code> and the
-input is not muted. The chain bus fades down to <code>VOLUME_REDUCED</code> over <code>VOLUME_DOWN_TIME</code>.
+<li><strong>T1.</strong> The translator starts speaking, meaning the level is above <code>VOICE_THRESHOLD_DB</code> and the
+input is not muted. The chain bus fades down to <code>VOLUME_REDUCED_DB</code> over <code>VOLUME_DOWN_TIME</code>.
 While the translator keeps speaking the fade is sent again at most once per
 <code>VOLUME_DOWN_TIME</code>.</li>
 <li><strong>T2.</strong> The translator stops speaking.</li>
-<li><strong>T3.</strong> After <code>SILENCE_LIMIT</code> of silence the volume comes up to <code>VOLUME_FULL</code>, and after
-<code>SILENCE_LIMIT2</code> it comes up again to <code>VOLUME_FULL2</code>. Raising it in two steps is smoother
-than one jump, and it fits a translation where the interpreter is almost always speaking,
-so the program never returns to full volume between sentences.</li>
+<li><strong>T3.</strong> After <code>SILENCE_LIMIT</code> of silence the volume starts to come up to <code>VOLUME_FULL_DB</code>,
+and arrives <code>VOLUME_UP_TIME</code> later. The slow raise is smoother than a jump. If the translator
+speaks again on the way up, the volume goes down again at once.</li>
 </ul>
 <p>The volume is never raised before the translator has spoken for the first time since the
 script started. This keeps it from changing the bus when you start it.</p>
 <h2 id="tuning">Tuning</h2>
 <ul>
-<li>If the program also contains music or other parts that should be at full volume, set
-<code>VOLUME_FULL2</code> to <code>100</code>, so the program returns to full after a longer silence.</li>
-<li>If the script reacts to breathing or room noise, raise <code>VOICE_THRESHOLD</code>. If it misses quiet
-speech, lower it. The script reads the left channel of the input&#39;s meter.</li>
-<li><code>VOLUME_REDUCED</code> is a percentage on vMix&#39;s volume scale, which is not linear. 50 on the
-scale is much quieter than half the loudness, see
-<a href="/projects/vmix-master/docs/reference/audio-levels/">Audio levels</a>.</li>
+<li>The default <code>VOLUME_FULL_DB = -6</code> fits a translation where the interpreter is almost always
+speaking. If the program also contains music or other parts that should be at full volume,
+set <code>VOLUME_FULL_DB</code> to <code>0</code>, so the program returns to full after the silence.</li>
+<li>If the script reacts to breathing or room noise, raise <code>VOICE_THRESHOLD_DB</code>, for example
+to <code>-15</code>. If it misses quiet speech, lower it, for example to <code>-25</code>. The script reads the left channel of the input&#39;s meter.</li>
+<li>The volumes are in decibels because vMix&#39;s volume scale is not linear: 50 on the scale is much
+quieter than half the loudness. The script converts the decibels to the vMix scale and rounds
+to a whole number, see <a href="/projects/vmix-master/docs/reference/audio-levels/">Audio levels</a>.</li>
 </ul>
 <h2 id="log-messages">Log messages</h2>
 <p>The script only prints its start-up lines, a missing-input notice, and

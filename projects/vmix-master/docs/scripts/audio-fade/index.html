@@ -103,6 +103,8 @@ rewound, so the next time it starts from the beginning and fades in.</p>
 <p>The script sets some options on these inputs when it starts, see below. If you add or rename
 an <code>AudioFade</code> input later, stop and start the script again so it gets them too.</p>
 <h2 id="settings">Settings</h2>
+<p>See <a href="/projects/vmix-master/docs/reference/audio-levels/">Audio levels</a> for how decibels relate to the vMix volume
+scale.</p>
 <table>
 <thead>
 <tr>
@@ -112,9 +114,9 @@ an <code>AudioFade</code> input later, stop and start the script again so it get
 </tr>
 </thead>
 <tbody><tr>
-<td><code>MAX_VOLUME</code></td>
-<td><code>91</code></td>
-<td>The volume, from 0 to 100, that the input fades up to when it goes on air</td>
+<td><code>MAX_VOLUME_DB</code></td>
+<td><code>-3</code></td>
+<td>The volume the input fades up to when it goes on air, in dB. <code>-3</code> is 92 on vMix&#39;s volume scale, and <code>0</code> is full volume</td>
 </tr>
 <tr>
 <td><code>FADE_DOWN_TIME</code></td>
@@ -158,7 +160,7 @@ an <code>AudioFade</code> input later, stop and start the script again so it get
 <li><strong>It is unmuted but no longer on program.</strong> The volume fades to 0 over <code>FADE_DOWN_TIME</code>,
 and then the input is muted, paused and set back to position 0.</li>
 <li><strong>It is muted and now on program.</strong> The input is unmuted and the volume fades up to
-<code>MAX_VOLUME</code> over <code>FADE_UP_TIME</code>.</li>
+<code>MAX_VOLUME_DB</code> over <code>FADE_UP_TIME</code>.</li>
 </ul>
 <h2 id="good-to-know">Good to know</h2>
 <ul>
@@ -170,10 +172,15 @@ not treated as on air.</li>
 <li>The script waits while a fade runs, so with several <code>AudioFade</code> inputs, a second one starts
 its fade after the first has finished.</li>
 <li>The sound is faded with the input&#39;s own volume. If you set an input&#39;s volume yourself, the
-next fade replaces it with <code>MAX_VOLUME</code>.</li>
+next fade replaces it with <code>MAX_VOLUME_DB</code>.</li>
 </ul>
 <h2 id="log-messages">Log messages</h2>
 <ul>
+<li><code>AudioFade | Set up 2 input(s) with &#39;AudioFade&#39; in their title.</code>: printed at start-up, with
+the number of inputs the script found and set up.</li>
+<li><code>AudioFade | No input found. Looked for inputs with &#39;AudioFade&#39; in their title. Add &#39;AudioFade&#39; to the titles and start the script again.</code>:
+printed at start-up when no title contains <code>AudioFade</code>. The script keeps running, but an
+input renamed later misses the set-up above, so start the script again.</li>
 <li><code>AudioFade | Fading out input 7</code>: input 7 left the program and is fading out.</li>
 <li><code>AudioFade | Fading in input 7</code>: input 7 came on air and is fading in.</li>
 <li><code>AudioFade | Unexpected error: ...</code>: a function call failed, and the script retries.</li>
