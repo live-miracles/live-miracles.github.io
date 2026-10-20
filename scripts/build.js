@@ -20,6 +20,7 @@ const path = require('node:path');
 const { execFileSync } = require('node:child_process');
 const { Marked } = require('marked');
 const { organization, categories, projects } = require('./projects');
+const { stripTags, githubSlug } = require('./markdown-text');
 
 const root = path.resolve(__dirname, '..');
 const dist = path.join(root, 'dist');
@@ -50,19 +51,6 @@ function escapeHtml(value) {
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#39;');
-}
-
-function decodeEntities(value) {
-    return value
-        .replace(/&lt;/g, '<')
-        .replace(/&gt;/g, '>')
-        .replace(/&quot;/g, '"')
-        .replace(/&#39;/g, "'")
-        .replace(/&amp;/g, '&');
-}
-
-function stripTags(html) {
-    return decodeEntities(html.replace(/<[^>]*>/g, ''));
 }
 
 const compact = new Intl.NumberFormat('en', { notation: 'compact', maximumFractionDigits: 1 });
@@ -159,19 +147,6 @@ async function fetchDocs(project) {
         });
     }
     return docs;
-}
-
-// GitHub's heading anchor rule, so links like #capacity--limits written for
-// github.com keep working here.
-function githubSlug(text, counts) {
-    const base = stripTags(text)
-        .toLowerCase()
-        .trim()
-        .replace(/[^\p{L}\p{N}\s_-]/gu, '')
-        .replace(/\s/g, '-');
-    const seen = counts.get(base) ?? 0;
-    counts.set(base, seen + 1);
-    return seen ? `${base}-${seen}` : base;
 }
 
 function absoluteUrl(value, base) {
