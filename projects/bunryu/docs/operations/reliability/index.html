@@ -92,7 +92,7 @@
               <div class="min-w-0"><details class="rounded-box border-base-content/10 bg-base-300/46 text-base-content/68 mb-7 border p-4 text-sm backdrop-blur">
               <summary class="text-base-content/80 cursor-pointer font-semibold">On this page</summary>
               <ol class="mt-3 space-y-2">
-                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#watchdogs">Watchdogs</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#falling-behind-realtime">Falling behind realtime</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#shared-encodes">Shared encodes</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#input-timestamp-fault-detection">Input timestamp fault detection</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#input-frame-rate">Input frame rate</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#flapping-inputs">Flapping inputs</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#encoder-restarts-do-not-restart-outputs">Encoder restarts do not restart outputs</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#srt-input-output-stalls">SRT-input output stalls</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#ffmpeg-memory-leaks-on-corrupt-input">FFmpeg memory leaks on corrupt input</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#why-goryu-exists">Why Goryu exists</a></li>
+                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#watchdogs">Watchdogs</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#falling-behind-realtime">Falling behind realtime</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#shared-encodes">Shared encodes</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#input-timestamp-fault-detection">Input timestamp fault detection</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#input-frame-rate">Input frame rate</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#flapping-inputs">Flapping inputs</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#encoder-restarts-do-not-restart-outputs">Encoder restarts do not restart outputs</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#srt-input-output-stalls">SRT-input output stalls</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#ffmpeg-memory-leaks-on-corrupt-input">FFmpeg memory leaks on corrupt input</a></li>
               </ol>
             </details><article class="readme min-w-0"><p>Bunryu is designed to keep running through long live events: failures are
 isolated to one output, recovered automatically where it is safe, and recorded
@@ -151,6 +151,17 @@ the failure modes they handle.</p>
 fresh process while the output&#39;s desired state remains <code>running</code>. The socket
 watchdog is advisory: if <code>ss</code> fails or times out, it does not restart anything,
 and a socket warning does not prevent the other watchdogs from acting.</p>
+<p><strong>Blocked destinations.</strong> Every RTMP/RTMPS output carries <code>-rw_timeout 10000000</code>
+(10 s) before its destination URL, so FFmpeg ends a connection to a destination that
+stopped answering instead of waiting for the progress watchdog: a connect that never
+completes ends after 5 s (FFmpeg&#39;s own timeout), a destination that never answers
+after 10 s, and one that stops reading mid-stream after 30 s for RTMP (three times
+the value) or about 10 s for RTMPS. The socket watchdog cannot see these, because
+the socket stays ESTABLISHED. The exit shows in the Error History as &quot;Connection
+timed out&quot; (or &quot;Error closing file: Input/output error&quot; for RTMPS mid-stream) and
+the retry loop takes over. SRT destinations are not covered. The measurements and
+why 10 s are in
+<a href="/projects/bunryu/docs/reference/design-decisions/#give-up-on-a-blocked-rtmprtmps-destination-with-an-output--rw_timeout">the design decision</a>.</p>
 <p><strong>Retries.</strong> An output retries indefinitely. The wait grows with the number of
 failed attempts in a row that never stayed up for 60 s: 1, 2, 4, 8, then 16 s. A
 run that lasted at least 60 s starts the sequence over, so a drop late in a long
@@ -162,7 +173,14 @@ input but have no process, no pending retry and no start in progress, and starts
 them (staggered, with an <code>output-restarted-by-backstop</code> diagnostics event). An
 output has to look that way on two checks in a row, so it does not race the
 normal staggered start when an input comes online. Normally nothing matches; it
-exists for unexpected errors, such as a start that threw.</p>
+exists for unexpected errors, such as a start that threw. Such a start leaves
+&quot;Start failed: <error>&quot; in the output&#39;s Error History (shown in red), and a backstop
+start leaves &quot;Watchdog: nothing was starting this output; starting it&quot;, each once
+until the output spawns again, so a start that keeps failing does not fill the
+history. However a start is triggered (API, retry, health poll or backstop), the
+spawn itself refuses to run a second FFmpeg for an output that already has one
+(<code>output-start-skipped</code> event), so overlapping triggers cannot leave an orphaned
+process.</p>
 <p><strong>Outputs that never stay up.</strong> If an output is stopped after 5 failed attempts in a
 row, none of which stayed up for 60 s, the stop is recorded with the count and the
 last failure (&quot;Stopped after 5 failed attempts. Last error: Connection refused&quot;),
@@ -199,7 +217,10 @@ dashboard port cannot be bound, the app writes <code>server-start-failed</code> 
 systemd restarts it, instead of running without a dashboard. A diagnostics write
 failure (disk full, directory unwritable) drops and counts events instead of
 crashing; see
-<a href="/projects/bunryu/docs/operations/configuration/">Configuration</a>.</p>
+<a href="/projects/bunryu/docs/operations/configuration/">Configuration</a>. On SIGTERM each shutdown step runs on its own,
+so one that throws cannot stop the others or the exit. An output whose stored Error
+History cannot be read is treated as having none (logged once as <code>[db] unreadable output Error History</code>) instead of failing every output listing; its next error
+replaces it.</p>
 <p><strong>Service restarts.</strong> The three systemd units restart a process 2 s after it exits
 (<code>Restart=always</code>, <code>RestartSec=2</code>) and set <code>StartLimitIntervalSec=0</code>. Without it,
 systemd&#39;s default start limit (5 starts in 10 s) marks a unit that keeps failing
@@ -212,8 +233,9 @@ build with another schema version (<code>PRAGMA user_version</code>; see
 why and exits with status 78, and <code>RestartPreventExitStatus=78</code> leaves it failed
 instead of restarting it every 2 s. SRS and the relay <code>Require</code> it, so they do not
 start either, which keeps the server from accepting publishes it cannot authorize. The
-Docker image has no such stop: its supervisor restarts the app every 2 s and repeats
-the message until <code>/data/db.sqlite</code> is removed.</p>
+installer catches this before it restarts anything. The Docker supervisor stops the same
+way: it logs the error once, starts neither SRS nor the relay, and leaves the container
+running but unhealthy until it is stopped; remove <code>/data/db.sqlite</code> and start it again.</p>
 <h2 id="falling-behind-realtime">Falling behind realtime</h2>
 <p>An output that processes media slower than realtime falls further behind live every
 second: a slow encode or destination, or an input delivering slowly. The output
@@ -500,15 +522,6 @@ outputs, about 2-3x a healthy output&#39;s normal 65-90 MB baseline, with higher
 per-encoding limits for transcoding profiles; far below the 1.5 GB+ range where
 the kernel OOM-killer struck) — well before the kernel ever needs to get
 involved, so the cascading restart doesn&#39;t happen.</p>
-<h2 id="why-goryu-exists">Why Goryu exists</h2>
-<p>The relay exists to work around two constraints:</p>
-<ol>
-<li><p><strong>ffmpeg cannot accept bonded SRT group connections.</strong> ffmpeg&#39;s SRT handler does not set <code>SRTO_GROUPCONNECT=1</code> on its listener socket, so bonded connection attempts from encoders like AJA Bridge Live are rejected at the handshake level.</p>
-</li>
-<li><p><strong>SRS has no native SRT bonding support.</strong> SRS accepts normal SRT publishers, but it does not accept bonded/redundant SRT groups directly.</p>
-</li>
-</ol>
-<p><strong>How it is fixed:</strong> <code>goryu</code> starts as its own systemd service, listens on <code>10081</code> with <code>SRTO_GROUPCONNECT=1</code>, accepts each bonded source session, reads its incoming <code>streamid</code>, and opens a normal SRT publisher connection to SRS using the same <code>streamid</code>. It only connects to SRS after an encoder connects, so SRS&#39;s idle-publisher timeout is not triggered by an empty boot-time publisher.</p>
 </article><a class="link text-base-content/50 mt-6 inline-block text-sm" href="https://github.com/live-miracles/bunryu/blob/master/docs/3-operations/4-reliability.md">Edit this page on GitHub</a><div class="border-base-content/10 mt-10 grid gap-3 border-t pt-6 sm:grid-cols-2">
               <a class="rounded-box border-base-content/10 hover:border-primary/50 border p-4" href="/projects/bunryu/docs/operations/configuration/"><div class="text-base-content/50 text-xs">Previous</div><div class="font-semibold">Configuration</div></a>
               <a class="rounded-box border-base-content/10 hover:border-primary/50 border p-4 sm:text-right" href="/projects/bunryu/docs/operations/known-issues/"><div class="text-base-content/50 text-xs">Next</div><div class="font-semibold">Known issues</div></a>

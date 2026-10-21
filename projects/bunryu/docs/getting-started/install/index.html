@@ -126,8 +126,12 @@ their process 2 s after it exits and never give up (<code>StartLimitIntervalSec=
 <p><strong>Production install:</strong></p>
 <pre><code class="language-bash">sudo apt-get update -q &amp;&amp; sudo apt-get install -y -q git  # in case git is not installed
 sudo git clone https://github.com/live-miracles/bunryu /opt/bunryu
-sudo bash /opt/bunryu/scripts/server-install.sh
+sudo BUNRYU_DASHBOARD_PASSWORD=&#39;choose-a-long-password&#39; bash /opt/bunryu/scripts/server-install.sh
 </code></pre>
+<p>A fresh install needs the initial dashboard password. If the variable is missing
+(and <code>/etc/bunryu/bunryu.json</code> has no <code>dashboard_password</code>), the installer stops
+before changing anything and says so; it never generates or prints a password. A
+re-run that keeps the existing database needs none.</p>
 <p><strong>Set server timezone (optional, for readable log timestamps):</strong></p>
 <p>SRS and journald log timestamps in the system&#39;s local timezone, which defaults to UTC on most fresh servers. Set it to your local timezone so log times make sense at a glance, e.g. for IST (Asia/Kolkata):</p>
 <pre><code class="language-bash">sudo timedatectl set-timezone Asia/Kolkata
@@ -143,10 +147,16 @@ itself changed, restarts itself from the new copy, so one run applies the new
 pinned versions, config and units. (An installer older than this behavior pulls
 its own replacement halfway through and keeps running the old steps; run it a second
 time once to move past it.)</p>
+<p>If a release changed the database schema (there are no migrations), the installer
+says so after pulling the code, before restarting anything; the running server is
+untouched. In a terminal it asks whether to wipe the database (Enter wipes; a backup
+copy is kept and pipelines have to be re-created) and stops if you decline; without a
+terminal it stops, and you re-run it with <code>WIPE_DB=y</code>. A database that still fits is kept without asking. See
+<a href="/projects/bunryu/docs/operations/configuration/#database-schema-version">Configuration</a>.</p>
 <p><strong>Stop services:</strong></p>
 <pre><code class="language-bash">sudo bash /opt/bunryu/scripts/server-down.sh
 </code></pre>
-<p>Open the dashboard: <code>http://SERVER_IP:8080</code> — the installer prints the generated password on first install (it is also stored as <code>dashboard_password</code> in <code>bunryu.json</code>).</p>
+<p>Open the dashboard: <code>http://SERVER_IP:8080</code> — log in with the password you gave the installer (it is stored as <code>dashboard_password</code> in <code>/etc/bunryu/bunryu.json</code>; <code>scripts/server-reset-password.sh</code> re-applies it).</p>
 <p>After the first login, set <strong>Settings → Public Host</strong> to the address your
 encoders use, so the publish URLs shown in the dashboard are correct. To reach
 the dashboard securely from outside, see <a href="/projects/bunryu/docs/operations/remote-access/">Remote access</a>.</p>
@@ -193,6 +203,7 @@ that 1985 and 8082 listen only on <code>127.0.0.1</code>.</p>
 <li><code>/etc/bunryu/srs.conf</code></li>
 <li><code>/etc/bunryu/goryu.json</code></li>
 </ul>
+<p>The app&#39;s own <code>/etc/bunryu/bunryu.json</code> is rewritten on every install too (the unit sets <code>BUNRYU_CONFIG</code> to it); only its <code>dashboard_password</code> carries over.</p>
 <p>SRS only reads its config at startup, and Goryu only reads its
 JSON config file at startup.</p>
 <p>The repo configs ship a public default SRT passphrase; on first install the
@@ -209,7 +220,7 @@ check entirely — SRS and the relay treat empty the same as unset.</p>
 <code>on_publish</code> rejects unknown stream keys, and <code>on_play</code> rejects any play not
 from loopback (only the app&#39;s own FFmpeg ever pulls streams), so the public
 ports are ingest-only. See
-<a href="/projects/bunryu/docs/operations/security/#why-fail2ban-is-not-used">Security</a> for why rejected attempts are logged
+<a href="/projects/bunryu/docs/reference/design-decisions/#dont-ban-abusive-ingest-clients-with-fail2ban">Design decisions</a> for why rejected attempts are logged
 but not converted into firewall bans.</p>
 </article><a class="link text-base-content/50 mt-6 inline-block text-sm" href="https://github.com/live-miracles/bunryu/blob/master/docs/1-getting-started/3-install.md">Edit this page on GitHub</a><div class="border-base-content/10 mt-10 grid gap-3 border-t pt-6 sm:grid-cols-2">
               <a class="rounded-box border-base-content/10 hover:border-primary/50 border p-4" href="/projects/bunryu/docs/getting-started/docker/"><div class="text-base-content/50 text-xs">Previous</div><div class="font-semibold">Docker</div></a>

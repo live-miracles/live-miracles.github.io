@@ -145,6 +145,13 @@ ps -eo args | grep &#39;[c]loudflared&#39;            # the token must not appea
 <code>/etc/cloudflared/tunnel.env</code>, and <code>sudo systemctl restart cloudflared</code>. Treat
 the token as compromised (and rotate it) if it was ever printed in a log or
 terminal, or was previously passed on the command line.</p>
+<h2 id="installing-the-dashboard-as-an-app">Installing the dashboard as an app</h2>
+<p>In Chrome or Edge, open the dashboard over HTTPS (the tunnel hostname) and use
+the install icon in the address bar, or the menu&#39;s <em>Install Bunryu</em>. It opens
+in its own window without browser chrome and gets a launcher icon. It is the
+same dashboard: you still log in, and it needs the server to be reachable (there
+is no offline mode). Plain <code>http://</code> is installable only on <code>localhost</code>, so a
+dashboard reached by IP and port does not offer it.</p>
 </article><a class="link text-base-content/50 mt-6 inline-block text-sm" href="https://github.com/live-miracles/bunryu/blob/master/docs/3-operations/2-remote-access.md">Edit this page on GitHub</a><div class="border-base-content/10 mt-10 grid gap-3 border-t pt-6 sm:grid-cols-2">
               <a class="rounded-box border-base-content/10 hover:border-primary/50 border p-4" href="/projects/bunryu/docs/operations/security/"><div class="text-base-content/50 text-xs">Previous</div><div class="font-semibold">Security</div></a>
               <a class="rounded-box border-base-content/10 hover:border-primary/50 border p-4 sm:text-right" href="/projects/bunryu/docs/operations/configuration/"><div class="text-base-content/50 text-xs">Next</div><div class="font-semibold">Configuration</div></a>

@@ -92,7 +92,7 @@
               <div class="min-w-0"><details class="rounded-box border-base-content/10 bg-base-300/46 text-base-content/68 mb-7 border p-4 text-sm backdrop-blur">
               <summary class="text-base-content/80 cursor-pointer font-semibold">On this page</summary>
               <ol class="mt-3 space-y-2">
-                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#build">Build</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#run-and-test">Run and test</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#ci">CI</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#versioning">Versioning</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#releases">Releases</a></li>
+                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#build">Build</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#run-and-test">Run and test</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#ci">CI</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#versioning">Versioning</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#releases">Releases</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#pinned-build-inputs">Pinned build inputs</a></li>
               </ol>
             </details><article class="readme min-w-0"><h2 id="build">Build</h2>
 <pre><code class="language-bash">bash scripts/build-local.sh
@@ -127,15 +127,27 @@ into the binary at build time, so <code>goryu --version</code> prints it. Changi
 <pre><code class="language-bash">git tag v3.2.1
 git push origin master v3.2.1
 </code></pre>
-<p>The release workflow (<code>.github/workflows/release.yml</code>) fails if the tag and
-<code>VERSION</code> differ, builds the archive with Docker, and creates the GitHub Release
-with generated notes. If the release already exists it replaces the archive.</p>
+<p>The release workflow (<code>.github/workflows/release.yml</code>) runs the CI jobs first,
+then fails if the tag and <code>VERSION</code> differ, builds the archive with Docker,
+attests its build provenance, and creates the GitHub Release with generated
+notes. The release carries the archive and <code>checksums.sha256</code>.</p>
+<p>A published release is never overwritten: if the release already exists the
+workflow fails. Fix forward with a new version.</p>
 <p>To build the archive locally:</p>
-<pre><code class="language-bash">bash scripts/build-release.sh   # writes build/goryu-linux-x86_64.tar.gz
+<pre><code class="language-bash">bash scripts/build-release.sh   # writes build/goryu-linux-x86_64.tar.gz and build/checksums.sha256
 </code></pre>
-<p>To replace the asset on an existing release by hand:</p>
-<pre><code class="language-bash">gh release upload &quot;$(cat VERSION)&quot; build/goryu-linux-x86_64.tar.gz --clobber
-</code></pre>
+<h3 id="pinned-build-inputs">Pinned build inputs</h3>
+<p><code>scripts/goryu.Dockerfile</code> pins the base image by digest and checks that the
+libsrt tag resolves to a known commit, so a moved tag fails the build instead of
+changing what ships. To update either one:</p>
+<ul>
+<li>Base image: <code>docker buildx imagetools inspect ubuntu:22.04</code>, then copy the
+top-level <code>Digest:</code> into the <code>FROM</code> line.</li>
+<li>libsrt: <code>git ls-remote https://github.com/Haivision/srt &#39;refs/tags/vX.Y.Z&#39;</code>,
+then set <code>SRT_TAG</code> and <code>SRT_COMMIT</code> in the Dockerfile and <code>SRT_TAG</code> in
+<code>scripts/build-local.sh</code>. To try another version locally without editing
+files, set both <code>SRT_TAG</code> and <code>SRT_COMMIT</code> in the environment.</li>
+</ul>
 <p>Projects that pin a Goryu release (such as Bunryu&#39;s installer and Docker image)
 download <code>goryu-linux-x86_64.tar.gz</code> from the release, so the asset name is part
 of the interface; keep it stable.</p>

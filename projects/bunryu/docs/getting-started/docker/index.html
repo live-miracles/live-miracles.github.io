@@ -99,10 +99,9 @@ servers, use the <a href="/projects/bunryu/docs/getting-started/install/">native
 <h2 id="quick-start">Quick start</h2>
 <pre><code class="language-bash">git clone https://github.com/live-miracles/bunryu
 cd bunryu
-docker compose up -d
-docker compose logs bunryu | grep &quot;dashboard password&quot;
+BUNRYU_DASHBOARD_PASSWORD=&#39;choose-a-long-password&#39; docker compose up -d
 </code></pre>
-<p>Open <code>http://localhost:8080</code>, log in with the printed password, create a
+<p>Open <code>http://localhost:8080</code>, log in with that password, create a
 pipeline and <a href="/projects/bunryu/docs/usage/publishing/">publish</a> to it.</p>
 <h2 id="details">Details</h2>
 <p>The image bundles the control plane, SRS, goryu and the same
@@ -110,7 +109,10 @@ pinned FFmpeg build as the native installer (x86_64 only). One container runs
 all three processes under a small supervisor (<code>docker/entrypoint.sh</code>) that
 keeps the native startup order: SRS starts only after <code>/api/ready</code> answers,
 each process is restarted 2 s after it exits, and every start and exit is
-logged with its status.</p>
+logged with its status. The exception is a database of another schema version:
+the control plane exits with status 78, the supervisor logs it and starts nothing
+else, and the container stays up but unhealthy until <code>/data/db.sqlite</code> is removed and
+it is restarted.</p>
 <pre><code class="language-bash">docker compose up -d                       # build and start (compose.yaml)
 docker compose logs -f bunryu        # all three processes log here
 docker compose down                        # stop; data stays in the volume
@@ -119,6 +121,7 @@ docker compose down                        # stop; data stays in the volume
 <pre><code class="language-bash">docker build -t bunryu .
 docker run -d --name bunryu --restart unless-stopped \
   -p 8080:8080 -p 21935:21935 -p 10080:10080/udp -p 10081:10081/udp \
+  -e BUNRYU_DASHBOARD_PASSWORD=&#39;choose-a-long-password&#39; \
   -v bunryu-data:/data bunryu
 </code></pre>
 <ul>
@@ -126,15 +129,17 @@ docker run -d --name bunryu --restart unless-stopped \
 <code>bunryu.json</code>, the generated <code>srs.conf</code> / <code>goryu.json</code>, HLS
 previews and diagnostics. On every start the SRS and relay configs are
 refreshed from the image and keep their SRT passphrase, like a reinstall.</li>
-<li><strong>Secrets</strong>: on first start the container generates the dashboard password
-(printed in the logs and stored as <code>dashboard_password</code> in
-<code>/data/bunryu.json</code>) and a random SRT passphrase.</li>
+<li><strong>Secrets</strong>: the first start needs <code>BUNRYU_DASHBOARD_PASSWORD</code> (it is stored
+as <code>dashboard_password</code> in <code>/data/bunryu.json</code>, so later starts don&#39;t) and
+otherwise stops with an error in the logs; it never generates or logs a
+password. The container does generate a random SRT passphrase.</li>
 <li><strong>Public host</strong>: set <strong>Settings → Public Host</strong> to the address encoders use,
 so the dashboard&#39;s publish URLs are correct.</li>
 <li><strong>Limitations</strong>: the dashboard&#39;s SRS/relay/app log viewers read journald, so
 they are empty in Docker; use <code>docker compose logs</code>. The version panel
 shows the commit as <code>unknown</code>. The Goryu needs UDP port 10081
-published as above.</li>
+published as above. The image can&#39;t raise the kernel&#39;s UDP buffer ceiling;
+see <a href="/projects/bunryu/docs/operations/configuration/#udp-buffer-ceiling">UDP buffer ceiling</a>.</li>
 </ul>
 </article><a class="link text-base-content/50 mt-6 inline-block text-sm" href="https://github.com/live-miracles/bunryu/blob/master/docs/1-getting-started/2-docker.md">Edit this page on GitHub</a><div class="border-base-content/10 mt-10 grid gap-3 border-t pt-6 sm:grid-cols-2">
               <a class="rounded-box border-base-content/10 hover:border-primary/50 border p-4" href="/projects/bunryu/docs/getting-started/introduction/"><div class="text-base-content/50 text-xs">Previous</div><div class="font-semibold">Introduction</div></a>

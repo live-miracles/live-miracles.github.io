@@ -4,12 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Configuration — Bunryu</title>
-    <meta name="description" content="The app reads runtime settings from bunryu.json in the app root." />
+    <meta name="description" content="The app reads runtime settings from bunryu.json. A dev checkout reads the one in the app root; the native install keeps it at /etc/bunryu/bunryu.json next to srs.conf and goryu.json (outside the git c" />
     <link rel="canonical" href="https://live-miracles.github.io/projects/bunryu/docs/operations/configuration/" />
     <meta property="og:site_name" content="Live Miracles" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Configuration — Bunryu" />
-    <meta property="og:description" content="The app reads runtime settings from bunryu.json in the app root." />
+    <meta property="og:description" content="The app reads runtime settings from bunryu.json. A dev checkout reads the one in the app root; the native install keeps it at /etc/bunryu/bunryu.json next to srs.conf and goryu.json (outside the git c" />
     <meta property="og:url" content="https://live-miracles.github.io/projects/bunryu/docs/operations/configuration/" />
     <meta property="og:image" content="https://raw.githubusercontent.com/live-miracles/bunryu/master/public/logo.png" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -89,7 +89,16 @@
                 <ul class="text-sm"><li><a href="/projects/bunryu/docs/reference/api/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">REST API</a></li><li><a href="/projects/bunryu/docs/reference/development/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Development</a></li><li><a href="/projects/bunryu/docs/reference/design-decisions/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Design decisions</a></li></ul>
               </div>
             </nav></div>
-              <div class="min-w-0"><article class="readme min-w-0"><p>The app reads runtime settings from <code>bunryu.json</code> in the app root.</p>
+              <div class="min-w-0"><details class="rounded-box border-base-content/10 bg-base-300/46 text-base-content/68 mb-7 border p-4 text-sm backdrop-blur">
+              <summary class="text-base-content/80 cursor-pointer font-semibold">On this page</summary>
+              <ol class="mt-3 space-y-2">
+                <li class="pl-4"><a class="hover:text-primary block leading-5 " href="#udp-buffer-ceiling">UDP buffer ceiling</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#database-schema-version">Database schema version</a></li>
+              </ol>
+            </details><article class="readme min-w-0"><p>The app reads runtime settings from <code>bunryu.json</code>. A dev checkout reads the one
+in the app root; the native install keeps it at <code>/etc/bunryu/bunryu.json</code> next to
+<code>srs.conf</code> and <code>goryu.json</code> (outside the git checkout, which every update resets)
+and the unit points the app at it with <code>BUNRYU_CONFIG</code>. The Docker image keeps it
+in the <code>/data</code> volume.</p>
 <p><code>bunryu.json</code>:</p>
 <table>
 <thead>
@@ -136,8 +145,8 @@
 </tr>
 <tr>
 <td><code>dashboard_password</code></td>
-<td><code>admin</code></td>
-<td>Initial dashboard password, used only when the database has no password yet (first boot or after a reset). Stored in plain text; the installer sets the file to mode <code>0600</code></td>
+<td>none (the repo&#39;s dev <code>bunryu.json</code> ships <code>change-me</code>)</td>
+<td>Initial dashboard password, used only when the database has no password yet (first boot or after a reset). There is no default: with an empty database and no password the server does not start (exit status 78). The installer and the Docker image require one on a fresh install and never generate or print it. Stored in plain text; the installer sets the file to mode <code>0600</code></td>
 </tr>
 <tr>
 <td><code>output_watchdog.warmup_ms</code></td>
@@ -180,7 +189,7 @@
 <td>Per-<code>videoEncoding</code> RSS limit override (MB); libx264 transcode profiles run at a much higher legitimate baseline than <code>copy</code></td>
 </tr>
 </tbody></table>
-<p>Relative file paths are resolved from the app root. Command names like <code>ffmpeg</code>
+<p>Relative file paths are resolved from the directory of <code>bunryu.json</code>. Command names like <code>ffmpeg</code>
 and <code>ffprobe</code> are left as command names.</p>
 <p>SRS values are inferred from <code>srs.conf</code>:</p>
 <ul>
@@ -239,7 +248,8 @@ dashboard refresh).</li>
 host probes) that throws writes <code>&lt;loop&gt;-failed</code> on its first failure or a new
 error, and <code>&lt;loop&gt;-recovered</code> with the count; an error nothing else caught is
 written as <code>uncaught-exception</code> or <code>unhandled-rejection</code>. The process keeps
-running in both cases.</li>
+running in both cases. A shutdown step or a staggered restart that throws is
+written as <code>step-failed</code> (with the step name) and the rest still run.</li>
 <li><strong>Stopped outputs are left out</strong> of the per-minute snapshot.</li>
 </ul>
 <p>Writing diagnostics is best effort and never stops the control plane: if a write
@@ -252,14 +262,29 @@ rotated daily or at 100 MB, whichever comes first, with a 5 GB total diagnostics
 cap that removes the oldest rotated files first. The installer configures
 persistent journald with a seven-day retention limit, 1 GB system journal cap,
 256 MB runtime cap, and one-day journal file rotation.</p>
+<h3 id="udp-buffer-ceiling">UDP buffer ceiling</h3>
+<p>The installer writes <code>/etc/sysctl.d/90-bunryu.conf</code>, which raises
+<code>net.core.rmem_max</code> and <code>net.core.wmem_max</code> to 16 MB (default 212992). libsrt asks
+for a 12 MB UDP buffer per socket and the kernel caps the request at that
+ceiling; sockets that ask for nothing keep the default size. The services read it
+when they create their sockets, so a change needs a restart of SRS and goryu.
+The ingest sockets are the ones to check: <code>sudo ss -uanmp</code> shows each socket&#39;s
+buffer as <code>rb</code> (24576000 for SRS on 10080 and goryu on 10081) and its drops as
+<code>d</code>, and <code>nstat -az UdpRcvbufErrors</code> counts drops host-wide. In Docker the
+container uses the host&#39;s kernel setting; set it on the Docker host.</p>
 <h3 id="database-schema-version">Database schema version</h3>
 <p>The SQLite database carries a schema version (<code>PRAGMA user_version</code>, <code>SCHEMA_VERSION</code>
 in <code>src/db/schema.ts</code>). There are no migrations, so a change to a table or column
 bumps it, and a database stamped with another version is refused at startup with a
 message saying so, instead of failing later on a query. The fix is to recreate the
-database: re-run the installer and answer <code>n</code> to &quot;Preserve it?&quot; (or set <code>WIPE_DB=y</code>),
-which keeps a <code>db.sqlite.&lt;timestamp&gt;.bak</code> copy to re-create pipelines from. A database
-from before the stamp existed is accepted and stamped, since its schema is version 1.</p>
+database. The installer checks this first: after it pulls the new code it compares the
+database&#39;s stamp with the build&#39;s, and when they differ it says so and stops before it
+changes anything or restarts a service, so a running server keeps running. Only then does
+it ask, in a terminal, &quot;Wipe it and start with an empty database? [Y/n]&quot;: Enter wipes, and
+<code>n</code>, <code>-y</code> or no terminal stops the install (<code>WIPE_DB=y</code> wipes without asking). A
+<code>db.sqlite.&lt;timestamp&gt;.bak</code> copy is kept to re-create pipelines from. A database with the
+current version is kept without any prompt. A database from before the stamp existed is
+accepted and stamped, since its schema is version 1.</p>
 <p>Relay ports and status polling are read from <code>goryu.json</code>, located beside <code>srs_config_path</code>.</p>
 <p>Installer/development overrides:</p>
 <table>
@@ -291,9 +316,19 @@ from before the stamp existed is accepted and stamped, since its schema is versi
 <td>Expected SHA256 for the relay archive; blank skips verification</td>
 </tr>
 <tr>
+<td><code>BUNRYU_DASHBOARD_PASSWORD</code></td>
+<td>the app, <code>server-install.sh</code>, Docker entrypoint</td>
+<td>Initial dashboard password, required when the database is empty (first install, a wipe, or an empty <code>/data</code> volume). Overrides <code>dashboard_password</code> in <code>bunryu.json</code></td>
+</tr>
+<tr>
+<td><code>BUNRYU_CONFIG</code></td>
+<td>the app</td>
+<td>Path of <code>bunryu.json</code>; unset reads <code>./bunryu.json</code>. Set by the installer&#39;s unit</td>
+</tr>
+<tr>
 <td><code>WIPE_DB</code></td>
 <td><code>server-install.sh</code></td>
-<td>Set <code>y</code>/<code>n</code> to force or skip wiping the existing SQLite DB. A wipe first copies it to <code>db.sqlite.&lt;timestamp&gt;.bak</code> (owner-only, it holds stream keys and destination URLs)</td>
+<td>Set <code>y</code> to wipe the existing SQLite DB without asking (needed when its schema changed and there is no terminal); <code>n</code> never wipes. A wipe first copies it to <code>db.sqlite.&lt;timestamp&gt;.bak</code> (owner-only, it holds stream keys and destination URLs)</td>
 </tr>
 <tr>
 <td><code>SRS_LOCAL_BIN</code></td>

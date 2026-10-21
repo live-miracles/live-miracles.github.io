@@ -157,12 +157,17 @@ input</strong> (<code>null</code> otherwise): like <code>latencyMs</code>, a bon
 aggregation for most of them (unlike latency, where &quot;max across legs&quot; has
 a clear meaning) — check <code>legs[]</code> for the real per-leg numbers on a bonded
 stream instead.</li>
-<li><code>legs</code>: one entry per individual bonded connection currently in (or
-recently in) the input group, read directly from <code>srt_group_data()</code> +
+<li><code>legs</code>: one entry per individual bonded connection currently in the input
+group, read directly from <code>srt_group_data()</code> +
 <code>srt_bstats()</code> on each member socket — this is real per-leg telemetry from
 libsrt, not something Goryu derives or combines:<ul>
 <li><code>ip</code>, <code>port</code>: the leg&#39;s peer (encoder-side) address, as seen by Goryu</li>
-<li><code>state</code>: <code>pending</code> | <code>idle</code> | <code>running</code> | <code>broken</code></li>
+<li><code>state</code>: <code>pending</code> | <code>idle</code> | <code>running</code>. A failed leg is not reported as
+<code>broken</code>: Goryu leaves broken members out of <code>legs[]</code>, and when a link was
+unplugged during testing, libsrt removed the dead leg from the group within
+the one-second sampling interval anyway. A leg that goes down simply
+disappears from the list, so detect it by comparing <code>legs[]</code> with the legs
+you have seen before.</li>
 <li><code>rttMs</code>, <code>recvPacketsTotal</code>, <code>recvUniquePacketsTotal</code>, <code>recvLossTotal</code>,
 <code>recvDropTotal</code>, <code>retransTotal</code>: stats for that leg only</li>
 <li><code>latencyMs</code>: the negotiated latency for that individual leg&#39;s own socket

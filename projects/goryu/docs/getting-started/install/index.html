@@ -102,6 +102,11 @@ libgcc), so it does not depend on the host&#39;s libsrt.</p>
 <pre><code class="language-bash">curl -fsSL -o goryu.tar.gz https://github.com/live-miracles/goryu/releases/latest/download/goryu-linux-x86_64.tar.gz
 mkdir goryu &amp;&amp; tar -xzf goryu.tar.gz -C goryu
 </code></pre>
+<p>Each release also publishes <code>checksums.sha256</code>. To verify a download, fetch it
+next to the archive and run <code>sha256sum --check checksums.sha256</code>, or check the
+build attestation with <code>gh attestation verify goryu.tar.gz --repo live-miracles/goryu</code>
+(needs a recent GitHub CLI; it prints nothing and exits 0 when the check passes
+outside a terminal, so use <code>--format json</code> to see the details).</p>
 <p>The archive unpacks to <code>bin/goryu</code> and <code>lib/</code>. To pin a version, replace
 <code>latest/download</code> with <code>download/vX.Y.Z</code>. Check what you have with:</p>
 <pre><code class="language-bash">LD_LIBRARY_PATH=goryu/lib goryu/bin/goryu --version

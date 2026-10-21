@@ -94,12 +94,13 @@
 <pre><code class="language-bash">npm install
 npm run dev-install   # downloads SRS and pinned FFmpeg into ./objs
 </code></pre>
-<p>Rerunning <code>npm run dev-install</code> also refreshes the sibling <code>../goryu</code>
-repo when it has no local changes and rebuilds <code>./objs/goryu</code>.</p>
+<p>The relay lives in the sibling <code>../goryu</code> repo in development (and in
+<code>live-miracles/goryu</code> releases for production installs). Rerunning
+<code>npm run dev-install</code> refreshes that repo when it has no local changes and
+rebuilds <code>./objs/goryu</code>.</p>
 <p>To use a local SRS binary:</p>
 <pre><code class="language-bash">SRS_LOCAL_BIN=./build/srs npm run dev-install
 </code></pre>
-<p>The standalone relay now lives in the sibling <code>../goryu</code> repo during development and in <code>live-miracles/goryu</code> GitHub Releases for production installs.</p>
 <p><strong>2. Start SRS</strong> (terminal 1):</p>
 <pre><code class="language-bash">npm run srs           # runs ./objs/srs -c srs.conf in the foreground
 </code></pre>
@@ -114,12 +115,23 @@ bonded-input status.</p>
 <p><strong>4. Start the app</strong> (terminal 3):</p>
 <pre><code class="language-bash">npm run dev           # tsx watch + tsc watch + tailwind watch
 </code></pre>
+<p>A fresh database is seeded with the <code>dashboard_password</code> in <code>bunryu.json</code>, which
+the repo ships as <code>change-me</code> for development only (the installer and the Docker image
+never use that file). The app has no built-in default: if you empty or delete that
+line it refuses to start on a fresh database, unless <code>BUNRYU_DASHBOARD_PASSWORD</code> is
+set. Later starts use the hash stored in the database.</p>
 <h2 id="tests">Tests</h2>
 <pre><code class="language-bash">npm test              # unit and integration tests
 npm run typecheck
 npm run lint          # ESLint: unhandled promises, dead code
 npm run format:check
 </code></pre>
+<p><code>test/malformedInput.test.js</code> feeds seeded random mutations of <code>ss</code> output,
+destination URLs, names, the relay config and the relay <code>/status</code> JSON to their
+parsers and asserts they never throw, hang or return a malformed value. A failure
+prints the seed and input; turn it into a regression test next to the parser&#39;s own.
+Add a parser that reads text from outside the process (a new <code>ss</code>, FFmpeg, SRS or
+relay output) to that file.</p>
 <p><code>scripts/test-stack.sh</code> starts an isolated local stack (its own SRS, control
 plane and fresh database, with a fake output FFmpeg) that does not touch a
 developer&#39;s own <code>npm run dev</code>. It is documented in

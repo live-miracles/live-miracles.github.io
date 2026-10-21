@@ -92,7 +92,7 @@
               <div class="min-w-0"><details class="rounded-box border-base-content/10 bg-base-300/46 text-base-content/68 mb-7 border p-4 text-sm backdrop-blur">
               <summary class="text-base-content/80 cursor-pointer font-semibold">On this page</summary>
               <ol class="mt-3 space-y-2">
-                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#current-architecture-in-one-paragraph">Current architecture in one paragraph</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#media-server">Media server</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#use-srs-for-ingest-from-the-official-release">Use SRS for ingest, from the official release</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#keep-srss-srt_to_rtmp-off-ffmpeg-converts-srt-inputs">Keep SRS&#39;s srt_to_rtmp off; FFmpeg converts SRT inputs</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-use-srss-built-in-forwarding-for-outputs">Don&#39;t use SRS&#39;s built-in forwarding for outputs</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-use-mediamtx-for-srt-ingest-or-srtrtmp-conversion">Don&#39;t use MediaMTX for SRT ingest or SRT→RTMP conversion</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-build-our-own-media-server">Don&#39;t build our own media server</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#srt-ingest">SRT ingest</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#plain-srt-goes-directly-to-srs-by-default-the-relay-also-accepts-it">Plain SRT goes directly to SRS by default; the relay also accepts it</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#outputs-pull-from-srs-not-from-the-relay">Outputs pull from SRS, not from the relay</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#keep-goryu-in-its-own-repository">Keep goryu in its own repository</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#outputs-and-preview">Outputs and preview</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#one-ffmpeg-process-per-output">One FFmpeg process per output</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#outputs-with-the-same-encode-share-one-ffmpeg-shared-encodes">Outputs with the same encode share one FFmpeg (shared encodes)</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#preview-copies-the-video-only-audio-is-encoded">Preview copies the video; only audio is encoded</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#sizing">Sizing</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#sizing-guidance-is-a-measured-table-not-a-calculator">Sizing guidance is a measured table, not a calculator</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#tooling">Tooling</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#eslint-checks-promise-handling-prettier-stays-the-formatter">ESLint checks promise handling; Prettier stays the formatter</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#logging-and-diagnostics">Logging and diagnostics</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#keep-the-process-running-after-an-uncaught-error">Keep the process running after an uncaught error</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#diagnostics-ideas-taken-from-srs-mediamtx-and-restream-krsna">Diagnostics ideas taken from SRS, MediaMTX and restream-krsna</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#warn-when-an-output-falls-behind-realtime-measured-from-its-media-clock">Warn when an output falls behind realtime, measured from its media clock</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#failures-that-need-an-operator-exit-with-status-78-which-systemd-does-not-restart">Failures that need an operator exit with status 78, which systemd does not restart</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#hints-are-a-dashboard-lookup-not-an-api-field">Hints are a dashboard lookup, not an API field</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#restart-outputs-when-a-reconnecting-encoder-changes-format-not-when-it-merely-reconnects">Restart outputs when a reconnecting encoder changes format, not when it merely reconnects</a></li>
+                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#current-architecture-in-one-paragraph">Current architecture in one paragraph</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#media-server">Media server</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#use-srs-for-ingest-from-the-official-release">Use SRS for ingest, from the official release</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#keep-srss-srt_to_rtmp-off-ffmpeg-converts-srt-inputs">Keep SRS&#39;s srt_to_rtmp off; FFmpeg converts SRT inputs</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-use-srss-built-in-forwarding-for-outputs">Don&#39;t use SRS&#39;s built-in forwarding for outputs</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-use-mediamtx-for-srt-ingest-or-srtrtmp-conversion">Don&#39;t use MediaMTX for SRT ingest or SRT→RTMP conversion</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-build-our-own-media-server">Don&#39;t build our own media server</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#srt-ingest">SRT ingest</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#a-separate-relay-accepts-bonded-srt-because-neither-ffmpeg-nor-srs-can">A separate relay accepts bonded SRT, because neither FFmpeg nor SRS can</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#plain-srt-goes-directly-to-srs-by-default-the-relay-also-accepts-it">Plain SRT goes directly to SRS by default; the relay also accepts it</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#a-lost-bonded-leg-is-found-by-counting-legs-because-the-relay-drops-it-instead-of-reporting-broken">A lost bonded leg is found by counting legs, because the relay drops it instead of reporting broken</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#outputs-pull-from-srs-not-from-the-relay">Outputs pull from SRS, not from the relay</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#keep-goryu-in-its-own-repository">Keep goryu in its own repository</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#raise-the-kernel-udp-buffer-ceiling-but-dont-alert-on-it">Raise the kernel UDP buffer ceiling, but don&#39;t alert on it</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#outputs-and-preview">Outputs and preview</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#one-ffmpeg-process-per-output">One FFmpeg process per output</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#outputs-with-the-same-encode-share-one-ffmpeg-shared-encodes">Outputs with the same encode share one FFmpeg (shared encodes)</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#preview-copies-the-video-only-audio-is-encoded">Preview copies the video; only audio is encoded</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#give-up-on-a-blocked-rtmprtmps-destination-with-an-output--rw_timeout">Give up on a blocked RTMP/RTMPS destination with an output -rw_timeout</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-add-an-ss--ti-ack-progress-check--rw_timeout-is-the-knob">Don&#39;t add an ss -ti ack-progress check; -rw_timeout is the knob</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#sizing">Sizing</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#sizing-guidance-is-a-measured-table-not-a-calculator">Sizing guidance is a measured table, not a calculator</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#dashboard">Dashboard</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#installable-as-an-app-with-a-manifest-only-no-service-worker">Installable as an app with a manifest only, no service worker</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#tooling">Tooling</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#eslint-checks-promise-handling-prettier-stays-the-formatter">ESLint checks promise handling; Prettier stays the formatter</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#logging-and-diagnostics">Logging and diagnostics</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#keep-the-process-running-after-an-uncaught-error">Keep the process running after an uncaught error</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#diagnostics-ideas-taken-from-srs-mediamtx-and-restream-krsna">Diagnostics ideas taken from SRS, MediaMTX and restream-krsna</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#warn-when-an-output-falls-behind-realtime-measured-from-its-media-clock">Warn when an output falls behind realtime, measured from its media clock</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#failures-that-need-an-operator-exit-with-status-78-which-systemd-does-not-restart">Failures that need an operator exit with status 78, which systemd does not restart</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#keep-a-fixed-2-s-systemd-restart-delay-with-no-back-off">Keep a fixed 2 s systemd restart delay, with no back-off</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#hints-are-a-dashboard-lookup-not-an-api-field">Hints are a dashboard lookup, not an API field</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#restart-outputs-when-a-reconnecting-encoder-changes-format-not-when-it-merely-reconnects">Restart outputs when a reconnecting encoder changes format, not when it merely reconnects</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#ingest-protection">Ingest protection</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-ban-abusive-ingest-clients-with-fail2ban">Don&#39;t ban abusive ingest clients with fail2ban</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#install-and-secrets">Install and secrets</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#the-initial-dashboard-password-is-supplied-never-generated-or-printed-the-app-config-lives-in-etcbunryu">The initial dashboard password is supplied, never generated or printed; the app config lives in /etc/bunryu</a></li>
               </ol>
             </details><article class="readme min-w-0"><p>Why Bunryu is built the way it is, and why some obvious alternatives are not
 used. Each entry gives the decision, the reasons, the evidence behind them, and
@@ -201,6 +201,21 @@ timestamps, enhanced RTMP) and behavior on bad networks, which only show up in
 real use. A new server carries every input at once, so its bugs reach every
 stream.</p>
 <h2 id="srt-ingest">SRT ingest</h2>
+<h3 id="a-separate-relay-accepts-bonded-srt-because-neither-ffmpeg-nor-srs-can">A separate relay accepts bonded SRT, because neither FFmpeg nor SRS can</h3>
+<p><strong>Decision:</strong> bonded SRT (several network links carrying one stream, as cellular
+bonding units and AJA Bridge Live send it) goes to <code>goryu</code>, its own service on
+<code>10081</code>. It listens with <code>SRTO_GROUPCONNECT=1</code>, accepts each bonded session, reads
+its <code>streamid</code> and publishes a normal SRT stream to SRS with the same <code>streamid</code>.
+It connects to SRS only after an encoder has connected, so SRS&#39;s idle-publisher
+timeout is not triggered by an empty publisher at boot.</p>
+<p><strong>Why a relay at all:</strong></p>
+<ul>
+<li>FFmpeg&#39;s SRT handler does not set <code>SRTO_GROUPCONNECT=1</code> on its listener socket,
+so bonded connection attempts are rejected at the handshake.</li>
+<li>SRS accepts normal SRT publishers but not bonded groups.</li>
+</ul>
+<p><strong>Revisit when:</strong> SRS accepts SRT groups natively (filed upstream as ossrs/srs#4771),
+which would make the relay unnecessary.</p>
 <h3 id="plain-srt-goes-directly-to-srs-by-default-the-relay-also-accepts-it">Plain SRT goes directly to SRS by default; the relay also accepts it</h3>
 <p><strong>Decision:</strong> encoders publish plain SRT to SRS&#39;s SRT port by default. The
 relay&#39;s listener accepts a plain single-link SRT caller as well as a bonded
@@ -218,6 +233,22 @@ SRS&#39;s per-client SRT stats into stats of the loopback hop.</li>
 <li>It would add ~200 ms of latency and a second process every SRT input depends on;
 a relay restart would drop all SRT inputs instead of only the bonded ones.</li>
 </ul>
+<h3 id="a-lost-bonded-leg-is-found-by-counting-legs-because-the-relay-drops-it-instead-of-reporting-broken">A lost bonded leg is found by counting legs, because the relay drops it instead of reporting <code>broken</code></h3>
+<p><strong>Decision:</strong> the health poll remembers the most legs a bonded input has had since it
+connected (<code>expectedLegs</code>). Fewer legs than that is a down leg: a <code>bonded-leg-down</code>
+alert, a warning on the input, and &quot;N of M bonded legs down&quot; in the dashboard. The
+count resets when the input goes away.</p>
+<p><strong>Why:</strong> the relay&#39;s <code>/status</code> documented a <code>broken</code> leg state but never sent it. It
+skips broken group members, and with that filter removed a pulled LAN cable still
+never showed <code>broken</code>: libsrt dropped the leg from the group within the relay&#39;s
+one-second sample (2026-10-21, bonded stream over two legs, polled every 0.25 s). The
+dashboard&#39;s broken-leg checks therefore never fired, and only a group down to one leg
+raised a warning, so a three-leg group that lost one showed nothing.</p>
+<p><strong>Why a count and not the leg&#39;s address:</strong> cellular legs change IP often, so a leg that
+comes back on a new address would stay &quot;lost&quot; if tracked by address.</p>
+<p><strong>Cost, and when to revisit:</strong> an encoder deliberately run with fewer legs keeps the
+warning until the input reconnects. Revisit if the relay starts reporting lost legs
+itself.</p>
 <h3 id="outputs-pull-from-srs-not-from-the-relay">Outputs pull from SRS, not from the relay</h3>
 <p><strong>Decision:</strong> the relay stays a byte-level pipe (one input, one downstream SRT
 connection) and doesn&#39;t serve readers.</p>
@@ -251,6 +282,31 @@ pin bump here.</li>
 <p>The coupling is the relay&#39;s config file and its <code>/status</code> JSON. Treat <code>/status</code>
 as a contract: add fields, and bump the relay&#39;s major version for anything
 else.</p>
+<h3 id="raise-the-kernel-udp-buffer-ceiling-but-dont-alert-on-it">Raise the kernel UDP buffer ceiling, but don&#39;t alert on it</h3>
+<p><strong>Decision:</strong> the installer sets <code>net.core.rmem_max</code> and <code>wmem_max</code> to 16 MB. There is
+no health alert or startup check for the value.</p>
+<p><strong>Why:</strong></p>
+<ul>
+<li>libsrt requests a 12 MB UDP buffer per socket. Prod had the Linux default
+ceiling of 212992, so SRS (10080) and goryu (10081) ingest sockets ran with
+<code>rb425984</code> (the kernel doubles the capped value), about 70 ms of a 50 Mbps feed.
+A stall longer than that, such as an encode starving the ingest thread, drops
+packets and costs SRT retransmits.</li>
+<li>Raising a ceiling is cheap. It changes nothing for sockets that don&#39;t ask for
+more, and memory is only used while a queue is full (bounded by <code>udp_mem</code>).</li>
+</ul>
+<p><strong>Evidence:</strong> no drops were observed, so this is headroom, not an incident fix.
+A 2 vCPU / 2 GB prod VM (outputs stopped, host about 85% idle) receiving a
+bonded SRT feed at 6.6k then 11k packets/s over 33 minutes showed
+<code>UdpRcvbufErrors</code> 0 and every ingest socket&#39;s <code>d</code> 0. The default ceiling was
+enough at that load, but nothing ran under CPU contention. With the 16 MB ceiling
+the same sockets got <code>rb24576000</code> (12 MB doubled) after a restart and again
+after a reboot, so the sysctl file is applied at boot.</p>
+<p><strong>Why no alert:</strong> an alert needs a recorded incident to justify it. Without drops
+there is nothing to calibrate it against.</p>
+<p><strong>Revisit when:</strong> <code>UdpRcvbufErrors</code> rises or an ingest socket shows <code>d</code> above 0
+(then add a health check for the ceiling and the counter), or inputs carry
+4K SRT at 50 Mbps or more with encodes running on the same host.</p>
 <h2 id="outputs-and-preview">Outputs and preview</h2>
 <h3 id="one-ffmpeg-process-per-output">One FFmpeg process per output</h3>
 <p><strong>Decision:</strong> each output runs in its own FFmpeg process with its own watchdogs.</p>
@@ -397,6 +453,158 @@ with a long keyframe interval starts slower and runs further behind live.</li>
 <li><strong>HEVC</strong> inputs preview only where Chrome can decode HEVC; there is no
 transcode fallback.</li>
 </ul>
+<h3 id="give-up-on-a-blocked-rtmprtmps-destination-with-an-output--rw_timeout">Give up on a blocked RTMP/RTMPS destination with an output <code>-rw_timeout</code></h3>
+<p><strong>Decision (October 2026):</strong> every RTMP and RTMPS destination gets <code>-rw_timeout 10000000</code> (10 s) as an output option, placed directly before the destination URL
+(<code>buildFfmpegArgs</code> and the translation mixer). SRT destinations do not.</p>
+<p><strong>Why:</strong> a destination that accepts the TCP connection and then goes quiet leaves the
+socket ESTABLISHED. The socket watchdog treats that as healthy, and FFmpeg waits
+forever, so only the progress watchdog (45 s without progress, after a 90 s warmup)
+ends it. Measured with the pinned FFmpeg n7.1.4 on loopback, 100-110 s cap per run:</p>
+<table>
+<thead>
+<tr>
+<th>Case</th>
+<th>Without</th>
+<th>With 10 s</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Connect never completes (accept queue full)</td>
+<td>5.2 s</td>
+<td>5.2 s</td>
+</tr>
+<tr>
+<td>Accepts, never answers (RTMP and RTMPS, also a completed TLS handshake)</td>
+<td>never</td>
+<td>10.2-10.3 s</td>
+</tr>
+<tr>
+<td>Frozen mid-stream, RTMP (SRS <code>SIGSTOP</code>; <code>ss</code> showed ESTAB with 2.7 MB queued)</td>
+<td>never</td>
+<td>30.8 s</td>
+</tr>
+<tr>
+<td>Frozen mid-stream, RTMPS (TLS proxy in front of the frozen SRS)</td>
+<td>never</td>
+<td>10.6 s</td>
+</tr>
+<tr>
+<td>Healthy destination, 70 s at real pace, RTMP and RTMPS</td>
+<td>publishing</td>
+<td>publishing (also at 3 s)</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>How each case was produced</strong> (all on loopback, FFmpeg copying a local file with
+Bunryu&#39;s real arguments, runs in parallel):<ul>
+<li><em>connect never completes:</em> a listener with a full accept queue, so the kernel
+drops further SYNs;</li>
+<li><em>accepts, never answers:</em> a listener that accepts and sends nothing; for RTMPS
+also a TLS server (self-signed certificate) that completes the handshake and then
+says nothing;</li>
+<li><em>frozen mid-stream:</em> SRS as the destination, stopped with <code>SIGSTOP</code>, so the
+kernel keeps accepting until the socket buffers are full and then advertises a
+zero window. For RTMPS a TLS proxy sat in front of the frozen SRS. FFmpeg ran
+unthrottled so the buffers fill at once and the block starts right away;</li>
+<li><em>healthy:</em> SRS behind the same proxy, FFmpeg paced at real time (<code>-re</code>).</li>
+</ul>
+</li>
+<li><strong>Scaling:</strong> for RTMP mid-stream the give-up time is three times the value (5 s gave
+15.6 s, 10 s gave 30.9 s twice, 20 s gave 60.9 s).</li>
+<li><strong>10 s is a compromise:</strong> 30 s of fully blocked writes is under the progress
+watchdog&#39;s 45 s, so it adds no new kind of restart, only an earlier one. A smaller
+value would restart outputs sooner on a platform that merely pauses reading.</li>
+<li><strong>The connect case needs nothing:</strong> FFmpeg&#39;s own connect timeout already ends it
+after 5 s, long before the 45 s socket watchdog.</li>
+<li><strong>Regression test:</strong> <code>test/outputTimeout.test.js</code> runs real FFmpeg on the arguments
+Bunryu builds against a destination that never answers (RTMP and RTMPS, no
+certificate needed), plus a control without the option; it passed on FFmpeg 7.1.4
+and the development machine&#39;s 8.0.1.</li>
+</ul>
+<p><strong>Not adopted:</strong></p>
+<ul>
+<li><strong><code>-timeout</code>.</strong> It is not a TCP timeout for RTMP: it implies listen mode and
+FFmpeg tries to bind the destination port (&quot;Address already in use&quot;).</li>
+<li><strong>SRT destinations.</strong> The option is a different setting for <code>srt://</code>; not tested.</li>
+<li><strong>A shorter progress-watchdog stall.</strong> It would also restart outputs fed by an
+idle input, which the watchdog deliberately ignores.</li>
+</ul>
+<p><strong>Not tested:</strong> a real platform ingest, and RTMPS certificate verification (FFmpeg&#39;s
+default does not verify).</p>
+<p><strong>Revisit when:</strong> outputs restart with &quot;Connection timed out&quot; against a healthy
+platform (raise the value), or FFmpeg is upgraded (the regression test checks the
+mechanism).</p>
+<h3 id="dont-add-an-ss--ti-ack-progress-check--rw_timeout-is-the-knob">Don&#39;t add an <code>ss -ti</code> ack-progress check; <code>-rw_timeout</code> is the knob</h3>
+<p><strong>Decision (October 2026):</strong> the socket watchdog keeps reading only the socket state
+from <code>ss -tanp</code>. It does not read <code>ss -ti</code> to notice a connection that stays
+ESTABLISHED but stops being acknowledged. How fast a blocked RTMP destination is
+given up on is set by <code>-rw_timeout</code> (see the entry above).</p>
+<p><strong>Measured</strong> on the production VM (Ubuntu 22.04, FFmpeg n7.1.4) with a 4.2 Mbps copy
+push of a looped clip to a destination SRS on a private loopback port, with the
+output&#39;s <code>-rw_timeout 10000000</code>. The fault started at t=20 s; &quot;ack stall&quot; is the time
+<code>bytes_acked</code> has not advanced while data is queued. The silent drop was one
+<code>iptables</code> DROP rule on the destination port.</p>
+<table>
+<thead>
+<tr>
+<th>Fault</th>
+<th>First ack stall of 3 s</th>
+<th>10 s</th>
+<th>Exit by FFmpeg</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Silent drop (nothing delivered)</td>
+<td>+3.2 s</td>
+<td>n/a</td>
+<td>+34.6 s</td>
+</tr>
+<tr>
+<td>Frozen receiver (SRS <code>SIGSTOP</code>, zero window)</td>
+<td>+9.8 s</td>
+<td>+16.9 s</td>
+<td>+40.1 s</td>
+</tr>
+<tr>
+<td>8% of packets dropped, still working</td>
+<td>never</td>
+<td>never</td>
+<td>never</td>
+</tr>
+<tr>
+<td>30% of packets dropped, still working</td>
+<td>+22.0 s</td>
+<td>never (max 6.1 s)</td>
+<td>never</td>
+</tr>
+</tbody></table>
+<p><strong>Why not:</strong></p>
+<ul>
+<li><strong>The gain is about 25 s on a rare failure.</strong> A rule of &quot;10 s without ack progress&quot;
+would end a dead connection at about +10 s instead of +35 s. That is more aggressive
+than the 30 s of blocked writes the <code>-rw_timeout</code> decision accepts, so it would
+restart sooner on a platform that merely pauses reading. A threshold that respects
+that decision (about 25 s) gains 10-15 s.</li>
+<li><strong>The same trade-off is already one constant.</strong> <code>-rw_timeout 5000000</code> gives up
+after about 15.6 s on mid-stream RTMP (measured above), with no new code.</li>
+<li><strong>It cannot see the other cases.</strong> A destination that never answers has an empty
+send queue, and SRT destinations are UDP.</li>
+<li><strong>The signals overlap.</strong> The 30% loss run stalled acks for 6.1 s while the stream
+kept flowing, and the frozen receiver and a lossy path are not cleanly separable
+from the ack counters alone.</li>
+<li><strong>Cost:</strong> multi-line <code>ss -ti</code> parsing across up to 500 sockets and per-socket ack
+state in the highest-risk loop.</li>
+</ul>
+<p><strong>Seen in the same runs:</strong> after about 4.6 s the destination SRS closed its side
+(probably its idle-publisher timeout; not checked), leaving the output&#39;s socket in <code>CLOSE-WAIT</code> with
+1.78 MB queued, which the existing socket watchdog already acts on.</p>
+<p><strong>Not tested:</strong> a real platform ingest. Everything above ran on loopback, so how
+long YouTube or Facebook pause reading before they resume is unknown.</p>
+<p><strong>Revisit when:</strong> a silently dead connection costs more than the current give-up
+time in a real incident, or outputs need to give up in under 15 s without the
+false restarts that a shorter <code>-rw_timeout</code> risks. The untested gap is SRT
+destinations, which neither <code>-rw_timeout</code> nor <code>ss</code> covers; only the 45 s progress
+watchdog does.</p>
 <h2 id="sizing">Sizing</h2>
 <h3 id="sizing-guidance-is-a-measured-table-not-a-calculator">Sizing guidance is a measured table, not a calculator</h3>
 <p><strong>Decision:</strong> <a href="/projects/bunryu/docs/getting-started/sizing/">Sizing a server</a> gives per-item CPU
@@ -481,6 +689,25 @@ them.</li>
 <li>People keep asking for an interactive tool: a spreadsheet linked from the page is
 the cheapest next step before a dashboard feature.</li>
 </ul>
+<h2 id="dashboard">Dashboard</h2>
+<h3 id="installable-as-an-app-with-a-manifest-only-no-service-worker">Installable as an app with a manifest only, no service worker</h3>
+<p><strong>Decision:</strong> <code>public/manifest.webmanifest</code> and the icons in <code>public/icons/</code> let
+Chrome and Edge install the dashboard as a standalone window. There is no service
+worker.</p>
+<p><strong>Reasons:</strong></p>
+<ul>
+<li>Chrome does not require a service worker to offer install on desktop.</li>
+<li>The server sends <code>no-store</code> on every JS and CSS file so a deploy never leaves a
+browser on an old module graph (see <code>src/index.ts</code>). A service worker is a
+second cache that could undo that.</li>
+<li>An offline shell would be useless: the dashboard is only meaningful with the
+live API.</li>
+<li>The manifest link uses <code>crossorigin=&quot;use-credentials&quot;</code>. Production sits behind
+Cloudflare Access, and a manifest request without the Access cookie is
+redirected to the Access login and silently ignored.</li>
+</ul>
+<p><strong>Revisit</strong> if push notifications or an offline page are wanted; both need a
+service worker and a cache policy that keeps deploys from going stale.</p>
 <h2 id="tooling">Tooling</h2>
 <h3 id="eslint-checks-promise-handling-prettier-stays-the-formatter">ESLint checks promise handling; Prettier stays the formatter</h3>
 <p><strong>Decision:</strong> <code>npm run lint</code> runs ESLint with the <code>typescript-eslint</code> recommended
@@ -509,7 +736,8 @@ reaches production that a rule would have caught.</p>
 a diagnostics event) and the process keeps running. Each background loop (health
 poll, output watchdog, host probes) also catches its own errors and logs the
 first failure and the recovery. The diagnostics writer handles its own stream
-errors.</p>
+errors. Shutdown steps and staggered restarts run through <code>runLogged</code>, which records
+a throw as <code>step-failed</code> and carries on. Requests answer errors in JSON.</p>
 <p><strong>Why:</strong></p>
 <ul>
 <li><strong>Exiting kills every output.</strong> The FFmpeg processes exit by SIGPIPE when the
@@ -518,13 +746,22 @@ full disk would otherwise end every forward of a live event, and systemd&#39;s
 restart would not bring them back for several seconds.</li>
 <li><strong>The loops are independent.</strong> A throw in the health poll leaves the output
 processes and their watchdog untouched. The next tick starts from fresh state.</li>
+<li><strong>Surviving an error must not leave the process half-stopped.</strong> A throw inside the
+SIGTERM handler would be swallowed by the same handler and a second SIGTERM is
+ignored, so the process would never exit. Each shutdown step is isolated.</li>
+<li><strong>One bad row must stay one bad row.</strong> An unparsable <code>outputs.last_error</code> made
+every <code>listOutputs()</code> throw (watchdog, health, API). It now reads as empty history.</li>
+<li><strong>A server error must not look like a lost connection.</strong> Express&#39;s default 500 is
+HTML; the dashboard failed to parse it and showed the connection banner. Errors are
+JSON and the dashboard shows the status of a non-JSON answer.</li>
 </ul>
 <p><strong>Evidence:</strong> before this, nothing listened for errors on the diagnostics
 <code>WriteStream</code>, so a full disk would have crashed the app, and so would an
 unwritable diagnostics directory at startup. The health poll and host-probe loops
 had <code>try</code>/<code>finally</code> with no <code>catch</code>, the same pattern the ffprobe fix (see the
 ESLint entry above) removed. Regression tests cover a write-stream error, an
-unwritable directory and a throwing health poll.</p>
+unwritable directory, a throwing health poll, a corrupt Error History row, <code>runLogged</code>
+and the JSON error handler.</p>
 <p><strong>Revisit when:</strong> an incident shows the process kept running in a broken state
 after an uncaught error. Then exit on <code>uncaughtException</code> and rely on systemd.</p>
 <h3 id="diagnostics-ideas-taken-from-srs-mediamtx-and-restream-krsna">Diagnostics ideas taken from SRS, MediaMTX and restream-krsna</h3>
@@ -584,15 +821,57 @@ filling the 1 GB journal with the same message and pushing out older, useful log
 Verified on systemd 259 with throwaway units: exit 78 stays <code>failed</code> with no
 restarts, and any other exit keeps restarting. SRS and the relay <code>Require</code> the app,
 so they stay down too, and nothing accepts a publish it cannot authorize.</p>
-<p><strong>Not adopted:</strong> a migration path, which AGENTS.md rules out; the schema version
-only turns a confusing failure into a clear one. The Docker supervisor does not
-stop on 78 (evaluation only, the message repeats until the volume&#39;s <code>db.sqlite</code> is
-removed).</p>
-<p><strong>Revisit when:</strong> a second failure class needs the same treatment, or the Docker
-image is used for real deployments.</p>
+<p>The installer reads the database&#39;s stamp (byte 60 of the SQLite header, so it needs
+neither <code>sqlite3</code> nor the node modules an update has not rebuilt yet, see
+<code>scripts/db-schema-version.sh</code>) after pulling the new code and refuses to continue on a
+mismatch unless <code>WIPE_DB=y</code> (or Enter at its default-yes prompt) agrees to the wipe, so the failure
+shows up at deploy time with the running service untouched. The Docker supervisor
+treats 78 the same way: it does not restart the app, does not start SRS or the relay,
+and keeps the container up (unhealthy, with the message in <code>docker logs</code>) rather than
+exiting into the restart policy, which would repeat the message.</p>
+<p><strong>Not adopted:</strong></p>
+<ul>
+<li>A migration path, which AGENTS.md rules out; the schema version only turns a
+confusing failure into a clear one.</li>
+<li>A dashboard alert with the app running on the wrong database: login, sessions and
+the SRS publish hook all read that database, so it would need a special mode
+guarding every route, and an app that is up but cannot work passes liveness checks
+and lets SRS and the relay start.</li>
+<li>Wiping automatically under <code>-y</code> or without a terminal: it discards the pipelines
+and outputs (a backup copy is kept), so it needs <code>WIPE_DB=y</code> or an interactive
+answer. The prompt defaults to yes because declining only ends the install, but
+only a person at a terminal can accept it.</li>
+</ul>
+<p><strong>Revisit when:</strong> a second failure class needs the same treatment.</p>
+<h3 id="keep-a-fixed-2-s-systemd-restart-delay-with-no-back-off">Keep a fixed 2 s systemd restart delay, with no back-off</h3>
+<p><strong>Decision (October 2026):</strong> the units keep <code>Restart=always</code>, <code>RestartSec=2</code> and
+<code>StartLimitIntervalSec=0</code>. A service that crashes right after it starts is restarted
+every 2 s until someone fixes it.</p>
+<p><strong>Why:</strong></p>
+<ul>
+<li>The loops that matter are already bounded: an error only an operator can fix exits
+with 78 and is not restarted, SRS waits for the app&#39;s readiness check (up to 60 s)
+before it starts, and the journal is capped at 1 GB.</li>
+<li>A crash during a live event is back in 2 s. A back-off would only add delay to the
+case that matters most.</li>
+<li>No crash loop has happened, so there is no incident to size a back-off against.</li>
+</ul>
+<p><strong>Not adopted:</strong></p>
+<ul>
+<li><code>RestartSteps=</code> and <code>RestartMaxDelaySec=</code>: they need systemd 254. The production VM
+runs Ubuntu 22.04 with systemd 249, where a throwaway unit with <code>RestartSec=1</code>,
+<code>RestartSteps=4</code> and <code>RestartMaxDelaySec=8</code> restarted 21 times in 25 s at a constant
+gap of about 1.2 s. The directives are silently ignored.</li>
+<li>A delay computed in <code>ExecStartPre</code> from <code>NRestarts</code>: systemd only resets that counter
+on a manual start or stop, so a crash a week into an event would inherit the delay.</li>
+<li><code>StartLimitIntervalSec</code> and <code>StartLimitBurst</code>: the unit would give up and stay down,
+which is what <code>StartLimitIntervalSec=0</code> exists to prevent.</li>
+</ul>
+<p><strong>Revisit when:</strong> the production VM moves to systemd 254 or later (Ubuntu 24.04 ships
+255), or a crash loop fills the journal or loads the host. The Docker supervisor has
+the same fixed 2 s delay (<code>docker/entrypoint.sh</code>).</p>
 <h3 id="hints-are-a-dashboard-lookup-not-an-api-field">Hints are a dashboard lookup, not an API field</h3>
-<p><strong>Decision (October 2026):</strong> the &quot;Hint:&quot; lines under known errors, warnings and
-alerts come from patterns in <code>public/ts/core/hints.ts</code>, matched against the text the
+<p><strong>Decision (October 2026):</strong> the hints on known errors, warnings and alerts come from patterns in <code>public/ts/core/hints.ts</code>, matched against the text the
 server already sends. There is no <code>hint</code> or <code>recommendedAction</code> field in the API.</p>
 <p><strong>Why:</strong> the advice is presentation (it can change wording without touching the
 server or its diagnostics), and an API field would be one more thing to document and
@@ -627,6 +906,95 @@ restarting every output on every new publisher (the rejected approach above); a
 <p><strong>Revisit when:</strong> a format change turns out not to need a restart for some destination
 type, or probes after a reconnect prove unreliable enough to report a change that did
 not happen.</p>
+<h2 id="ingest-protection">Ingest protection</h2>
+<h3 id="dont-ban-abusive-ingest-clients-with-fail2ban">Don&#39;t ban abusive ingest clients with fail2ban</h3>
+<p><strong>Decision:</strong> the repo does not install or manage fail2ban. The app logs rejected
+<code>on_publish</code> and <code>on_play</code> attempts (publish rejections throttled per key), and
+that is where the built-in protection stops.</p>
+<p><strong>Why:</strong></p>
+<ul>
+<li><strong>It was tried and removed.</strong> Earlier versions used fail2ban as a narrow
+RTMP/app-hook protection. It added root-owned config, sudo helper scripts, a
+dashboard whitelist/status UI and extra test surface, and still left the most
+important gap, SRT, uncovered.</li>
+<li><strong>Neither SRT listener logs a bad-passphrase rejection in a form fail2ban could
+act on:</strong><ul>
+<li>SRS&#39;s SRT server (port <code>10080</code>) rejects a handshake that fails its
+<code>passphrase</code> check, either because the peer declares no encryption or because
+<code>SRTO_ENFORCEDENCRYPTION</code> fails the key exchange. The rejection happens
+inside the SRT handshake, before <code>srt_accept()</code> returns, so SRS&#39;s own log
+(<code>ERROR:UNSECURE</code> / &quot;Password required or unexpected&quot;) never records the
+peer&#39;s IP.</li>
+<li><code>goryu</code>&#39;s listener (port <code>10081</code>) used to log a matchable
+<code>[srt-relay] rejected connection (bad passphrase) from &lt;HOST&gt;</code> line from its
+own <code>srt_accept()</code> KMSTATE check, and a dedicated jail watched it. As of
+<code>goryu</code> v2.1.0 that line is no longer logged, so a jail would have nothing to
+match.</li>
+</ul>
+</li>
+<li><strong>The part that can be matched is only a partial defense.</strong> The logged
+rejected-publish lines would be enough for a jail on repeated bad RTMP
+stream-key attempts from one IP. That does not cover SRT bad passphrases, does
+little against distributed attackers, and is no substitute for an edge or
+firewall deployment at a high-risk event.</li>
+<li><strong>Brute force is not a practical risk.</strong> The passphrase is a long random
+string and each guess needs a live SRT handshake round trip, so online guessing
+is computationally infeasible whether or not anyone is banned. The real effect
+is log and CPU noise from a misconfigured device or scanner that retries
+forever.</li>
+</ul>
+<p><strong>What to do instead:</strong> for small events rely on strong stream keys, a strong SRT
+passphrase and the non-default RTMP port (<code>21935</code>). For larger or higher-risk
+events keep the origin private and put a media-aware ingest edge or a provider
+firewall/DDoS layer in front of it.</p>
+<p><strong>Revisit when:</strong> SRS or <code>goryu</code> logs a rejected SRT peer&#39;s IP in a matchable
+form, or an incident shows repeated bad-key or bad-passphrase attempts causing
+real load.</p>
+<h2 id="install-and-secrets">Install and secrets</h2>
+<h3 id="the-initial-dashboard-password-is-supplied-never-generated-or-printed-the-app-config-lives-in-etcbunryu">The initial dashboard password is supplied, never generated or printed; the app config lives in <code>/etc/bunryu</code></h3>
+<p><strong>Decision (October 2026):</strong> a fresh install must be given the initial dashboard
+password: <code>BUNRYU_DASHBOARD_PASSWORD</code>, or <code>dashboard_password</code> in
+<code>/etc/bunryu/bunryu.json</code>. Without one the installer stops before changing
+anything. The Docker entrypoint applies the same rule on an empty <code>/data</code> volume. A
+run that keeps the database needs none, because the password only seeds an empty
+one. <code>bunryu.json</code> moved from <code>/opt/bunryu</code> to <code>/etc/bunryu</code>, and the app finds it
+through <code>BUNRYU_CONFIG</code> (unset means <code>./bunryu.json</code>, so dev checkouts are
+unchanged). <code>server-reset-password.sh</code> refuses to run when the file has no
+<code>dashboard_password</code>.</p>
+<p><strong>Why:</strong></p>
+<ul>
+<li><strong>Install output is copied.</strong> The old installer printed a generated password at
+the end, and the container logged one. Startup scripts, SSH session logs,
+<code>docker logs</code> and pasted tickets all kept it. A password the operator chose is
+never shown.</li>
+<li><strong>The file was inside the git checkout.</strong> <code>bunryu.json</code> is tracked, so the
+installer&#39;s <code>git reset --hard</code> restored the repo copy, which has no password. A
+reinstall therefore generated a new password into the file that no longer
+matched the kept database, and <code>server-reset-password.sh</code> would then apply the
+wrong one. <code>srs.conf</code> and <code>goryu.json</code> were already in <code>/etc/bunryu</code>, which is why
+the SRT passphrase survived reinstalls. The app config now sits beside them.</li>
+<li><strong>Failing early beats a default.</strong> The app used to fall back to the public
+<code>admin</code> when it had no password to seed an empty database with, so a wiped
+database or a hand-made config could silently create that login. It now exits
+with status 78 instead, and the installer, the entrypoint and the reset script
+check first and say how to fix it. The repo&#39;s own <code>bunryu.json</code> ships <code>change-me</code> for
+development, which the installer, the unit and the image never read.</li>
+</ul>
+<p><strong>Not adopted:</strong></p>
+<ul>
+<li><strong>Generate and print once</strong>, the previous behavior: the leak above.</li>
+<li><strong>Generate and write only to the file</strong>: the operator would then have to read a
+root-only file to log in, and the installer could not tell a deliberate empty
+value from a missing one.</li>
+<li><strong>An empty <code>dashboard_password</code> in the tracked <code>bunryu.json</code></strong>: it invites
+editing a tracked file in a public repository.</li>
+</ul>
+<p><strong>Tradeoffs:</strong> <code>compose.yaml</code> passes the variable through, so <code>docker compose up</code>
+without it restarts the container with the error in <code>docker compose logs</code> until it
+is set (the supervisor is for evaluation only). The variable stays in the container
+environment after the first start.</p>
+<p><strong>Revisit when:</strong> a second secret needs the same handling, or the Docker image is
+used for real deployments and <code>docker secret</code> support matters.</p>
 </article><a class="link text-base-content/50 mt-6 inline-block text-sm" href="https://github.com/live-miracles/bunryu/blob/master/docs/4-reference/3-design-decisions.md">Edit this page on GitHub</a><div class="border-base-content/10 mt-10 grid gap-3 border-t pt-6 sm:grid-cols-2">
               <a class="rounded-box border-base-content/10 hover:border-primary/50 border p-4" href="/projects/bunryu/docs/reference/development/"><div class="text-base-content/50 text-xs">Previous</div><div class="font-semibold">Development</div></a>
               

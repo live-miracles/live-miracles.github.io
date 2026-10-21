@@ -95,7 +95,9 @@ session cookie. SRS&#39;s <code>on_publish</code>/<code>on_play</code> hooks are
 they are served on the loopback-only hook port. An output pushes to a
 single destination: <code>url</code> and <code>audioEncoding</code>, plus <code>videoEncoding</code>. The input is
 pulled back over whatever protocol it was published with (SRT input → SRT pull,
-RTMP input → RTMP pull), so there is no pull-method setting.</p>
+RTMP input → RTMP pull), so there is no pull-method setting. An error is always
+JSON, <code>{ &quot;error&quot;: &quot;…&quot; }</code>; an unexpected failure is a 500 with a generic message
+(the detail is in the log).</p>
 <table>
 <thead>
 <tr>

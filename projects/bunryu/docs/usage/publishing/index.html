@@ -123,7 +123,9 @@ panel does not display the URLs themselves.</p>
 <td><code>srt://&lt;public-host&gt;:10081?mode=caller&amp;grouptype=broadcast&amp;streamid=#!::r=live/&lt;stream-key&gt;,m=publish&amp;passphrase=&lt;passphrase&gt;&amp;pbkeylen=16</code></td>
 </tr>
 </tbody></table>
-<p><code>&lt;public-host&gt;</code> is the <strong>Public Host</strong> set in Settings. The SRT passphrase is
+<p><code>&lt;public-host&gt;</code> is the <strong>Public Host</strong> set in Settings. It is empty on a new install:
+the dashboard shows a banner asking for it, and the publish URLs use <code>localhost</code> until
+you set it. The SRT passphrase is
 generated at install time; see <a href="/projects/bunryu/docs/getting-started/install/#srs-and-srt-relay-config">SRS and SRT relay config</a>.</p>
 <p>Prefer SRT when the encoder supports it: it has fixed, predictable latency,
 survives lossy networks better than RTMP, and keeps every audio track. Use

@@ -227,19 +227,16 @@ last one stops (so stopping and restarting an output, or editing one, does not
 restart the encode that its other outputs use). You cannot create, edit, delete, start or stop one,
 and you cannot point an output at the server&#39;s internal <code>internal</code> RTMP app. They
 do not count toward the 500-output limit.</p>
-<p><strong>In the dashboard.</strong> The pipeline&#39;s side column shows a <strong>Shared encodes</strong> card
-with one row per encode, laid out like an output card: the status, the restart
-button (it restarts the encode after a confirmation and its outputs reconnect), the
-encoding as badges (the video encoding unless it is <code>copy</code>, and the audio track as
-<code>T1</code>, <code>T2</code>, …, where <code>T1</code> is track 0), how many outputs use it and how many are
-reading it right now (&quot;2 outs · 1 read&quot;), uptime, bitrate | CPU | memory and the
-failure count, with <strong>History</strong> (its Error History) at the end. Everything sits on
-one line and wraps to a second only when the column is too narrow; the last error
-follows. While an
-output&#39;s encode is not up, the output shows a warning (&quot;Waiting for Shared
-encode …&quot;, or &quot;Shared encode failed: …&quot;) rather than an error. The pipeline&#39;s
-&quot;N readers&quot; counts only what reads the input itself, so it no longer includes
-outputs that read a shared encode.</p>
+<p><strong>In the dashboard.</strong> The pipeline&#39;s side column has a <strong>Shared encodes</strong> card
+with one row per encode, laid out like an output card: status, a restart button
+(after a confirmation; its outputs reconnect), the encoding as badges (the video
+encoding unless it is <code>copy</code>, and the audio track as <code>T1</code>, <code>T2</code>, …, where <code>T1</code> is
+track 0), how many outputs use it and how many are reading it now (&quot;2 outs · 1
+read&quot;), uptime, bitrate, CPU, memory, the failure count and <strong>History</strong> (its Error
+History), followed by the last error. While an output&#39;s encode is not up, the
+output shows a warning (&quot;Waiting for Shared encode …&quot;, or &quot;Shared encode failed:
+…&quot;), not an error. The pipeline&#39;s &quot;N readers&quot; counts only what reads the input
+itself, not outputs that read a shared encode.</p>
 <p><strong>When a shared encode fails,</strong> every output that uses it is restarted and waits
 for the encode to come back; each of them gets one Error History record &quot;Shared
 encode … failed: …&quot; naming the cause, so its card explains the reconnect. Other
@@ -262,15 +259,16 @@ runs on its own.</li>
 </ul>
 <p><strong>Trade-offs.</strong></p>
 <ul>
-<li>Starting a shared output takes longer than a direct one when its encode is not
-running yet: the encode starts first and the output connects once it is writing
-data. Measured: about 5 s from the encode&#39;s start to its first output. With the
-encode already running an output starts at once, so an output stopped and started
-again within the 15 s grace, or a further output of the same recipe, reuses it.</li>
+<li>A shared output starts slower than a direct one when its encode is not running
+yet: the encode starts first and the output connects once it is writing data
+(about 5 s measured). With the encode already running an output starts at once,
+so an output restarted within the 15 s grace, or a further output of the same
+recipe, reuses it.</li>
 <li>The encode is a single point of failure for its outputs: when it restarts, all
 of them reconnect at once.</li>
-<li>CPU is counted once per recipe per pipeline. Sharing is never across pipelines.</li>
-<li>Outputs get ids with gaps (the encode takes a number in the pipeline&#39;s sequence).</li>
+<li>Sharing is per pipeline, never across pipelines.</li>
+<li>Output ids have gaps, because the encode takes a number in the pipeline&#39;s
+sequence.</li>
 </ul>
 <h2 id="running-outputs">Running outputs</h2>
 <p>Start and stop outputs individually or for the whole pipeline. <strong>Start all</strong>
@@ -287,8 +285,9 @@ after 5 failed attempts&quot; line with the last error, and the History button s
 until you start the output again.
 Under a known error or warning (connection refused, a rejected stream key, an
 unresolvable host, a failed SRT handshake, an output falling behind realtime) the card
-adds a muted &quot;Hint:&quot; line with what to check first; so do the pipeline alerts. An
-error it has no advice for is shown as is.
+adds an info icon to the line; hover or focus it for a &quot;Hint:&quot; with what to check first.
+The pipeline alerts show their hint as a muted line. An error it has no advice for is
+shown as is.
 See <a href="/projects/bunryu/docs/operations/reliability/">Reliability</a> for what is detected and when
 outputs are restarted.</p>
 </article><a class="link text-base-content/50 mt-6 inline-block text-sm" href="https://github.com/live-miracles/bunryu/blob/master/docs/2-usage/2-outputs.md">Edit this page on GitHub</a><div class="border-base-content/10 mt-10 grid gap-3 border-t pt-6 sm:grid-cols-2">
