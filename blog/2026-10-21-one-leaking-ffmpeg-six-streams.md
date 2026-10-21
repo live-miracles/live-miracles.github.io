@@ -3,7 +3,7 @@ title: One leaking FFmpeg process took down six live streams
 date: 2026-10-21
 tags: [bunryu, reliability, ffmpeg, srt]
 summary: A memory leak in one FFmpeg process restarted our whole streaming stack. How it happened, and the guard rails that keep a single bad process small.
-draft: true
+draft: false
 ---
 
 A live event cannot be restarted. When we built [Bunryu](https://github.com/live-miracles/bunryu), a

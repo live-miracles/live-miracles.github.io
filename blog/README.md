@@ -16,8 +16,8 @@ draft: true
 ---
 ```
 
-Set `draft: false` once the post has been reviewed. Before publishing a post that
+Posts with `draft: true` are not built; set `draft: false` once the post has been reviewed. Before publishing a post that
 quotes logs or incidents, redact stream keys, SRT passphrases, destination URLs and
 customer or encoder IP addresses.
 
-The site does not build these pages yet; GitHub renders them as they are.
+The site build turns each published post into `/blog/<slug>/`, lists it on `/blog/` and in the RSS feed at `/blog/feed.xml`. To preview, run `npm run dev` and open `/blog/` on the port it prints.

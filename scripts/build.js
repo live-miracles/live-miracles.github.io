@@ -14,6 +14,9 @@
 // fetched still gets a page (summary and links) and the build logs a warning.
 // LOCAL_PROJECTS=<id>=<path>[,<id>=<path>] reads a project's README and docs
 // from a local checkout instead, to preview documentation before pushing it.
+//
+// The Markdown posts in blog/ become /blog/<slug>/ pages, a /blog/ index and an
+// RSS feed at /blog/feed.xml (see blog.js); posts marked `draft: true` are left out.
 
 const fs = require('node:fs');
 const path = require('node:path');
@@ -21,6 +24,7 @@ const { execFileSync } = require('node:child_process');
 const { Marked } = require('marked');
 const { organization, categories, projects } = require('./projects');
 const { stripTags, githubSlug } = require('./markdown-text');
+const { loadPosts } = require('./blog');
 
 const root = path.resolve(__dirname, '..');
 const dist = path.join(root, 'dist');
@@ -42,6 +46,7 @@ const icons = {
     collapse: `<svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M11 17l-5-5 5-5M18 17l-5-5 5-5" /></svg>`,
     close: `<svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg>`,
     menu: `<svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /></svg>`,
+    blog: `<svg xmlns="http://www.w3.org/2000/svg" class="size-6 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 5h13a2 2 0 0 1 2 2v12H6a2 2 0 0 1-2-2V5Z"/><path d="M8 9h7M8 13h7M8 17h4"/></svg>`,
 };
 
 function escapeHtml(value) {
@@ -285,6 +290,10 @@ function sidebar(activeId) {
             </a>
             <button type="button" id="sidebar-toggle" class="btn btn-ghost btn-sm btn-square hidden lg:inline-flex lg:group-data-[rail]/drawer:rotate-180" aria-label="Collapse projects to icons">${icons.collapse}</button>
           </div>
+          <a href="/blog/" title="Blog" aria-label="Blog" class="rounded-box hover:bg-base-100 mb-5 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:mb-3 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ${activeId === 'blog' ? 'bg-base-100 text-primary font-semibold' : ''}"${activeId === 'blog' ? ' aria-current="page"' : ''}>
+            ${icons.blog}
+            <span class="lg:group-data-[rail]/drawer:hidden">Blog</span>
+          </a>
           ${groups}
         </nav>
       </aside>`;
@@ -357,6 +366,7 @@ function layout({
     activeId,
     body,
     railByDefault = false,
+    ogType = 'website',
 }) {
     const canonical = `${siteUrl}${canonicalPath}`;
     const image = ogImage || `${siteUrl}/assets/logo.png`;
@@ -369,13 +379,14 @@ function layout({
     <meta name="description" content="${escapeHtml(description)}" />
     <link rel="canonical" href="${canonical}" />
     <meta property="og:site_name" content="${siteName}" />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content="${ogType}" />
     <meta property="og:title" content="${escapeHtml(title)}" />
     <meta property="og:description" content="${escapeHtml(description)}" />
     <meta property="og:url" content="${canonical}" />
     <meta property="og:image" content="${escapeHtml(image)}" />
     <meta name="twitter:card" content="${ogImage ? 'summary_large_image' : 'summary'}" />
     <link rel="icon" href="/assets/logo.png" type="image/png" />
+    <link rel="alternate" type="application/rss+xml" title="${siteName} blog" href="/blog/feed.xml" />
     <link rel="stylesheet" href="/assets/styles.css" />
   </head>
   <body>
@@ -438,7 +449,7 @@ function starCount(repo) {
         : '';
 }
 
-function homePage(data) {
+function homePage(data, posts) {
     const totals = data.reduce(
         (sum, { repo }) => ({
             stars: sum.stars + (repo?.stargazers_count ?? 0),
@@ -496,6 +507,7 @@ function homePage(data) {
               </div>
             </div>
           </section>
+          ${latestPosts(posts)}
           ${sections}`;
 
     return layout({
@@ -714,6 +726,143 @@ function docPage({ project, repo, readme, docs }, doc, index) {
     });
 }
 
+function postUrl(post) {
+    return `/blog/${post.slug}/`;
+}
+
+function formatDate(date) {
+    return new Date(`${date}T00:00:00Z`).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        timeZone: 'UTC',
+    });
+}
+
+function tagBadges(tags) {
+    return tags
+        .map((tag) => `<span class="badge badge-outline badge-sm">${escapeHtml(tag)}</span>`)
+        .join('');
+}
+
+// Posts are standalone: no project to resolve links against, so links stay as
+// written and relative images point at blog/ in this repository.
+function renderPost(post) {
+    const rawBase = `https://raw.githubusercontent.com/${organization}/${organization}.github.io/${branch}/blog/`;
+    const slugCounts = new Map();
+    const marked = new Marked({ gfm: true, breaks: false });
+    marked.use({
+        walkTokens(token) {
+            if (token.type === 'image') token.href = absoluteUrl(token.href, rawBase);
+        },
+        renderer: {
+            heading(text, level) {
+                return `<h${level} id="${githubSlug(text, slugCounts)}">${text}</h${level}>\n`;
+            },
+            image(href, title, text) {
+                const titleAttr = title ? ` title="${escapeHtml(title)}"` : '';
+                return `<img src="${escapeHtml(href)}" alt="${escapeHtml(text)}"${titleAttr} loading="lazy" />`;
+            },
+        },
+    });
+    return marked.parse(post.markdown);
+}
+
+function blogIndexPage(posts) {
+    const list = posts.length
+        ? posts
+              .map(
+                  (
+                      post,
+                  ) => `<article class="card border-base-content/10 bg-base-200/68 border shadow-xl backdrop-blur">
+              <div class="card-body gap-2">
+                <div class="text-base-content/60 text-sm"><time datetime="${post.date}">${formatDate(post.date)}</time></div>
+                <h2 class="card-title"><a class="hover:text-primary" href="${postUrl(post)}">${escapeHtml(post.title)}</a></h2>
+                <p class="text-base-content/70 text-sm leading-6">${escapeHtml(post.summary)}</p>
+                <div class="flex flex-wrap gap-2 pt-1">${tagBadges(post.tags)}</div>
+              </div>
+            </article>`,
+              )
+              .join('')
+        : '<p class="text-base-content/70">No posts yet.</p>';
+    return layout({
+        title: `Blog — ${siteName}`,
+        description: 'Notes from running live events and building the tools behind them.',
+        canonicalPath: '/blog/',
+        activeId: 'blog',
+        body: `<header>
+            <h1 class="text-3xl font-bold sm:text-4xl">Blog</h1>
+            <p class="text-base-content/64 mt-2">Notes from running live events and building the tools behind them. <a class="link" href="/blog/feed.xml">RSS feed</a></p>
+          </header>
+          <div class="grid gap-4">${list}</div>`,
+    });
+}
+
+function blogPostPage(post) {
+    return layout({
+        title: `${post.title} — ${siteName}`,
+        description: post.summary,
+        canonicalPath: postUrl(post),
+        activeId: 'blog',
+        railByDefault: true,
+        ogType: 'article',
+        body: `<nav class="text-base-content/60 flex flex-wrap items-center gap-2 text-sm" aria-label="Breadcrumb">
+            <a href="/blog/" class="hover:text-primary">Blog</a>
+          </nav>
+          <header>
+            <h1 class="text-3xl font-bold sm:text-4xl">${escapeHtml(post.title)}</h1>
+            <div class="text-base-content/60 mt-3 flex flex-wrap items-center gap-3 text-sm">
+              <time datetime="${post.date}">${formatDate(post.date)}</time>${tagBadges(post.tags)}
+            </div>
+          </header>
+          <article class="readme min-w-0">${post.html}</article>
+          <a class="link text-base-content/50 text-sm" href="https://github.com/${organization}/${organization}.github.io/blob/${branch}/${post.sourcePath}">Edit this post on GitHub</a>`,
+    });
+}
+
+function blogFeed(posts) {
+    const items = posts
+        .map(
+            (post) => `    <item>
+      <title>${escapeHtml(post.title)}</title>
+      <link>${siteUrl}${postUrl(post)}</link>
+      <guid>${siteUrl}${postUrl(post)}</guid>
+      <pubDate>${new Date(`${post.date}T00:00:00Z`).toUTCString()}</pubDate>
+      <description>${escapeHtml(post.summary)}</description>
+    </item>`,
+        )
+        .join('\n');
+    return `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>${siteName} blog</title>
+    <link>${siteUrl}/blog/</link>
+    <description>Notes from running live events and building the tools behind them.</description>
+${items}
+  </channel>
+</rss>
+`;
+}
+
+// The newest posts on the home page; nothing when there are none.
+function latestPosts(posts) {
+    if (!posts.length) return '';
+    const items = posts
+        .slice(0, 3)
+        .map(
+            (post) => `<li class="flex flex-wrap items-baseline justify-between gap-x-4">
+              <a class="link link-hover font-semibold" href="${postUrl(post)}">${escapeHtml(post.title)}</a>
+              <time class="text-base-content/60 text-sm" datetime="${post.date}">${formatDate(post.date)}</time>
+            </li>`,
+        )
+        .join('');
+    return `<section id="blog" class="scroll-mt-20">
+            <h2 class="text-2xl font-bold">From the blog</h2>
+            <ul class="mt-3 flex flex-col gap-2">${items}</ul>
+            <a class="link mt-3 inline-block text-sm" href="/blog/">All posts</a>
+          </section>`;
+}
+
 function notFoundPage() {
     return layout({
         title: `Page not found — ${siteName}`,
@@ -727,9 +876,11 @@ function notFoundPage() {
     });
 }
 
-function sitemap(data) {
+function sitemap(data, posts) {
     const today = new Date().toISOString().slice(0, 10);
     const urls = [{ loc: `${siteUrl}/`, lastmod: today }];
+    urls.push({ loc: `${siteUrl}/blog/`, lastmod: posts[0]?.date ?? today });
+    for (const post of posts) urls.push({ loc: `${siteUrl}${postUrl(post)}`, lastmod: post.date });
     for (const { project, repo, docs } of data) {
         const lastmod = repo?.pushed_at?.slice(0, 10) ?? today;
         urls.push({ loc: `${siteUrl}${projectUrl(project)}`, lastmod });
@@ -808,8 +959,15 @@ async function main() {
     writeFile('.nojekyll', '');
 
     const data = await Promise.all(projects.map(loadProject));
+    const posts = loadPosts(path.join(root, 'blog')).map((post) => ({
+        ...post,
+        html: renderPost(post),
+    }));
 
-    writeFile('index.html', homePage(data));
+    writeFile('index.html', homePage(data, posts));
+    writeFile(path.join('blog', 'index.html'), blogIndexPage(posts));
+    writeFile(path.join('blog', 'feed.xml'), blogFeed(posts));
+    for (const post of posts) writeFile(path.join(postUrl(post), 'index.html'), blogPostPage(post));
     let pageCount = 0;
     for (const entry of data) {
         const base = path.join('projects', entry.project.id);
@@ -823,9 +981,11 @@ async function main() {
         pageCount += 1 + (entry.docs.length ? entry.docs.length + 1 : 0);
     }
     writeFile('404.html', notFoundPage());
-    writeFile('sitemap.xml', sitemap(data));
+    writeFile('sitemap.xml', sitemap(data, posts));
     writeFile('robots.txt', `User-agent: *\nAllow: /\nSitemap: ${siteUrl}/sitemap.xml\n`);
-    console.log(`Built ${data.length} projects (${pageCount} pages) into dist/`);
+    console.log(
+        `Built ${data.length} projects (${pageCount} pages) and ${posts.length} blog posts into dist/`,
+    );
 }
 
 main().catch((error) => {
