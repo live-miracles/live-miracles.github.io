@@ -203,7 +203,7 @@ that 1985 and 8082 listen only on <code>127.0.0.1</code>.</p>
 <li><code>/etc/bunryu/srs.conf</code></li>
 <li><code>/etc/bunryu/goryu.json</code></li>
 </ul>
-<p>The app&#39;s own <code>/etc/bunryu/bunryu.json</code> is rewritten on every install too (the unit sets <code>BUNRYU_CONFIG</code> to it); only its <code>dashboard_password</code> carries over.</p>
+<p>The app&#39;s own <code>/etc/bunryu/bunryu.json</code> (the unit sets <code>BUNRYU_CONFIG</code> to it) is updated, not replaced: the installer sets only <code>port</code>, the file paths and, when it has one, <code>dashboard_password</code>. Any other setting you add, such as <code>trust_proxy</code> or watchdog values, stays across updates. A file that is not valid JSON is replaced by the defaults, with a notice.</p>
 <p>SRS only reads its config at startup, and Goryu only reads its
 JSON config file at startup.</p>
 <p>The repo configs ship a public default SRT passphrase; on first install the

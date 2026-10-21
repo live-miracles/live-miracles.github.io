@@ -89,7 +89,12 @@
                 <ul class="text-sm"><li><a href="/projects/bunryu/docs/reference/api/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 bg-base-100 text-primary font-semibold" aria-current="page">REST API</a></li><li><a href="/projects/bunryu/docs/reference/development/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Development</a></li><li><a href="/projects/bunryu/docs/reference/design-decisions/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Design decisions</a></li></ul>
               </div>
             </nav></div>
-              <div class="min-w-0"><article class="readme min-w-0"><p>All routes below sit behind the session-cookie auth middleware except
+              <div class="min-w-0"><details class="rounded-box border-base-content/10 bg-base-300/46 text-base-content/68 mb-7 border p-4 text-sm backdrop-blur">
+              <summary class="text-base-content/80 cursor-pointer font-semibold">On this page</summary>
+              <ol class="mt-3 space-y-2">
+                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#using-the-api-from-a-script">Using the API from a script</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#shared-encodes">Shared encodes</a></li>
+              </ol>
+            </details><article class="readme min-w-0"><p>All routes below sit behind the session-cookie auth middleware except
 <code>/api/ready</code> and <code>/api/auth/login</code>. HLS preview files under <code>/hls</code> use the same
 session cookie. SRS&#39;s <code>on_publish</code>/<code>on_play</code> hooks are not on this port at all —
 they are served on the loopback-only hook port. An output pushes to a
@@ -307,6 +312,18 @@ JSON, <code>{ &quot;error&quot;: &quot;…&quot; }</code>; an unexpected failure
 <td>SRS publish hook (called by SRS on the loopback-only <code>hook_port</code>, not on the dashboard port). Pipeline keys are accepted in the <code>live</code> app; the reserved <code>internal</code> app is accepted only for a running shared encode, over RTMP from loopback</td>
 </tr>
 </tbody></table>
+<h2 id="using-the-api-from-a-script">Using the API from a script</h2>
+<p>There is no CLI or API token: a script logs in with the dashboard password and
+sends the session cookie (valid 7 days) on every call. Five wrong passwords in a
+minute block that IP for five minutes (<code>429</code>), so don&#39;t retry a failed login in a loop.</p>
+<pre><code class="language-bash">curl -sS -c jar -H &#39;content-type: application/json&#39; \
+  -d &#39;{&quot;password&quot;:&quot;…&quot;}&#39; http://localhost:8080/api/auth/login
+curl -sS -b jar http://localhost:8080/api/health
+curl -sS -b jar -X POST http://localhost:8080/api/pipelines/1/outputs/start-all
+</code></pre>
+<p>A start returns before anything is running, so poll <code>/api/health</code> for the result.
+An output started while its pipeline has no live input stays <code>stopped</code> (its
+desired state is <code>running</code>) until a publisher connects.</p>
 <h2 id="shared-encodes">Shared encodes</h2>
 <p>Outputs of one pipeline that need the same encode (the same <code>videoEncoding</code> plus
 the same single audio track, and not plain copy, multi-track or translation)

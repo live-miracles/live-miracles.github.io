@@ -92,7 +92,7 @@
               <div class="min-w-0"><details class="rounded-box border-base-content/10 bg-base-300/46 text-base-content/68 mb-7 border p-4 text-sm backdrop-blur">
               <summary class="text-base-content/80 cursor-pointer font-semibold">On this page</summary>
               <ol class="mt-3 space-y-2">
-                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#current-architecture-in-one-paragraph">Current architecture in one paragraph</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#media-server">Media server</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#use-srs-for-ingest-from-the-official-release">Use SRS for ingest, from the official release</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#keep-srss-srt_to_rtmp-off-ffmpeg-converts-srt-inputs">Keep SRS&#39;s srt_to_rtmp off; FFmpeg converts SRT inputs</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-use-srss-built-in-forwarding-for-outputs">Don&#39;t use SRS&#39;s built-in forwarding for outputs</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-use-mediamtx-for-srt-ingest-or-srtrtmp-conversion">Don&#39;t use MediaMTX for SRT ingest or SRT→RTMP conversion</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-build-our-own-media-server">Don&#39;t build our own media server</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#srt-ingest">SRT ingest</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#a-separate-relay-accepts-bonded-srt-because-neither-ffmpeg-nor-srs-can">A separate relay accepts bonded SRT, because neither FFmpeg nor SRS can</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#plain-srt-goes-directly-to-srs-by-default-the-relay-also-accepts-it">Plain SRT goes directly to SRS by default; the relay also accepts it</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#a-lost-bonded-leg-is-found-by-counting-legs-because-the-relay-drops-it-instead-of-reporting-broken">A lost bonded leg is found by counting legs, because the relay drops it instead of reporting broken</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#outputs-pull-from-srs-not-from-the-relay">Outputs pull from SRS, not from the relay</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#keep-goryu-in-its-own-repository">Keep goryu in its own repository</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#raise-the-kernel-udp-buffer-ceiling-but-dont-alert-on-it">Raise the kernel UDP buffer ceiling, but don&#39;t alert on it</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#outputs-and-preview">Outputs and preview</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#one-ffmpeg-process-per-output">One FFmpeg process per output</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#outputs-with-the-same-encode-share-one-ffmpeg-shared-encodes">Outputs with the same encode share one FFmpeg (shared encodes)</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#preview-copies-the-video-only-audio-is-encoded">Preview copies the video; only audio is encoded</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#give-up-on-a-blocked-rtmprtmps-destination-with-an-output--rw_timeout">Give up on a blocked RTMP/RTMPS destination with an output -rw_timeout</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-add-an-ss--ti-ack-progress-check--rw_timeout-is-the-knob">Don&#39;t add an ss -ti ack-progress check; -rw_timeout is the knob</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#sizing">Sizing</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#sizing-guidance-is-a-measured-table-not-a-calculator">Sizing guidance is a measured table, not a calculator</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#dashboard">Dashboard</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#installable-as-an-app-with-a-manifest-only-no-service-worker">Installable as an app with a manifest only, no service worker</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#tooling">Tooling</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#eslint-checks-promise-handling-prettier-stays-the-formatter">ESLint checks promise handling; Prettier stays the formatter</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#logging-and-diagnostics">Logging and diagnostics</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#keep-the-process-running-after-an-uncaught-error">Keep the process running after an uncaught error</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#diagnostics-ideas-taken-from-srs-mediamtx-and-restream-krsna">Diagnostics ideas taken from SRS, MediaMTX and restream-krsna</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#warn-when-an-output-falls-behind-realtime-measured-from-its-media-clock">Warn when an output falls behind realtime, measured from its media clock</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#failures-that-need-an-operator-exit-with-status-78-which-systemd-does-not-restart">Failures that need an operator exit with status 78, which systemd does not restart</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#keep-a-fixed-2-s-systemd-restart-delay-with-no-back-off">Keep a fixed 2 s systemd restart delay, with no back-off</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#hints-are-a-dashboard-lookup-not-an-api-field">Hints are a dashboard lookup, not an API field</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#restart-outputs-when-a-reconnecting-encoder-changes-format-not-when-it-merely-reconnects">Restart outputs when a reconnecting encoder changes format, not when it merely reconnects</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#ingest-protection">Ingest protection</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-ban-abusive-ingest-clients-with-fail2ban">Don&#39;t ban abusive ingest clients with fail2ban</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#install-and-secrets">Install and secrets</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#the-initial-dashboard-password-is-supplied-never-generated-or-printed-the-app-config-lives-in-etcbunryu">The initial dashboard password is supplied, never generated or printed; the app config lives in /etc/bunryu</a></li>
+                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#current-architecture-in-one-paragraph">Current architecture in one paragraph</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#media-server">Media server</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#use-srs-for-ingest-from-the-official-release">Use SRS for ingest, from the official release</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#keep-srss-srt_to_rtmp-off-ffmpeg-converts-srt-inputs">Keep SRS&#39;s srt_to_rtmp off; FFmpeg converts SRT inputs</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-use-srss-built-in-forwarding-for-outputs">Don&#39;t use SRS&#39;s built-in forwarding for outputs</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-use-mediamtx-for-srt-ingest-or-srtrtmp-conversion">Don&#39;t use MediaMTX for SRT ingest or SRT→RTMP conversion</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-build-our-own-media-server">Don&#39;t build our own media server</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#srt-ingest">SRT ingest</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#a-separate-relay-accepts-bonded-srt-because-neither-ffmpeg-nor-srs-can">A separate relay accepts bonded SRT, because neither FFmpeg nor SRS can</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#plain-srt-goes-directly-to-srs-by-default-the-relay-also-accepts-it">Plain SRT goes directly to SRS by default; the relay also accepts it</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#a-lost-bonded-leg-is-found-by-counting-legs-because-the-relay-drops-it-instead-of-reporting-broken">A lost bonded leg is found by counting legs, because the relay drops it instead of reporting broken</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#outputs-pull-from-srs-not-from-the-relay">Outputs pull from SRS, not from the relay</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#keep-goryu-in-its-own-repository">Keep goryu in its own repository</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#raise-the-kernel-udp-buffer-ceiling-but-dont-alert-on-it">Raise the kernel UDP buffer ceiling, but don&#39;t alert on it</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#outputs-and-preview">Outputs and preview</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#one-ffmpeg-process-per-output">One FFmpeg process per output</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#outputs-with-the-same-encode-share-one-ffmpeg-shared-encodes">Outputs with the same encode share one FFmpeg (shared encodes)</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#preview-copies-the-video-only-audio-is-encoded">Preview copies the video; only audio is encoded</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#give-up-on-a-blocked-rtmprtmps-destination-with-an-output--rw_timeout">Give up on a blocked RTMP/RTMPS destination with an output -rw_timeout</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-add-an-ss--ti-ack-progress-check--rw_timeout-is-the-knob">Don&#39;t add an ss -ti ack-progress check; -rw_timeout is the knob</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#srt-destinations-need-no-output-timeout">SRT destinations need no output timeout</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#sizing">Sizing</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#sizing-guidance-is-a-measured-table-not-a-calculator">Sizing guidance is a measured table, not a calculator</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#dashboard">Dashboard</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#installable-as-an-app-with-a-manifest-only-no-service-worker">Installable as an app with a manifest only, no service worker</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#tooling">Tooling</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#eslint-checks-promise-handling-prettier-stays-the-formatter">ESLint checks promise handling; Prettier stays the formatter</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#logging-and-diagnostics">Logging and diagnostics</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#keep-the-process-running-after-an-uncaught-error">Keep the process running after an uncaught error</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#diagnostics-ideas-taken-from-srs-mediamtx-and-restream-krsna">Diagnostics ideas taken from SRS, MediaMTX and restream-krsna</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#warn-when-an-output-falls-behind-realtime-measured-from-its-media-clock">Warn when an output falls behind realtime, measured from its media clock</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#failures-that-need-an-operator-exit-with-status-78-which-systemd-does-not-restart">Failures that need an operator exit with status 78, which systemd does not restart</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#keep-a-fixed-2-s-systemd-restart-delay-with-no-back-off">Keep a fixed 2 s systemd restart delay, with no back-off</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#hints-are-a-dashboard-lookup-not-an-api-field">Hints are a dashboard lookup, not an API field</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#restart-outputs-when-a-reconnecting-encoder-changes-format-not-when-it-merely-reconnects">Restart outputs when a reconnecting encoder changes format, not when it merely reconnects</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#ingest-protection">Ingest protection</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-ban-abusive-ingest-clients-with-fail2ban">Don&#39;t ban abusive ingest clients with fail2ban</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#install-and-secrets">Install and secrets</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#the-initial-dashboard-password-is-supplied-never-generated-or-printed-the-app-config-lives-in-etcbunryu">The initial dashboard password is supplied, never generated or printed; the app config lives in /etc/bunryu</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#the-docker-image-is-x86_64-only-arm-hosts-run-it-emulated-for-development">The Docker image is x86_64 only; ARM hosts run it emulated, for development</a></li>
               </ol>
             </details><article class="readme min-w-0"><p>Why Bunryu is built the way it is, and why some obvious alternatives are not
 used. Each entry gives the decision, the reasons, the evidence behind them, and
@@ -525,7 +525,8 @@ and the development machine&#39;s 8.0.1.</li>
 <ul>
 <li><strong><code>-timeout</code>.</strong> It is not a TCP timeout for RTMP: it implies listen mode and
 FFmpeg tries to bind the destination port (&quot;Address already in use&quot;).</li>
-<li><strong>SRT destinations.</strong> The option is a different setting for <code>srt://</code>; not tested.</li>
+<li><strong>SRT destinations.</strong> The option is a different setting for <code>srt://</code>; they need no
+timeout, see <a href="#srt-destinations-need-no-output-timeout">below</a>.</li>
 <li><strong>A shorter progress-watchdog stall.</strong> It would also restart outputs fed by an
 idle input, which the watchdog deliberately ignores.</li>
 </ul>
@@ -602,9 +603,55 @@ state in the highest-risk loop.</li>
 long YouTube or Facebook pause reading before they resume is unknown.</p>
 <p><strong>Revisit when:</strong> a silently dead connection costs more than the current give-up
 time in a real incident, or outputs need to give up in under 15 s without the
-false restarts that a shorter <code>-rw_timeout</code> risks. The untested gap is SRT
-destinations, which neither <code>-rw_timeout</code> nor <code>ss</code> covers; only the 45 s progress
-watchdog does.</p>
+false restarts that a shorter <code>-rw_timeout</code> risks.</p>
+<h3 id="srt-destinations-need-no-output-timeout">SRT destinations need no output timeout</h3>
+<p><strong>Decision (October 2026):</strong> SRT destinations get no equivalent of the RTMP
+<code>-rw_timeout</code>. FFmpeg&#39;s libsrt already ends a dead one within seconds.</p>
+<p><strong>Measured</strong> on the production VM (Ubuntu 22.04, FFmpeg n7.1.4) with a 4.2 Mbps copy
+push of a looped clip, <code>-c copy -f mpegts srt://127.0.0.1:&lt;port&gt;?streamid=…</code>, no extra
+options, to a private loopback port:</p>
+<table>
+<thead>
+<tr>
+<th>Destination</th>
+<th>What ffmpeg did</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Never answers (a bound UDP socket that replies to nothing)</td>
+<td>exit after 4 s with &quot;Connection … failed: Input/output error&quot;</td>
+</tr>
+<tr>
+<td>SRS as the SRT listener, <code>SIGSTOP</code>&#39;d mid-stream</td>
+<td>exit 6 s later (<code>Error writing trailer: Input/output error</code>)</td>
+</tr>
+<tr>
+<td>SRS as the listener, every packet of the port dropped in both directions mid-stream</td>
+<td>exit 6 s later, the same error</td>
+</tr>
+<tr>
+<td>A libsrt receiver (FFmpeg) whose output pipe nobody drains, so it stops consuming the stream mid-stream</td>
+<td>kept sending for 150 s: progress advanced, no stall, RSS flat at 35 MB, no exit</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>Why 6 s:</strong> libsrt&#39;s peer idle timeout (5 s by default) closes a connection that
+hears nothing from its peer, and a send on it fails. That is far tighter than the
+30 s that RTMP needed <code>-rw_timeout</code> for, so the retry loop takes over on its own.</li>
+<li><strong>A receiver that stays connected and stops reading</strong> is not a hang. The sender
+keeps sending (probably because live mode drops at the receiver instead of blocking
+the sender; not checked), so the output looks healthy and nothing restarts it. No sender-side signal tells that
+case apart from a working destination, as with an RTMP destination that
+acknowledges data it never uses.</li>
+<li><strong>A destination URL that sets <code>timeout=</code></strong> (or another libsrt timeout) changes
+these numbers; the runs used no options.</li>
+</ul>
+<p><strong>Regression test:</strong> <code>node scripts/test-faults.mjs srt</code> reproduces the first, second and
+last rows on the local stack (the silent path needs <code>iptables</code> and root, so it was only
+measured on the VM).</p>
+<p><strong>Not tested:</strong> a real SRT platform, a one-way loss (packets dropped in one direction
+only), and a libsrt version other than the one built into the pinned FFmpeg.</p>
+<p><strong>Revisit when:</strong> SRT outputs hang or restart late against a real destination.</p>
 <h2 id="sizing">Sizing</h2>
 <h3 id="sizing-guidance-is-a-measured-table-not-a-calculator">Sizing guidance is a measured table, not a calculator</h3>
 <p><strong>Decision:</strong> <a href="/projects/bunryu/docs/getting-started/sizing/">Sizing a server</a> gives per-item CPU
@@ -959,7 +1006,8 @@ anything. The Docker entrypoint applies the same rule on an empty <code>/data</c
 run that keeps the database needs none, because the password only seeds an empty
 one. <code>bunryu.json</code> moved from <code>/opt/bunryu</code> to <code>/etc/bunryu</code>, and the app finds it
 through <code>BUNRYU_CONFIG</code> (unset means <code>./bunryu.json</code>, so dev checkouts are
-unchanged). <code>server-reset-password.sh</code> refuses to run when the file has no
+unchanged). The installer and the Docker entrypoint set only <code>port</code>, the file paths
+and the password in that file and keep every other key. <code>server-reset-password.sh</code> refuses to run when the file has no
 <code>dashboard_password</code>.</p>
 <p><strong>Why:</strong></p>
 <ul>
@@ -979,15 +1027,28 @@ database or a hand-made config could silently create that login. It now exits
 with status 78 instead, and the installer, the entrypoint and the reset script
 check first and say how to fix it. The repo&#39;s own <code>bunryu.json</code> ships <code>change-me</code> for
 development, which the installer, the unit and the image never read.</li>
+<li><strong>Hand edits must survive an update.</strong> The installer used to write the whole
+file from a template, so a value an operator added, such as <code>trust_proxy</code> behind
+the Cloudflare Tunnel (without it every user shares one login rate-limit bucket),
+was lost on the next update without a message. Its template values equalled the
+app&#39;s own defaults, so rewriting them changed nothing except undoing edits. It now
+sets only what it has to (<code>port</code>, which the units&#39; readiness check hardcodes, the
+file paths and the password) and keeps every other key.</li>
 </ul>
 <p><strong>Not adopted:</strong></p>
 <ul>
+<li><strong>Carrying over a named list of keys</strong> (first <code>dashboard_password</code>, then
+<code>trust_proxy</code>): every setting someone needs next would need adding to the list.</li>
+<li><strong>The same merge for <code>srs.conf</code> and <code>goryu.json</code>:</strong> they are refreshed from the
+repo on purpose, because the app, the units and the docs assume their hook URLs,
+ports and SRT settings. Only the SRT passphrase is kept.</li>
 <li><strong>Generate and print once</strong>, the previous behavior: the leak above.</li>
 <li><strong>Generate and write only to the file</strong>: the operator would then have to read a
 root-only file to log in, and the installer could not tell a deliberate empty
 value from a missing one.</li>
-<li><strong>An empty <code>dashboard_password</code> in the tracked <code>bunryu.json</code></strong>: it invites
-editing a tracked file in a public repository.</li>
+<li><strong>A real password in the tracked <code>bunryu.json</code></strong>: it invites editing a tracked
+file in a public repository, so the repo ships only the <code>change-me</code> dev
+placeholder.</li>
 </ul>
 <p><strong>Tradeoffs:</strong> <code>compose.yaml</code> passes the variable through, so <code>docker compose up</code>
 without it restarts the container with the error in <code>docker compose logs</code> until it
@@ -995,6 +1056,23 @@ is set (the supervisor is for evaluation only). The variable stays in the contai
 environment after the first start.</p>
 <p><strong>Revisit when:</strong> a second secret needs the same handling, or the Docker image is
 used for real deployments and <code>docker secret</code> support matters.</p>
+<h3 id="the-docker-image-is-x86_64-only-arm-hosts-run-it-emulated-for-development">The Docker image is x86_64 only; ARM hosts run it emulated, for development</h3>
+<p><strong>Decision (October 2026):</strong> no native arm64 image. Production is Linux x86_64, and
+<code>compose.yaml</code> sets <code>platform: linux/amd64</code>, so Docker on an Apple Silicon Mac or
+other ARM host runs the same image emulated. That is enough to try Bunryu or
+develop against it.</p>
+<p><strong>Why:</strong> production doesn&#39;t need ARM, and two of the three pinned binaries have no
+arm64 build to pin: goryu&#39;s releases are x86_64 only, and the FFmpeg 7.1 we mirror
+has no arm64 counterpart (BtbN now builds arm64 only for 8.1 and later; FFmpeg 8.0.1
+stalled pulling SRT from SRS on a development machine). SRS does publish an arm64
+<code>ossrs/srs:v6.0-r2</code>. The emulated run was not tested, because the development host
+is x86_64.</p>
+<p><strong>Tradeoffs:</strong> emulated timing and CPU say nothing about real capacity, so the
+sizing numbers are x86_64 only.</p>
+<p><strong>Revisit when:</strong> developers need to debug media behavior on ARM, or production
+moves to arm64 VMs. It needs an FFmpeg 7.1 arm64 build mirrored like the amd64 one,
+an arm64 goryu release, the arm64 SRS from <code>ossrs/srs</code>, and a multi-platform image
+build.</p>
 </article><a class="link text-base-content/50 mt-6 inline-block text-sm" href="https://github.com/live-miracles/bunryu/blob/master/docs/4-reference/3-design-decisions.md">Edit this page on GitHub</a><div class="border-base-content/10 mt-10 grid gap-3 border-t pt-6 sm:grid-cols-2">
               <a class="rounded-box border-base-content/10 hover:border-primary/50 border p-4" href="/projects/bunryu/docs/reference/development/"><div class="text-base-content/50 text-xs">Previous</div><div class="font-semibold">Development</div></a>
               

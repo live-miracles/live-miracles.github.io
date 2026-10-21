@@ -98,7 +98,9 @@
 in the app root; the native install keeps it at <code>/etc/bunryu/bunryu.json</code> next to
 <code>srs.conf</code> and <code>goryu.json</code> (outside the git checkout, which every update resets)
 and the unit points the app at it with <code>BUNRYU_CONFIG</code>. The Docker image keeps it
-in the <code>/data</code> volume.</p>
+in the <code>/data</code> volume. The installer and the Docker entrypoint set only <code>port</code>, the
+file paths and <code>dashboard_password</code>; every other setting you add stays when you
+update.</p>
 <p><code>bunryu.json</code>:</p>
 <table>
 <thead>

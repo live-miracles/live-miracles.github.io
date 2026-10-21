@@ -134,6 +134,12 @@ RestartSec=5s
 WantedBy=multi-user.target
 </code></pre>
 </li>
+<li><strong>Tell the app it is behind a proxy.</strong> In <code>/etc/bunryu/bunryu.json</code> add
+<code>&quot;trust_proxy&quot;: 1</code> and run <code>sudo systemctl restart bunryu.service</code>. Without it
+every dashboard user appears to come from the tunnel&#39;s address: they share one
+login rate-limit bucket (5 failures a minute), so one person&#39;s typos can lock
+out the others, and the logs show only that address. The installer keeps this
+value when you update. See <a href="/projects/bunryu/docs/operations/configuration/">Configuration</a>.</li>
 <li><strong>Start it and check</strong>:<pre><code class="language-bash">sudo systemctl daemon-reload
 sudo systemctl enable --now cloudflared
 journalctl -u cloudflared -n 20 --no-pager   # look for &quot;Registered tunnel connection&quot;

@@ -65,7 +65,7 @@
             <div class="mt-7"><details class="rounded-box border-base-content/10 bg-base-300/46 text-base-content/68 mb-7 border p-4 text-sm backdrop-blur">
               <summary class="text-base-content/80 cursor-pointer font-semibold">On this page</summary>
               <ol class="mt-3 space-y-2">
-                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#features">Features</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#quick-start">Quick start</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#documentation">Documentation</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#license">License</a></li>
+                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#features">Features</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#built-for-reliability">Built for reliability</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#quick-start">Quick start</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#documentation">Documentation</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#license">License</a></li>
               </ol>
             </details><article class="readme min-w-0"><img src="https://raw.githubusercontent.com/live-miracles/bunryu/master/public/logo.png" alt="Bunryu logo" width="96" align="right" />
 
@@ -73,7 +73,7 @@
 <p><a href="https://github.com/live-miracles/bunryu/actions/workflows/ci.yml"><img src="https://github.com/live-miracles/bunryu/actions/workflows/ci.yml/badge.svg" alt="CI" loading="lazy" /></a>
 <a href="https://github.com/live-miracles/bunryu/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License: MIT" loading="lazy" /></a>
 <a href="https://live-miracles.github.io/projects/bunryu/"><img src="https://img.shields.io/badge/website-live--miracles.github.io-blue.svg" alt="Website" loading="lazy" /></a></p>
-<p><strong>Self-hosted restreaming server for long live events.</strong> Take inputs over RTMP, SRT and bonded SRT, and forward each one to many RTMP/RTMPS/SRT destinations (YouTube, Facebook, Twitch, CDNs) from one Linux server. Watchdogs restart a failed output without affecting the others.</p>
+<p><strong>Self-hosted restreaming server built for reliability, for live events that run for many hours.</strong> Take inputs over RTMP, SRT and bonded SRT, and forward each one to many RTMP/RTMPS/SRT destinations (YouTube, Facebook, Twitch, CDNs) from one Linux server. Watchdogs restart a failed output without affecting the others.</p>
 <p>Built on official <a href="https://github.com/ossrs/srs">SRS</a> for ingest, <a href="https://github.com/live-miracles/goryu"><code>goryu</code></a> for bonded SRT ingress, and FFmpeg for outputs, with a Node.js + TypeScript control plane, web dashboard and REST API.</p>
 <table>
 <thead>
@@ -97,13 +97,23 @@
 <li>Restart safely: SRS accepts publishes only once the control plane is ready, and all configuration persists in SQLite.</li>
 </ul>
 <p><img src="https://raw.githubusercontent.com/live-miracles/bunryu/master/.github/assets/overview.png" alt="Overview page with host charts and per-process resources" loading="lazy" /></p>
+<h2 id="built-for-reliability">Built for reliability</h2>
+<p>A live event can&#39;t be restarted. Bunryu assumes something will go wrong (a destination stalls, an encoder drops, a process runs out of memory) and is built so the failure stays small, fixes itself where that is safe, and is explained afterwards.</p>
+<ul>
+<li><strong>Isolated:</strong> each output is its own FFmpeg process. A frozen, refusing or non-reading destination, a dropped input or a crashed FFmpeg doesn&#39;t touch the other outputs or pipelines.</li>
+<li><strong>Bounded recovery:</strong> <a href="/projects/bunryu/docs/operations/reliability/">watchdogs</a> restart stuck outputs with limits, so a bad destination can&#39;t cause a restart storm.</li>
+<li><strong>Safe startup:</strong> SRS accepts publishes only once the control plane is ready, and a service restart or host reboot comes back from SQLite without manual steps.</li>
+<li><strong>Accurate state:</strong> inputs and outputs don&#39;t stay &quot;running&quot; in the dashboard after a disconnect, crash or restart.</li>
+<li><strong>Evidence:</strong> per-output Error History, rotated diagnostics, and <a href="https://github.com/live-miracles/bunryu/blob/master/fail-reports/README.md">incident write-ups</a> of real failures and their fixes.</li>
+</ul>
+<p>These paths are exercised with fault-injection scenarios (a frozen destination, one that never reads, one that refuses connections, output churn, a publisher outage, a CPU-saturated host and a soak with 50 healthy outputs). No software can promise that nothing fails: see <a href="/projects/bunryu/docs/operations/known-issues/">Known issues</a> and the <a href="/projects/bunryu/docs/getting-started/introduction/#capacity-and-limits">supported capacity</a> for what Bunryu does not cover.</p>
 <h2 id="quick-start">Quick start</h2>
 <p>Try it with Docker:</p>
 <pre><code class="language-bash">git clone https://github.com/live-miracles/bunryu
 cd bunryu
 BUNRYU_DASHBOARD_PASSWORD=&#39;choose-a-long-password&#39; docker compose up -d
 </code></pre>
-<p>Open <code>http://localhost:8080</code>, log in with that password, create a pipeline and publish to the URL the dashboard shows.</p>
+<p>Open <code>http://localhost:8080</code>, log in with that password, create a pipeline and publish to the URL the dashboard shows. No camera? <a href="/projects/bunryu/docs/usage/publishing/#without-a-camera-file-or-destination">Publish a test card</a> with FFmpeg.</p>
 <p>Install on a server (Debian/Ubuntu, x86_64, systemd), the recommended setup for production:</p>
 <pre><code class="language-bash">sudo git clone https://github.com/live-miracles/bunryu /opt/bunryu
 sudo BUNRYU_DASHBOARD_PASSWORD=&#39;choose-a-long-password&#39; bash /opt/bunryu/scripts/server-install.sh

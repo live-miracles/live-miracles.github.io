@@ -92,7 +92,7 @@
               <div class="min-w-0"><details class="rounded-box border-base-content/10 bg-base-300/46 text-base-content/68 mb-7 border p-4 text-sm backdrop-blur">
               <summary class="text-base-content/80 cursor-pointer font-semibold">On this page</summary>
               <ol class="mt-3 space-y-2">
-                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#test-commands">Test commands</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#checking-the-input">Checking the input</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#preview">Preview</a></li>
+                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#test-commands">Test commands</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#without-a-camera-file-or-destination">Without a camera, file or destination</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#from-a-file">From a file</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#checking-the-input">Checking the input</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#preview">Preview</a></li>
               </ol>
             </details><article class="readme min-w-0"><p>A <strong>pipeline</strong> is one live input. Creating a pipeline assigns it a stream key;
 the pipeline panel in the dashboard has a copy button for the full publish URL
@@ -144,9 +144,31 @@ counters for an SRT publisher, so a stream sent straight to 10080 has no link
 statistics or loss alerts in the dashboard (its input card says so). Through the
 relay you get them, so use the bonded port when you want to watch the link.</p>
 <h2 id="test-commands">Test commands</h2>
-<p>These <code>ffmpeg</code> commands publish a looping file. Replace <code>localhost</code> with the
+<p>These <code>ffmpeg</code> commands publish a test stream. Replace <code>localhost</code> with the
 server address, and <code>&lt;stream-key&gt;</code> / <code>&lt;passphrase&gt;</code> with the values from the
 dashboard.</p>
+<h3 id="without-a-camera-file-or-destination">Without a camera, file or destination</h3>
+<p>This generates a test card and a tone, so you need no encoder, video file or
+platform account:</p>
+<pre><code class="language-bash">ffmpeg -re -f lavfi -i testsrc2=size=1280x720:rate=30 \
+  -f lavfi -i sine=frequency=440 \
+  -c:v libx264 -preset veryfast -b:v 2500k -pix_fmt yuv420p -g 60 \
+  -c:a aac -b:a 128k \
+  -f flv rtmp://localhost:21935/live/&lt;stream-key&gt;
+</code></pre>
+<p>To see an output run without a real destination, forward one pipeline into
+another on the same server:</p>
+<ol>
+<li>Create two pipelines, A and B.</li>
+<li>Add an output to A with the destination
+<code>rtmp://localhost:21935/live/&lt;stream-key-of-B&gt;</code>. An output may connect to
+loopback only on the server&#39;s own RTMP/SRT ports.</li>
+<li>Run the command above with A&#39;s stream key.</li>
+</ol>
+<p>A goes live and its output shows running, and B goes live with the forwarded
+stream. Preview either one.</p>
+<h3 id="from-a-file">From a file</h3>
+<p>These commands publish a looping file.</p>
 <p>RTMP:</p>
 <pre><code class="language-bash">ffmpeg -re -stream_loop -1 -i video.mp4 \
   -c:v libx264 -preset veryfast -b:v 2500k -c:a aac -b:a 128k \

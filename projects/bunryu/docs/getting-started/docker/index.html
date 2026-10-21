@@ -103,9 +103,25 @@ BUNRYU_DASHBOARD_PASSWORD=&#39;choose-a-long-password&#39; docker compose up -d
 </code></pre>
 <p>Open <code>http://localhost:8080</code>, log in with that password, create a
 pipeline and <a href="/projects/bunryu/docs/usage/publishing/">publish</a> to it.</p>
+<p>No camera or local FFmpeg? Run the image&#39;s own FFmpeg as a test source
+(<code>&lt;stream-key&gt;</code> is from the pipeline panel; stop it with Ctrl+C):</p>
+<pre><code class="language-bash">docker exec bunryu ffmpeg -re -f lavfi -i testsrc2=size=1280x720:rate=30 \
+  -f lavfi -i sine=frequency=440 \
+  -c:v libx264 -preset veryfast -b:v 2500k -pix_fmt yuv420p -g 60 \
+  -c:a aac -b:a 128k \
+  -f flv rtmp://localhost:21935/live/&lt;stream-key&gt;
+</code></pre>
+<p>The image is x86_64 only. On Apple Silicon Macs and other ARM hosts it runs
+emulated, which is for trying and developing only; run production on Linux x86_64
+(see <a href="#details">Details</a>).</p>
 <h2 id="details">Details</h2>
 <p>The image bundles the control plane, SRS, goryu and the same
-pinned FFmpeg build as the native installer (x86_64 only). One container runs
+pinned FFmpeg build as the native installer (x86_64 only). On an ARM host such
+as an Apple Silicon Mac, <code>compose.yaml</code> makes Docker emulate it (with plain
+<code>docker build</code> and <code>docker run</code>, add <code>--platform linux/amd64</code>); that is slower, so
+use it only to try or develop Bunryu. See
+<a href="/projects/bunryu/docs/reference/design-decisions/#the-docker-image-is-x86_64-only-arm-hosts-run-it-emulated-for-development">why there is no ARM image</a>.
+One container runs
 all three processes under a small supervisor (<code>docker/entrypoint.sh</code>) that
 keeps the native startup order: SRS starts only after <code>/api/ready</code> answers,
 each process is restarted 2 s after it exits, and every start and exit is
@@ -128,7 +144,9 @@ docker run -d --name bunryu --restart unless-stopped \
 <li><strong>Data</strong>: everything persistent is in the <code>/data</code> volume: <code>db.sqlite</code>,
 <code>bunryu.json</code>, the generated <code>srs.conf</code> / <code>goryu.json</code>, HLS
 previews and diagnostics. On every start the SRS and relay configs are
-refreshed from the image and keep their SRT passphrase, like a reinstall.</li>
+refreshed from the image and keep their SRT passphrase, like a reinstall;
+<code>bunryu.json</code> keeps any setting you added and gets only the port, paths and
+password set.</li>
 <li><strong>Secrets</strong>: the first start needs <code>BUNRYU_DASHBOARD_PASSWORD</code> (it is stored
 as <code>dashboard_password</code> in <code>/data/bunryu.json</code>, so later starts don&#39;t) and
 otherwise stops with an error in the logs; it never generates or logs a
