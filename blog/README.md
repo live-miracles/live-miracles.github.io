@@ -20,4 +20,4 @@ Posts with `draft: true` are not built; set `draft: false` once the post has bee
 quotes logs or incidents, redact stream keys, SRT passphrases, destination URLs and
 customer or encoder IP addresses.
 
-The site build turns each published post into `/blog/<slug>/`, lists it on `/blog/` and in the RSS feed at `/blog/feed.xml`. To preview, run `npm run dev` and open `/blog/` on the port it prints.
+The site build turns each published post into `/blog/<slug>/`, lists it on `/blog/` and in the RSS feed at `/blog/feed.xml`. To preview, run `npm run dev` and open `/blog/` on the port it prints; set `BLOG_DRAFTS=1` to include drafts. Put images in `blog/images/` and write them as `![alt](images/name.png)`; they are copied to `/blog/images/`.

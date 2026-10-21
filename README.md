@@ -38,7 +38,7 @@ for an example.
 Posts are Markdown files in `blog/`, named `YYYY-MM-DD-slug.md`, with front matter
 (`title`, `date`, `summary`, `tags`, `draft`). Each published post gets a page at
 `/blog/<slug>/`, and the site lists them at `/blog/` and in an RSS feed at
-`/blog/feed.xml`. Posts with `draft: true` are not built. See
+`/blog/feed.xml`. Posts with `draft: true` are not built (`BLOG_DRAFTS=1 npm run dev` previews them). See
 [blog/README.md](blog/README.md) for the conventions.
 
 To preview a project's README and docs from a local checkout before pushing:

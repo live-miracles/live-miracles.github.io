@@ -16,7 +16,8 @@
 // from a local checkout instead, to preview documentation before pushing it.
 //
 // The Markdown posts in blog/ become /blog/<slug>/ pages, a /blog/ index and an
-// RSS feed at /blog/feed.xml (see blog.js); posts marked `draft: true` are left out.
+// RSS feed at /blog/feed.xml (see blog.js); posts marked `draft: true` are left out
+// unless BLOG_DRAFTS=1 is set, to preview them locally.
 
 const fs = require('node:fs');
 const path = require('node:path');
@@ -24,7 +25,7 @@ const { execFileSync } = require('node:child_process');
 const { Marked } = require('marked');
 const { organization, categories, projects } = require('./projects');
 const { stripTags, githubSlug } = require('./markdown-text');
-const { loadPosts } = require('./blog');
+const { loadPosts, blogImageUrl } = require('./blog');
 
 const root = path.resolve(__dirname, '..');
 const dist = path.join(root, 'dist');
@@ -746,14 +747,13 @@ function tagBadges(tags) {
 }
 
 // Posts are standalone: no project to resolve links against, so links stay as
-// written and relative images point at blog/ in this repository.
+// written and relative images are served from /blog/ (see blogImageUrl).
 function renderPost(post) {
-    const rawBase = `https://raw.githubusercontent.com/${organization}/${organization}.github.io/${branch}/blog/`;
     const slugCounts = new Map();
     const marked = new Marked({ gfm: true, breaks: false });
     marked.use({
         walkTokens(token) {
-            if (token.type === 'image') token.href = absoluteUrl(token.href, rawBase);
+            if (token.type === 'image') token.href = blogImageUrl(token.href);
         },
         renderer: {
             heading(text, level) {
@@ -959,11 +959,17 @@ async function main() {
     writeFile('.nojekyll', '');
 
     const data = await Promise.all(projects.map(loadProject));
-    const posts = loadPosts(path.join(root, 'blog')).map((post) => ({
+    const posts = loadPosts(path.join(root, 'blog'), {
+        includeDrafts: process.env.BLOG_DRAFTS === '1',
+    }).map((post) => ({
         ...post,
         html: renderPost(post),
     }));
 
+    const blogImages = path.join(root, 'blog', 'images');
+    if (fs.existsSync(blogImages)) {
+        fs.cpSync(blogImages, path.join(dist, 'blog', 'images'), { recursive: true });
+    }
     writeFile('index.html', homePage(data, posts));
     writeFile(path.join('blog', 'index.html'), blogIndexPage(posts));
     writeFile(path.join('blog', 'feed.xml'), blogFeed(posts));

@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
-const { parseFrontMatter, loadPosts } = require('./blog');
+const { parseFrontMatter, loadPosts, blogImageUrl } = require('./blog');
 
 function post({ title = 'A title', date = '2026-01-02', draft = false, extra = '' } = {}) {
     return `---\ntitle: ${title}\ndate: ${date}\ntags: [one, two]\nsummary: A summary.\ndraft: ${draft}\n${extra}---\n\nBody.\n`;
@@ -45,6 +45,17 @@ test('loadPosts returns published posts newest first and skips drafts and README
     assert.equal(posts[0].sourcePath, 'blog/2026-03-04-newer.md');
 });
 
+test('loadPosts includes drafts when asked to', () => {
+    const dir = blogDir({
+        '2026-01-02-live.md': post({ date: '2026-01-02' }),
+        '2026-05-06-wip.md': post({ date: '2026-05-06', draft: true }),
+    });
+    assert.deepEqual(
+        loadPosts(dir, { includeDrafts: true }).map((p) => p.slug),
+        ['wip', 'live'],
+    );
+});
+
 test('loadPosts skips a post with a missing field or a date that differs from its file name', () => {
     const warn = console.warn;
     const warnings = [];
@@ -67,4 +78,11 @@ test('loadPosts skips a post with a missing field or a date that differs from it
 
 test('loadPosts returns nothing when there is no blog folder', () => {
     assert.deepEqual(loadPosts(path.join(os.tmpdir(), 'no-such-blog-dir')), []);
+});
+
+test('blogImageUrl serves relative images from /blog/ and leaves other URLs alone', () => {
+    assert.equal(blogImageUrl('images/a.png'), '/blog/images/a.png');
+    assert.equal(blogImageUrl('./images/a.png'), '/blog/images/a.png');
+    assert.equal(blogImageUrl('https://example.com/a.png'), 'https://example.com/a.png');
+    assert.equal(blogImageUrl('/assets/logo.png'), '/assets/logo.png');
 });
