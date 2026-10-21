@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Live Miracles blog</title>
+    <link>https://live-miracles.github.io/blog/</link>
+    <description>Notes from running live events and building the tools behind them.</description>
+    <item>
+      <title>One leaking FFmpeg process took down six live streams</title>
+      <link>https://live-miracles.github.io/blog/one-leaking-ffmpeg-six-streams/</link>
+      <guid>https://live-miracles.github.io/blog/one-leaking-ffmpeg-six-streams/</guid>
+      <pubDate>Wed, 21 Oct 2026 00:00:00 GMT</pubDate>
+      <description>A memory leak in one FFmpeg process restarted our whole streaming stack. How it happened, and the guard rails that keep a single bad process small.</description>
+    </item>
+  </channel>
+</rss>
