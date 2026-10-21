@@ -36,6 +36,8 @@ The root cause was a loop: flaky input, a decoder leak on resync, an OOM kill, a
 stack, and a fresh mass reconnect. Isolation between outputs did not help, because the process
 topology made the kernel kill a shared fate.
 
+![The restart loop in five steps, with the memory watchdog we added between the decoder leak and the OOM kill](images/leak-restart-loop.png)
+
 ## What we changed
 
 **Drop damaged packets before they reach the decoder.** Outputs now run with

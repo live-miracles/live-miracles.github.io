@@ -27,6 +27,9 @@ costs the control plane. It does not show FFmpeg's own CPU and RAM, which our
 [sizing page](https://live-miracles.github.io/projects/bunryu/docs/getting-started/sizing/) covers
 separately. The machine was an 8-core laptop shared with other work.
 
+The screenshots and the recording were taken before the fixes described near the end, so they
+show the dashboard without search boxes.
+
 ## The overview
 
 ![The overview with 50 inputs and 500 outputs: host charts, totals, and pipelines grouped in the sidebar](images/overview-500-outputs.png)
@@ -77,25 +80,30 @@ level you work at when you are adjusting one destination.
 These are the control plane's costs. A real 500-output server also runs 500 FFmpeg processes. Our
 sizing page puts that at about 30 vCPUs and 17 to 30 GB of RAM at 8 Mbps per output.
 
-## What is still awkward
+## What we fixed after looking
 
-Looking at it at this size also showed us what is not good yet:
+Looking at it at this size showed us four things we did not like, and we fixed three of them:
 
-- **There is no search box.** Finding one output by name or destination means opening its pipeline or
-  scrolling. Groups help; search would help more.
-- **The overview is one long page.** About 32 screens at 500 outputs. The Issues tab shortens it when
-  something is wrong, but not when you just want to look around.
-- **The "Outputs" heading keeps saying 500** when the Issues tab has narrowed the list to 20.
-- **The Issues tab says "No input issues"** while two inputs are offline. The offline inputs are
-  visible in the sidebar, the totals and through their outputs, but not in that list.
+- **There was no search box.** Each table now has one on its heading line, matching names as you
+  type. An output matches on its own name or its pipeline's, so "studio 07" lists that pipeline's ten
+  outputs and "youtube" lists every YouTube output. It keeps what you typed, and the cursor, through
+  the dashboard's refresh every five seconds.
+- **The "Outputs" heading kept saying 500** when the Issues tab had narrowed the list to 20. It now
+  says "20 of 500".
+- **The Issues tab said "No input issues"** while two inputs were offline, and listed only the
+  outputs that were waiting on them. An offline input stays a quiet grey everywhere else, because an
+  idle pipeline before a show is normal. But in the Issues view it now appears with its cause, "No
+  publisher is connected; 10 outputs affected."
 
-We have written the first one down under
+What is still not great: the overview is one long page, about 32 screens at 500 outputs, and search
+matches names only, not destinations or statuses. We left destinations out on purpose, because a
+destination URL can contain a platform's stream key. The remaining limits are listed under
 [known issues](https://live-miracles.github.io/projects/bunryu/docs/operations/known-issues/).
 
 ## Takeaways
 
 - **Test the interface at the capacity you claim.** We had the server numbers for 500 outputs and had
-  never opened the dashboard at that size.
+  never opened the dashboard at that size. Doing it found three things to fix.
 - **Show problems in the totals and the navigation, not only in a list.** Counting at the top and a
   colour in the sidebar mean you notice before you scroll.
 - **Say what was simulated.** Without real FFmpeg processes this is a test of the dashboard and the
