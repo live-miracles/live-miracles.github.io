@@ -79,6 +79,7 @@ climbing. &quot;No error&quot; did not mean &quot;healthy&quot;.</p>
 <p>The root cause was a loop: flaky input, a decoder leak on resync, an OOM kill, a restart of the whole
 stack, and a fresh mass reconnect. Isolation between outputs did not help, because the process
 topology made the kernel kill a shared fate.</p>
+<p><img src="/blog/images/leak-restart-loop.png" alt="The restart loop in five steps, with the memory watchdog we added between the decoder leak and the OOM kill" loading="lazy" /></p>
 <h2 id="what-we-changed">What we changed</h2>
 <p><strong>Drop damaged packets before they reach the decoder.</strong> Outputs now run with
 <code>-fflags +discardcorrupt -err_detect crccheck+bitstream</code>. This reduces the chance of the misparse,

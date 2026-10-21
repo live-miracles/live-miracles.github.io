@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="en" data-theme="dim">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Comparison with alternatives — Bunryu</title>
+    <meta name="description" content="How Bunryu differs from the tools people usually consider for the same job. It is written for choosing a tool, not for ranking them: each has a case where it is the better pick. Facts about other proj" />
+    <link rel="canonical" href="https://live-miracles.github.io/projects/bunryu/docs/getting-started/comparison/" />
+    <meta property="og:site_name" content="Live Miracles" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Comparison with alternatives — Bunryu" />
+    <meta property="og:description" content="How Bunryu differs from the tools people usually consider for the same job. It is written for choosing a tool, not for ranking them: each has a case where it is the better pick. Facts about other proj" />
+    <meta property="og:url" content="https://live-miracles.github.io/projects/bunryu/docs/getting-started/comparison/" />
+    <meta property="og:image" content="https://raw.githubusercontent.com/live-miracles/bunryu/master/public/logo.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/assets/logo.png" type="image/png" />
+    <link rel="alternate" type="application/rss+xml" title="Live Miracles blog" href="/blog/feed.xml" />
+    <link rel="stylesheet" href="/assets/styles.css" />
+  </head>
+  <body>
+    <div class="group/drawer drawer lg:drawer-open">
+      <script>
+        window.setSidebarRail = function (rail) {
+          document.querySelector('.drawer').toggleAttribute('data-rail', rail);
+          var toggle = document.getElementById('sidebar-toggle');
+          if (toggle) {
+            toggle.setAttribute('aria-label', rail ? 'Expand projects' : 'Collapse projects to icons');
+          }
+        };
+        window.sidebarRail = function () {
+          try {
+            var saved = localStorage.getItem('sidebar-rail');
+            if (saved) return saved === '1';
+          } catch (e) {}
+          return true;
+        };
+        window.setSidebarRail(window.sidebarRail());
+      </script>
+      <input id="project-drawer" type="checkbox" class="drawer-toggle" />
+      <div class="drawer-content min-h-screen">
+        <header class="navbar border-base-content/10 bg-base-300/92 sticky top-0 z-20 border-b px-4 backdrop-blur lg:hidden">
+          <div class="flex-none">
+            <label for="project-drawer" class="btn btn-square btn-ghost" aria-label="Open projects"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /></svg></label>
+          </div>
+          <div class="flex-1">
+            <a href="/" class="btn btn-ghost text-lg font-bold">Live Miracles</a>
+          </div>
+        </header>
+        <main class="mx-auto flex min-h-screen w-full max-w-6xl flex-col gap-8 px-4 py-6 sm:px-6 lg:px-8">
+          <section class="rounded-box border-base-content/10 bg-base-200/68 border p-5 shadow-xl backdrop-blur sm:p-7">
+            <nav class="text-base-content/60 flex flex-wrap items-center gap-2 text-sm" aria-label="Breadcrumb">
+              <a href="/projects/bunryu/" class="hover:text-primary flex items-center gap-2"><img src="/assets/bunryu-logo.png" alt="" class="rounded-box size-5  shrink-0 object-contain" /><span>Bunryu</span></a>
+              <span aria-hidden="true">›</span><a class="hover:text-primary" href="/projects/bunryu/docs/">Documentation</a><span aria-hidden="true">›</span><span>Getting started</span>
+            </nav>
+            <h1 class="mt-3 text-3xl font-bold sm:text-4xl">Comparison with alternatives</h1>
+            <div role="tablist" class="tabs tabs-border mt-6" aria-label="Bunryu sections">
+              <a role="tab" href="/projects/bunryu/" class="tab ">Overview</a><a role="tab" href="/projects/bunryu/docs/" class="tab tab-active font-semibold" aria-current="page">Documentation</a>
+            </div>
+            <details class="rounded-box border-base-content/10 bg-base-300/46 mt-6 border p-4 lg:hidden">
+              <summary class="text-base-content/80 cursor-pointer text-sm font-semibold">Documentation menu</summary>
+              <div class="mt-3"><nav class="lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto" aria-label="Bunryu documentation">
+              <div class="">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Getting started</div>
+                <ul class="text-sm"><li><a href="/projects/bunryu/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Introduction</a></li><li><a href="/projects/bunryu/docs/getting-started/docker/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Docker</a></li><li><a href="/projects/bunryu/docs/getting-started/install/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Native install</a></li><li><a href="/projects/bunryu/docs/getting-started/sizing/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Sizing a server</a></li><li><a href="/projects/bunryu/docs/getting-started/comparison/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 bg-base-100 text-primary font-semibold" aria-current="page">Comparison with alternatives</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Usage</div>
+                <ul class="text-sm"><li><a href="/projects/bunryu/docs/usage/publishing/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Publishing to a pipeline</a></li><li><a href="/projects/bunryu/docs/usage/outputs/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Outputs</a></li><li><a href="/projects/bunryu/docs/usage/translation/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Translation outputs</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Operations</div>
+                <ul class="text-sm"><li><a href="/projects/bunryu/docs/operations/security/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Security</a></li><li><a href="/projects/bunryu/docs/operations/remote-access/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Remote access (Cloudflare Tunnel)</a></li><li><a href="/projects/bunryu/docs/operations/configuration/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Configuration</a></li><li><a href="/projects/bunryu/docs/operations/reliability/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Reliability</a></li><li><a href="/projects/bunryu/docs/operations/known-issues/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Known issues</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Reference</div>
+                <ul class="text-sm"><li><a href="/projects/bunryu/docs/reference/api/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">REST API</a></li><li><a href="/projects/bunryu/docs/reference/development/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Development</a></li><li><a href="/projects/bunryu/docs/reference/design-decisions/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Design decisions</a></li></ul>
+              </div>
+            </nav></div>
+            </details>
+            <div class="mt-7 grid gap-8 lg:grid-cols-[15rem_minmax(0,1fr)]">
+              <div class="border-base-content/10 hidden lg:block lg:border-r lg:pr-4"><nav class="lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto" aria-label="Bunryu documentation">
+              <div class="">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Getting started</div>
+                <ul class="text-sm"><li><a href="/projects/bunryu/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Introduction</a></li><li><a href="/projects/bunryu/docs/getting-started/docker/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Docker</a></li><li><a href="/projects/bunryu/docs/getting-started/install/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Native install</a></li><li><a href="/projects/bunryu/docs/getting-started/sizing/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Sizing a server</a></li><li><a href="/projects/bunryu/docs/getting-started/comparison/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 bg-base-100 text-primary font-semibold" aria-current="page">Comparison with alternatives</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Usage</div>
+                <ul class="text-sm"><li><a href="/projects/bunryu/docs/usage/publishing/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Publishing to a pipeline</a></li><li><a href="/projects/bunryu/docs/usage/outputs/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Outputs</a></li><li><a href="/projects/bunryu/docs/usage/translation/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Translation outputs</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Operations</div>
+                <ul class="text-sm"><li><a href="/projects/bunryu/docs/operations/security/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Security</a></li><li><a href="/projects/bunryu/docs/operations/remote-access/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Remote access (Cloudflare Tunnel)</a></li><li><a href="/projects/bunryu/docs/operations/configuration/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Configuration</a></li><li><a href="/projects/bunryu/docs/operations/reliability/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Reliability</a></li><li><a href="/projects/bunryu/docs/operations/known-issues/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Known issues</a></li></ul>
+              </div><div class="mt-4">
+                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Reference</div>
+                <ul class="text-sm"><li><a href="/projects/bunryu/docs/reference/api/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">REST API</a></li><li><a href="/projects/bunryu/docs/reference/development/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Development</a></li><li><a href="/projects/bunryu/docs/reference/design-decisions/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Design decisions</a></li></ul>
+              </div>
+            </nav></div>
+              <div class="min-w-0"><details class="rounded-box border-base-content/10 bg-base-300/46 text-base-content/68 mb-7 border p-4 text-sm backdrop-blur">
+              <summary class="text-base-content/80 cursor-pointer font-semibold">On this page</summary>
+              <ol class="mt-3 space-y-2">
+                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#design-approach">Design approach</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#at-a-glance">At a glance</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#datarhei-restreamer">datarhei Restreamer</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#srs">SRS</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#mediamtx">MediaMTX</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#hosted-multistreaming-services">Hosted multistreaming services</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#when-not-to-use-bunryu">When not to use Bunryu</a></li>
+              </ol>
+            </details><article class="readme min-w-0"><p>How Bunryu differs from the tools people usually consider for the same job. It is
+written for choosing a tool, not for ranking them: each has a case where it is the
+better pick. Facts about other projects come from their own READMEs and
+documentation, checked in October 2026 against Bunryu 3.0, Restreamer 2.12, SRS 6.0
+and MediaMTX 1.21; check their sites for what they offer today.</p>
+<h2 id="design-approach">Design approach</h2>
+<p>Bunryu has no media code of its own. SRS accepts RTMP and SRT, libsrt carries SRT
+(inside SRS and in <a href="https://github.com/live-miracles/goryu">Goryu</a>), and FFmpeg does
+everything to the stream after that: the outputs, previews, probing and audio
+processing. What Bunryu adds is a control plane of about 11,000 lines of TypeScript
+(38 files, four runtime dependencies) and Goryu, about 2,000 lines of C over libsrt.</p>
+<p>This is deliberate. Timestamps, codec quirks and damaged input are where media
+software fails, and FFmpeg and libsrt have long production use on exactly that. In
+our tests FFmpeg stayed connected through 10% packet loss where a newer converter
+dropped its readers (<a href="/projects/bunryu/docs/reference/design-decisions/#dont-use-mediamtx-for-srt-ingest-or-srtrtmp-conversion">details</a>).
+A small codebase is also easier to read, test and reason about when something fails
+in the middle of an event.</p>
+<p>The cost is efficiency. A copy output is a whole FFmpeg process of about 65 to 90 MB
+of RAM, where a purpose-built forwarding hub used about 10x less RAM, though about
+1.5x more CPU (<a href="/projects/bunryu/docs/reference/design-decisions/#one-ffmpeg-process-per-output">details</a>).
+That is acceptable inside the supported <a href="/projects/bunryu/docs/getting-started/introduction/#capacity-and-limits">capacity</a>,
+and we chose it over writing our own.</p>
+<h2 id="at-a-glance">At a glance</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Bunryu</th>
+<th>datarhei Restreamer</th>
+<th>SRS alone</th>
+<th>MediaMTX</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>What it is</td>
+<td>Restreaming server for long live events, with one dashboard for up to 50 inputs and 500 outputs</td>
+<td>Restreaming app with a wizard UI, built on datarhei Core</td>
+<td>Media server (ingest and delivery)</td>
+<td>Media server and router for many protocols</td>
+</tr>
+<tr>
+<td>Forward to many destinations</td>
+<td>RTMP, RTMPS and SRT, one FFmpeg process per output</td>
+<td>RTMP, SRT and other protocols through its UI</td>
+<td><code>forward</code> entries in its config file</td>
+<td>The <code>forward</code> feature, set per path in its config file</td>
+</tr>
+<tr>
+<td>Dashboard and API</td>
+<td>Dashboard and REST API</td>
+<td>Web UI and Swagger-documented REST API</td>
+<td>HTTP API and config files</td>
+<td>Control API and config file</td>
+</tr>
+<tr>
+<td>Bonded SRT ingest</td>
+<td>Yes, through <a href="https://github.com/live-miracles/goryu">Goryu</a></td>
+<td>Not documented</td>
+<td>No (<a href="https://github.com/ossrs/srs/issues/4771">ossrs/srs#4771</a>)</td>
+<td>Not found in its docs or code</td>
+</tr>
+<tr>
+<td>Recovery</td>
+<td>Per-output watchdogs, bounded retries, Error History</td>
+<td>Core documents error detection and recovery for its processes</td>
+<td>Not compared</td>
+<td>Not compared</td>
+</tr>
+<tr>
+<td>Translation audio mixing</td>
+<td>Yes (beta): ducking, delay and restore</td>
+<td>Can mux a separate audio channel</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Viewer-facing playback</td>
+<td>Dashboard preview only</td>
+<td>Built-in player and publication page</td>
+<td>HLS, WebRTC and more</td>
+<td>WebRTC, HLS, RTSP and more</td>
+</tr>
+<tr>
+<td>Where it runs</td>
+<td>Linux x86_64 (ARM only emulated, for development)</td>
+<td>Docker on AMD64, ARMv7 and ARM64</td>
+<td>Linux and macOS on many CPU types</td>
+<td>Linux, Windows and macOS, one binary</td>
+</tr>
+<tr>
+<td>License</td>
+<td>MIT</td>
+<td>Apache-2.0</td>
+<td>MIT</td>
+<td>MIT</td>
+</tr>
+</tbody></table>
+<h2 id="datarhei-restreamer">datarhei Restreamer</h2>
+<p><strong>Core trade-off:</strong> friendlier and broader, versus built for a narrower job.</p>
+<ul>
+<li>Pick Restreamer if you want a setup wizard, a built-in player or public page for
+viewers, hardware encoding (Raspberry Pi, NVIDIA, Intel), or to run on ARM.</li>
+<li>Pick Bunryu for a Linux server that forwards many pipelines to many destinations
+through long events, where per-output recovery, an Error History with FFmpeg&#39;s
+last output, bonded SRT ingest or translation mixing matter.</li>
+</ul>
+<p>Both are FFmpeg based. We have not compared how they behave when a destination
+fails, so we make no claim about it.</p>
+<h2 id="srs">SRS</h2>
+<p><strong>Core trade-off:</strong> SRS is Bunryu&#39;s ingest, and its own forwarding is static.</p>
+<p>Bunryu runs on official SRS for RTMP and SRT ingest. For outputs it does not use
+SRS&#39;s <code>forward</code>: in 6.0 a destination cannot be added or removed on a live stream
+without disconnecting the publisher, and a forward runs inside the SRS process, so a
+fault there can affect every stream. See
+<a href="/projects/bunryu/docs/reference/design-decisions/#dont-use-srss-built-in-forwarding-for-outputs">the design decision</a>.</p>
+<p>Use SRS alone for a media server with a fixed configuration, or when you need
+WebRTC, HLS or its other delivery protocols. Bunryu adds the management layer around
+it for restreaming.</p>
+<h2 id="mediamtx">MediaMTX</h2>
+<p><strong>Core trade-off:</strong> a flexible protocol router, versus FFmpeg&#39;s maturity on damaged
+input.</p>
+<ul>
+<li>We tested MediaMTX in two roles and kept FFmpeg in both. As an SRT-to-RTMP
+converter it closed RTMP readers under 5-10% packet loss where FFmpeg stayed
+connected (<a href="/projects/bunryu/docs/reference/design-decisions/#dont-use-mediamtx-for-srt-ingest-or-srtrtmp-conversion">details</a>).
+As a forwarding hub for copy outputs it used about 10x less RAM but about 1.5x
+more CPU than FFmpeg, and FFmpeg would still be needed for transcodes, SRT
+destinations and translation mixes
+(<a href="/projects/bunryu/docs/reference/design-decisions/#one-ffmpeg-process-per-output">details</a>).</li>
+<li>Pick MediaMTX for protocol conversion, WebRTC or RTSP, recording, running on
+Windows or macOS, or a single small binary. It is not a restreaming manager, so
+you set up and watch each forward yourself.</li>
+</ul>
+<h2 id="hosted-multistreaming-services">Hosted multistreaming services</h2>
+<p>A hosted service means no server to run. Bunryu is for teams that want to run the
+server themselves: on their own infrastructure, with their own destinations and
+logs, with capacity set by their own hardware. It does not remove the
+work of operating a server; see <a href="/projects/bunryu/docs/getting-started/sizing/">sizing</a> and
+<a href="/projects/bunryu/docs/operations/reliability/">reliability</a>.</p>
+<h2 id="when-not-to-use-bunryu">When not to use Bunryu</h2>
+<ul>
+<li>You need a native ARM or Apple Silicon deployment, or a Windows or macOS host.
+Bunryu installs on Debian or Ubuntu x86_64 and the <a href="/projects/bunryu/docs/getting-started/docker/">Docker image</a> is
+x86_64 only.</li>
+<li>You need hardware encoding. Bunryu&#39;s video encodings are CPU profiles, and most
+outputs are meant to copy the stream.</li>
+<li>You want a public page or embeddable player for viewers. Bunryu forwards streams
+to destinations; it does not serve viewers.</li>
+<li>You need WebRTC, RTSP or HLS delivery, or protocol conversion as a service.</li>
+<li>You need more than the supported
+<a href="/projects/bunryu/docs/getting-started/introduction/#capacity-and-limits">capacity</a>: 50 inputs and 500 outputs.</li>
+</ul>
+</article><a class="link text-base-content/50 mt-6 inline-block text-sm" href="https://github.com/live-miracles/bunryu/blob/master/docs/1-getting-started/5-comparison.md">Edit this page on GitHub</a><div class="border-base-content/10 mt-10 grid gap-3 border-t pt-6 sm:grid-cols-2">
+              <a class="rounded-box border-base-content/10 hover:border-primary/50 border p-4" href="/projects/bunryu/docs/getting-started/sizing/"><div class="text-base-content/50 text-xs">Previous</div><div class="font-semibold">Sizing a server</div></a>
+              <a class="rounded-box border-base-content/10 hover:border-primary/50 border p-4 sm:text-right" href="/projects/bunryu/docs/usage/publishing/"><div class="text-base-content/50 text-xs">Next</div><div class="font-semibold">Publishing to a pipeline</div></a>
+            </div></div>
+            </div>
+          </section>
+          <footer class="text-base-content/50 border-base-content/10 mt-auto border-t pt-6 pb-2 text-sm">
+            Live Miracles · <a class="link" href="https://github.com/live-miracles">github.com/live-miracles</a>
+          </footer>
+        </main>
+      </div>
+      <aside class="drawer-side z-30">
+        <label for="project-drawer" aria-label="Close projects" class="drawer-overlay"></label>
+        <nav class="border-base-content/10 bg-base-200 min-h-full w-80 border-r p-4 lg:group-data-[rail]/drawer:w-16 lg:group-data-[rail]/drawer:p-2" aria-label="Projects">
+          <div class="mb-6 flex items-center justify-between gap-2 lg:group-data-[rail]/drawer:flex-col lg:group-data-[rail]/drawer:gap-3">
+            <a href="/" title="Live Miracles" aria-label="Live Miracles" class="rounded-box flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:p-0">
+              <img src="/assets/logo.png" alt="" class="rounded-box size-11" />
+              <span class="lg:group-data-[rail]/drawer:hidden">
+                <span class="block text-xl font-bold">Live Miracles</span>
+                <span class="text-base-content/58 text-sm">Open tools for live teams</span>
+              </span>
+            </a>
+            <button type="button" id="sidebar-toggle" class="btn btn-ghost btn-sm btn-square hidden lg:inline-flex lg:group-data-[rail]/drawer:rotate-180" aria-label="Collapse projects to icons"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M11 17l-5-5 5-5M18 17l-5-5 5-5" /></svg></button>
+          </div>
+          <a href="/blog/" title="Blog" aria-label="Blog" class="rounded-box hover:bg-base-100 mb-5 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:mb-3 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+            <svg xmlns="http://www.w3.org/2000/svg" class="size-6 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 5h13a2 2 0 0 1 2 2v12H6a2 2 0 0 1-2-2V5Z"/><path d="M8 9h7M8 13h7M8 17h4"/></svg>
+            <span class="lg:group-data-[rail]/drawer:hidden">Blog</span>
+          </a>
+          <div class="mb-5 lg:group-data-[rail]/drawer:mb-3">
+              
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase lg:group-data-[rail]/drawer:hidden">Streaming &amp; transport</div>
+              <a href="/projects/bunryu/" title="Bunryu" aria-label="Bunryu" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 bg-base-100 text-primary font-semibold" aria-current="page">
+                <img src="/assets/bunryu-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span class="lg:group-data-[rail]/drawer:hidden">Bunryu</span>
+              </a><a href="/projects/goryu/" title="Goryu" aria-label="Goryu" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+                <img src="/assets/goryu-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span class="lg:group-data-[rail]/drawer:hidden">Goryu</span>
+              </a><a href="/projects/delayed-yt/" title="Delayed YouTube" aria-label="Delayed YouTube" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+                <img src="https://live-miracles.github.io/delayed-yt/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span class="lg:group-data-[rail]/drawer:hidden">Delayed YouTube</span>
+              </a>
+            </div><div class="mb-5 lg:group-data-[rail]/drawer:mb-3">
+              <hr class="border-base-content/10 mb-3 hidden lg:group-data-[rail]/drawer:block" />
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase lg:group-data-[rail]/drawer:hidden">vMix production</div>
+              <a href="/projects/vmix-master/" title="vMix Master" aria-label="vMix Master" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+                <img src="https://live-miracles.github.io/vmix-master/logo.svg" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span class="lg:group-data-[rail]/drawer:hidden">vMix Master</span>
+              </a><a href="/projects/folder-player/" title="vMix Folder Player" aria-label="vMix Folder Player" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+                <img src="/assets/folder-player-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span class="lg:group-data-[rail]/drawer:hidden">vMix Folder Player</span>
+              </a>
+            </div><div class="mb-5 lg:group-data-[rail]/drawer:mb-3">
+              <hr class="border-base-content/10 mb-3 hidden lg:group-data-[rail]/drawer:block" />
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase lg:group-data-[rail]/drawer:hidden">Monitoring &amp; operations</div>
+              <a href="/projects/live-gallery/" title="Live Gallery" aria-label="Live Gallery" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+                <img src="/assets/live-gallery-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span class="lg:group-data-[rail]/drawer:hidden">Live Gallery</span>
+              </a><a href="/projects/wake-up-support/" title="Wake Up Support" aria-label="Wake Up Support" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">W</span>
+                <span class="lg:group-data-[rail]/drawer:hidden">Wake Up Support</span>
+              </a>
+            </div><div class="mb-5 lg:group-data-[rail]/drawer:mb-3">
+              <hr class="border-base-content/10 mb-3 hidden lg:group-data-[rail]/drawer:block" />
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase lg:group-data-[rail]/drawer:hidden">Event workflows</div>
+              <a href="/projects/key-vault/" title="Key Vault" aria-label="Key Vault" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+                <img src="https://live-miracles.github.io/key-vault/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span class="lg:group-data-[rail]/drawer:hidden">Key Vault</span>
+              </a><a href="/projects/live-generator/" title="Live Generator" aria-label="Live Generator" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">L</span>
+                <span class="lg:group-data-[rail]/drawer:hidden">Live Generator</span>
+              </a><a href="/projects/multi-lang-qa/" title="Multi Lang QA" aria-label="Multi Lang QA" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+                <img src="https://live-miracles.github.io/multi-lang-qa/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span class="lg:group-data-[rail]/drawer:hidden">Multi Lang QA</span>
+              </a>
+            </div>
+        </nav>
+      </aside>
+      <script>
+        window.setSidebarRail(window.sidebarRail());
+        document.getElementById('sidebar-toggle').addEventListener('click', function () {
+          var rail = !window.sidebarRail();
+          try {
+            localStorage.setItem('sidebar-rail', rail ? '1' : '0');
+          } catch (e) {}
+          window.setSidebarRail(rail);
+        });
+      </script>
+    </div>
+    <dialog id="lightbox" class="lightbox" aria-label="Enlarged image">
+      <button type="button" class="btn btn-circle btn-sm lightbox-close" aria-label="Close image"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg></button>
+      <div class="lightbox-frame"><img alt="" /></div>
+    </dialog>
+    <script>
+      (function () {
+        var dialog = document.getElementById('lightbox');
+        if (!dialog || !dialog.showModal) return;
+        var shown = dialog.querySelector('img');
+        function zoomable(img) {
+          return !img.closest('a') && img.naturalWidth >= 300 && img.naturalHeight >= 100;
+        }
+        function mark(img) {
+          if (img.dataset.zoom || !zoomable(img)) return;
+          img.dataset.zoom = '1';
+          img.classList.add('zoomable');
+          img.tabIndex = 0;
+          img.setAttribute('role', 'button');
+          img.setAttribute('aria-label', 'Enlarge image: ' + (img.alt || 'screenshot'));
+        }
+        function open(img) {
+          shown.src = img.currentSrc || img.src;
+          shown.alt = img.alt;
+          shown.classList.remove('actual');
+          dialog.showModal();
+          dialog.scrollTo(0, 0);
+        }
+        document.querySelectorAll('.readme img').forEach(function (img) {
+          if (img.complete) mark(img);
+          else img.addEventListener('load', function () { mark(img); }, { once: true });
+        });
+        document.addEventListener('click', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom) open(img);
+        });
+        document.addEventListener('keydown', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom && (event.key === 'Enter' || event.key === ' ')) {
+            event.preventDefault();
+            open(img);
+          }
+        });
+        shown.addEventListener('click', function () {
+          shown.classList.toggle('actual');
+        });
+        dialog.addEventListener('click', function (event) {
+          if (event.target !== shown) dialog.close();
+        });
+      })();
+    </script>
+  </body>
+</html>
