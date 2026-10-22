@@ -66,49 +66,61 @@
             <div class="mt-7"><details class="rounded-box border-base-content/10 bg-base-300/46 text-base-content/68 mb-7 border p-4 text-sm backdrop-blur">
               <summary class="text-base-content/80 cursor-pointer font-semibold">On this page</summary>
               <ol class="mt-3 space-y-2">
-                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#features">Features</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#quick-start">Quick start</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#documentation">Documentation</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#license">License</a></li>
+                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#works-in-front-of">Works in front of</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#features">Features</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#quick-start">Quick start</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#documentation">Documentation</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#license">License</a></li>
               </ol>
             </details><article class="readme min-w-0"><img src="https://raw.githubusercontent.com/live-miracles/goryu/master/.github/assets/logo.png" alt="Goryu logo" width="96" align="right" />
 
 <p><em>Goryu (合流, &quot;confluence&quot;): many network paths, one stream.</em></p>
 <p><a href="https://github.com/live-miracles/goryu/actions/workflows/ci.yml"><img src="https://github.com/live-miracles/goryu/actions/workflows/ci.yml/badge.svg" alt="CI" loading="lazy" /></a>
 <a href="https://github.com/live-miracles/goryu/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License: MIT" loading="lazy" /></a></p>
-<p><strong>A small SRT bonding relay for Linux.</strong> An encoder sends one stream over several network links (two uplinks, two SIMs) as a bonded SRT group. Goryu accepts the group on one port, merges the legs into a single deduplicated stream, and forwards it to a downstream SRT server. An ordinary single-link SRT caller works on the same port.</p>
-<p>Built on <a href="https://github.com/Haivision/srt">libsrt</a> 1.5.6 socket-group bonding. It is one C binary with a six-field JSON config and a loopback JSON status API, and it is the bonded-SRT ingress for <a href="https://github.com/live-miracles/bunryu">Bunryu</a>.</p>
-<pre><code class="language-text">        encoder / publisher
-
-   leg A: SRT caller + streamid
-   leg B: SRT caller + same streamid
-              |
-              v
-   +-----------------------------+
-   | goryu listener              |
-   | SRTO_GROUPCONNECT=1         |
-   +-----------------------------+
-              |
-              | SRT group socket
-              | libsrt merges and deduplicates legs
-              v
-   +-----------------------------+
-   | session thread per streamid |
-   | reads one MPEG-TS payload   |
-   +-----------------------------+
-              |
-              +----&gt; srt:// output, same streamid
+<p><strong>Bonded SRT for servers that don&#39;t speak it.</strong> SRT bonding sends one stream over several network links (two uplinks, two SIMs) so a failing link doesn&#39;t drop the stream. SRS, MediaMTX and Restreamer&#39;s engine (datarhei Core) reject a bonded SRT group. Goryu sits in front of them: it accepts the group, merges the legs into one deduplicated stream, and forwards ordinary SRT to your server under the same <code>streamid</code>. A plain single-link SRT caller works on the same port.</p>
+<pre><code class="language-text"> encoder ── link A ──┐
+ (one SRT group,     ├──▶  Goryu :10081  ── plain SRT ──▶  SRS · MediaMTX · Restreamer
+  one streamid)      │     merges the legs,                or any SRT server
+         ── link B ──┘     drops duplicates
 </code></pre>
+<p>One C binary on <a href="https://github.com/Haivision/srt">libsrt</a> 1.5.6, a short JSON config, and a loopback JSON status API with per-leg telemetry. It is also the bonded-SRT ingress of <a href="https://github.com/live-miracles/bunryu">Bunryu</a>.</p>
+<h2 id="works-in-front-of">Works in front of</h2>
+<p>A bonded group was sent to each server directly and through Goryu, then the stream was read back from the server (<a href="/projects/goryu/docs/usage/downstream-servers/">details</a>):</p>
+<table>
+<thead>
+<tr>
+<th>Server</th>
+<th>Bonded group sent directly</th>
+<th>Through Goryu</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SRS 7.0.189</td>
+<td>rejected</td>
+<td>accepted, stream read back</td>
+</tr>
+<tr>
+<td>MediaMTX v1.21.2</td>
+<td>rejected</td>
+<td>accepted, stream read back</td>
+</tr>
+<tr>
+<td>datarhei Core 16.16.0 (Restreamer&#39;s engine)</td>
+<td>rejected</td>
+<td>accepted, stream read back</td>
+</tr>
+</tbody></table>
+<p>These runs used legs simulated on loopback. A real AJA BRIDGE LIVE encoder sending two legs across the internet (about 41 to 44 ms RTT, 22.6 Mbps per leg, packet loss on both legs) was also accepted and forwarded to SRS by a deployed relay; that is the setup we run our live events on every day. Unplugging one of its two cables for 45 seconds left the stream flowing at the same rate, and the leg rejoined by itself. A link that degrades under heavy loss, rather than disconnecting, has not been tested. You still need a sender that implements SRT bonding: see <a href="/projects/goryu/docs/usage/sending-bonded-srt/">Sending bonded SRT</a> for what can send one and a test caller you can run today. For SRTLA or a server with built-in bonding, see <a href="/projects/goryu/docs/getting-started/alternatives/">Alternatives</a>.</p>
 <h2 id="features">Features</h2>
 <ul>
 <li><a href="/projects/goryu/docs/getting-started/introduction/">Bonded and plain SRT</a> on one listener; the status API tells them apart.</li>
 <li><a href="/projects/goryu/docs/usage/configuration/#streamid-routing">Streamid passthrough</a>: one listener serves many streams, each forwarded under its own streamid.</li>
-<li><a href="/projects/goryu/docs/usage/configuration/#passphrase">Passphrase</a> applied to the input and the downstream connection.</li>
+<li><a href="/projects/goryu/docs/usage/configuration/#passphrase">Passphrase</a> for the input and, unless you set <code>output_passphrase</code>, the downstream connection.</li>
 <li><a href="/projects/goryu/docs/reference/status-api/">Per-leg telemetry</a>: RTT, loss, latency, bandwidth and buffer occupancy for every leg, plus the output connection.</li>
 <li><a href="/projects/goryu/docs/operations/reliability/">Built to stay up</a>: bounded retry with backoff to the downstream, takeover of a stale publisher, and a hard cap on log volume.</li>
 </ul>
 <h2 id="quick-start">Quick start</h2>
+<p>No second uplink handy? <code>docker compose -f docker/compose.yaml --profile demo up --build</code> runs MediaMTX, Goryu and a bonded test sender, so you can watch the legs merge with no hardware (<a href="/projects/goryu/docs/getting-started/install/#docker">details</a>).</p>
 <pre><code class="language-bash">curl -fsSL -o goryu.tar.gz https://github.com/live-miracles/goryu/releases/latest/download/goryu-linux-x86_64.tar.gz
 mkdir goryu &amp;&amp; tar -xzf goryu.tar.gz -C goryu &amp;&amp; cd goryu
 </code></pre>
-<p>Create <code>goryu.json</code> (the downstream must be an SRT server that accepts the publish):</p>
+<p>Create <code>goryu.json</code>, pointing <code>output_port</code> at your server&#39;s SRT port (for example <code>8890</code> for MediaMTX, <code>10080</code> for SRS):</p>
 <pre><code class="language-json">{
   &quot;input_host&quot;: &quot;0.0.0.0&quot;,
   &quot;input_port&quot;: 10081,
@@ -118,15 +130,29 @@ mkdir goryu &amp;&amp; tar -xzf goryu.tar.gz -C goryu &amp;&amp; cd goryu
   &quot;passphrase&quot;: &quot;&quot;
 }
 </code></pre>
-<p>Run it, then check it is up:</p>
+<p>Run it, then check it is up (or use <a href="/projects/goryu/docs/getting-started/install/#docker">Docker</a>):</p>
 <pre><code class="language-bash">LD_LIBRARY_PATH=lib ./bin/goryu goryu.json
 curl http://127.0.0.1:8081/status
 </code></pre>
-<p>Point the encoder at <code>srt://&lt;host&gt;:10081</code> with a <code>streamid</code>. See <a href="/projects/goryu/docs/getting-started/install/">Install</a> for running it under systemd and the firewall port, and <a href="/projects/goryu/docs/usage/configuration/">Configuration</a> for every field.</p>
+<p>Point a bonded sender at <code>srt://&lt;host&gt;:10081</code> with the <code>streamid</code> your server expects for a publish (<a href="/projects/goryu/docs/usage/downstream-servers/#configure-the-streamid">per server</a>). Once a stream is flowing, the status API shows each leg (a trimmed response from the loopback test above):</p>
+<pre><code class="language-json">{
+  &quot;streamId&quot;: &quot;camera1/main&quot;,
+  &quot;inputActive&quot;: true,
+  &quot;outputConnected&quot;: true,
+  &quot;input&quot;: {
+    &quot;bonded&quot;: true,
+    &quot;legs&quot;: [
+      { &quot;ip&quot;: &quot;127.0.0.1&quot;, &quot;state&quot;: &quot;running&quot;, &quot;rttMs&quot;: 0.166, &quot;recvLossTotal&quot;: 0, &quot;rcvBufMs&quot;: 227 },
+      { &quot;ip&quot;: &quot;127.0.0.2&quot;, &quot;state&quot;: &quot;running&quot;, &quot;rttMs&quot;: 0.154, &quot;recvLossTotal&quot;: 0, &quot;rcvBufMs&quot;: 220 }
+    ]
+  }
+}
+</code></pre>
+<p>If a leg fails, it leaves <code>legs[]</code> and <code>forwardedBytes</code> keeps growing; the downstream never notices. See <a href="/projects/goryu/docs/getting-started/install/">Install</a> for systemd and the firewall port, and <a href="/projects/goryu/docs/usage/configuration/">Configuration</a> for every field.</p>
 <h2 id="documentation">Documentation</h2>
 <ul>
-<li><strong>Getting started:</strong> <a href="/projects/goryu/docs/getting-started/introduction/">Introduction</a> · <a href="/projects/goryu/docs/getting-started/install/">Install</a></li>
-<li><strong>Usage:</strong> <a href="/projects/goryu/docs/usage/configuration/">Configuration</a></li>
+<li><strong>Getting started:</strong> <a href="/projects/goryu/docs/getting-started/introduction/">Introduction</a> · <a href="/projects/goryu/docs/getting-started/install/">Install</a> · <a href="/projects/goryu/docs/getting-started/alternatives/">Alternatives</a></li>
+<li><strong>Usage:</strong> <a href="/projects/goryu/docs/usage/configuration/">Configuration</a> · <a href="/projects/goryu/docs/usage/sending-bonded-srt/">Sending bonded SRT</a> · <a href="/projects/goryu/docs/usage/downstream-servers/">Downstream servers</a></li>
 <li><strong>Operations:</strong> <a href="/projects/goryu/docs/operations/reliability/">Reliability</a></li>
 <li><strong>Reference:</strong> <a href="/projects/goryu/docs/reference/status-api/">Status API</a> · <a href="/projects/goryu/docs/reference/architecture/">Architecture</a> · <a href="/projects/goryu/docs/reference/development/">Development</a></li>
 </ul>

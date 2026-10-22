@@ -61,10 +61,10 @@
               <div class="mt-3"><nav class="lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto" aria-label="Goryu documentation">
               <div class="">
                 <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Getting started</div>
-                <ul class="text-sm"><li><a href="/projects/goryu/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Introduction</a></li><li><a href="/projects/goryu/docs/getting-started/install/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Install</a></li></ul>
+                <ul class="text-sm"><li><a href="/projects/goryu/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Introduction</a></li><li><a href="/projects/goryu/docs/getting-started/install/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Install</a></li><li><a href="/projects/goryu/docs/getting-started/alternatives/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Alternatives</a></li></ul>
               </div><div class="mt-4">
                 <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Usage</div>
-                <ul class="text-sm"><li><a href="/projects/goryu/docs/usage/configuration/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Configuration</a></li></ul>
+                <ul class="text-sm"><li><a href="/projects/goryu/docs/usage/configuration/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Configuration</a></li><li><a href="/projects/goryu/docs/usage/sending-bonded-srt/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Sending bonded SRT</a></li><li><a href="/projects/goryu/docs/usage/downstream-servers/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Downstream servers</a></li></ul>
               </div><div class="mt-4">
                 <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Operations</div>
                 <ul class="text-sm"><li><a href="/projects/goryu/docs/operations/reliability/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Reliability</a></li></ul>
@@ -78,10 +78,10 @@
               <div class="border-base-content/10 hidden lg:block lg:border-r lg:pr-4"><nav class="lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto" aria-label="Goryu documentation">
               <div class="">
                 <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Getting started</div>
-                <ul class="text-sm"><li><a href="/projects/goryu/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Introduction</a></li><li><a href="/projects/goryu/docs/getting-started/install/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Install</a></li></ul>
+                <ul class="text-sm"><li><a href="/projects/goryu/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Introduction</a></li><li><a href="/projects/goryu/docs/getting-started/install/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Install</a></li><li><a href="/projects/goryu/docs/getting-started/alternatives/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Alternatives</a></li></ul>
               </div><div class="mt-4">
                 <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Usage</div>
-                <ul class="text-sm"><li><a href="/projects/goryu/docs/usage/configuration/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Configuration</a></li></ul>
+                <ul class="text-sm"><li><a href="/projects/goryu/docs/usage/configuration/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Configuration</a></li><li><a href="/projects/goryu/docs/usage/sending-bonded-srt/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Sending bonded SRT</a></li><li><a href="/projects/goryu/docs/usage/downstream-servers/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Downstream servers</a></li></ul>
               </div><div class="mt-4">
                 <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Operations</div>
                 <ul class="text-sm"><li><a href="/projects/goryu/docs/operations/reliability/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Reliability</a></li></ul>
@@ -108,6 +108,7 @@ bash scripts/format.sh check # check only, as CI does
 bash scripts/test-unit.sh    # unit tests (gcc with sanitizers; no Docker)
 bash scripts/smoke-test.sh   # build, start with goryu.json, check /status
 bash scripts/test-e2e.sh     # end-to-end scenarios against ./objs/goryu
+bash scripts/test-docker.sh  # the image and compose file in docker/ (DEMO=1 adds a bonded stream)
 </code></pre>
 <p><code>run.sh</code> honours <code>GORYU_PATH</code>, <code>GORYU_LIB_DIR</code> and <code>GORYU_CONFIG_PATH</code>. The smoke
 test checks that a call with no arguments prints the usage text and fails, that
@@ -124,20 +125,29 @@ goes in the matching <code>tests/unit/test_*.c</code>.</li>
 ffmpeg publishers on spare ports (<code>E2E_BASE_PORT</code>, default 24000) and a private
 work dir, so a running relay is not touched. They need <code>ffmpeg</code> with SRT, <code>curl</code>,
 <code>jq</code> and <code>ss</code> (plus Docker for the bonded caller), and take about three minutes.
-Pass scenario names to run some: <code>cli bad_config uri_mode forward downstream_down duplicate takeover two_streams passphrase sigterm shutdown_silent churn bonded bonded_legs bonded_duplicate bonded_takeover bonded_passphrase bonded_shutdown bonded_abrupt_end</code>.</li>
+Pass scenario names to run some: <code>cli bad_config uri_mode forward downstream_down duplicate takeover two_streams passphrase sigterm shutdown_silent churn bonded bonded_legs bonded_flap bonded_backup bonded_duplicate bonded_takeover bonded_passphrase bonded_shutdown bonded_abrupt_end</code>.</li>
 <li><strong>Bonded input is simulated.</strong> ffmpeg cannot open a socket group, so
 <code>tests/e2e/bonded_caller.c</code> does: a small libsrt caller that reads MPEG-TS from
-stdin and sends it as a broadcast group with one leg per <code>--locals</code> address. Legs
+stdin and sends it as a broadcast group (or a main/backup one, <code>--type backup --weights 10,5</code>) with one leg per <code>--locals</code> address. Legs
 bound to <code>127.0.0.1</code> and <code>127.0.0.2</code> look like two links to the relay, and the
 caller can drop a leg or add one later. The scenarios <code>bonded*</code> check the legs in
 the status API, deduplication (each packet forwarded once, not once per leg), a
 single-leg and a late-joining group, a dropped leg, duplicates and stale takeover,
-passphrase, SIGTERM and a vanished caller; <code>churn</code> repeats connect/disconnect
+passphrase, SIGTERM, a vanished caller, a main/backup group (<code>bonded_backup</code>: the standby
+is idle and takes over when the main leg is closed) and a flapping leg (<code>bonded_flap</code>:
+its join and leave log lines are limited, then summarised); <code>churn</code> repeats connect/disconnect
 and checks that file descriptors and threads do not grow. The caller is built once
 into <code>objs/bonded-caller</code> with the Docker image <code>scripts/build-local.sh</code> makes;
 <code>E2E_SKIP_BONDED=1</code> skips these scenarios. What it cannot do is real network
 conditions: loss, jitter, latency or a physical link failing, so the per-leg loss
 and retransmission counters are only checked for presence, not for values.</li>
+<li><strong>Docker packaging</strong> (<code>scripts/test-docker.sh</code>) builds <code>docker/Dockerfile</code>, which
+installs a published release, and checks the version, that it does not run as root,
+that a missing config is refused, that the status API answers, that <code>docker stop</code>
+ends it with exit 0 in under 5 s (it is PID 1, so this proves SIGTERM is handled), and
+that <code>compose.yaml</code> is valid. It tests the packaging of a release, not the commit&#39;s
+source. <code>DEMO=1</code> also runs the compose stack with the bonded test sender and reads
+the stream back from MediaMTX; it builds libsrt once, so it is not in CI.</li>
 <li>The takeover scenario holds a publisher&#39;s SRT connection open without sending
 media (ffmpeg remuxing a FIFO). A <code>SIGSTOP</code>ped ffmpeg does not work: libsrt&#39;s own
 5 s idle timeout drops its connection before the relay&#39;s staleness check can run.</li>
@@ -150,6 +160,7 @@ requests:</p>
 <li><strong>Unit tests:</strong> <code>scripts/test-unit.sh</code>.</li>
 <li><strong>Build, smoke and end-to-end tests:</strong> the Docker build, <code>scripts/smoke-test.sh</code>,
 then <code>scripts/test-e2e.sh</code>.</li>
+<li><strong>Docker image:</strong> <code>scripts/test-docker.sh</code>.</li>
 </ul>
 <h2 id="versioning">Versioning</h2>
 <p>The version lives in the <code>VERSION</code> file (for example <code>v3.2.0</code>) and is embedded
@@ -182,6 +193,10 @@ then set <code>SRT_TAG</code> and <code>SRT_COMMIT</code> in the Dockerfile and 
 <code>scripts/build-local.sh</code>. To try another version locally without editing
 files, set both <code>SRT_TAG</code> and <code>SRT_COMMIT</code> in the environment.</li>
 </ul>
+<p><code>docker/Dockerfile</code> repeats the base image digest (it must match the one the release
+is built on, because the archive links against that glibc), so change both together.
+<code>docker/demo-sender/Dockerfile</code> reads the libsrt tag and commit out of
+<code>scripts/goryu.Dockerfile</code>, so it follows without an edit.</p>
 <p>Projects that pin a Goryu release (such as Bunryu&#39;s installer and Docker image)
 download <code>goryu-linux-x86_64.tar.gz</code> from the release, so the asset name is part
 of the interface; keep it stable.</p>

@@ -110,7 +110,7 @@
 <li><strong>Evidence:</strong> per-output Error History, rotated diagnostics, and <a href="https://github.com/live-miracles/bunryu/blob/master/fail-reports/README.md">incident write-ups</a> of real failures and their fixes.</li>
 <li><strong>Small and boring:</strong> no media code of our own. SRS, libsrt and FFmpeg do the media work, and the control plane is about 11,000 lines of TypeScript; it costs some efficiency (<a href="/projects/bunryu/docs/getting-started/comparison/#design-approach">why</a>).</li>
 </ul>
-<p>These paths are exercised with fault-injection scenarios (a frozen destination, one that never reads, one that refuses connections, output churn, a publisher outage, a CPU-saturated host and a soak with 50 healthy outputs). No software can promise that nothing fails: see <a href="/projects/bunryu/docs/operations/known-issues/">Known issues</a> and the <a href="/projects/bunryu/docs/getting-started/introduction/#capacity-and-limits">supported capacity</a> for what Bunryu does not cover.</p>
+<p>These paths are exercised with fault-injection scenarios (a frozen destination, one that never reads, one that refuses connections, output churn, a publisher outage, an SRS crash, a CPU-saturated host and a soak with 50 healthy outputs). No software can promise that nothing fails: see <a href="/projects/bunryu/docs/operations/known-issues/">Known issues</a> and the <a href="/projects/bunryu/docs/getting-started/introduction/#capacity-and-limits">supported capacity</a> for what Bunryu does not cover.</p>
 <h2 id="quick-start">Quick start</h2>
 <p>Try it with Docker:</p>
 <pre><code class="language-bash">git clone https://github.com/live-miracles/bunryu

@@ -232,13 +232,20 @@ incident can be investigated after the live one-hour chart window has passed.
 The snapshots also record resource usage: per-output FFmpeg RSS/CPU and memory
 limit (translation mixers included), CPU and RSS for the Node control plane
 (plus its V8 heap), SRS and the SRT relay (the same samples the dashboard
-shows, up to ~10 s old), and host total/available memory and swap. Separately,
+shows, up to ~10 s old), host total/available memory and swap, host CPU pressure
+(<code>cpuPressure</code>: the share of the last 10 s and 60 s in which a runnable task waited for a CPU,
+from <code>/proc/pressure/cpu</code>, null where the kernel has none) and the kernel&#39;s UDP counters
+(<code>udp</code>: datagrams dropped host-wide for a full receive buffer, how many since the previous
+snapshot, and the receive queue and drops of the SRS and relay SRT ingest sockets).
+Separately,
 <code>host-memory-low</code> (available memory under 15% of total) and
 <code>host-memory-recovered</code> (back above 20%) events are logged on transition, the
 former with the five largest processes by RSS.</p>
 <p>Other things the diagnostics record so an incident can be pieced together:</p>
 <ul>
-<li><strong>Restarts:</strong> <code>server-started</code> (version, pid, a random <code>instanceId</code> per start),
+<li><strong>Restarts:</strong> <code>server-started</code> (version, pid, a random <code>instanceId</code> per start, the
+kernel release, and the <code>net.core.rmem_max</code>/<code>wmem_max</code> ceilings the process started
+under, so a kernel change or an unapplied sysctl file shows up between two starts),
 <code>server-shutdown</code> (signal, uptime, the outputs it killed — their own
 <code>ffmpeg-exited</code> events are not written during a shutdown) and
 <code>server-start-failed</code> (for example the dashboard port already in use).</li>
@@ -281,6 +288,7 @@ persistent journald with a seven-day retention limit, 1 GB system journal cap,
 for a 12 MB UDP buffer per socket and the kernel caps the request at that
 ceiling; sockets that ask for nothing keep the default size. The services read it
 when they create their sockets, so a change needs a restart of SRS and goryu.
+The ceilings the control plane started under are in its <code>server-started</code> diagnostics event.
 The ingest sockets are the ones to check: <code>sudo ss -uanmp</code> shows each socket&#39;s
 buffer as <code>rb</code> (24576000 for SRS on 10080 and goryu on 10081) and its drops as
 <code>d</code>, and <code>nstat -az UdpRcvbufErrors</code> counts drops host-wide. In Docker the

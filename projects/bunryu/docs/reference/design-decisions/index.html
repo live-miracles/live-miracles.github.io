@@ -292,6 +292,18 @@ dashboard&#39;s broken-leg checks therefore never fired, and only a group down t
 raised a warning, so a three-leg group that lost one showed nothing.</p>
 <p><strong>Why a count and not the leg&#39;s address:</strong> cellular legs change IP often, so a leg that
 comes back on a new address would stay &quot;lost&quot; if tracked by address.</p>
+<p><strong>The history does name addresses.</strong> The alert counts legs, but the pipeline log and
+the diagnostics record which link changed, because &quot;which one&quot; is what an operator
+needs after the fact: <code>Bonded legs went from 2 to 1: lost 198.51.100.7:49152 (now: ...)</code>
+in the pipeline log, and a <code>bonded-legs-changed</code> diagnostics event with the legs
+before and after. A leg that returns from a new port is logged as one lost and one
+joined; that is accurate, and it does not touch the alert. The pipeline log keeps only
+100 entries, so a link that flaps would push the online/offline history out of it: it
+gets 4 lines a minute and one &quot;N more changes not shown&quot; line afterwards, while every
+change still goes to the diagnostics (one per 5 s poll at most). A bonded input that
+disconnects resets the remembered legs, so reconnecting is &quot;connected with N legs&quot;, not
+a run of lost legs. The relay logs the same changes itself with one-second timing
+(<code>Bonded leg joined|left</code> in its journal); this view is the 5 s sample of it.</p>
 <p><strong>Cost, and when to revisit:</strong> an encoder deliberately run with fewer legs keeps the
 warning until the input reconnects. Revisit if the relay starts reporting lost legs
 itself.</p>
@@ -351,7 +363,9 @@ after a reboot, so the sysctl file is applied at boot.</p>
 <p><strong>Why no alert:</strong> an alert needs a recorded incident to justify it. Without drops
 there is nothing to calibrate it against.</p>
 <p><strong>Revisit when:</strong> <code>UdpRcvbufErrors</code> rises or an ingest socket shows <code>d</code> above 0
-(then add a health check for the ceiling and the counter), or inputs carry
+(the per-minute <code>health-snapshot</code> records both as <code>host.udp</code>, with <code>host.cpuPressure</code>
+to tell whether the host was starved at the time; then add a health check for the
+ceiling and the counter), or inputs carry
 4K SRT at 50 Mbps or more with encodes running on the same host.</p>
 <h2 id="outputs-and-preview">Outputs and preview</h2>
 <h3 id="one-ffmpeg-process-per-output">One FFmpeg process per output</h3>

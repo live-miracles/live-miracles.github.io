@@ -61,10 +61,10 @@
               <div class="mt-3"><nav class="lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto" aria-label="Goryu documentation">
               <div class="">
                 <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Getting started</div>
-                <ul class="text-sm"><li><a href="/projects/goryu/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Introduction</a></li><li><a href="/projects/goryu/docs/getting-started/install/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Install</a></li></ul>
+                <ul class="text-sm"><li><a href="/projects/goryu/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Introduction</a></li><li><a href="/projects/goryu/docs/getting-started/install/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Install</a></li><li><a href="/projects/goryu/docs/getting-started/alternatives/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Alternatives</a></li></ul>
               </div><div class="mt-4">
                 <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Usage</div>
-                <ul class="text-sm"><li><a href="/projects/goryu/docs/usage/configuration/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Configuration</a></li></ul>
+                <ul class="text-sm"><li><a href="/projects/goryu/docs/usage/configuration/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Configuration</a></li><li><a href="/projects/goryu/docs/usage/sending-bonded-srt/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Sending bonded SRT</a></li><li><a href="/projects/goryu/docs/usage/downstream-servers/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Downstream servers</a></li></ul>
               </div><div class="mt-4">
                 <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Operations</div>
                 <ul class="text-sm"><li><a href="/projects/goryu/docs/operations/reliability/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Reliability</a></li></ul>
@@ -78,10 +78,10 @@
               <div class="border-base-content/10 hidden lg:block lg:border-r lg:pr-4"><nav class="lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto" aria-label="Goryu documentation">
               <div class="">
                 <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Getting started</div>
-                <ul class="text-sm"><li><a href="/projects/goryu/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Introduction</a></li><li><a href="/projects/goryu/docs/getting-started/install/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Install</a></li></ul>
+                <ul class="text-sm"><li><a href="/projects/goryu/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Introduction</a></li><li><a href="/projects/goryu/docs/getting-started/install/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Install</a></li><li><a href="/projects/goryu/docs/getting-started/alternatives/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Alternatives</a></li></ul>
               </div><div class="mt-4">
                 <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Usage</div>
-                <ul class="text-sm"><li><a href="/projects/goryu/docs/usage/configuration/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Configuration</a></li></ul>
+                <ul class="text-sm"><li><a href="/projects/goryu/docs/usage/configuration/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Configuration</a></li><li><a href="/projects/goryu/docs/usage/sending-bonded-srt/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Sending bonded SRT</a></li><li><a href="/projects/goryu/docs/usage/downstream-servers/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Downstream servers</a></li></ul>
               </div><div class="mt-4">
                 <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Operations</div>
                 <ul class="text-sm"><li><a href="/projects/goryu/docs/operations/reliability/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Reliability</a></li></ul>
@@ -93,11 +93,14 @@
               <div class="min-w-0"><article class="readme min-w-0"><h2 id="getting-started">Getting started</h2>
 <ul>
 <li><a href="/projects/goryu/docs/getting-started/introduction/">Introduction</a>: what it is, how bonded and plain SRT are handled, limits</li>
-<li><a href="/projects/goryu/docs/getting-started/install/">Install</a>: release download, systemd, firewall port</li>
+<li><a href="/projects/goryu/docs/getting-started/install/">Install</a>: release download, systemd, Docker, firewall port</li>
+<li><a href="/projects/goryu/docs/getting-started/alternatives/">Alternatives</a>: native server bonding, SRTLA, vendor bonding, and when Goryu is the right tool</li>
 </ul>
 <h2 id="usage">Usage</h2>
 <ul>
 <li><a href="/projects/goryu/docs/usage/configuration/">Configuration</a>: command line, <code>goryu.json</code>, streamid routing, passphrase</li>
+<li><a href="/projects/goryu/docs/usage/sending-bonded-srt/">Sending bonded SRT</a>: what a sender must do, what can send one, a test caller you can run today</li>
+<li><a href="/projects/goryu/docs/usage/downstream-servers/">Downstream servers</a>: SRS, MediaMTX and Restreamer behind Goryu, with the streamid each expects</li>
 </ul>
 <h2 id="operations">Operations</h2>
 <ul>

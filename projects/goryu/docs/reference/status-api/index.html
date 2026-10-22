@@ -61,10 +61,10 @@
               <div class="mt-3"><nav class="lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto" aria-label="Goryu documentation">
               <div class="">
                 <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Getting started</div>
-                <ul class="text-sm"><li><a href="/projects/goryu/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Introduction</a></li><li><a href="/projects/goryu/docs/getting-started/install/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Install</a></li></ul>
+                <ul class="text-sm"><li><a href="/projects/goryu/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Introduction</a></li><li><a href="/projects/goryu/docs/getting-started/install/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Install</a></li><li><a href="/projects/goryu/docs/getting-started/alternatives/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Alternatives</a></li></ul>
               </div><div class="mt-4">
                 <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Usage</div>
-                <ul class="text-sm"><li><a href="/projects/goryu/docs/usage/configuration/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Configuration</a></li></ul>
+                <ul class="text-sm"><li><a href="/projects/goryu/docs/usage/configuration/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Configuration</a></li><li><a href="/projects/goryu/docs/usage/sending-bonded-srt/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Sending bonded SRT</a></li><li><a href="/projects/goryu/docs/usage/downstream-servers/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Downstream servers</a></li></ul>
               </div><div class="mt-4">
                 <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Operations</div>
                 <ul class="text-sm"><li><a href="/projects/goryu/docs/operations/reliability/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Reliability</a></li></ul>
@@ -78,10 +78,10 @@
               <div class="border-base-content/10 hidden lg:block lg:border-r lg:pr-4"><nav class="lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto" aria-label="Goryu documentation">
               <div class="">
                 <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Getting started</div>
-                <ul class="text-sm"><li><a href="/projects/goryu/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Introduction</a></li><li><a href="/projects/goryu/docs/getting-started/install/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Install</a></li></ul>
+                <ul class="text-sm"><li><a href="/projects/goryu/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Introduction</a></li><li><a href="/projects/goryu/docs/getting-started/install/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Install</a></li><li><a href="/projects/goryu/docs/getting-started/alternatives/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Alternatives</a></li></ul>
               </div><div class="mt-4">
                 <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Usage</div>
-                <ul class="text-sm"><li><a href="/projects/goryu/docs/usage/configuration/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Configuration</a></li></ul>
+                <ul class="text-sm"><li><a href="/projects/goryu/docs/usage/configuration/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Configuration</a></li><li><a href="/projects/goryu/docs/usage/sending-bonded-srt/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Sending bonded SRT</a></li><li><a href="/projects/goryu/docs/usage/downstream-servers/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Downstream servers</a></li></ul>
               </div><div class="mt-4">
                 <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Operations</div>
                 <ul class="text-sm"><li><a href="/projects/goryu/docs/operations/reliability/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Reliability</a></li></ul>
@@ -163,12 +163,21 @@ group, read directly from <code>srt_group_data()</code> +
 <code>srt_bstats()</code> on each member socket — this is real per-leg telemetry from
 libsrt, not something Goryu derives or combines:<ul>
 <li><code>ip</code>, <code>port</code>: the leg&#39;s peer (encoder-side) address, as seen by Goryu</li>
-<li><code>state</code>: <code>pending</code> | <code>idle</code> | <code>running</code>. A failed leg is not reported as
+<li><code>state</code>: <code>pending</code> | <code>idle</code> | <code>running</code>. Every leg of a broadcast group is
+<code>running</code>; the standby leg of a main/backup group is <code>idle</code> (it carries nothing,
+<code>recvRateMbps</code> is about 0) until the main leg fails and it becomes <code>running</code>. A
+failed leg is not reported as
 <code>broken</code>: Goryu leaves broken members out of <code>legs[]</code>, and when a link was
 unplugged during testing, libsrt removed the dead leg from the group within
 the one-second sampling interval anyway. A leg that goes down simply
 disappears from the list, so detect it by comparing <code>legs[]</code> with the legs
-you have seen before.</li>
+you have seen before. Goryu does this itself and logs each change, so the
+journal tells you which link dropped and when without polling:
+<code>Bonded leg joined streamid=... leg=&lt;ip&gt;:&lt;port&gt; legs=2</code> and
+<code>Bonded leg left streamid=... leg=&lt;ip&gt;:&lt;port&gt; legs=1</code> (<code>legs</code> is the number
+of legs after the change). A leg that reconnects from a new port is a left and a
+joined. Changes are noticed on the one-second sampling, so a leg that is gone and
+back within a second is not seen.</li>
 <li><code>rttMs</code>, <code>recvPacketsTotal</code>, <code>recvUniquePacketsTotal</code>, <code>recvLossTotal</code>,
 <code>recvDropTotal</code>, <code>retransTotal</code>: stats for that leg only</li>
 <li><code>latencyMs</code>: the negotiated latency for that individual leg&#39;s own socket

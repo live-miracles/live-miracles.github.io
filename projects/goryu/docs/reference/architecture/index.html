@@ -61,10 +61,10 @@
               <div class="mt-3"><nav class="lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto" aria-label="Goryu documentation">
               <div class="">
                 <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Getting started</div>
-                <ul class="text-sm"><li><a href="/projects/goryu/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Introduction</a></li><li><a href="/projects/goryu/docs/getting-started/install/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Install</a></li></ul>
+                <ul class="text-sm"><li><a href="/projects/goryu/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Introduction</a></li><li><a href="/projects/goryu/docs/getting-started/install/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Install</a></li><li><a href="/projects/goryu/docs/getting-started/alternatives/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Alternatives</a></li></ul>
               </div><div class="mt-4">
                 <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Usage</div>
-                <ul class="text-sm"><li><a href="/projects/goryu/docs/usage/configuration/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Configuration</a></li></ul>
+                <ul class="text-sm"><li><a href="/projects/goryu/docs/usage/configuration/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Configuration</a></li><li><a href="/projects/goryu/docs/usage/sending-bonded-srt/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Sending bonded SRT</a></li><li><a href="/projects/goryu/docs/usage/downstream-servers/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Downstream servers</a></li></ul>
               </div><div class="mt-4">
                 <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Operations</div>
                 <ul class="text-sm"><li><a href="/projects/goryu/docs/operations/reliability/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Reliability</a></li></ul>
@@ -78,10 +78,10 @@
               <div class="border-base-content/10 hidden lg:block lg:border-r lg:pr-4"><nav class="lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto" aria-label="Goryu documentation">
               <div class="">
                 <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Getting started</div>
-                <ul class="text-sm"><li><a href="/projects/goryu/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Introduction</a></li><li><a href="/projects/goryu/docs/getting-started/install/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Install</a></li></ul>
+                <ul class="text-sm"><li><a href="/projects/goryu/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Introduction</a></li><li><a href="/projects/goryu/docs/getting-started/install/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Install</a></li><li><a href="/projects/goryu/docs/getting-started/alternatives/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Alternatives</a></li></ul>
               </div><div class="mt-4">
                 <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Usage</div>
-                <ul class="text-sm"><li><a href="/projects/goryu/docs/usage/configuration/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Configuration</a></li></ul>
+                <ul class="text-sm"><li><a href="/projects/goryu/docs/usage/configuration/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Configuration</a></li><li><a href="/projects/goryu/docs/usage/sending-bonded-srt/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Sending bonded SRT</a></li><li><a href="/projects/goryu/docs/usage/downstream-servers/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Downstream servers</a></li></ul>
               </div><div class="mt-4">
                 <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Operations</div>
                 <ul class="text-sm"><li><a href="/projects/goryu/docs/operations/reliability/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Reliability</a></li></ul>
@@ -150,6 +150,10 @@ loopback-only port.</li>
 <td>Applies SRT options from a query and reports a refused one</td>
 </tr>
 <tr>
+<td><code>ratelimit.c</code></td>
+<td>A fixed window that lets a few events through and counts the rest (used for the leg join/leave log lines)</td>
+</tr>
+<tr>
 <td><code>net.c</code>, <code>log.c</code>, <code>runtime.c</code>, <code>backoff.c</code></td>
 <td>Address handling; timestamped logging and the libsrt log cap; the run flag, signals and clock; the retry delays</td>
 </tr>
@@ -204,7 +208,12 @@ derives the input latency from the legs; see the
 <h2 id="logging">Logging</h2>
 <p>libsrt&#39;s log level is set to errors only, and a process-wide handler caps what
 is left at 20 lines per second. See
-<a href="/projects/goryu/docs/operations/reliability/#log-volume">Reliability</a> for why. The
+<a href="/projects/goryu/docs/operations/reliability/#log-volume">Reliability</a> for why. A bonded leg
+joining or leaving is logged by the stats sampler (see the
+<a href="/projects/goryu/docs/reference/status-api/">status API</a>), at most 12 lines per stream per 30 s; a leg that
+flaps faster than that is summarised once the window ends
+(<code>Bonded leg events suppressed streamid=... count=N in the last 30 s</code>), so a bad link
+cannot flood the journal the way the libsrt messages once did. The
 passphrase is never logged: the startup line shows the output URI with
 <code>passphrase=&lt;redacted&gt;</code>, and a bad config reports the offending key and the
 passphrase&#39;s length, not its value.</p>
