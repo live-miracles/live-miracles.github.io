@@ -18,6 +18,8 @@ draft: true
 ---
 ```
 
+Write each paragraph and list item on a single line, with no hard wraps: Dev.to renders a single newline as a line break, so a wrapped post has to be unwrapped by hand before copying it there. `npm run format` (Prettier, `proseWrap: never` for the posts) joins wrapped lines for you.
+
 `image` and `imageAlt` are optional: the image is shown above the post, on its card in the list and as the link preview.
 Posts with `draft: true` are not built; set `draft: false` once the post has been reviewed. Before publishing a post that
 quotes logs or incidents, redact stream keys, SRT passphrases, destination URLs and

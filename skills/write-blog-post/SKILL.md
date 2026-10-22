@@ -18,6 +18,8 @@ afterwards.
 - Start with `draft: true`; set `draft: false` only after the user has reviewed it.
 - Tags: at most four (Dev.to's limit), lowercase.
 - `summary` is one sentence and is used for the list, link previews and RSS.
+- One line per paragraph and per list item, never hard-wrapped: Dev.to turns every
+  newline into a line break. `npx prettier --write blog/` joins wrapped lines.
 - Do not repeat the title or date in the body; the page already shows them.
 - Tone that worked for the incident post: a plain problem statement, a timeline of
   what really happened, what was changed and why, **what was not fixed**, and a
