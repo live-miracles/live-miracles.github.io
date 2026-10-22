@@ -93,7 +93,7 @@
               <div class="min-w-0"><details class="rounded-box border-base-content/10 bg-base-300/46 text-base-content/68 mb-7 border p-4 text-sm backdrop-blur">
               <summary class="text-base-content/80 cursor-pointer font-semibold">On this page</summary>
               <ol class="mt-3 space-y-2">
-                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#destinations">Destinations</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#video-encoding">Video encoding</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#audio">Audio</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#shared-encodes">Shared encodes</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#running-outputs">Running outputs</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#overview">Overview</a></li>
+                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#destinations">Destinations</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#video-encoding">Video encoding</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#audio">Audio</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#shared-encodes">Shared encodes</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#running-outputs">Running outputs</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#overview">Overview</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#alert-sound">Alert sound</a></li>
               </ol>
             </details><article class="readme min-w-0"><p>An <strong>output</strong> forwards one pipeline to one destination. Each output is a separate
 FFmpeg process, so a destination that fails or stalls never affects the others.
@@ -283,7 +283,9 @@ stopped, and Issues keeps only warnings and errors, plus an offline input whose 
 are affected, with the reason. The search box on each table&#39;s heading line filters it by
 name as you type; an output matches on its own name or its pipeline&#39;s. The heading badge
 shows how many rows are left (&quot;20 of 500&quot;).</p>
-<p>The output card shows status, uptime, bitrate, CPU and memory. Problems appear on
+<p>The output card shows status, uptime, bitrate, CPU and memory. An output that failed
+shows its failed attempts since it was last started and, while it waits to try again,
+when the next attempt is due (&quot;retry in 8 s&quot;). Problems appear on
 the card as warnings, each with the time it began (&quot;since 09:18&quot;), and every crash, watchdog restart and finished warning
 episode is kept in the output&#39;s <strong>Error History</strong> with the FFmpeg stderr tail.
 The History button is red while the latest record is a crash or watchdog restart;
@@ -298,6 +300,16 @@ The pipeline alerts show their hint as a muted line. An error it has no advice f
 shown as is.
 See <a href="/projects/bunryu/docs/operations/reliability/">Reliability</a> for what is detected and when
 outputs are restarted.</p>
+<h3 id="alert-sound">Alert sound</h3>
+<p>The dashboard beeps for 5 s when something goes wrong that needs attention: an output
+crashes or is restarted by a watchdog, an input goes offline while its outputs are
+running, a pipeline raises an error alert, or the server, SRS or the SRT relay becomes
+unreachable. It beeps when the problem appears, not while it lasts, and an output that
+keeps failing beeps only when it starts failing. Warnings do not beep.</p>
+<p>The bell in the navbar mutes and unmutes the beeps; hover it for the volume slider.
+Both settings are kept in the browser. Browsers play sound only after the page has been
+clicked once, so the bell turns yellow until then: click anywhere on the dashboard after
+opening it. See <a href="/projects/bunryu/docs/reference/design-decisions/#alert-sound-beeps-for-new-problems-only-in-the-browser">the design decision</a>.</p>
 </article><a class="link text-base-content/50 mt-6 inline-block text-sm" href="https://github.com/live-miracles/bunryu/blob/master/docs/2-usage/2-outputs.md">Edit this page on GitHub</a><div class="border-base-content/10 mt-10 grid gap-3 border-t pt-6 sm:grid-cols-2">
               <a class="rounded-box border-base-content/10 hover:border-primary/50 border p-4" href="/projects/bunryu/docs/usage/publishing/"><div class="text-base-content/50 text-xs">Previous</div><div class="font-semibold">Publishing to a pipeline</div></a>
               <a class="rounded-box border-base-content/10 hover:border-primary/50 border p-4 sm:text-right" href="/projects/bunryu/docs/usage/translation/"><div class="text-base-content/50 text-xs">Next</div><div class="font-semibold">Translation outputs</div></a>

@@ -93,19 +93,54 @@
               <div class="min-w-0"><details class="rounded-box border-base-content/10 bg-base-300/46 text-base-content/68 mb-7 border p-4 text-sm backdrop-blur">
               <summary class="text-base-content/80 cursor-pointer font-semibold">On this page</summary>
               <ol class="mt-3 space-y-2">
-                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#design-approach">Design approach</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#at-a-glance">At a glance</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#datarhei-restreamer">datarhei Restreamer</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#srs">SRS</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#mediamtx">MediaMTX</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#hosted-multistreaming-services">Hosted multistreaming services</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#when-not-to-use-bunryu">When not to use Bunryu</a></li>
+                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#why-bunryu-exists">Why Bunryu exists</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#design-approach">Design approach</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#at-a-glance">At a glance</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#datarhei-restreamer">datarhei Restreamer</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#srs">SRS</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#mediamtx">MediaMTX</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#paid-products-and-hosted-services">Paid products and hosted services</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#when-not-to-use-bunryu">When not to use Bunryu</a></li>
               </ol>
             </details><article class="readme min-w-0"><p>How Bunryu differs from the tools people usually consider for the same job. It is
 written for choosing a tool, not for ranking them: each has a case where it is the
-better pick. Facts about other projects come from their own READMEs and
-documentation, checked in October 2026 against Bunryu 3.0, Restreamer 2.12, SRS 6.0
+better pick. Facts about other projects come from their own READMEs, documentation
+and, where noted, source code, checked in October 2026 against Bunryu 3.0, Restreamer 2.12, SRS 6.0
 and MediaMTX 1.21; check their sites for what they offer today.</p>
+<h2 id="why-bunryu-exists">Why Bunryu exists</h2>
+<p>We needed one server for dozens of live inputs and hundreds of outputs, and looked at
+what already existed before writing anything. This is how that went. The code facts
+(libraries, versions, commit counts) were checked in October 2026; what we saw in our
+own trials is marked as that, and none of it is a benchmark.</p>
+<ul>
+<li><strong>Restreamer was the first candidate, and we considered using it.</strong> Two things ruled
+it out:<ul>
+<li>Its built-in SRT server is datarhei&#39;s own Go implementation,
+<a href="https://github.com/datarhei/gosrt">gosrt</a> (v0.6.0 in Core&#39;s <code>go.mod</code>), not
+Haivision&#39;s libsrt. On a flaky network we saw heavy pixelation in streams passing
+through it that did not appear through libsrt under the same conditions. That was an
+observation in a trial, not a measurement, and we kept no recording.</li>
+<li>In our trial the interface did not suit many outputs. Adding an output took many
+clicks, the output list grew long, and each output&#39;s bitrate and health were not
+shown beside it, so an output with a problem, or one that had restarted, was hard to
+find. Its UI repository (<code>restreamer-ui</code>) has had one commit since January 2025 and
+its last release is v1.13.0 (June 2024); the Core engine underneath is more active.</li>
+</ul>
+</li>
+<li><strong>MediaMTX has no management UI</strong>: it is configured by file and control API. Its SRT
+is gosrt as well (v0.12.0), so we expected the same weakness. What we measured was its
+SRT-to-RTMP conversion (see <a href="#mediamtx">below</a>), not its SRT ingest on its own.</li>
+<li><strong>SRS uses libsrt</strong>, which is mature and widely deployed, and that decided it. Its own
+console is minimal and its forwarding is static, so around it we built a dashboard and
+a manager that runs one FFmpeg per destination, so any output starts and stops without
+touching the others.</li>
+<li><strong>Paid products</strong> such as Wowza, and hosted services such as Restream.io, work, but
+at our number of inputs and outputs we judged the cost too high to depend on.</li>
+<li>We found no other open-source restreaming server that combined libsrt, a dashboard and
+outputs that change while the stream runs.</li>
+</ul>
+<p>The result is SRS, libsrt and FFmpeg with about 20,000 lines of TypeScript on top, which
+manage many inputs and outputs from one place.</p>
 <h2 id="design-approach">Design approach</h2>
 <p>Bunryu has no media code of its own. SRS accepts RTMP and SRT, libsrt carries SRT
 (inside SRS and in <a href="https://github.com/live-miracles/goryu">Goryu</a>), and FFmpeg does
 everything to the stream after that: the outputs, previews, probing and audio
 processing. What Bunryu adds is a control plane of about 11,000 lines of TypeScript
-(38 files, four runtime dependencies) and Goryu, about 2,000 lines of C over libsrt.</p>
+(38 files, four runtime dependencies), a dashboard of about 8,600 more, and Goryu,
+about 2,000 lines of C over libsrt.</p>
 <p>This is deliberate. Timestamps, codec quirks and damaged input are where media
 software fails, and FFmpeg and libsrt have long production use on exactly that. In
 our tests FFmpeg stayed connected through 10% packet loss where a newer converter
@@ -157,9 +192,16 @@ and we chose it over writing our own.</p>
 <td>Not found in its docs or code</td>
 </tr>
 <tr>
+<td>SRT library</td>
+<td>libsrt (Haivision), through SRS, FFmpeg and Goryu</td>
+<td>gosrt (datarhei&#39;s Go implementation) in its built-in SRT server</td>
+<td>libsrt</td>
+<td>gosrt</td>
+</tr>
+<tr>
 <td>Recovery</td>
 <td>Per-output watchdogs, bounded retries, Error History</td>
-<td>Core documents error detection and recovery for its processes</td>
+<td>Restart after a fixed delay, progress stall timeout, optional CPU and memory limits</td>
 <td>Not compared</td>
 <td>Not compared</td>
 </tr>
@@ -201,8 +243,25 @@ viewers, hardware encoding (Raspberry Pi, NVIDIA, Intel), or to run on ARM.</li>
 through long events, where per-output recovery, an Error History with FFmpeg&#39;s
 last output, bonded SRT ingest or translation mixing matter.</li>
 </ul>
-<p>Both are FFmpeg based. We have not compared how they behave when a destination
-fails, so we make no claim about it.</p>
+<p>Its built-in SRT server uses gosrt, not libsrt, and in our trial its interface did not
+suit many outputs (<a href="#why-bunryu-exists">why we did not use it</a>).</p>
+<p>Both run one FFmpeg process per output, but Bunryu does more to keep outputs running
+and to explain their failures. This comes from reading Core&#39;s process supervisor
+(<code>process/process.go</code>, October 2026), not from a side-by-side test:</p>
+<ul>
+<li><strong>Retries.</strong> Core restarts a failed process after a fixed delay. Bunryu backs off
+from 1 s to 16 s with jitter, so outputs to a platform that blipped do not all
+reconnect in the same second, and an output whose input is down waits without
+spawning FFmpeg.</li>
+<li><strong>Stalls.</strong> Core kills a process whose FFmpeg progress stops. Bunryu does the same,
+and also restarts an output whose destination socket is half closed while FFmpeg
+still reports progress, a case seen on YouTube.</li>
+<li><strong>Limits.</strong> Core can kill a process above a CPU or memory limit. Bunryu enforces
+memory only: a CPU limit would kill encodes that are merely busy on a loaded host.</li>
+<li><strong>Evidence.</strong> Both keep FFmpeg&#39;s last output per run. Bunryu also keeps an Error
+History per output and writes timestamped diagnostics for every start, exit,
+restart and watchdog action, and groups FFmpeg&#39;s repeated timestamp warnings.</li>
+</ul>
 <h2 id="srs">SRS</h2>
 <p><strong>Core trade-off:</strong> SRS is Bunryu&#39;s ingest, and its own forwarding is static.</p>
 <p>Bunryu runs on official SRS for RTMP and SRT ingest. For outputs it does not use
@@ -224,16 +283,20 @@ As a forwarding hub for copy outputs it used about 10x less RAM but about 1.5x
 more CPU than FFmpeg, and FFmpeg would still be needed for transcodes, SRT
 destinations and translation mixes
 (<a href="/projects/bunryu/docs/reference/design-decisions/#one-ffmpeg-process-per-output">details</a>).</li>
+<li>Its SRT is gosrt, like Restreamer&#39;s built-in server, not libsrt. We measured its
+conversion, not its SRT ingest on its own.</li>
 <li>Pick MediaMTX for protocol conversion, WebRTC or RTSP, recording, running on
 Windows or macOS, or a single small binary. It is not a restreaming manager, so
 you set up and watch each forward yourself.</li>
 </ul>
-<h2 id="hosted-multistreaming-services">Hosted multistreaming services</h2>
-<p>A hosted service means no server to run. Bunryu is for teams that want to run the
-server themselves: on their own infrastructure, with their own destinations and
-logs, with capacity set by their own hardware. It does not remove the
-work of operating a server; see <a href="/projects/bunryu/docs/getting-started/sizing/">sizing</a> and
-<a href="/projects/bunryu/docs/operations/reliability/">reliability</a>.</p>
+<h2 id="paid-products-and-hosted-services">Paid products and hosted services</h2>
+<p>A paid product such as Wowza, or a hosted service such as Restream.io, means less to
+build or no server to run, and comes with support. Bunryu is for teams that want to run
+the server themselves: on their own infrastructure, with their own destinations and
+logs, with capacity set by their own hardware. It does not remove the work of operating
+a server; see <a href="/projects/bunryu/docs/getting-started/sizing/">sizing</a> and
+<a href="/projects/bunryu/docs/operations/reliability/">reliability</a>. We have not compared features or
+prices with these products.</p>
 <h2 id="when-not-to-use-bunryu">When not to use Bunryu</h2>
 <ul>
 <li>You need a native ARM or Apple Silicon deployment, or a Windows or macOS host.

@@ -242,6 +242,15 @@ start either, which keeps the server from accepting publishes it cannot authoriz
 installer catches this before it restarts anything. The Docker supervisor stops the same
 way: it logs the error once, starts neither SRS nor the relay, and leaves the container
 running but unhealthy until it is stopped; remove <code>/data/db.sqlite</code> and start it again.</p>
+<p><strong>FFmpeg build check.</strong> At startup the app runs the configured <code>ffmpeg</code> with
+<code>-protocols</code>, <code>-encoders</code> and <code>-filters</code>, and <code>ffprobe -version</code>, and checks for
+everything it uses: RTMP, RTMPS and SRT for both input and output, the <code>aac</code> and
+<code>libx264</code> encoders, and the <code>amix</code> and <code>azmq</code> filters (translation mixing). The result
+goes to the journal and to diagnostics as <code>ffmpeg-check</code>, with the version and what is
+missing. Unlike a schema mismatch this is not fatal: ingest, the dashboard and every
+output that does not need the missing piece keep working. Without the check, a missing
+or incomplete build (an OS package replacing the pinned one, or a wrong <code>ffmpeg_path</code>)
+would show up only as each affected output failing with its own error.</p>
 <h2 id="falling-behind-realtime">Falling behind realtime</h2>
 <p>An output that processes media slower than realtime falls further behind live every
 second: a slow encode or destination, or an input delivering slowly. The output

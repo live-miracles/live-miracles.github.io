@@ -121,6 +121,11 @@ History and the dashboard keep FFmpeg&#39;s stderr as-is, including full
 destination URLs, stream keys and SRT passphrases. They are private to the
 server and its operators; redact before copying any of it into a commit or
 issue.</li>
+<li><strong>FFmpeg gets a minimal environment:</strong> output, preview, translation-mixer and
+probe processes receive only <code>PATH</code>, <code>LANG</code>, <code>LC_ALL</code>, <code>TZ</code>, <code>SSL_CERT_FILE</code>,
+<code>SSL_CERT_DIR</code> and <code>LD_LIBRARY_PATH</code>. The app&#39;s own variables, such as
+<code>BUNRYU_DASHBOARD_PASSWORD</code>, stay out of the <code>/proc/&lt;pid&gt;/environ</code> of every
+FFmpeg process.</li>
 <li><strong>Output destinations and host probes:</strong> the server will not connect to
 link-local/unspecified addresses (cloud metadata such as <code>169.254.169.254</code>), and
 loopback only on the app&#39;s own RTMP/SRT ports (pipeline-to-pipeline restreams).

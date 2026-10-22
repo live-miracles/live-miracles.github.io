@@ -120,7 +120,7 @@ JSON, <code>{ &quot;error&quot;: &quot;…&quot; }</code>; an unexpected failure
 <tr>
 <td>GET</td>
 <td><code>/api/health</code></td>
-<td>Live input/output status snapshot (refreshed every 5s). An output has <code>warningReason</code> and <code>warningSinceMs</code> (when that warning began); each pipeline alert has <code>sinceMs</code>, the time its current episode started, which stays the same while the alert lasts. An alert is one episode until it has been absent for six polls (~30 s)</td>
+<td>Live input/output status snapshot (refreshed every 5s). An output has <code>warningReason</code> and <code>warningSinceMs</code> (when that warning began), and <code>nextRetryAtMs</code>, when its pending retry after a failure is due (else <code>null</code>); each pipeline alert has <code>sinceMs</code>, the time its current episode started, which stays the same while the alert lasts. An alert is one episode until it has been absent for six polls (~30 s)</td>
 </tr>
 <tr>
 <td>GET</td>
