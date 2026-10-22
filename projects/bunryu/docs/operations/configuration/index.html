@@ -102,6 +102,11 @@ and the unit points the app at it with <code>BUNRYU_CONFIG</code>. The Docker im
 in the <code>/data</code> volume. The installer and the Docker entrypoint set only <code>port</code>, the
 file paths and <code>dashboard_password</code>; every other setting you add stays when you
 update.</p>
+<p>The app reads <code>bunryu.json</code>, <code>srs.conf</code> and <code>goryu.json</code> once, when it starts:
+restart the app after changing any of them. SRS and Goryu read their own file only
+at startup too. If one of the three is missing or is not valid JSON, the app prints
+which file and exits with status 78, which systemd does not restart (see
+<a href="/projects/bunryu/docs/operations/reliability/">Reliability</a>).</p>
 <p><code>bunryu.json</code>:</p>
 <table>
 <thead>
@@ -150,6 +155,11 @@ update.</p>
 <td><code>dashboard_password</code></td>
 <td>none (the repo&#39;s dev <code>bunryu.json</code> ships <code>change-me</code>)</td>
 <td>Initial dashboard password, used only when the database has no password yet (first boot or after a reset). There is no default: with an empty database and no password the server does not start (exit status 78). The installer and the Docker image require one on a fresh install and never generate or print it. Stored in plain text; the installer sets the file to mode <code>0600</code></td>
+</tr>
+<tr>
+<td><code>stream_key_count</code></td>
+<td><code>100</code></td>
+<td>Stream keys generated for pipelines to publish with. One pipeline uses one key, so this is also the most inputs the server accepts. A whole number from 1 to 10000; anything else gives 100. Raising it adds keys at the next start; lowering it removes the unassigned keys above it (keys a pipeline uses stay). The inputs and outputs recommended in the <a href="/projects/bunryu/docs/getting-started/introduction/#capacity-and-limits">introduction</a> are not enforced</td>
 </tr>
 <tr>
 <td><code>output_watchdog.warmup_ms</code></td>
@@ -247,8 +257,8 @@ that is logged. Repeats are throttled to one journal line per minute per key.
 The number not logged goes on the next line, or, if the attempts stopped, on a
 summary line once the minute is over (written on the next hook call or
 dashboard refresh).</li>
-<li><strong>Control-plane errors:</strong> a background loop (health poll, output watchdog,
-host probes) that throws writes <code>&lt;loop&gt;-failed</code> on its first failure or a new
+<li><strong>Control-plane errors:</strong> a background loop (health poll, output watchdog)
+that throws writes <code>&lt;loop&gt;-failed</code> on its first failure or a new
 error, and <code>&lt;loop&gt;-recovered</code> with the count; an error nothing else caught is
 written as <code>uncaught-exception</code> or <code>unhandled-rejection</code>. The process keeps
 running in both cases. A shutdown step or a staggered restart that throws is
@@ -287,8 +297,8 @@ it ask, in a terminal, &quot;Wipe it and start with an empty database? [Y/n]&quo
 <code>n</code>, <code>-y</code> or no terminal stops the install (<code>WIPE_DB=y</code> wipes without asking). A
 <code>db.sqlite.&lt;timestamp&gt;.bak</code> copy is kept to re-create pipelines from. A database with the
 current version is kept without any prompt. A database from before the stamp existed is
-accepted and stamped, since its schema is version 1.</p>
-<p>Relay ports and status polling are read from <code>goryu.json</code>, located beside <code>srs_config_path</code>.</p>
+accepted and stamped, since it differs from the current schema only by an unused table.</p>
+<p>Relay ports, status polling and the SRT passphrase are read from <code>goryu.json</code>, located beside <code>srs_config_path</code>.</p>
 <p>Installer/development overrides:</p>
 <table>
 <thead>

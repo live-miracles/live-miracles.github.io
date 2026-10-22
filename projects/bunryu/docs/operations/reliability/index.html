@@ -213,7 +213,7 @@ succeeds:</p>
 <td>Stops re-probing once a probe succeeds for the current publisher; a new probe cycle starts on the next publisher change. Every failed probe is written to diagnostics as <code>media-probe-failed</code> (reason <code>timeout</code>/<code>exit</code>/<code>parse</code>/<code>unusable</code>, elapsed time, exit status, ffprobe stderr tail) and the first failure and the later recovery per publisher are added to the pipeline log (<code>probe_failed</code> / <code>probe_recovered</code>). Input liveness and output recovery do not wait for a valid ffprobe result — ffprobe fills in media/track details when available.</td>
 </tr>
 </tbody></table>
-<p><strong>Control-plane errors.</strong> The health poll, the output watchdog and the host probes
+<p><strong>Control-plane errors.</strong> The health poll and the output watchdog
 each catch errors from their own tick and run again on the next one. They log the
 first failure (and any new error) and a recovery event with the count, not one line
 per tick. An error that escapes everything else is logged as
@@ -242,6 +242,11 @@ start either, which keeps the server from accepting publishes it cannot authoriz
 installer catches this before it restarts anything. The Docker supervisor stops the same
 way: it logs the error once, starts neither SRS nor the relay, and leaves the container
 running but unhealthy until it is stopped; remove <code>/data/db.sqlite</code> and start it again.</p>
+<p>The same applies to the three config files. At startup, before anything else, the app
+reads <code>bunryu.json</code>, <code>srs.conf</code> and <code>goryu.json</code>; one that is missing or is not valid
+JSON (<code>srs.conf</code> only needs to exist) makes it print which file and exit with status 78,
+so it is fixed or restored before the next start. Any other read error (an I/O error, say) is
+not treated that way: the process crashes and is restarted after 2 s like any crash.</p>
 <p><strong>FFmpeg build check.</strong> At startup the app runs the configured <code>ffmpeg</code> with
 <code>-protocols</code>, <code>-encoders</code> and <code>-filters</code>, and <code>ffprobe -version</code>, and checks for
 everything it uses: RTMP, RTMPS and SRT for both input and output, the <code>aac</code> and
@@ -260,7 +265,10 @@ shows &quot;Output is running at 0.62x realtime and falling behind live&quot;. O
 clears it. It is a warning only: nothing is restarted, and it is recorded like the
 other card warnings (an <code>ffmpeg-warning-started</code> / <code>ffmpeg-warning-ended</code> pair of
 diagnostics events with <code>kind: falling-behind</code>, and an Error History record when it
-ends). The card shows when the warning began (&quot;since 09:18&quot;).</p>
+ends). The card shows when the warning began (&quot;since 09:18&quot;). The last finished
+window&#39;s speed is also in the health data (<code>speed</code>) and on the card&#39;s badge when it is
+below 0.95x or above 1.05x; the first window after a start is not reported, because
+FFmpeg reads its probe data faster than realtime and it would read high on every start.</p>
 <ul>
 <li><strong>Why not FFmpeg&#39;s own <code>speed=</code> or <code>fps=</code>:</strong> both are averages over the whole run,
 so after hours of healthy output a sudden slowdown would barely move them.</li>

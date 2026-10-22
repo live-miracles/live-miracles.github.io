@@ -89,7 +89,7 @@
 <h2 id="features">Features</h2>
 <ul>
 <li><a href="/projects/bunryu/docs/usage/publishing/">Ingest</a> over RTMP, SRT and bonded SRT, with stream-key authorization and passphrase-protected SRT.</li>
-<li><a href="/projects/bunryu/docs/usage/outputs/">Forward</a> each input to many RTMP, RTMPS or SRT destinations: up to 50 inputs and 500 outputs per server. Copy-mode (passthrough) outputs cost almost no CPU.</li>
+<li><a href="/projects/bunryu/docs/usage/outputs/">Forward</a> each input to many RTMP, RTMPS or SRT destinations: no fixed limit, tested with 50 inputs and 500 outputs per server. Copy-mode (passthrough) outputs cost almost no CPU.</li>
 <li><a href="/projects/bunryu/docs/usage/outputs/#video-encoding">Transcode</a> a few outputs to 720p, 1080p or a rotated vertical feed for Shorts/Reels, and <a href="/projects/bunryu/docs/usage/outputs/#audio">select audio tracks</a> per output, including multi-track SRT outputs. Outputs that need the same encode <a href="/projects/bunryu/docs/usage/outputs/#shared-encodes">share one FFmpeg</a>, so ten 720p outputs cost one encode, not ten.</li>
 <li><a href="/projects/bunryu/docs/usage/translation/">Mix translation audio</a> (beta) from an interpreter&#39;s pipeline over the source, with speech detection, ducking, delay and restore timing. If the translator drops, the output continues with source audio.</li>
 <li><a href="/projects/bunryu/docs/operations/reliability/">Recover automatically</a>: stall, socket and memory watchdogs with bounded restarts. One failing destination never affects the others.</li>

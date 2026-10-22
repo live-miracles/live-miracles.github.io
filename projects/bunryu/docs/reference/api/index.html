@@ -149,11 +149,6 @@ JSON, <code>{ &quot;error&quot;: &quot;…&quot; }</code>; an unexpected failure
 </tr>
 <tr>
 <td>GET</td>
-<td><code>/api/host-probes</code></td>
-<td>Host reachability probe targets and their samples, <code>?hours=</code> up to 6 (default 6)</td>
-</tr>
-<tr>
-<td>GET</td>
 <td><code>/api/ready</code></td>
 <td>Unauthenticated readiness check used by systemd before starting SRS</td>
 </tr>
@@ -269,11 +264,6 @@ JSON, <code>{ &quot;error&quot;: &quot;…&quot; }</code>; an unexpected failure
 </tr>
 <tr>
 <td>POST</td>
-<td><code>/api/settings/host-probes</code></td>
-<td>Replace the host probe targets <code>{ hostProbeTargets: [{ slot, label, host, port }] }</code>; a target resolving to a blocked address is refused with 400</td>
-</tr>
-<tr>
-<td>POST</td>
 <td><code>/api/settings/layout-order</code></td>
 <td>Save the dashboard&#39;s pipeline and output order <code>{ order: [{ id, outs: [outputId] }] }</code></td>
 </tr>
@@ -347,7 +337,6 @@ History can be read and cleared, and it can be restarted (<code>/restart</code>)
 <li><strong>You cannot create outputs in the <code>internal</code> app.</strong> Create, bulk create and
 update refuse a destination that resolves to this host with a path under
 <code>/internal/</code> (<code>400</code>, &quot;the internal app is reserved for shared encodes&quot;).</li>
-<li><strong>It does not count toward the 500-output cap</strong>, which is for your outputs.</li>
 <li><strong>Output stats carry extra fields</strong> (<code>GET /api/health</code>, per output): <code>role</code>
 (<code>&quot;rendition&quot;</code> for a shared encode, else <code>&quot;output&quot;</code>), <code>renditionId</code> (the shared
 encode a running shared output is pulling, else <code>null</code>), and, for a shared

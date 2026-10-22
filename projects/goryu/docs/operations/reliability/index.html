@@ -122,6 +122,16 @@ stale, force-closed, and the new publisher takes over
 </ul>
 <p>This lets an encoder that crashed and reconnected recover quickly, without
 letting a second encoder hijack a stream that is still flowing.</p>
+<p>Each session wakes from its receive once a second (<code>SRTO_RCVTIMEO</code>, 1000 ms) even
+when the encoder sends nothing, then re-checks whether it was closed. Up to v3.2.1
+it blocked until data arrived, and that made takeover impossible for a <strong>bonded</strong>
+encoder: libsrt defers <code>srt_close()</code> on a group while another thread is receiving
+on it, so the takeover was logged and the stale group was &quot;closed&quot;, yet its session
+kept running and the new publisher was rejected 5 s later, for as long as the stale
+legs stayed connected (reproduced on v3.2.1 with a bonded caller that stays
+connected and sends nothing). A plain socket was not affected. The wake-up also
+refreshes the stream&#39;s counters, so a silent stream still shows legs joining and
+leaving in the status API.</p>
 <h2 id="log-volume">Log volume</h2>
 <p>libsrt&#39;s own log level is set to errors only at startup, so its per-packet
 diagnostics (for example receive-queue pressure warnings under sustained loss)

@@ -142,22 +142,24 @@ one shared encode. See <a href="/projects/bunryu/docs/operations/reliability/">R
 watchdogs that supervise them.</p>
 <h2 id="capacity-and-limits">Capacity and limits</h2>
 <p>The server is built and operated for the envelope below. It has <strong>not</strong> been
-tested or designed for anything beyond it — treat these as the supported ceiling,
-not a target to exceed.</p>
+tested or designed for anything beyond it. These are recommendations, not
+enforced: Bunryu does not refuse an output or a pipeline because of a count, so
+size the machine for your load (<a href="/projects/bunryu/docs/getting-started/sizing/">Sizing a server</a>) and treat these as
+the tested ceiling, not a target to exceed.</p>
 <table>
 <thead>
 <tr>
-<th>Limit</th>
-<th>Supported ceiling</th>
+<th>Recommended ceiling</th>
+<th>Tested up to</th>
 </tr>
 </thead>
 <tbody><tr>
 <td>Inputs (pipelines)</td>
-<td>up to <strong>50</strong></td>
+<td>up to <strong>50</strong>. The most the server accepts is its number of stream keys, <strong>100</strong> by default (<a href="/projects/bunryu/docs/operations/configuration/"><code>stream_key_count</code></a>)</td>
 </tr>
 <tr>
 <td>Outputs (forwards)</td>
-<td>up to <strong>500</strong> total — enforced: creating a 501st returns <code>409</code> (shared encodes are not counted)</td>
+<td>up to <strong>500</strong> in total (shared encodes are not counted)</td>
 </tr>
 <tr>
 <td>Distinct custom (transcoding) encodes</td>
@@ -210,7 +212,7 @@ enough to check state or start and stop an output from a phone, not to edit
 <li>Transcoding ladders or large numbers of encoded outputs.</li>
 <li>Serving viewers directly (it forwards to platforms and CDNs).</li>
 <li>Recording and VOD.</li>
-<li>More than about 50 inputs or 500 outputs on one server.</li>
+<li>More than about 50 inputs or 500 outputs on one server (not enforced, but untested).</li>
 </ul>
 </article><a class="link text-base-content/50 mt-6 inline-block text-sm" href="https://github.com/live-miracles/bunryu/blob/master/docs/1-getting-started/1-introduction.md">Edit this page on GitHub</a><div class="border-base-content/10 mt-10 grid gap-3 border-t pt-6 sm:grid-cols-2">
               <span></span>

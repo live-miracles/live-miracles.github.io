@@ -143,13 +143,15 @@ port <code>8081</code>.</p>
 </tr>
 <tr>
 <td><code>passphrase</code></td>
-<td>SRT passphrase for the input and the output; <code>&quot;&quot;</code> disables encryption</td>
+<td>SRT passphrase for the input and the output, 10 to 79 characters; <code>&quot;&quot;</code> disables encryption</td>
 </tr>
 </tbody></table>
-<p>All six fields are required, and the three ports must be 1 to 65535. A missing
-field or a port out of range makes Goryu exit at startup with <code>Bad config file</code>.
-The parser reads a flat JSON object by key, so keep the file to these six keys
-and no comments.</p>
+<p>All six fields are required, the three ports must be whole numbers from 1 to 65535
+and the passphrase must be empty or 10 to 79 characters. Anything else makes
+Goryu exit at startup with <code>Bad config file &lt;path&gt;: &lt;reason&gt;</code> and a non-zero
+status, where the reason names the key (never its value). The parser reads a flat
+JSON object by key, so keep the file to these six keys and no comments. In a
+string only the escapes <code>\&quot;</code>, <code>\\</code> and <code>\/</code> are understood; any other is refused.</p>
 <p>In this mode the input listener runs <code>transtype=live</code> with <code>latency=240</code> ms and
 group connections enabled, and the downstream connection is a caller with
 <code>transtype=live</code> and <code>latency=200</code> ms. The negotiated values are reported in the
@@ -167,6 +169,14 @@ publish authorization hook that checks it as a stream key).</p>
 on the output connection, and leaves validation to libsrt&#39;s normal encrypted
 handshake. Encoders must use the same passphrase, and so must the downstream
 server. To run unencrypted end to end, use <code>&quot;&quot;</code>.</p>
+<p>libsrt accepts only 10 to 79 bytes. Goryu checks the length at startup and
+refuses to run otherwise: an earlier version ignored libsrt&#39;s refusal, so a
+configured but too-short passphrase left the whole relay, input and output,
+running without encryption and accepting callers that sent no passphrase. Every
+SRT option Goryu applies is now checked in the same way, so a refused option stops
+the relay at startup instead of being ignored. The passphrase is not written to
+the log; see <a href="/projects/goryu/docs/reference/architecture/#logging">Architecture</a>.</p>
+<p>The two-URI command line follows the same rule for a <code>passphrase</code> in either URI.</p>
 <p>A caller with a wrong passphrase is rejected by libsrt during the handshake,
 before Goryu is handed a connection, so Goryu never learns the caller&#39;s address
 for those attempts. See

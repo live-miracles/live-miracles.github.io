@@ -227,7 +227,7 @@ left, starts it with the first running output, and stops it 15 seconds after the
 last one stops (so stopping and restarting an output, or editing one, does not
 restart the encode that its other outputs use). You cannot create, edit, delete, start or stop one,
 and you cannot point an output at the server&#39;s internal <code>internal</code> RTMP app. They
-do not count toward the 500-output limit.</p>
+are not counted among your outputs.</p>
 <p><strong>In the dashboard.</strong> The pipeline&#39;s side column has a <strong>Shared encodes</strong> card
 with one row per encode, laid out like an output card: status, a restart button
 (after a confirmation; its outputs reconnect), the encoding as badges (the video
@@ -283,7 +283,12 @@ stopped, and Issues keeps only warnings and errors, plus an offline input whose 
 are affected, with the reason. The search box on each table&#39;s heading line filters it by
 name as you type; an output matches on its own name or its pipeline&#39;s. The heading badge
 shows how many rows are left (&quot;20 of 500&quot;).</p>
-<p>The output card shows status, uptime, bitrate, CPU and memory. An output that failed
+<p>The output card shows status, uptime, bitrate, CPU and memory. When the output&#39;s speed
+(media produced per second of wall time, 1.00x is realtime, measured over 30 s windows)
+is below 0.95x the badge adds it in yellow (&quot;0.88x&quot;); above 1.05x it adds it in the
+normal color, which is usually a backlog draining after a stall. In between, and
+always, the badge&#39;s tooltip shows it. The speed is not shown for the first minute after a
+start. An output that failed
 shows its failed attempts since it was last started and, while it waits to try again,
 when the next attempt is due (&quot;retry in 8 s&quot;). Problems appear on
 the card as warnings, each with the time it began (&quot;since 09:18&quot;), and every crash, watchdog restart and finished warning

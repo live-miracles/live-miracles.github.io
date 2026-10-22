@@ -126,14 +126,13 @@ probe processes receive only <code>PATH</code>, <code>LANG</code>, <code>LC_ALL<
 <code>SSL_CERT_DIR</code> and <code>LD_LIBRARY_PATH</code>. The app&#39;s own variables, such as
 <code>BUNRYU_DASHBOARD_PASSWORD</code>, stay out of the <code>/proc/&lt;pid&gt;/environ</code> of every
 FFmpeg process.</li>
-<li><strong>Output destinations and host probes:</strong> the server will not connect to
+<li><strong>Output destinations:</strong> the server will not connect to
 link-local/unspecified addresses (cloud metadata such as <code>169.254.169.254</code>), and
 loopback only on the app&#39;s own RTMP/SRT ports (pipeline-to-pipeline restreams).
 Hosts are resolved the way FFmpeg resolves them, so <code>2130706433</code> or <code>0x7f.1</code> are
 treated as loopback. Private LAN ranges and SRT <code>mode=listener</code> outputs are
 deliberately allowed. Outputs saved before the check existed are re-checked at
-startup and stopped, with the reason shown in the dashboard. Host probes never
-probe loopback. DNS that changes between the check and FFmpeg&#39;s own lookup
+startup and stopped, with the reason shown in the dashboard. DNS that changes between the check and FFmpeg&#39;s own lookup
 cannot be ruled out.</li>
 <li><strong>The <code>internal</code> RTMP app is reserved for shared encodes.</strong> Outputs cannot
 target it (any host spelling that resolves to this machine, with a path under
