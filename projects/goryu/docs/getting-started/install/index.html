@@ -37,7 +37,7 @@
         window.setSidebarRail(window.sidebarRail());
       </script>
       <input id="project-drawer" type="checkbox" class="drawer-toggle" />
-      <div class="drawer-content min-h-screen">
+      <div class="drawer-content min-h-screen min-w-0">
         <header class="navbar border-base-content/10 bg-base-300/92 sticky top-0 z-20 border-b px-4 backdrop-blur lg:hidden">
           <div class="flex-none">
             <label for="project-drawer" class="btn btn-square btn-ghost" aria-label="Open projects"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /></svg></label>
@@ -150,13 +150,16 @@ bound to <code>127.0.0.1</code> and must stay closed to the network.</p>
 <h2 id="docker">Docker</h2>
 <p><code>docker/</code> holds a runtime image and a compose example. The image installs a published
 release and checks it against <code>checksums.sha256</code>, runs as an unprivileged user, and
-stops cleanly on <code>docker stop</code>. It is linux/amd64 only, like the release, and there is
-no published image yet: build it.</p>
-<pre><code class="language-bash">docker build -t goryu docker                                             # newest release
-docker build --build-arg GORYU_VERSION=v3.3.0 -t goryu:v3.3.0 docker     # a pinned one
-docker run -d --name goryu --network host --restart unless-stopped \
-  -v &quot;$PWD/goryu.json:/etc/goryu/goryu.json:ro&quot; goryu
+stops cleanly on <code>docker stop</code>. It is linux/amd64 only, like the release. From v3.4.0 each
+release publishes it as <code>nandisha0/goryu</code> on Docker Hub and <code>ghcr.io/live-miracles/goryu</code>,
+tagged <code>X.Y.Z</code>, <code>X.Y</code> and <code>latest</code>; pin an exact version for anything long-lived.</p>
+<pre><code class="language-bash">docker run -d --name goryu --network host --restart unless-stopped \
+  -v &quot;$PWD/goryu.json:/etc/goryu/goryu.json:ro&quot; nandisha0/goryu:3.4.0
 curl http://127.0.0.1:8081/status
+</code></pre>
+<p>To build it yourself instead (the image installs a published release):</p>
+<pre><code class="language-bash">docker build -t goryu docker                                             # newest release
+docker build --build-arg GORYU_VERSION=v3.4.0 -t goryu:v3.4.0 docker     # a pinned one
 </code></pre>
 <p>Use host networking: the status API listens on <code>127.0.0.1</code> inside the container, so a
 published port cannot reach it. The config must be readable by uid 10001 (<code>chmod 644</code>),

@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en" data-theme="dim">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>One faulty audio embedder disrupted 20 live streams — Live Miracles</title>
+    <meta name="description" content="Two fiber paths carried the same bad audio, while our monitoring missed the cancellation between left and right channels." />
+    <link rel="canonical" href="https://live-miracles.github.io/blog/one-faulty-embedder-20-streams/" />
+    <meta property="og:site_name" content="Live Miracles" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="One faulty audio embedder disrupted 20 live streams — Live Miracles" />
+    <meta property="og:description" content="Two fiber paths carried the same bad audio, while our monitoring missed the cancellation between left and right channels." />
+    <meta property="og:url" content="https://live-miracles.github.io/blog/one-faulty-embedder-20-streams/" />
+    <meta property="og:image" content="https://live-miracles.github.io/blog/images/audio-cancellation-cover.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/assets/logo.png" type="image/png" />
+    <link rel="alternate" type="application/rss+xml" title="Live Miracles blog" href="/blog/feed.xml" />
+    <link rel="stylesheet" href="/assets/styles.css" />
+  </head>
+  <body>
+    <div class="group/drawer drawer lg:drawer-open">
+      <script>
+        window.setSidebarRail = function (rail) {
+          document.querySelector('.drawer').toggleAttribute('data-rail', rail);
+          var toggle = document.getElementById('sidebar-toggle');
+          if (toggle) {
+            toggle.setAttribute('aria-label', rail ? 'Expand projects' : 'Collapse projects to icons');
+          }
+        };
+        window.sidebarRail = function () {
+          try {
+            var saved = localStorage.getItem('sidebar-rail');
+            if (saved) return saved === '1';
+          } catch (e) {}
+          return true;
+        };
+        window.setSidebarRail(window.sidebarRail());
+      </script>
+      <input id="project-drawer" type="checkbox" class="drawer-toggle" />
+      <div class="drawer-content min-h-screen min-w-0">
+        <header class="navbar border-base-content/10 bg-base-300/92 sticky top-0 z-20 border-b px-4 backdrop-blur lg:hidden">
+          <div class="flex-none">
+            <label for="project-drawer" class="btn btn-square btn-ghost" aria-label="Open projects"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /></svg></label>
+          </div>
+          <div class="flex-1">
+            <a href="/" class="btn btn-ghost text-lg font-bold">Live Miracles</a>
+          </div>
+        </header>
+        <main class="mx-auto flex min-h-screen w-full max-w-6xl flex-col gap-8 px-4 py-6 sm:px-6 lg:px-8">
+          <nav class="text-base-content/60 flex flex-wrap items-center gap-2 text-sm" aria-label="Breadcrumb">
+            <a href="/blog/" class="hover:text-primary">Blog</a>
+          </nav>
+          <header>
+            <h1 class="text-3xl font-bold sm:text-4xl">One faulty audio embedder disrupted 20 live streams</h1>
+            <div class="text-base-content/60 mt-3 flex flex-wrap items-center gap-3 text-sm">
+              <time datetime="2026-10-22">October 22, 2026</time><span class="badge badge-outline badge-sm">audio</span><span class="badge badge-outline badge-sm">streaming</span><span class="badge badge-outline badge-sm">reliability</span><span class="badge badge-outline badge-sm">livegallery</span>
+            </div>
+          </header>
+          <img src="/blog/images/audio-cancellation-cover.jpg" alt="Illustration of opposite-polarity audio channels combining into a flat line, with the words Mono Cancelled" class="border-base-content/10 w-full rounded-box border" loading="lazy" />
+          <article class="readme min-w-0"><p>Both audio meters were moving. The dry run had gone well. We had two fiber paths from the event to the streaming server. Yet when the event went live, viewers across more than 20 streams started reporting bad, breaking audio.</p>
+<p>Switching to the backup feed did not help. Switching to a third feed finally did, about an hour into the live event. By then, many viewers had left.</p>
+<p>This is how one suspected faulty audio embedder affected all those streams, why our monitoring missed it, and what we changed in <a href="https://github.com/live-miracles/live-gallery">Live Gallery</a> afterwards.</p>
+<h2 id="the-warning-we-did-not-understand">The warning we did not understand</h2>
+<p>At the venue, vendors were using hardware to embed the audio and video into the outgoing feed. That device had shown signs of trouble from the beginning. We suspected a loose connection, but the vendors appeared to resolve the problem, and we did not investigate further. The dry run then went well.</p>
+<p>We do not have a confirmed diagnosis of the hardware fault. A loose connection is one possibility, not an established cause. What became clear later was that the affected feeds shared that embedding stage, and their left and right audio channels were cancelling when combined.</p>
+<h2 id="our-monitoring-heard-only-one-channel">Our monitoring heard only one channel</h2>
+<p>We were monitoring the streams in Live Gallery with a mono speaker setup that, in our arrangement, let us hear only the left channel. We could also see separate volume bars for left and right. Both showed audio, and what we heard sounded acceptable, so we thought the feeds were healthy.</p>
+<p>But listening to the left channel alone is different from listening to a mono mix of left and right. We had checked that audio was present in each channel. We had not checked whether the channels worked together.</p>
+<p>That distinction became painful during the event. Some phones played the audio acceptably; others sounded bad or lost much of it. Headphones could sound fine too. At the time, that inconsistency made the reports harder to explain. In retrospect, it was a useful clue: the result depended on how the playback device handled the two channels.</p>
+<h2 id="why-two-active-meters-can-hide-bad-audio">Why two active meters can hide bad audio</h2>
+<p>When two channels carry similar sound with opposite polarity, each channel can sound fine on its own. Their volume meters can look normal too. Trouble appears when a playback system adds them together.</p>
+<p>A mono mix commonly combines the channels as <code>(L + R) / 2</code>. If the right channel is an inverted copy of the left, the positive parts of one meet the negative parts of the other, and the sound cancels. With partial cancellation, voices can become thin, quiet, or unstable rather than disappearing completely.</p>
+<p>Stereo playback can keep the channels separate, so headphones may conceal the problem. Devices that combine the channels can expose it. The behavior we observed was consistent with this, although we did not verify the internal routing of every phone that viewers used.</p>
+<p>Analysis of the recording later showed negative correlation between the channels and a loss of level when they were combined. The strength varied through the affected portion. That points to a stereo compatibility problem; it does not, by itself, tell us which physical channel or connection was at fault.</p>
+<p><img src="/blog/images/phase-mismatch-recording.webp" alt="A zoom from the affected recording shows blue left-channel and red right-channel waveforms moving in opposite directions, with correlation rounded to -1.000." loading="lazy" /></p>
+<p>This 33.3 millisecond sample from just before the feed switch shows the problem clearly: when one channel rises, the other falls. Cancellation was not equally strong throughout the incident.</p>
+<p><img src="/blog/images/phase-in-sync-recording.webp" alt="A 33.3 millisecond zoom around 01:20:00 in the recording shows the blue left-channel and red right-channel waveforms closely following each other, with correlation rounded to +0.999." loading="lazy" /></p>
+<p>For comparison, this sample around 01:20:00, after the switch to the clean feed, shows the channels rising and falling together. Their correlation is close to +1. The key difference is their shared direction, not the height of the waveform: the two images show different moments of audio. Healthy stereo does not need to match this closely, but these channels reinforce rather than cancel each other when combined.</p>
+<h2 id="the-backup-had-the-same-upstream-fault">The backup had the same upstream fault</h2>
+<p><img src="/blog/images/shared-embedder-paths.webp" alt="The video and audio mixers feed a shared suspected faulty embedder supplying both fiber paths to the streaming server. A separate embedding path supplies the clean feed that restored audio." loading="lazy" /></p>
+<p>Our first response was to switch fiber paths. We had two paths from the venue to the streaming server, but both carried audio from the same suspected faulty embedder. Changing the transport path could not remove a problem already present in the source.</p>
+<p>The third feed was different. It took video from the video mixer and audio from the audio mixer through a separate embedding path. We normally used this clean feed to make social media shorts because it did not include the event overlays and lower thirds.</p>
+<p>When we switched to that feed, the audio problem cleared. This was the recovery, about an hour after the live started. It also exposed the gap in our backup plan: the two fiber paths were separate, but a critical part of their source chain was shared.</p>
+<h2 id="what-we-added-to-live-gallery">What we added to Live Gallery</h2>
+<p><a href="https://github.com/live-miracles/live-gallery">Live Gallery</a> is our open source, MIT-licensed Electron application for monitoring many live streams simultaneously. After this incident, we added an audio phase mismatch alert and a choice of mono or stereo listening mode.</p>
+<p>The phase check looks at the relationship between left and right, including their correlation and how much level is lost when they are combined. It evaluates sustained evidence across multiple samples rather than treating one negative reading as a fault. We want to avoid nuisance warnings: normal stereo material can contain differences between channels, and negative correlation alone is not proof of broken equipment.</p>
+<p>The mono listening option combines left and right so we can hear cancellation during a check. It closes the specific gap in our earlier setup, where hearing only the left channel gave us confidence that the full stereo feed was safe.</p>
+<p><img src="/blog/images/live-gallery-phase-warning-video.webp" alt="Live Gallery 1.6.1 showing event footage in a local-file tile, with an Audio phase mismatch warning over the video, active audio meters, and one alert in the toolbar." loading="lazy" /></p>
+<p>Our screenshot of Live Gallery 1.6.1 shows the phase warning directly over the playing recording, even while the channel meters show audio activity. This demonstrates the monitoring added after the incident, not an alert available during the original event.</p>
+<h2 id="what-these-changes-cannot-guarantee">What these changes cannot guarantee</h2>
+<p>The alert is a warning about possible cancellation, not a diagnosis of an embedder. It cannot identify a loose cable, determine which channel was inverted, or promise that every viewer&#39;s device will sound good. Quiet passages, intermittent faults, and less pronounced cancellation may also escape detection. We prefer some missed detections to constant false alarms that operators learn to ignore.</p>
+<p>Mono listening and phase warnings give us additional ways to notice this failure. They do not replace listening, investigating early hardware trouble, or checking which components our backup feeds share.</p>
+<h2 id="what-we-would-carry-into-the-next-event">What we would carry into the next event</h2>
+<ul>
+<li>Check the feed in stereo and in a combined mono mix during the dry run. Left-only listening is a separate check.</li>
+<li>Treat moving left and right meters as evidence of signal, not evidence that the signals combine correctly.</li>
+<li>Trace backup feeds all the way upstream. Two transport paths can still share one faulty source device.</li>
+<li>Investigate an early hardware problem even when it appears to have gone away.</li>
+<li>Keep an independently sourced feed available, and know how to switch to it before the event starts.</li>
+</ul>
+<p>The clean feed saved this event&#39;s remaining broadcast. The more lasting change was learning to test what our viewers might actually hear, including what happens when two apparently healthy channels become one.</p>
+</article>
+          <a class="link text-base-content/50 text-sm" href="https://github.com/live-miracles/live-miracles.github.io/blob/master/blog/2026-10-22-one-faulty-embedder-20-streams.md">Edit this post on GitHub</a>
+          <footer class="text-base-content/50 border-base-content/10 mt-auto border-t pt-6 pb-2 text-sm">
+            Live Miracles · <a class="link" href="https://github.com/live-miracles">github.com/live-miracles</a>
+          </footer>
+        </main>
+      </div>
+      <aside class="drawer-side z-30">
+        <label for="project-drawer" aria-label="Close projects" class="drawer-overlay"></label>
+        <nav class="border-base-content/10 bg-base-200 min-h-full w-80 border-r p-4 lg:group-data-[rail]/drawer:w-16 lg:group-data-[rail]/drawer:p-2" aria-label="Projects">
+          <div class="mb-6 flex items-center justify-between gap-2 lg:group-data-[rail]/drawer:flex-col lg:group-data-[rail]/drawer:gap-3">
+            <a href="/" title="Live Miracles" aria-label="Live Miracles" class="rounded-box flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:p-0">
+              <img src="/assets/logo.png" alt="" class="rounded-box size-11" />
+              <span class="lg:group-data-[rail]/drawer:hidden">
+                <span class="block text-xl font-bold">Live Miracles</span>
+                <span class="text-base-content/58 text-sm">Open tools for live teams</span>
+              </span>
+            </a>
+            <button type="button" id="sidebar-toggle" class="btn btn-ghost btn-sm btn-square hidden lg:inline-flex lg:group-data-[rail]/drawer:rotate-180" aria-label="Collapse projects to icons"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M11 17l-5-5 5-5M18 17l-5-5 5-5" /></svg></button>
+          </div>
+          <a href="/blog/" title="Blog" aria-label="Blog" class="rounded-box hover:bg-base-100 mb-5 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:mb-3 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 bg-base-100 text-primary font-semibold" aria-current="page">
+            <svg xmlns="http://www.w3.org/2000/svg" class="size-6 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 5h13a2 2 0 0 1 2 2v12H6a2 2 0 0 1-2-2V5Z"/><path d="M8 9h7M8 13h7M8 17h4"/></svg>
+            <span class="lg:group-data-[rail]/drawer:hidden">Blog</span>
+          </a>
+          <div class="mb-5 lg:group-data-[rail]/drawer:mb-3">
+              
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase lg:group-data-[rail]/drawer:hidden">Streaming &amp; transport</div>
+              <a href="/projects/bunryu/" title="Bunryu" aria-label="Bunryu" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+                <img src="/assets/bunryu-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span class="lg:group-data-[rail]/drawer:hidden">Bunryu</span>
+              </a><a href="/projects/goryu/" title="Goryu" aria-label="Goryu" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+                <img src="/assets/goryu-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span class="lg:group-data-[rail]/drawer:hidden">Goryu</span>
+              </a><a href="/projects/delayed-yt/" title="Delayed YouTube" aria-label="Delayed YouTube" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+                <img src="https://live-miracles.github.io/delayed-yt/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span class="lg:group-data-[rail]/drawer:hidden">Delayed YouTube</span>
+              </a>
+            </div><div class="mb-5 lg:group-data-[rail]/drawer:mb-3">
+              <hr class="border-base-content/10 mb-3 hidden lg:group-data-[rail]/drawer:block" />
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase lg:group-data-[rail]/drawer:hidden">vMix production</div>
+              <a href="/projects/vmix-master/" title="vMix Master" aria-label="vMix Master" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+                <img src="https://live-miracles.github.io/vmix-master/logo.svg" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span class="lg:group-data-[rail]/drawer:hidden">vMix Master</span>
+              </a><a href="/projects/folder-player/" title="vMix Folder Player" aria-label="vMix Folder Player" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+                <img src="/assets/folder-player-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span class="lg:group-data-[rail]/drawer:hidden">vMix Folder Player</span>
+              </a>
+            </div><div class="mb-5 lg:group-data-[rail]/drawer:mb-3">
+              <hr class="border-base-content/10 mb-3 hidden lg:group-data-[rail]/drawer:block" />
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase lg:group-data-[rail]/drawer:hidden">Monitoring &amp; operations</div>
+              <a href="/projects/live-gallery/" title="Live Gallery" aria-label="Live Gallery" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+                <img src="/assets/live-gallery-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span class="lg:group-data-[rail]/drawer:hidden">Live Gallery</span>
+              </a><a href="/projects/wake-up-support/" title="Wake Up Support" aria-label="Wake Up Support" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">W</span>
+                <span class="lg:group-data-[rail]/drawer:hidden">Wake Up Support</span>
+              </a>
+            </div><div class="mb-5 lg:group-data-[rail]/drawer:mb-3">
+              <hr class="border-base-content/10 mb-3 hidden lg:group-data-[rail]/drawer:block" />
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase lg:group-data-[rail]/drawer:hidden">Event workflows</div>
+              <a href="/projects/key-vault/" title="Key Vault" aria-label="Key Vault" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+                <img src="https://live-miracles.github.io/key-vault/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span class="lg:group-data-[rail]/drawer:hidden">Key Vault</span>
+              </a><a href="/projects/live-generator/" title="Live Generator" aria-label="Live Generator" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">L</span>
+                <span class="lg:group-data-[rail]/drawer:hidden">Live Generator</span>
+              </a><a href="/projects/multi-lang-qa/" title="Multi Lang QA" aria-label="Multi Lang QA" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+                <img src="https://live-miracles.github.io/multi-lang-qa/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span class="lg:group-data-[rail]/drawer:hidden">Multi Lang QA</span>
+              </a>
+            </div>
+        </nav>
+      </aside>
+      <script>
+        window.setSidebarRail(window.sidebarRail());
+        document.getElementById('sidebar-toggle').addEventListener('click', function () {
+          var rail = !window.sidebarRail();
+          try {
+            localStorage.setItem('sidebar-rail', rail ? '1' : '0');
+          } catch (e) {}
+          window.setSidebarRail(rail);
+        });
+      </script>
+    </div>
+    <dialog id="lightbox" class="lightbox" aria-label="Enlarged image">
+      <button type="button" class="btn btn-circle btn-sm lightbox-close" aria-label="Close image"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg></button>
+      <div class="lightbox-frame"><img alt="" /></div>
+    </dialog>
+    <script>
+      (function () {
+        var dialog = document.getElementById('lightbox');
+        if (!dialog || !dialog.showModal) return;
+        var shown = dialog.querySelector('img');
+        function zoomable(img) {
+          return !img.closest('a') && img.naturalWidth >= 300 && img.naturalHeight >= 100;
+        }
+        function mark(img) {
+          if (img.dataset.zoom || !zoomable(img)) return;
+          img.dataset.zoom = '1';
+          img.classList.add('zoomable');
+          img.tabIndex = 0;
+          img.setAttribute('role', 'button');
+          img.setAttribute('aria-label', 'Enlarge image: ' + (img.alt || 'screenshot'));
+        }
+        function open(img) {
+          shown.src = img.currentSrc || img.src;
+          shown.alt = img.alt;
+          shown.classList.remove('actual');
+          dialog.showModal();
+          dialog.scrollTo(0, 0);
+        }
+        document.querySelectorAll('.readme img').forEach(function (img) {
+          if (img.complete) mark(img);
+          else img.addEventListener('load', function () { mark(img); }, { once: true });
+        });
+        document.addEventListener('click', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom) open(img);
+        });
+        document.addEventListener('keydown', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom && (event.key === 'Enter' || event.key === ' ')) {
+            event.preventDefault();
+            open(img);
+          }
+        });
+        shown.addEventListener('click', function () {
+          shown.classList.toggle('actual');
+        });
+        dialog.addEventListener('click', function (event) {
+          if (event.target !== shown) dialog.close();
+        });
+      })();
+    </script>
+  </body>
+</html>

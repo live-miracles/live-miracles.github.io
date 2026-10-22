@@ -37,7 +37,7 @@
         window.setSidebarRail(window.sidebarRail());
       </script>
       <input id="project-drawer" type="checkbox" class="drawer-toggle" />
-      <div class="drawer-content min-h-screen">
+      <div class="drawer-content min-h-screen min-w-0">
         <header class="navbar border-base-content/10 bg-base-300/92 sticky top-0 z-20 border-b px-4 backdrop-blur lg:hidden">
           <div class="flex-none">
             <label for="project-drawer" class="btn btn-square btn-ghost" aria-label="Open projects"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /></svg></label>
@@ -162,6 +162,14 @@ requests:</p>
 then <code>scripts/test-e2e.sh</code>.</li>
 <li><strong>Docker image:</strong> <code>scripts/test-docker.sh</code>.</li>
 </ul>
+<p>The release workflow (<code>release.yml</code>) runs that CI, builds and attests the archive,
+publishes the GitHub Release, and then builds <code>docker/Dockerfile</code> for that tag and
+pushes it to GHCR and, when the <code>DOCKERHUB_USERNAME</code> and <code>DOCKERHUB_TOKEN</code> secrets
+are set, Docker Hub (<code>nandisha0/goryu</code>, description synced from
+<code>docker/README.dockerhub.md</code>). The image job runs after the release because the image
+installs it, and it checks that the pushed image reports the tag&#39;s version. If it
+fails, the release stays published; re-run the job, since a published release is never
+overwritten.</p>
 <h2 id="versioning">Versioning</h2>
 <p>The version lives in the <code>VERSION</code> file (for example <code>v3.2.0</code>) and is embedded
 into the binary at build time, so <code>goryu --version</code> prints it. Changing
