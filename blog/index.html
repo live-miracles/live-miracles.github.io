@@ -52,11 +52,14 @@
             <p class="text-base-content/64 mt-2">Notes from running live events and building the tools behind them. <a class="link" href="/blog/feed.xml">RSS feed</a></p>
           </header>
           <div class="grid gap-4"><article class="card border-base-content/10 bg-base-200/68 border shadow-xl backdrop-blur">
-              <div class="card-body gap-2">
-                <div class="text-base-content/60 text-sm"><time datetime="2026-10-21">October 21, 2026</time></div>
-                <h2 class="card-title"><a class="hover:text-primary" href="/blog/one-leaking-ffmpeg-six-streams/">One leaking FFmpeg process took down six live streams</a></h2>
-                <p class="text-base-content/70 text-sm leading-6">A memory leak in one FFmpeg process restarted our whole streaming stack. How it happened, and the guard rails that keep a single bad process small.</p>
-                <div class="flex flex-wrap gap-2 pt-1"><span class="badge badge-outline badge-sm">bunryu</span><span class="badge badge-outline badge-sm">reliability</span><span class="badge badge-outline badge-sm">ffmpeg</span><span class="badge badge-outline badge-sm">srt</span></div>
+              <div class="card-body gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div class="flex min-w-0 flex-col gap-2">
+                  <div class="text-base-content/60 text-sm"><time datetime="2026-10-21">October 21, 2026</time></div>
+                  <h2 class="card-title"><a class="hover:text-primary" href="/blog/one-leaking-ffmpeg-six-streams/">One leaking FFmpeg process took down six live streams</a></h2>
+                  <p class="text-base-content/70 text-sm leading-6">A memory leak in one FFmpeg process restarted our whole streaming stack. How it happened, and the guard rails that keep a single bad process small.</p>
+                  <div class="flex flex-wrap gap-2 pt-1"><span class="badge badge-outline badge-sm">bunryu</span><span class="badge badge-outline badge-sm">reliability</span><span class="badge badge-outline badge-sm">ffmpeg</span><span class="badge badge-outline badge-sm">srt</span></div>
+                </div>
+                <a href="/blog/one-leaking-ffmpeg-six-streams/" tabindex="-1" aria-hidden="true" class="order-first shrink-0 sm:order-last sm:w-56 lg:w-64"><img src="/blog/images/leak-cover.jpg" alt="&#39;exit=SIGKILL&#39; above a memory chart, where a watchdog restarts a leaking process at 200 MB before it reaches 1.6 GB and the kernel kills it" class="border-base-content/10 rounded-box w-full border" loading="lazy" /></a>
               </div>
             </article></div>
           <footer class="text-base-content/50 border-base-content/10 mt-auto border-t pt-6 pb-2 text-sm">

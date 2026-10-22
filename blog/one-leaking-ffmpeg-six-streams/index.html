@@ -11,8 +11,8 @@
     <meta property="og:title" content="One leaking FFmpeg process took down six live streams — Live Miracles" />
     <meta property="og:description" content="A memory leak in one FFmpeg process restarted our whole streaming stack. How it happened, and the guard rails that keep a single bad process small." />
     <meta property="og:url" content="https://live-miracles.github.io/blog/one-leaking-ffmpeg-six-streams/" />
-    <meta property="og:image" content="https://live-miracles.github.io/assets/logo.png" />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content="https://live-miracles.github.io/blog/images/leak-cover.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="/assets/logo.png" type="image/png" />
     <link rel="alternate" type="application/rss+xml" title="Live Miracles blog" href="/blog/feed.xml" />
     <link rel="stylesheet" href="/assets/styles.css" />
@@ -56,6 +56,7 @@
               <time datetime="2026-10-21">October 21, 2026</time><span class="badge badge-outline badge-sm">bunryu</span><span class="badge badge-outline badge-sm">reliability</span><span class="badge badge-outline badge-sm">ffmpeg</span><span class="badge badge-outline badge-sm">srt</span>
             </div>
           </header>
+          <img src="/blog/images/leak-cover.jpg" alt="&#39;exit=SIGKILL&#39; above a memory chart, where a watchdog restarts a leaking process at 200 MB before it reaches 1.6 GB and the kernel kills it" class="border-base-content/10 w-full rounded-box border" loading="lazy" />
           <article class="readme min-w-0"><p>A live event cannot be restarted. When we built <a href="https://github.com/live-miracles/bunryu">Bunryu</a>, a
 self-hosted server that forwards one live stream to many destinations, we assumed things would go wrong
 and tried to keep each failure small. In July 2026 a single FFmpeg process showed us where that was not
@@ -79,7 +80,7 @@ climbing. &quot;No error&quot; did not mean &quot;healthy&quot;.</p>
 <p>The root cause was a loop: flaky input, a decoder leak on resync, an OOM kill, a restart of the whole
 stack, and a fresh mass reconnect. Isolation between outputs did not help, because the process
 topology made the kernel kill a shared fate.</p>
-<p><img src="/blog/images/leak-restart-loop.png" alt="The restart loop in five steps, with the memory watchdog we added between the decoder leak and the OOM kill" loading="lazy" /></p>
+<p><img src="/blog/images/leak-restart-loop.webp" alt="The restart loop in five steps, with the memory watchdog we added between the decoder leak and the OOM kill" loading="lazy" /></p>
 <h2 id="what-we-changed">What we changed</h2>
 <p><strong>Drop damaged packets before they reach the decoder.</strong> Outputs now run with
 <code>-fflags +discardcorrupt -err_detect crccheck+bitstream</code>. This reduces the chance of the misparse,
