@@ -93,7 +93,20 @@ Each passphrase must be empty or 10 to 79 characters, the range libsrt accepts, 
 
 This is the awkward part, and we would rather say so. FFmpeg cannot open a socket group, and libsrt's own `srt-live-transmit` takes one input and one output. `srt-test-live` from libsrt 1.5.6 failed to create a sending group when we tried it. Many encoders that advertise bonding use a vendor protocol with their own receiver instead of libsrt groups. The one hardware encoder we have confirmed sends a libsrt group to Goryu is the AJA BRIDGE LIVE, described below.
 
-For testing without hardware, there is a 196-line test caller in the Goryu repository, `bonded_caller.c`, that sends a broadcast group with one leg per local address, and can drop, add or flap a leg. It is what every bonded test in the project uses, and the [sending page](https://live-miracles.github.io/projects/goryu/docs/usage/sending-bonded-srt/) shows how to build and run it. If your encoder sends a libsrt broadcast group, point it at Goryu and it will work; if it speaks SRTLA or a vendor protocol, it will not, and the [alternatives page](https://live-miracles.github.io/projects/goryu/docs/getting-started/alternatives/) says what to look at instead.
+For testing without hardware, there is a 196-line test caller in the Goryu repository, `bonded_caller.c`, that sends a broadcast group with one leg per local address, and can drop, add or flap a leg, or send a main/backup group. It is what every bonded test in the project uses, and the [sending page](https://live-miracles.github.io/projects/goryu/docs/usage/sending-bonded-srt/) shows how to build and run it. If your encoder sends a libsrt broadcast group, point it at Goryu and it will work; if it speaks SRTLA or a vendor protocol, it will not, and the [alternatives page](https://live-miracles.github.io/projects/goryu/docs/getting-started/alternatives/) says what to look at instead.
+
+## Broadcast or main/backup
+
+libsrt 1.5 offers two group types, and the sender picks one. The receiver, Goryu, treats them the same: it merges what arrives and forwards one stream.
+
+- **Broadcast** puts the whole stream on every link. If a link fails the others already have every packet, so nothing has to switch. The price is bandwidth: two links cost twice the data.
+- **Main/backup** gives each link a weight. The heaviest link carries the stream and the others sit idle, sending only keepalives. If the main link becomes unstable the sender activates a standby. It costs one link's worth of data, which matters on metered cellular, but the switchover is its weak spot: packets sent while the main link was failing, before it was judged unstable, can be late or lost.
+
+In Goryu's status API every leg of a broadcast group is `running`. In a main/backup group the standby is `idle`, with a receive rate of about zero.
+
+We sent a main/backup group over loopback at 4 Mbps, with weights 10 and 5. The main leg was `running` at 4.4 Mbps and the backup `idle` at 0.000 Mbps. When we closed the main leg the backup became `running`, about 2 MB arrived in the next four seconds (roughly 4 Mbps), and the downstream never reconnected.
+
+One catch: at a trickle (0.12 Mbps) libsrt kept both legs active, so a main/backup group needs real traffic before it settles on a main leg.
 
 ## What we saw when a leg dropped
 
@@ -148,7 +161,7 @@ With the stream running, we unplugged one of the encoder's two LAN cables for ab
 ## What we did not test
 
 - **Different providers and degraded links.** The cable pull is a clean failure: the link went away and came back. The relay cannot tell whether the two paths use different providers, and we have not tested a link that degrades with heavy loss or congestion instead of disconnecting. The loopback test above is the only run that exercised a leg closing from the sender's side.
-- **Group types.** We tested broadcast groups only, not main/backup.
+- **Switchover on a real link.** We tested both group types on loopback legs. We have not measured how many packets a main/backup switchover loses on a link that degrades before it dies, because loopback legs never do.
 - **Other things worth knowing.** By default one passphrase covers both the input and the downstream connection; from v3.4.0 `output_passphrase` gives the server its own, or none. The release is Linux x86_64 only.
 
 ## Takeaways
