@@ -768,6 +768,11 @@ function renderPost(post) {
     return marked.parse(post.markdown);
 }
 
+// The header image of a post, written in front matter relative to blog/.
+function postImage(post, classes) {
+    return `<img src="${escapeHtml(post.image)}" alt="${escapeHtml(post.imageAlt)}" class="${classes}" loading="lazy" />`;
+}
+
 function blogIndexPage(posts) {
     const list = posts.length
         ? posts
@@ -775,11 +780,14 @@ function blogIndexPage(posts) {
                   (
                       post,
                   ) => `<article class="card border-base-content/10 bg-base-200/68 border shadow-xl backdrop-blur">
-              <div class="card-body gap-2">
-                <div class="text-base-content/60 text-sm"><time datetime="${post.date}">${formatDate(post.date)}</time></div>
-                <h2 class="card-title"><a class="hover:text-primary" href="${postUrl(post)}">${escapeHtml(post.title)}</a></h2>
-                <p class="text-base-content/70 text-sm leading-6">${escapeHtml(post.summary)}</p>
-                <div class="flex flex-wrap gap-2 pt-1">${tagBadges(post.tags)}</div>
+              <div class="card-body gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div class="flex min-w-0 flex-col gap-2">
+                  <div class="text-base-content/60 text-sm"><time datetime="${post.date}">${formatDate(post.date)}</time></div>
+                  <h2 class="card-title"><a class="hover:text-primary" href="${postUrl(post)}">${escapeHtml(post.title)}</a></h2>
+                  <p class="text-base-content/70 text-sm leading-6">${escapeHtml(post.summary)}</p>
+                  <div class="flex flex-wrap gap-2 pt-1">${tagBadges(post.tags)}</div>
+                </div>
+                ${post.image ? `<a href="${postUrl(post)}" tabindex="-1" aria-hidden="true" class="order-first shrink-0 sm:order-last sm:w-56 lg:w-64">${postImage(post, 'border-base-content/10 rounded-box w-full border')}</a>` : ''}
               </div>
             </article>`,
               )
@@ -806,6 +814,11 @@ function blogPostPage(post) {
         activeId: 'blog',
         railByDefault: true,
         ogType: 'article',
+        ogImage: post.image
+            ? /^https?:\/\//.test(post.image)
+                ? post.image
+                : `${siteUrl}${post.image}`
+            : undefined,
         body: `<nav class="text-base-content/60 flex flex-wrap items-center gap-2 text-sm" aria-label="Breadcrumb">
             <a href="/blog/" class="hover:text-primary">Blog</a>
           </nav>
@@ -815,6 +828,7 @@ function blogPostPage(post) {
               <time datetime="${post.date}">${formatDate(post.date)}</time>${tagBadges(post.tags)}
             </div>
           </header>
+          ${post.image ? postImage(post, 'border-base-content/10 w-full rounded-box border') : ''}
           <article class="readme min-w-0">${post.html}</article>
           <a class="link text-base-content/50 text-sm" href="https://github.com/${organization}/${organization}.github.io/blob/${branch}/${post.sourcePath}">Edit this post on GitHub</a>`,
     });

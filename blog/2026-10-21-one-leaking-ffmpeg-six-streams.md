@@ -2,6 +2,8 @@
 title: One leaking FFmpeg process took down six live streams
 date: 2026-10-21
 tags: [bunryu, reliability, ffmpeg, srt]
+image: images/leak-cover.jpg
+imageAlt: 'exit=SIGKILL' above a memory chart, where a watchdog restarts a leaking process at 200 MB before it reaches 1.6 GB and the kernel kills it
 summary: A memory leak in one FFmpeg process restarted our whole streaming stack. How it happened, and the guard rails that keep a single bad process small.
 draft: false
 ---
@@ -36,7 +38,7 @@ The root cause was a loop: flaky input, a decoder leak on resync, an OOM kill, a
 stack, and a fresh mass reconnect. Isolation between outputs did not help, because the process
 topology made the kernel kill a shared fate.
 
-![The restart loop in five steps, with the memory watchdog we added between the decoder leak and the OOM kill](images/leak-restart-loop.png)
+![The restart loop in five steps, with the memory watchdog we added between the decoder leak and the OOM kill](images/leak-restart-loop.webp)
 
 ## What we changed
 

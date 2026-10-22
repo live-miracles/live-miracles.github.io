@@ -32,7 +32,7 @@ show the dashboard without search boxes.
 
 ## The overview
 
-![The overview with 50 inputs and 500 outputs: host charts, totals, and pipelines grouped in the sidebar](images/overview-500-outputs.png)
+![The overview with 50 inputs and 500 outputs: host charts, totals, and pipelines grouped in the sidebar](images/overview-500-outputs.webp)
 
 The left column is every pipeline, in groups (here Main Stage, Halls, Studios, Chapels and Plaza).
 Each row has a status dot, its output count, its name, how long it has been up and its input
@@ -46,7 +46,7 @@ Below that are two lists: every input, then every output.
 The useful test of a big dashboard is whether a problem shows up without hunting for it. We took two
 of the 50 inputs offline and watched.
 
-![Two inputs drop: the totals change, the affected pipelines turn yellow, and the Issues tab narrows the list](images/two-inputs-down.gif)
+![Two inputs drop: the totals change, the affected pipelines turn yellow, and the Issues tab narrows the list](images/two-inputs-down.webp)
 
 Within a few seconds:
 
@@ -55,14 +55,14 @@ Within a few seconds:
 - The two pipelines turned yellow in their groups in the sidebar.
 - The **Issues** tab narrowed the output list to those 20 outputs.
 
-![The Issues tab lists the 20 affected outputs, each with its reason](images/issues-tab.png)
+![The Issues tab lists the 20 affected outputs, each with its reason](images/issues-tab.webp)
 
 Each row says why: "Output is running but input is not live." The outputs were not failing, they
 were waiting for an input that had gone, and that is what the dashboard told us.
 
 ## One pipeline at a time
 
-![A pipeline's own view: its input, publish URLs and its 10 outputs](images/pipeline-view.png)
+![A pipeline's own view: its input, publish URLs and its 10 outputs](images/pipeline-view.webp)
 
 Opening a pipeline shows its input, its publish URLs and its 10 outputs on one screen, each with
 status, uptime, bitrate and memory. A group of ten outputs fits without scrolling, which is the

@@ -1,5 +1,6 @@
 // Reads the blog posts in blog/: Markdown files named YYYY-MM-DD-slug.md that
-// start with front matter (title, date, summary, tags, draft). Drafts are not
+// start with front matter (title, date, summary, tags, draft, and optionally
+// image and imageAlt for the header image). Drafts are not
 // built unless BLOG_DRAFTS=1 is set for a local preview. A post that cannot be read is skipped with a warning, so one bad file
 // never stops the site from building.
 
@@ -46,12 +47,19 @@ function readPost(file, name) {
     if (data.date !== fileDate) {
         throw new Error(`date ${data.date} does not match the file name date ${fileDate}`);
     }
+    for (const field of ['image', 'imageAlt']) {
+        if (data[field] !== undefined && typeof data[field] !== 'string') {
+            throw new Error(`${field} must be text`);
+        }
+    }
     return {
         slug,
         title: data.title,
         date: data.date,
         summary: data.summary,
         tags: Array.isArray(data.tags) ? data.tags : [],
+        image: data.image ? blogImageUrl(data.image) : '',
+        imageAlt: data.imageAlt || '',
         draft: data.draft === true,
         markdown: body,
         sourcePath: `blog/${name}`,

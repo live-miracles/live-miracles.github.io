@@ -76,6 +76,18 @@ test('loadPosts skips a post with a missing field or a date that differs from it
     assert.equal(warnings.length, 2);
 });
 
+test('loadPosts reads the optional header image and serves it from /blog/', () => {
+    const dir = blogDir({
+        '2026-01-02-with.md': post({ extra: 'image: images/a.png\nimageAlt: A diagram\n' }),
+        '2026-01-03-without.md': post({ date: '2026-01-03' }),
+    });
+    const [without, withImage] = loadPosts(dir);
+    assert.equal(withImage.image, '/blog/images/a.png');
+    assert.equal(withImage.imageAlt, 'A diagram');
+    assert.equal(without.image, '');
+    assert.equal(without.imageAlt, '');
+});
+
 test('loadPosts returns nothing when there is no blog folder', () => {
     assert.deepEqual(loadPosts(path.join(os.tmpdir(), 'no-such-blog-dir')), []);
 });
