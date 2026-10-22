@@ -410,7 +410,7 @@ function layout({
         window.setSidebarRail(window.sidebarRail());
       </script>
       <input id="project-drawer" type="checkbox" class="drawer-toggle" />
-      <div class="drawer-content min-h-screen">
+      <div class="drawer-content min-h-screen min-w-0">
         <header class="navbar border-base-content/10 bg-base-300/92 sticky top-0 z-20 border-b px-4 backdrop-blur lg:hidden">
           <div class="flex-none">
             <label for="project-drawer" class="btn btn-square btn-ghost" aria-label="Open projects">${icons.menu}</label>
