@@ -120,7 +120,7 @@ JSON, <code>{ &quot;error&quot;: &quot;…&quot; }</code>; an unexpected failure
 <tr>
 <td>GET</td>
 <td><code>/api/health</code></td>
-<td>Live input/output status snapshot (refreshed every 5s). An output has <code>warningReason</code> and <code>warningSinceMs</code> (when that warning began), and <code>nextRetryAtMs</code>, when its pending retry after a failure is due (else <code>null</code>); each pipeline alert has <code>sinceMs</code>, the time its current episode started, which stays the same while the alert lasts. An alert is one episode until it has been absent for six polls (~30 s)</td>
+<td>Live input/output status snapshot (refreshed every 5s). An output has <code>warningReason</code> and <code>warningSinceMs</code> (when that warning began), and <code>nextRetryAtMs</code>, when its pending retry after a failure is due (else <code>null</code>); each pipeline alert has <code>sinceMs</code>, the time its current episode started, which stays the same while the alert lasts. An alert is one episode until it has been absent for six polls (~30 s). <code>hostAlerts</code> lists the open host resource alerts (<code>cpu</code>, <code>memory</code>, <code>disk</code>)</td>
 </tr>
 <tr>
 <td>GET</td>
@@ -145,7 +145,7 @@ JSON, <code>{ &quot;error&quot;: &quot;…&quot; }</code>; an unexpected failure
 <tr>
 <td>GET</td>
 <td><code>/api/srs-logs</code></td>
-<td>Recent SRS up/down events and log tails for SRS, the dashboard, and the relay</td>
+<td>Recent Server events (SRS and Goryu becoming unreachable or recovering, host CPU, memory and disk alerts: <code>{ ts, source: srs|relay|host, type: problem|recovered, message }</code>) and log tails for SRS, the dashboard, and the relay</td>
 </tr>
 <tr>
 <td>GET</td>

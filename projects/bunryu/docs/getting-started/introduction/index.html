@@ -105,7 +105,7 @@ and every failure leaves enough evidence to explain it afterwards.</p>
 <h2 id="how-it-works">How it works</h2>
 <pre><code>OBS / ffmpeg  ──RTMP────────►  SRS (21935)  ──FFmpeg──►  YouTube / Facebook / ...
               ──SRT─────────►  SRS (10080)  ──FFmpeg──►  rtmp:// or srt://
-              ──SRT bonding─►  goryu (10081) ──► SRS
+              ──SRT relay───►  goryu (10081) ──► SRS
 </code></pre>
 <table>
 <thead>

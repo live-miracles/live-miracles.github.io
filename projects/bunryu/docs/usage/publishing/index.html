@@ -131,11 +131,11 @@ generated at install time; see <a href="/projects/bunryu/docs/getting-started/in
 <p>Prefer SRT when the encoder supports it: it has fixed, predictable latency,
 survives lossy networks better than RTMP, and keeps every audio track. Use
 bonded SRT for encoders that send the same stream over several network links
-(for example cellular bonding units); the
-<a href="https://github.com/live-miracles/goryu"><code>goryu</code></a>
+(for example cellular bonding units); the SRT relay
+(<a href="https://github.com/live-miracles/goryu">Goryu</a>)
 merges the links before SRS sees the stream.</p>
-<p>The bonded port also accepts an ordinary single-link SRT connection: use the
-bonded URL without <code>grouptype=broadcast</code>. The dashboard then shows it as an
+<p>The relay port also accepts an ordinary single-link SRT connection: use the
+relay URL without <code>grouptype=broadcast</code>. The dashboard then shows it as an
 &quot;SRT input via relay&quot; with the encoder&#39;s IP, instead of a bonded group. This is
 optional. Plain SRT sent straight to port 10080 avoids the relay&#39;s extra hop
 (about 200 ms) and keeps the stream independent of the relay process; see

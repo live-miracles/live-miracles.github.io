@@ -237,10 +237,11 @@ shows, up to ~10 s old), host total/available memory and swap, host CPU pressure
 from <code>/proc/pressure/cpu</code>, null where the kernel has none) and the kernel&#39;s UDP counters
 (<code>udp</code>: datagrams dropped host-wide for a full receive buffer, how many since the previous
 snapshot, and the receive queue and drops of the SRS and relay SRT ingest sockets).
-Separately,
-<code>host-memory-low</code> (available memory under 15% of total) and
-<code>host-memory-recovered</code> (back above 20%) events are logged on transition, the
-former with the five largest processes by RSS.</p>
+The snapshot also records the free space of the filesystem holding the database
+(<code>dataDisk</code>). Separately, the host resource alerts are logged on transition (see
+<a href="/projects/bunryu/docs/operations/reliability/#host-resource-alerts">Host resource alerts</a>): <code>host-memory-low</code> /
+<code>host-memory-recovered</code>, <code>host-cpu-high</code> / <code>host-cpu-recovered</code> and
+<code>host-disk-low</code> / <code>host-disk-recovered</code>.</p>
 <p>Other things the diagnostics record so an incident can be pieced together:</p>
 <ul>
 <li><strong>Restarts:</strong> <code>server-started</code> (version, pid, a random <code>instanceId</code> per start, the

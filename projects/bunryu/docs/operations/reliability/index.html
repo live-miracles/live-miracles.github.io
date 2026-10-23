@@ -93,7 +93,7 @@
               <div class="min-w-0"><details class="rounded-box border-base-content/10 bg-base-300/46 text-base-content/68 mb-7 border p-4 text-sm backdrop-blur">
               <summary class="text-base-content/80 cursor-pointer font-semibold">On this page</summary>
               <ol class="mt-3 space-y-2">
-                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#watchdogs">Watchdogs</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#falling-behind-realtime">Falling behind realtime</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#shared-encodes">Shared encodes</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#input-timestamp-fault-detection">Input timestamp fault detection</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#input-frame-rate">Input frame rate</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#flapping-inputs">Flapping inputs</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#encoder-restarts-do-not-restart-outputs">Encoder restarts do not restart outputs</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#srt-input-output-stalls">SRT-input output stalls</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#ffmpeg-memory-leaks-on-corrupt-input">FFmpeg memory leaks on corrupt input</a></li>
+                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#watchdogs">Watchdogs</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#host-resource-alerts">Host resource alerts</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#falling-behind-realtime">Falling behind realtime</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#shared-encodes">Shared encodes</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#input-timestamp-fault-detection">Input timestamp fault detection</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#input-frame-rate">Input frame rate</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#flapping-inputs">Flapping inputs</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#encoder-restarts-do-not-restart-outputs">Encoder restarts do not restart outputs</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#srt-input-output-stalls">SRT-input output stalls</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#ffmpeg-memory-leaks-on-corrupt-input">FFmpeg memory leaks on corrupt input</a></li>
               </ol>
             </details><article class="readme min-w-0"><p>Bunryu is designed to keep running through long live events: failures are
 isolated to one output, recovered automatically where it is safe, and recorded
@@ -256,6 +256,60 @@ missing. Unlike a schema mismatch this is not fatal: ingest, the dashboard and e
 output that does not need the missing piece keep working. Without the check, a missing
 or incomplete build (an OS package replacing the pinned one, or a wrong <code>ffmpeg_path</code>)
 would show up only as each affected output failing with its own error.</p>
+<h2 id="host-resource-alerts">Host resource alerts</h2>
+<p>The health poll (every 5 s) watches the host itself, because an overloaded or full host
+degrades every pipeline at once and no single output&#39;s error explains it. Each alert
+has a start and an end threshold that differ, so a reading hovering near the line is
+one episode, and each start and end is written three ways: a journal line
+(<code>[host] ...</code>), a diagnostics event with the numbers, and a row in the <strong>Server events</strong>
+table of the dashboard&#39;s Server Logs view (the last 200 rows, kept in memory, so the
+diagnostics are the record that survives a restart).</p>
+<table>
+<thead>
+<tr>
+<th>Alert</th>
+<th>Starts when</th>
+<th>Ends when</th>
+<th>Events</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CPU</td>
+<td>CPU pressure (10 s average) is 50% or more for 30 s</td>
+<td>below 30% for 60 s</td>
+<td><code>host-cpu-high</code>, <code>host-cpu-recovered</code></td>
+</tr>
+<tr>
+<td>Memory</td>
+<td>available memory under 15% of total</td>
+<td>back at 20%</td>
+<td><code>host-memory-low</code>, <code>host-memory-recovered</code></td>
+</tr>
+<tr>
+<td>Disk</td>
+<td>free space under 10% of the filesystem</td>
+<td>back at 15%</td>
+<td><code>host-disk-low</code>, <code>host-disk-recovered</code></td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>CPU pressure</strong> is the share of the last 10 s in which a runnable task waited for a
+CPU (<code>/proc/pressure/cpu</code>, &quot;some&quot;). It measures starvation, not busyness: a host that
+runs its encodes at 100% with nothing waiting reads low, which is healthy. The start
+event names the busiest managed processes (SRS, the control plane, the outputs&#39;
+FFmpeg); the end event has the peak and how long it lasted. On a kernel without PSI
+there is no CPU alert.</li>
+<li><strong>Memory</strong> is <code>MemAvailable</code> (free plus reclaimable cache). The start event names the
+five largest processes by RSS.</li>
+<li><strong>Disk</strong> checks the filesystem holding the database (which also holds the
+diagnostics and HLS previews) and the root filesystem (journald, SRS logs), once
+each when they are the same one. The event carries the path, so it says which filled.</li>
+</ul>
+<p>The open alerts are listed in <code>/api/health</code> as <code>hostAlerts</code>, and the dashboard beeps
+once when the memory or disk alert opens (not CPU, whose thresholds are not yet proven
+on production, so a beep on a healthy event would get the sound muted). They are
+reporting only: nothing is stopped or restarted for them. Why these
+thresholds: <a href="/projects/bunryu/docs/reference/design-decisions/#host-resource-alerts-cpu-pressure-memory-and-disk">Host resource alerts</a>.</p>
 <h2 id="falling-behind-realtime">Falling behind realtime</h2>
 <p>An output that processes media slower than realtime falls further behind live every
 second: a slow encode or destination, or an input delivering slowly. The output

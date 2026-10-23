@@ -2,39 +2,39 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://live-miracles.github.io/</loc><lastmod>2026-10-23</lastmod></url>
   <url><loc>https://live-miracles.github.io/blog/</loc><lastmod>2026-10-22</lastmod></url>
-  <url><loc>https://live-miracles.github.io/blog/bonded-srt-for-srs-mediamtx-restreamer/</loc><lastmod>2026-10-22</lastmod></url>
   <url><loc>https://live-miracles.github.io/blog/one-faulty-embedder-20-streams/</loc><lastmod>2026-10-22</lastmod></url>
+  <url><loc>https://live-miracles.github.io/blog/srs-mediamtx-restreamer-reject-bonded-srt/</loc><lastmod>2026-10-22</lastmod></url>
   <url><loc>https://live-miracles.github.io/blog/one-leaking-ffmpeg-six-streams/</loc><lastmod>2026-10-21</lastmod></url>
-  <url><loc>https://live-miracles.github.io/projects/bunryu/</loc><lastmod>2026-10-22</lastmod></url>
-  <url><loc>https://live-miracles.github.io/projects/bunryu/docs/</loc><lastmod>2026-10-22</lastmod></url>
-  <url><loc>https://live-miracles.github.io/projects/bunryu/docs/getting-started/introduction/</loc><lastmod>2026-10-22</lastmod></url>
-  <url><loc>https://live-miracles.github.io/projects/bunryu/docs/getting-started/docker/</loc><lastmod>2026-10-22</lastmod></url>
-  <url><loc>https://live-miracles.github.io/projects/bunryu/docs/getting-started/install/</loc><lastmod>2026-10-22</lastmod></url>
-  <url><loc>https://live-miracles.github.io/projects/bunryu/docs/getting-started/sizing/</loc><lastmod>2026-10-22</lastmod></url>
-  <url><loc>https://live-miracles.github.io/projects/bunryu/docs/getting-started/comparison/</loc><lastmod>2026-10-22</lastmod></url>
-  <url><loc>https://live-miracles.github.io/projects/bunryu/docs/usage/publishing/</loc><lastmod>2026-10-22</lastmod></url>
-  <url><loc>https://live-miracles.github.io/projects/bunryu/docs/usage/outputs/</loc><lastmod>2026-10-22</lastmod></url>
-  <url><loc>https://live-miracles.github.io/projects/bunryu/docs/usage/translation/</loc><lastmod>2026-10-22</lastmod></url>
-  <url><loc>https://live-miracles.github.io/projects/bunryu/docs/operations/security/</loc><lastmod>2026-10-22</lastmod></url>
-  <url><loc>https://live-miracles.github.io/projects/bunryu/docs/operations/remote-access/</loc><lastmod>2026-10-22</lastmod></url>
-  <url><loc>https://live-miracles.github.io/projects/bunryu/docs/operations/configuration/</loc><lastmod>2026-10-22</lastmod></url>
-  <url><loc>https://live-miracles.github.io/projects/bunryu/docs/operations/reliability/</loc><lastmod>2026-10-22</lastmod></url>
-  <url><loc>https://live-miracles.github.io/projects/bunryu/docs/operations/known-issues/</loc><lastmod>2026-10-22</lastmod></url>
-  <url><loc>https://live-miracles.github.io/projects/bunryu/docs/reference/api/</loc><lastmod>2026-10-22</lastmod></url>
-  <url><loc>https://live-miracles.github.io/projects/bunryu/docs/reference/development/</loc><lastmod>2026-10-22</lastmod></url>
-  <url><loc>https://live-miracles.github.io/projects/bunryu/docs/reference/design-decisions/</loc><lastmod>2026-10-22</lastmod></url>
-  <url><loc>https://live-miracles.github.io/projects/goryu/</loc><lastmod>2026-10-22</lastmod></url>
-  <url><loc>https://live-miracles.github.io/projects/goryu/docs/</loc><lastmod>2026-10-22</lastmod></url>
-  <url><loc>https://live-miracles.github.io/projects/goryu/docs/getting-started/introduction/</loc><lastmod>2026-10-22</lastmod></url>
-  <url><loc>https://live-miracles.github.io/projects/goryu/docs/getting-started/install/</loc><lastmod>2026-10-22</lastmod></url>
-  <url><loc>https://live-miracles.github.io/projects/goryu/docs/getting-started/alternatives/</loc><lastmod>2026-10-22</lastmod></url>
-  <url><loc>https://live-miracles.github.io/projects/goryu/docs/usage/configuration/</loc><lastmod>2026-10-22</lastmod></url>
-  <url><loc>https://live-miracles.github.io/projects/goryu/docs/usage/sending-bonded-srt/</loc><lastmod>2026-10-22</lastmod></url>
-  <url><loc>https://live-miracles.github.io/projects/goryu/docs/usage/downstream-servers/</loc><lastmod>2026-10-22</lastmod></url>
-  <url><loc>https://live-miracles.github.io/projects/goryu/docs/operations/reliability/</loc><lastmod>2026-10-22</lastmod></url>
-  <url><loc>https://live-miracles.github.io/projects/goryu/docs/reference/status-api/</loc><lastmod>2026-10-22</lastmod></url>
-  <url><loc>https://live-miracles.github.io/projects/goryu/docs/reference/architecture/</loc><lastmod>2026-10-22</lastmod></url>
-  <url><loc>https://live-miracles.github.io/projects/goryu/docs/reference/development/</loc><lastmod>2026-10-22</lastmod></url>
+  <url><loc>https://live-miracles.github.io/projects/bunryu/</loc><lastmod>2026-10-23</lastmod></url>
+  <url><loc>https://live-miracles.github.io/projects/bunryu/docs/</loc><lastmod>2026-10-23</lastmod></url>
+  <url><loc>https://live-miracles.github.io/projects/bunryu/docs/getting-started/introduction/</loc><lastmod>2026-10-23</lastmod></url>
+  <url><loc>https://live-miracles.github.io/projects/bunryu/docs/getting-started/docker/</loc><lastmod>2026-10-23</lastmod></url>
+  <url><loc>https://live-miracles.github.io/projects/bunryu/docs/getting-started/install/</loc><lastmod>2026-10-23</lastmod></url>
+  <url><loc>https://live-miracles.github.io/projects/bunryu/docs/getting-started/sizing/</loc><lastmod>2026-10-23</lastmod></url>
+  <url><loc>https://live-miracles.github.io/projects/bunryu/docs/getting-started/comparison/</loc><lastmod>2026-10-23</lastmod></url>
+  <url><loc>https://live-miracles.github.io/projects/bunryu/docs/usage/publishing/</loc><lastmod>2026-10-23</lastmod></url>
+  <url><loc>https://live-miracles.github.io/projects/bunryu/docs/usage/outputs/</loc><lastmod>2026-10-23</lastmod></url>
+  <url><loc>https://live-miracles.github.io/projects/bunryu/docs/usage/translation/</loc><lastmod>2026-10-23</lastmod></url>
+  <url><loc>https://live-miracles.github.io/projects/bunryu/docs/operations/security/</loc><lastmod>2026-10-23</lastmod></url>
+  <url><loc>https://live-miracles.github.io/projects/bunryu/docs/operations/remote-access/</loc><lastmod>2026-10-23</lastmod></url>
+  <url><loc>https://live-miracles.github.io/projects/bunryu/docs/operations/configuration/</loc><lastmod>2026-10-23</lastmod></url>
+  <url><loc>https://live-miracles.github.io/projects/bunryu/docs/operations/reliability/</loc><lastmod>2026-10-23</lastmod></url>
+  <url><loc>https://live-miracles.github.io/projects/bunryu/docs/operations/known-issues/</loc><lastmod>2026-10-23</lastmod></url>
+  <url><loc>https://live-miracles.github.io/projects/bunryu/docs/reference/api/</loc><lastmod>2026-10-23</lastmod></url>
+  <url><loc>https://live-miracles.github.io/projects/bunryu/docs/reference/development/</loc><lastmod>2026-10-23</lastmod></url>
+  <url><loc>https://live-miracles.github.io/projects/bunryu/docs/reference/design-decisions/</loc><lastmod>2026-10-23</lastmod></url>
+  <url><loc>https://live-miracles.github.io/projects/goryu/</loc><lastmod>2026-10-23</lastmod></url>
+  <url><loc>https://live-miracles.github.io/projects/goryu/docs/</loc><lastmod>2026-10-23</lastmod></url>
+  <url><loc>https://live-miracles.github.io/projects/goryu/docs/getting-started/introduction/</loc><lastmod>2026-10-23</lastmod></url>
+  <url><loc>https://live-miracles.github.io/projects/goryu/docs/getting-started/install/</loc><lastmod>2026-10-23</lastmod></url>
+  <url><loc>https://live-miracles.github.io/projects/goryu/docs/getting-started/alternatives/</loc><lastmod>2026-10-23</lastmod></url>
+  <url><loc>https://live-miracles.github.io/projects/goryu/docs/usage/configuration/</loc><lastmod>2026-10-23</lastmod></url>
+  <url><loc>https://live-miracles.github.io/projects/goryu/docs/usage/sending-bonded-srt/</loc><lastmod>2026-10-23</lastmod></url>
+  <url><loc>https://live-miracles.github.io/projects/goryu/docs/usage/downstream-servers/</loc><lastmod>2026-10-23</lastmod></url>
+  <url><loc>https://live-miracles.github.io/projects/goryu/docs/operations/reliability/</loc><lastmod>2026-10-23</lastmod></url>
+  <url><loc>https://live-miracles.github.io/projects/goryu/docs/reference/status-api/</loc><lastmod>2026-10-23</lastmod></url>
+  <url><loc>https://live-miracles.github.io/projects/goryu/docs/reference/architecture/</loc><lastmod>2026-10-23</lastmod></url>
+  <url><loc>https://live-miracles.github.io/projects/goryu/docs/reference/development/</loc><lastmod>2026-10-23</lastmod></url>
   <url><loc>https://live-miracles.github.io/projects/delayed-yt/</loc><lastmod>2026-08-23</lastmod></url>
   <url><loc>https://live-miracles.github.io/projects/vmix-master/</loc><lastmod>2026-10-20</lastmod></url>
   <url><loc>https://live-miracles.github.io/projects/vmix-master/docs/</loc><lastmod>2026-10-20</lastmod></url>

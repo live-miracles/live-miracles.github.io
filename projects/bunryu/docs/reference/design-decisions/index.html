@@ -93,7 +93,7 @@
               <div class="min-w-0"><details class="rounded-box border-base-content/10 bg-base-300/46 text-base-content/68 mb-7 border p-4 text-sm backdrop-blur">
               <summary class="text-base-content/80 cursor-pointer font-semibold">On this page</summary>
               <ol class="mt-3 space-y-2">
-                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#current-architecture-in-one-paragraph">Current architecture in one paragraph</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#media-server">Media server</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#use-srs-for-ingest-from-the-official-release">Use SRS for ingest, from the official release</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#keep-srss-srt_to_rtmp-off-ffmpeg-converts-srt-inputs">Keep SRS&#39;s srt_to_rtmp off; FFmpeg converts SRT inputs</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-use-srss-built-in-forwarding-for-outputs">Don&#39;t use SRS&#39;s built-in forwarding for outputs</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-use-mediamtx-for-srt-ingest-or-srtrtmp-conversion">Don&#39;t use MediaMTX for SRT ingest or SRT→RTMP conversion</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-build-on-datarhei-restreamer">Don&#39;t build on datarhei Restreamer</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-build-our-own-media-server">Don&#39;t build our own media server</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#srt-ingest">SRT ingest</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#a-separate-relay-accepts-bonded-srt-because-neither-ffmpeg-nor-srs-can">A separate relay accepts bonded SRT, because neither FFmpeg nor SRS can</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#plain-srt-goes-directly-to-srs-by-default-the-relay-also-accepts-it">Plain SRT goes directly to SRS by default; the relay also accepts it</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#a-lost-bonded-leg-is-found-by-counting-legs-because-the-relay-drops-it-instead-of-reporting-broken">A lost bonded leg is found by counting legs, because the relay drops it instead of reporting broken</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#outputs-pull-from-srs-not-from-the-relay">Outputs pull from SRS, not from the relay</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#keep-goryu-in-its-own-repository">Keep goryu in its own repository</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#raise-the-kernel-udp-buffer-ceiling-but-dont-alert-on-it">Raise the kernel UDP buffer ceiling, but don&#39;t alert on it</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#outputs-and-preview">Outputs and preview</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#one-ffmpeg-process-per-output">One FFmpeg process per output</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#outputs-with-the-same-encode-share-one-ffmpeg-shared-encodes">Outputs with the same encode share one FFmpeg (shared encodes)</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#preview-copies-the-video-only-audio-is-encoded">Preview copies the video; only audio is encoded</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#give-up-on-a-blocked-rtmprtmps-destination-with-an-output--rw_timeout">Give up on a blocked RTMP/RTMPS destination with an output -rw_timeout</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-add-an-ss--ti-ack-progress-check--rw_timeout-is-the-knob">Don&#39;t add an ss -ti ack-progress check; -rw_timeout is the knob</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#srt-destinations-need-no-output-timeout">SRT destinations need no output timeout</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#sizing">Sizing</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#sizing-guidance-is-a-measured-table-not-a-calculator">Sizing guidance is a measured table, not a calculator</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#no-hard-cap-on-inputs-or-outputs-the-stream-key-count-is-a-setting">No hard cap on inputs or outputs; the stream key count is a setting</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#dashboard">Dashboard</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#installable-as-an-app-with-a-manifest-only-no-service-worker">Installable as an app with a manifest only, no service worker</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#the-overview-filters-in-the-browser-and-searches-names-only">The Overview filters in the browser, and searches names only</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#alert-sound-beeps-for-new-problems-only-in-the-browser">Alert sound beeps for new problems only, in the browser</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-probe-platform-hosts-from-the-server">Don&#39;t probe platform hosts from the server</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#tooling">Tooling</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#eslint-checks-promise-handling-prettier-stays-the-formatter">ESLint checks promise handling; Prettier stays the formatter</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#logging-and-diagnostics">Logging and diagnostics</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#keep-the-process-running-after-an-uncaught-error">Keep the process running after an uncaught error</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#diagnostics-ideas-taken-from-srs-mediamtx-and-restream-krsna">Diagnostics ideas taken from SRS, MediaMTX and restream-krsna</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#warn-when-an-output-falls-behind-realtime-measured-from-its-media-clock">Warn when an output falls behind realtime, measured from its media clock</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#failures-that-need-an-operator-exit-with-status-78-which-systemd-does-not-restart">Failures that need an operator exit with status 78, which systemd does not restart</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#keep-a-fixed-2-s-systemd-restart-delay-with-no-back-off">Keep a fixed 2 s systemd restart delay, with no back-off</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#hints-are-a-dashboard-lookup-not-an-api-field">Hints are a dashboard lookup, not an API field</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#restart-outputs-when-a-reconnecting-encoder-changes-format-not-when-it-merely-reconnects">Restart outputs when a reconnecting encoder changes format, not when it merely reconnects</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#ingest-protection">Ingest protection</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-ban-abusive-ingest-clients-with-fail2ban">Don&#39;t ban abusive ingest clients with fail2ban</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#install-and-secrets">Install and secrets</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#the-initial-dashboard-password-is-supplied-never-generated-or-printed-the-app-config-lives-in-etcbunryu">The initial dashboard password is supplied, never generated or printed; the app config lives in /etc/bunryu</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#the-docker-image-is-x86_64-only-arm-hosts-run-it-emulated-for-development">The Docker image is x86_64 only; ARM hosts run it emulated, for development</a></li>
+                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#current-architecture-in-one-paragraph">Current architecture in one paragraph</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#media-server">Media server</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#use-srs-for-ingest-from-the-official-release">Use SRS for ingest, from the official release</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#keep-srss-srt_to_rtmp-off-ffmpeg-converts-srt-inputs">Keep SRS&#39;s srt_to_rtmp off; FFmpeg converts SRT inputs</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-use-srss-built-in-forwarding-for-outputs">Don&#39;t use SRS&#39;s built-in forwarding for outputs</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-use-mediamtx-for-srt-ingest-or-srtrtmp-conversion">Don&#39;t use MediaMTX for SRT ingest or SRT→RTMP conversion</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-build-on-datarhei-restreamer">Don&#39;t build on datarhei Restreamer</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-build-our-own-media-server">Don&#39;t build our own media server</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#srt-ingest">SRT ingest</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#a-separate-relay-accepts-bonded-srt-because-neither-ffmpeg-nor-srs-can">A separate relay accepts bonded SRT, because neither FFmpeg nor SRS can</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#plain-srt-goes-directly-to-srs-by-default-the-relay-also-accepts-it">Plain SRT goes directly to SRS by default; the relay also accepts it</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#link-stats-for-a-direct-srt-input-are-not-read-from-srss-log">Link stats for a direct SRT input are not read from SRS&#39;s log</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#a-lost-bonded-leg-is-found-by-counting-legs-because-the-relay-drops-it-instead-of-reporting-broken">A lost bonded leg is found by counting legs, because the relay drops it instead of reporting broken</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#outputs-pull-from-srs-not-from-the-relay">Outputs pull from SRS, not from the relay</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#keep-goryu-in-its-own-repository">Keep goryu in its own repository</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#raise-the-kernel-udp-buffer-ceiling-but-dont-alert-on-it">Raise the kernel UDP buffer ceiling, but don&#39;t alert on it</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#outputs-and-preview">Outputs and preview</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#one-ffmpeg-process-per-output">One FFmpeg process per output</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#outputs-with-the-same-encode-share-one-ffmpeg-shared-encodes">Outputs with the same encode share one FFmpeg (shared encodes)</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#preview-copies-the-video-only-audio-is-encoded">Preview copies the video; only audio is encoded</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#give-up-on-a-blocked-rtmprtmps-destination-with-an-output--rw_timeout">Give up on a blocked RTMP/RTMPS destination with an output -rw_timeout</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-add-an-ss--ti-ack-progress-check--rw_timeout-is-the-knob">Don&#39;t add an ss -ti ack-progress check; -rw_timeout is the knob</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#srt-destinations-need-no-output-timeout">SRT destinations need no output timeout</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#sizing">Sizing</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#sizing-guidance-is-a-measured-table-not-a-calculator">Sizing guidance is a measured table, not a calculator</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#no-hard-cap-on-inputs-or-outputs-the-stream-key-count-is-a-setting">No hard cap on inputs or outputs; the stream key count is a setting</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#dashboard">Dashboard</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#installable-as-an-app-with-a-manifest-only-no-service-worker">Installable as an app with a manifest only, no service worker</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#the-overview-filters-in-the-browser-and-searches-names-only">The Overview filters in the browser, and searches names only</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#alert-sound-beeps-for-new-problems-only-in-the-browser">Alert sound beeps for new problems only, in the browser</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-probe-platform-hosts-from-the-server">Don&#39;t probe platform hosts from the server</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#tooling">Tooling</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#eslint-checks-promise-handling-prettier-stays-the-formatter">ESLint checks promise handling; Prettier stays the formatter</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#logging-and-diagnostics">Logging and diagnostics</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#keep-the-process-running-after-an-uncaught-error">Keep the process running after an uncaught error</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#diagnostics-ideas-taken-from-srs-mediamtx-and-restream-krsna">Diagnostics ideas taken from SRS, MediaMTX and restream-krsna</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#warn-when-an-output-falls-behind-realtime-measured-from-its-media-clock">Warn when an output falls behind realtime, measured from its media clock</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#host-resource-alerts-cpu-pressure-memory-and-disk">Host resource alerts: CPU pressure, memory and disk</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#failures-that-need-an-operator-exit-with-status-78-which-systemd-does-not-restart">Failures that need an operator exit with status 78, which systemd does not restart</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#keep-a-fixed-2-s-systemd-restart-delay-with-no-back-off">Keep a fixed 2 s systemd restart delay, with no back-off</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#hints-are-a-dashboard-lookup-not-an-api-field">Hints are a dashboard lookup, not an API field</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#restart-outputs-when-a-reconnecting-encoder-changes-format-not-when-it-merely-reconnects">Restart outputs when a reconnecting encoder changes format, not when it merely reconnects</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#ingest-protection">Ingest protection</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-ban-abusive-ingest-clients-with-fail2ban">Don&#39;t ban abusive ingest clients with fail2ban</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#install-and-secrets">Install and secrets</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#the-initial-dashboard-password-is-supplied-never-generated-or-printed-the-app-config-lives-in-etcbunryu">The initial dashboard password is supplied, never generated or printed; the app config lives in /etc/bunryu</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#the-docker-image-is-x86_64-only-arm-hosts-run-it-emulated-for-development">The Docker image is x86_64 only; ARM hosts run it emulated, for development</a></li>
               </ol>
             </details><article class="readme min-w-0"><p>Why Bunryu is built the way it is, and why some obvious alternatives are not
 used. Each entry gives the decision, the reasons, the evidence behind them, and
@@ -279,6 +279,48 @@ SRS&#39;s per-client SRT stats into stats of the loopback hop.</li>
 <li>It would add ~200 ms of latency and a second process every SRT input depends on;
 a relay restart would drop all SRT inputs instead of only the bonded ones.</li>
 </ul>
+<h3 id="link-stats-for-a-direct-srt-input-are-not-read-from-srss-log">Link stats for a direct SRT input are not read from SRS&#39;s log</h3>
+<p><strong>Decision:</strong> not implemented. A direct SRT input (port 10080) has no loss, retransmit
+or drop stats or alerts, and its card says to use the SRT relay port for them. The
+only source in SRS 6.0 is its log, which would need <code>srs_log_level trace</code>, and that
+is too risky for the journal.</p>
+<p><strong>What was tried:</strong> SRS logs <code>&lt;- SRT_CPB Transport Stats # pktRecv, pktRcvLoss, pktRcvRetrans, pktRcvDrop</code> for each SRT publisher. A prototype followed
+<code>journalctl -u srs.service -f -g ...</code>, matched the line&#39;s <code>[cid]</code> to <code>publish.cid</code>
+(also the hook&#39;s <code>client_id</code>; verified on SRS 6.0-r2) and fed the input card and the
+relay&#39;s <code>srt-packet-loss</code>, <code>srt-retransmissions</code> and <code>srt-packets-dropped</code> alerts. It
+worked end to end, including a reader that could not affect a stream (bounded buffers,
+a malformed line only counted, a dead <code>journalctl</code> restarted with backoff).</p>
+<p><strong>Why it was dropped:</strong></p>
+<ul>
+<li><strong>Needs <code>trace</code>.</strong> At <code>srs_log_level warn</code>, the setting since 2026-06-14, there are
+no such lines (0 in 60 s with an SRT input connected). The setting came with the log
+rotation commit and records no reason; log volume is the likely one.</li>
+<li><strong>Steady state is acceptable</strong> (measured on the test stack with one input and four
+outputs, the rest from SRS&#39;s source). About 4 lines/s (~40-60 MB/day) at idle, mostly
+SRS logging each of the app&#39;s own API polls (about 5 lines per request). SRS&#39;s
+periodic lines are limited to about one per stage per 10 s however many clients
+share the stage, so 50 inputs and 500 outputs should not change it. That was not
+run at that scale.</li>
+<li><strong>Failure storms are the problem.</strong> Per rejected publish, <code>warn</code> logs about 3
+<code>WARN</code>/<code>ERROR</code> lines for RTMP and 2.4 for SRT; <code>trace</code> adds about 16 and 8. The
+app already throttles rejected publishers that retry every 10-40 ms (seen in
+production), which at trace would be 400-1600 extra lines/s. The journal cap is
+1 GB, so a storm could push out the history of an earlier incident within hours.
+journald&#39;s default rate limit (about 333 lines/s per service) would drop lines, the
+warnings and errors among them.</li>
+<li><strong>No safe mitigation verified.</strong> A journald <code>LogFilterPatterns</code> rule could drop
+the <code>INFO</code> lines and keep warnings, errors and the stats lines, but it needs
+systemd 253 or newer (Debian 12 has 252), and a test with a user unit did not filter
+anything; a system unit could not be tested without root. Docker would also need
+<code>warn</code> pinned: it has no journal and <code>docker logs</code> is not rotated by default.</li>
+<li><strong>Little gained.</strong> Counters only (no RTT, bandwidth or latency), one sample per input
+about every 10 s times the number of SRT inputs (50 inputs: ~8 min), and a stalled
+connection logs nothing.</li>
+</ul>
+<p><strong>Revisit when:</strong> SRS 8 with per-client SRT stats in its API (ossrs/srs#4769, PR #4770)
+is deployed: read the API, which needs no log level. Or when a journald filter is
+verified on the production OS, if a stats line is wanted sooner. Meanwhile an operator
+who needs link stats for an input sends it through the relay port.</p>
 <h3 id="a-lost-bonded-leg-is-found-by-counting-legs-because-the-relay-drops-it-instead-of-reporting-broken">A lost bonded leg is found by counting legs, because the relay drops it instead of reporting <code>broken</code></h3>
 <p><strong>Decision:</strong> the health poll remembers the most legs a bonded input has had since it
 connected (<code>expectedLegs</code>). Fewer legs than that is a down leg: a <code>bonded-leg-down</code>
@@ -304,6 +346,13 @@ change still goes to the diagnostics (one per 5 s poll at most). A bonded input 
 disconnects resets the remembered legs, so reconnecting is &quot;connected with N legs&quot;, not
 a run of lost legs. The relay logs the same changes itself with one-second timing
 (<code>Bonded leg joined|left</code> in its journal); this view is the 5 s sample of it.</p>
+<p><strong>An idle leg is not a fault while another leg runs.</strong> In a main/backup group the relay
+reports the standby leg as <code>idle</code> (carrying nothing) and the main leg as <code>running</code>; when
+the main leg fails the standby becomes <code>running</code> (checked 2026-10-22 against the relay with
+a 4 Mbps stream: main 4.4 Mbps, standby 0.000 Mbps, and no gap when the main leg was
+closed). The leg health used to mark every idle leg as a warning, which turned a healthy
+backup group&#39;s pipeline status to warn permanently. An idle leg is now a warning only when
+no other leg is running, and <code>pending</code> still is one.</p>
 <p><strong>Cost, and when to revisit:</strong> an encoder deliberately run with fewer legs keeps the
 warning until the input reconnects. Revisit if the relay starts reporting lost legs
 itself.</p>
@@ -879,6 +928,7 @@ not there at the previous 5 s poll:</p>
 <ul>
 <li>the server, SRS or the SRT relay becoming unreachable;</li>
 <li>an error-level pipeline alert;</li>
+<li>the host running low on memory or disk space (the host alerts in <code>hostAlerts</code>);</li>
 <li>an input going offline while its outputs are meant to run;</li>
 <li>an output crashing or being restarted by a watchdog.</li>
 </ul>
@@ -898,14 +948,20 @@ reload does not beep for problems already on screen.</li>
 <li><strong>In the browser, not the server.</strong> The dashboard is on a visible screen during
 events, so its sound reaches the operator without push permissions, Do Not Disturb or
 a phone. The 5 s poll already carries everything needed, so the server is unchanged.</li>
-<li><strong>Warnings do not beep</strong> (timestamp floods, high memory, falling behind, SRT loss):
-they are frequent and usually recover on their own.</li>
+<li><strong>Warnings do not beep</strong> (timestamp floods, falling behind, SRT loss): they are
+frequent and usually recover on their own.</li>
+<li><strong>Host memory and disk beep, host CPU does not.</strong> Low memory ends with the kernel
+killing FFmpeg or SRS, and a full disk breaks the database, diagnostics and journal,
+and neither clears on its own. The CPU alert&#39;s thresholds come from a desktop
+measurement, not production (see <a href="#host-resource-alerts-cpu-pressure-memory-and-disk">Host resource alerts</a>),
+so a beep on a healthy event would get the bell muted. It still shows in Server events.</li>
 </ul>
 <p><strong>Not adopted:</strong> a &quot;silence for N minutes&quot; button (mute is simpler, and the operator
 decides when to unmute); keeping a background tab&#39;s polling unthrottled (the dashboard
 is on top during events); push notifications.</p>
-<p><strong>Revisit when:</strong> operators mute it because it beeps too often, or a problem worth a
-beep reaches the dashboard only as a warning.</p>
+<p><strong>Revisit when:</strong> operators mute it because it beeps too often, a problem worth a
+beep reaches the dashboard only as a warning, or the CPU alert has fired only on real
+trouble in production (then add <code>cpu</code> to the beeping host alerts).</p>
 <h3 id="dont-probe-platform-hosts-from-the-server">Don&#39;t probe platform hosts from the server</h3>
 <p><strong>Decision (October 2026):</strong> the host connectivity probes were removed: a dashboard
 tab that opened a TCP connection every 5 s from the server to up to 10 configured
@@ -1045,6 +1101,68 @@ encode, and would drop the platform session for nothing.</li>
 warning text carries the number).</p>
 <p><strong>Revisit when:</strong> the warning fires on healthy outputs (then widen the window or
 lower the threshold), or operators want to see the speed continuously.</p>
+<h3 id="host-resource-alerts-cpu-pressure-memory-and-disk">Host resource alerts: CPU pressure, memory and disk</h3>
+<p><strong>Decision (October 2026):</strong> the health poll raises an alert, with a separate end
+threshold, when host CPU pressure, available memory or free disk space crosses a
+line. It is reported (journal, diagnostics events, the dashboard&#39;s Server events
+table) and nothing is acted on. The numbers are in
+<a href="/projects/bunryu/docs/operations/reliability/#host-resource-alerts">Reliability</a>.</p>
+<p><strong>Why:</strong></p>
+<ul>
+<li>Before this only memory had an alert. A CPU-starved host (the sizing page shows a
+<code>1080p</code> encode of a 4K input not keeping up on 4 vCPUs) makes outputs fall behind
+and SRT ingest drop packets, and the operator saw only each symptom per pipeline.</li>
+<li>Start and end thresholds differ, and the CPU alert also needs the reading to hold
+for 30 s (start) and 60 s (end), so a reading that hovers near the line is one
+episode, not a stream of them. The same idea ends a pipeline alert after six quiet polls.</li>
+</ul>
+<p><strong>CPU uses pressure (PSI), not utilisation:</strong> an encode is meant to use the CPUs (a
+<code>720p</code> encode takes about 2 vCPUs), so a host sized for its encodes is near fully busy
+while healthy and a utilisation alert would fire in normal use. Pressure stays near
+zero until something waits for a CPU. It also means no fallback: a kernel without <code>/proc/pressure/cpu</code> gets no CPU
+alert, rather than a utilisation guess that would fire on healthy encodes.</p>
+<p><strong>Evidence for the thresholds (8-CPU development host, busy loops, <code>some avg10</code>):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Busy loops</th>
+<th>Load</th>
+<th>Pressure after 45 s</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>8</td>
+<td>1.0x</td>
+<td>25-30%</td>
+</tr>
+<tr>
+<td>10</td>
+<td>1.25x</td>
+<td>46-53%</td>
+</tr>
+<tr>
+<td>16</td>
+<td>2.0x</td>
+<td>68-70%</td>
+</tr>
+</tbody></table>
+<p>A first draft used 90 to start and 85 to end; that never fires, since pressure stays
+near 70 even with the host twice oversubscribed, and a threshold of 70 would stay
+silent at about 1.5x oversubscription, where the sizing page has a <code>1080p</code> encode of a
+4K input no longer keeping up (about 55-60% by interpolating the table). 50 is about
+1.25x oversubscription, and 30 sits just above the reading of a fully busy but
+unstarved host, so its noise does not hold an alert open. These come from a desktop with background load, not from the
+production VM.</p>
+<p><strong>Disk:</strong> the filesystem of the database directory (database, diagnostics, HLS
+previews) and the root filesystem (journald, SRS logs), alert under 10% free and end
+at 15%. Diagnostics are size-capped and previews stop when idle, so this catches the
+journal, logs or database growing, or another tenant of the disk.</p>
+<p><strong>Not adopted:</strong> acting on the alert (stopping outputs, shedding load), which could
+take down streams on a reading that may be harmless; a dashboard banner or beep,
+until the table proves useful (the beep is for pipeline problems).</p>
+<p><strong>Revisit when:</strong> a production incident shows the CPU thresholds firing late or on
+healthy load (compare <code>host.cpuPressure</code> in the <code>health-snapshot</code> with the alert
+times), or operators need these in front of them rather than in Server Logs.</p>
 <h3 id="failures-that-need-an-operator-exit-with-status-78-which-systemd-does-not-restart">Failures that need an operator exit with status 78, which systemd does not restart</h3>
 <p><strong>Decision (October 2026):</strong> a database stamped with another schema version, or a
 missing or invalid config file (<code>bunryu.json</code>, <code>srs.conf</code>, <code>goryu.json</code>), makes the
