@@ -44,7 +44,7 @@ Posts are Markdown files in `blog/`, named `YYYY-MM-DD-slug.md`, with front matt
 To preview a project's README and docs from a local checkout before pushing:
 
 ```sh
-LOCAL_PROJECTS=bunryu=../bunryu npm run build && npm run dev
+LOCAL_PROJECTS=bunryu=../bunryu npm run dev
 ```
 
 ## Adding a project
@@ -67,6 +67,12 @@ Run the local preview:
 ```sh
 npm run dev
 ```
+
+It builds the site, serves `dist/` and rebuilds about a second after you save a
+file in `blog/`, `ui/` or `scripts/` (or the README and `docs/` of a
+`LOCAL_PROJECTS` checkout). The browser does not reload by itself: refresh it
+after the "Rebuilt" line. GitHub data is fetched once per run and reused, so
+restart to refresh it.
 
 Format source files:
 

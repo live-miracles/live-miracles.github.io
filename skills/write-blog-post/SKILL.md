@@ -92,7 +92,7 @@ the GIF was 1.4 MB.
 ## 3. Preview and check
 
 ```sh
-BLOG_DRAFTS=1 npm run dev     # drafts are visible at /blog/
+BLOG_DRAFTS=1 npm run dev     # drafts are visible at /blog/; rebuilds on save, refresh to see it
 npm run build                 # published posts only
 npx prettier --check .
 npm test

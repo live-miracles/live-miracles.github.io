@@ -14,11 +14,14 @@
 // fetched still gets a page (summary and links) and the build logs a warning.
 // LOCAL_PROJECTS=<id>=<path>[,<id>=<path>] reads a project's README and docs
 // from a local checkout instead, to preview documentation before pushing it.
+// BUILD_CACHE_DIR=<dir> keeps each fetched response there and reuses it, so
+// the dev server's rebuilds on save do not hit the GitHub API again.
 //
 // The Markdown posts in blog/ become /blog/<slug>/ pages, a /blog/ index and an
 // RSS feed at /blog/feed.xml (see blog.js); posts marked `draft: true` are left out
 // unless BLOG_DRAFTS=1 is set, to preview them locally.
 
+const crypto = require('node:crypto');
 const fs = require('node:fs');
 const path = require('node:path');
 const { execFileSync } = require('node:child_process');
@@ -35,6 +38,7 @@ const siteDescription =
     'Open-source tools for live production teams: restreaming, SRT bonding, vMix control, stream monitoring and multilingual event workflows.';
 const branch = 'master';
 const fetchTimeoutMs = 15000;
+const cacheDir = process.env.BUILD_CACHE_DIR;
 
 const iconClass = 'size-4 shrink-0';
 const icons = {
@@ -61,7 +65,18 @@ function escapeHtml(value) {
 
 const compact = new Intl.NumberFormat('en', { notation: 'compact', maximumFractionDigits: 1 });
 
+// Only successful responses are cached, so a failed fetch is retried next build.
 async function fetchWithRetry(url, options = {}) {
+    if (!cacheDir) return fetchUncached(url, options);
+    const file = path.join(cacheDir, crypto.createHash('sha256').update(url).digest('hex'));
+    if (fs.existsSync(file)) return new Response(fs.readFileSync(file));
+    const body = Buffer.from(await (await fetchUncached(url, options)).arrayBuffer());
+    fs.mkdirSync(cacheDir, { recursive: true });
+    fs.writeFileSync(file, body);
+    return new Response(body);
+}
+
+async function fetchUncached(url, options) {
     let lastError;
     for (let attempt = 1; attempt <= 2; attempt += 1) {
         try {
