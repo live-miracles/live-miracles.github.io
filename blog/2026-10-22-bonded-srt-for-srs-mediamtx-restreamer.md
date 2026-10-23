@@ -5,7 +5,7 @@ tags: [srt, bonding, goryu, mediamtx]
 image: images/bonded-cover.jpg
 imageAlt: Two network links merging into one stream, labelled 2 links, 1 stream
 summary: SRS, MediaMTX and Restreamer reject a bonded SRT group. We sent one to each, saw it refused, and put Goryu in front. How to do it yourself, and what we did not test.
-draft: true
+draft: false
 ---
 
 SRT bonding sends one live stream over several network links at once, for example two uplinks or two SIM cards. If one link degrades or dies, the receiver still has the data from the other, so the stream does not drop. libsrt implements it as a _socket group_.
@@ -122,7 +122,7 @@ The leg left the `legs[]` list, the byte counter kept growing, and `outputConnec
 
 ## With a real encoder, over the internet
 
-This is how we run it: Goryu in front of SRS carries our live events every day.
+This is how we run it: Goryu in front of SRS carries our live events, a few days every week.
 
 We pointed an AJA BRIDGE LIVE at the Goryu relay (v3.3.0) on our Bunryu server, a Google Cloud VM in Mumbai, which forwards to the SRS on the same host. AJA lists SRT bonding over the public internet as a feature from firmware v1.16 ([release notes](https://www.aja.com/pdf/2024/AJA_BRIDGE-LIVE_ReleaseNotes_v1.16.pdf)), and it needs the Annual Maintenance Option. Four minutes after the relay started, its status API showed this for the two legs:
 
@@ -140,7 +140,7 @@ We pointed an AJA BRIDGE LIVE at the Goryu relay (v3.3.0) on our Bunryu server, 
 - **Real loss, handled.** Each leg lost a small share of its packets (about 0.01% and 0.03%) and asked for retransmissions, and nothing arrived too late. Goryu reports loss per leg, not for the merged stream, so this shows how each link behaved, not what the merged stream lost.
 - **Downstream.** Zero retry failures and no error on the stream.
 
-The relay's journal covers five days. It records 18 bonded sessions and no plain ones, with no downstream retries and no failed connects. The longest session ran 21 hours 51 minutes and forwarded 215.8 GB, about 22 Mbps on average, and it ended only because the service was stopped for maintenance. These are our live events, not test runs.
+The relay's journal covers five days. It records 18 bonded sessions and no plain ones, with no downstream retries and no failed connects. The longest session ran 21 hours 51 minutes and forwarded 215.8 GB, about 22 Mbps on average, and it ended only because the service was stopped for maintenance. These sessions are our regular use of the relay. The snapshot above and the cable pull were taken on a test feed, not during a live event.
 
 ## Pulling one cable
 
