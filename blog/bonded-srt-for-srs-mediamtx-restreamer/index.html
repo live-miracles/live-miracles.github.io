@@ -167,7 +167,7 @@ LD_LIBRARY_PATH=goryu/lib goryu/bin/goryu goryu.json
 </tbody></table>
 <p>The leg left the <code>legs[]</code> list, the byte counter kept growing, and <code>outputConnected</code> stayed <code>true</code>. The server behind Goryu saw an unbroken stream. Each leg reports its own round-trip time, loss, retransmissions and buffer, which is what you want when you are deciding which uplink is the weak one.</p>
 <h2 id="with-a-real-encoder-over-the-internet">With a real encoder, over the internet</h2>
-<p>This is how we run it: Goryu in front of SRS carries our live events, a few days every week.</p>
+<p>This is how we run it: Goryu in front of SRS (known as srt-bonding-relay until this month) has carried our live events for the past few months, a few days every week.</p>
 <p>We pointed an AJA BRIDGE LIVE at the Goryu relay (v3.3.0) on our Bunryu server, a Google Cloud VM in Mumbai, which forwards to the SRS on the same host. AJA lists SRT bonding over the public internet as a feature from firmware v1.16 (<a href="https://www.aja.com/pdf/2024/AJA_BRIDGE-LIVE_ReleaseNotes_v1.16.pdf">release notes</a>), and it needs the Annual Maintenance Option. Four minutes after the relay started, its status API showed this for the two legs:</p>
 <table>
 <thead>
