@@ -1,5 +1,5 @@
 ---
-title: Add bonded SRT to SRS, MediaMTX or Restreamer with a small relay
+title: SRS, MediaMTX and Restreamer reject bonded SRT. Here is a relay that fixes it
 date: 2026-10-22
 tags: [srt, bonding, goryu, mediamtx]
 image: images/bonded-cover.jpg
