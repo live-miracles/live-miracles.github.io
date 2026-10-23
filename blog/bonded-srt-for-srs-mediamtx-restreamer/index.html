@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="en" data-theme="dim">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add bonded SRT to SRS, MediaMTX or Restreamer with a small relay — Live Miracles</title>
+    <meta name="description" content="SRS, MediaMTX and Restreamer reject a bonded SRT group. We sent one to each, saw it refused, and put Goryu in front. How to do it yourself, and what we did not test." />
+    <link rel="canonical" href="https://live-miracles.github.io/blog/bonded-srt-for-srs-mediamtx-restreamer/" />
+    <meta property="og:site_name" content="Live Miracles" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Add bonded SRT to SRS, MediaMTX or Restreamer with a small relay — Live Miracles" />
+    <meta property="og:description" content="SRS, MediaMTX and Restreamer reject a bonded SRT group. We sent one to each, saw it refused, and put Goryu in front. How to do it yourself, and what we did not test." />
+    <meta property="og:url" content="https://live-miracles.github.io/blog/bonded-srt-for-srs-mediamtx-restreamer/" />
+    <meta property="og:image" content="https://live-miracles.github.io/blog/images/bonded-cover.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/assets/logo.png" type="image/png" />
+    <link rel="alternate" type="application/rss+xml" title="Live Miracles blog" href="/blog/feed.xml" />
+    <link rel="stylesheet" href="/assets/styles.css" />
+  </head>
+  <body>
+    <div class="group/drawer drawer lg:drawer-open">
+      <script>
+        window.setSidebarRail = function (rail) {
+          document.querySelector('.drawer').toggleAttribute('data-rail', rail);
+          var toggle = document.getElementById('sidebar-toggle');
+          if (toggle) {
+            toggle.setAttribute('aria-label', rail ? 'Expand projects' : 'Collapse projects to icons');
+          }
+        };
+        window.sidebarRail = function () {
+          try {
+            var saved = localStorage.getItem('sidebar-rail');
+            if (saved) return saved === '1';
+          } catch (e) {}
+          return true;
+        };
+        window.setSidebarRail(window.sidebarRail());
+      </script>
+      <input id="project-drawer" type="checkbox" class="drawer-toggle" />
+      <div class="drawer-content min-h-screen min-w-0">
+        <header class="navbar border-base-content/10 bg-base-300/92 sticky top-0 z-20 border-b px-4 backdrop-blur lg:hidden">
+          <div class="flex-none">
+            <label for="project-drawer" class="btn btn-square btn-ghost" aria-label="Open projects"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /></svg></label>
+          </div>
+          <div class="flex-1">
+            <a href="/" class="btn btn-ghost text-lg font-bold">Live Miracles</a>
+          </div>
+        </header>
+        <main class="mx-auto flex min-h-screen w-full max-w-6xl flex-col gap-8 px-4 py-6 sm:px-6 lg:px-8">
+          <nav class="text-base-content/60 flex flex-wrap items-center gap-2 text-sm" aria-label="Breadcrumb">
+            <a href="/blog/" class="hover:text-primary">Blog</a>
+          </nav>
+          <header>
+            <h1 class="text-3xl font-bold sm:text-4xl">Add bonded SRT to SRS, MediaMTX or Restreamer with a small relay</h1>
+            <div class="text-base-content/60 mt-3 flex flex-wrap items-center gap-3 text-sm">
+              <time datetime="2026-10-22">October 22, 2026</time><span class="badge badge-outline badge-sm">srt</span><span class="badge badge-outline badge-sm">bonding</span><span class="badge badge-outline badge-sm">goryu</span><span class="badge badge-outline badge-sm">mediamtx</span>
+            </div>
+          </header>
+          <img src="/blog/images/bonded-cover.jpg" alt="Two network links merging into one stream, labelled 2 links, 1 stream" class="border-base-content/10 w-full rounded-box border" loading="lazy" />
+          <article class="readme min-w-0"><p>SRT bonding sends one live stream over several network links at once, for example two uplinks or two SIM cards. If one link degrades or dies, the receiver still has the data from the other, so the stream does not drop. libsrt implements it as a <em>socket group</em>.</p>
+<p>The catch is the receiving end. A server has to accept the group, and most open source media servers cannot. We run <a href="https://github.com/ossrs/srs">SRS</a> in <a href="https://github.com/live-miracles/bunryu">Bunryu</a>, so we wrote a small relay, <a href="https://github.com/live-miracles/goryu">Goryu</a>, that accepts the bonded group and forwards ordinary SRT to the server behind it. This post shows how to put it in front of SRS, MediaMTX or Restreamer, and what we actually checked.</p>
+<h2 id="the-problem">The problem</h2>
+<p>We sent a bonded broadcast group, two legs, straight at each server&#39;s SRT port. All three refused it. The sender&#39;s libsrt logs the reason:</p>
+<pre><code class="language-text">HS EXT: agent is a group member, but the listener did not respond with group ID. Rejecting.
+</code></pre>
+<p>That means the server&#39;s listener does not accept groups. The versions we tried were SRS 7.0.189, MediaMTX v1.21.2 and datarhei Core 16.16.0, which is the engine inside Restreamer. SRS has an open request for it (<a href="https://github.com/ossrs/srs/issues/4771">ossrs/srs#4771</a>), so that one may change.</p>
+<h2 id="the-fix-terminate-the-group-before-the-server">The fix: terminate the group before the server</h2>
+<p><img src="/blog/images/bonded-before-after.webp" alt="Sent directly, the bonded group is rejected by the server. Through Goryu, the legs are merged and the server receives one plain SRT stream" loading="lazy" /></p>
+<p>Goryu listens on one port with group connections enabled. libsrt merges the legs and drops the duplicate packets before Goryu reads anything, so Goryu sees one clean MPEG-TS stream. It then publishes that stream to your server as a normal single-link SRT caller, with the same <code>streamid</code>. The server never knows the input was bonded. An ordinary single-link SRT sender works on the same port.</p>
+<h2 id="try-it-with-mediamtx">Try it with MediaMTX</h2>
+<p>Start MediaMTX, then Goryu with a config that points at MediaMTX&#39;s SRT port (<code>8890</code>):</p>
+<pre><code class="language-bash">docker run -d --network host bluenviron/mediamtx
+</code></pre>
+<pre><code class="language-json">{
+    &quot;input_host&quot;: &quot;0.0.0.0&quot;,
+    &quot;input_port&quot;: 10081,
+    &quot;output_host&quot;: &quot;127.0.0.1&quot;,
+    &quot;output_port&quot;: 8890,
+    &quot;status_port&quot;: 8081,
+    &quot;passphrase&quot;: &quot;&quot;
+}
+</code></pre>
+<pre><code class="language-bash">curl -fsSL -o goryu.tar.gz https://github.com/live-miracles/goryu/releases/latest/download/goryu-linux-x86_64.tar.gz
+mkdir goryu &amp;&amp; tar -xzf goryu.tar.gz -C goryu
+LD_LIBRARY_PATH=goryu/lib goryu/bin/goryu goryu.json
+</code></pre>
+<p>Now send a bonded stream to <code>srt://&lt;host&gt;:10081</code> with <code>streamid=publish:stream</code>, and play it back from MediaMTX:</p>
+<pre><code class="language-bash">ffplay &#39;srt://127.0.0.1:8890?streamid=read:stream&#39;
+</code></pre>
+<p>The <code>streamid</code> is the one thing to get right, because Goryu copies it unchanged to the server. These are the publish ids we used:</p>
+<table>
+<thead>
+<tr>
+<th>Server</th>
+<th>Publish streamid</th>
+<th>Goryu <code>output_port</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SRS</td>
+<td><code>#!::r=live/stream,m=publish</code></td>
+<td><code>10080</code></td>
+</tr>
+<tr>
+<td>MediaMTX</td>
+<td><code>publish:stream</code></td>
+<td><code>8890</code></td>
+</tr>
+<tr>
+<td>datarhei Core / Restreamer</td>
+<td><code>stream,mode:publish</code></td>
+<td><code>6000</code></td>
+</tr>
+</tbody></table>
+<p>SRS needs its SRT server enabled, and Core needs <code>CORE_SRT_ENABLE=true</code>. The <a href="https://live-miracles.github.io/projects/goryu/docs/usage/downstream-servers/">downstream servers page</a> has the details and the playback ids.</p>
+<h2 id="passphrases">Passphrases</h2>
+<p>SRT encrypts each hop on its own. By default Goryu uses one passphrase on both: set <code>passphrase</code> and the encoder must use it, and so must the server. That is awkward when Goryu runs next to the server, because the hop that crosses the internet is the encoder&#39;s.</p>
+<p>From v3.4.0 you can give the server side its own with <code>output_passphrase</code>: an empty string for a server without a passphrase, or a different one. Left out, it falls back to <code>passphrase</code>, so existing configs do not change.</p>
+<pre><code class="language-json">{
+    &quot;input_host&quot;: &quot;0.0.0.0&quot;,
+    &quot;input_port&quot;: 10081,
+    &quot;output_host&quot;: &quot;127.0.0.1&quot;,
+    &quot;output_port&quot;: 8890,
+    &quot;status_port&quot;: 8081,
+    &quot;passphrase&quot;: &quot;a-long-secret-for-encoders&quot;,
+    &quot;output_passphrase&quot;: &quot;&quot;
+}
+</code></pre>
+<p>Each passphrase must be empty or 10 to 79 characters, the range libsrt accepts, and Goryu refuses to start otherwise. We checked this against a server that enforces its passphrase: encrypted input with a plain server, a different passphrase on each side, a plain input with an encrypted server, and the default. We also checked the two cases that must fail. An empty <code>output_passphrase</code> does not fall back to the input&#39;s, so a server that still requires one is refused. A server given the input&#39;s passphrase instead of its own is refused too. Neither passphrase appears in the relay&#39;s log.</p>
+<h2 id="sending-a-bonded-stream">Sending a bonded stream</h2>
+<p>This is the awkward part, and we would rather say so. FFmpeg cannot open a socket group, and libsrt&#39;s own <code>srt-live-transmit</code> takes one input and one output. <code>srt-test-live</code> from libsrt 1.5.6 failed to create a sending group when we tried it. Many encoders that advertise bonding use a vendor protocol with their own receiver instead of libsrt groups. The one hardware encoder we have confirmed sends a libsrt group to Goryu is the AJA BRIDGE LIVE, described below.</p>
+<p>For testing without hardware, there is a 196-line test caller in the Goryu repository, <code>bonded_caller.c</code>, that sends a broadcast group with one leg per local address, and can drop, add or flap a leg, or send a main/backup group. It is what every bonded test in the project uses, and the <a href="https://live-miracles.github.io/projects/goryu/docs/usage/sending-bonded-srt/">sending page</a> shows how to build and run it. If your encoder sends a libsrt broadcast group, point it at Goryu and it will work; if it speaks SRTLA or a vendor protocol, it will not, and the <a href="https://live-miracles.github.io/projects/goryu/docs/getting-started/alternatives/">alternatives page</a> says what to look at instead.</p>
+<h2 id="broadcast-or-mainbackup">Broadcast or main/backup</h2>
+<p>libsrt 1.5 offers two group types, and the sender picks one. The receiver, Goryu, treats them the same: it merges what arrives and forwards one stream.</p>
+<ul>
+<li><strong>Broadcast</strong> puts the whole stream on every link. If a link fails the others already have every packet, so nothing has to switch. The price is bandwidth: two links cost twice the data.</li>
+<li><strong>Main/backup</strong> gives each link a weight. The heaviest link carries the stream and the others sit idle, sending only keepalives. If the main link becomes unstable the sender activates a standby. It costs one link&#39;s worth of data, which matters on metered cellular, but the switchover is its weak spot: packets sent while the main link was failing, before it was judged unstable, can be late or lost.</li>
+</ul>
+<p>In Goryu&#39;s status API every leg of a broadcast group is <code>running</code>. In a main/backup group the standby is <code>idle</code>, with a receive rate of about zero.</p>
+<p>We sent a main/backup group over loopback at 4 Mbps, with weights 10 and 5. The main leg was <code>running</code> at 4.4 Mbps and the backup <code>idle</code> at 0.000 Mbps. When we closed the main leg the backup became <code>running</code>, about 2 MB arrived in the next four seconds (roughly 4 Mbps), and the downstream never reconnected.</p>
+<p>One catch: at a trickle (0.12 Mbps) libsrt kept both legs active, so a main/backup group needs real traffic before it settles on a main leg.</p>
+<h2 id="what-we-saw-when-a-leg-dropped">What we saw when a leg dropped</h2>
+<p>We sent a stream through Goryu with two legs and closed the second leg nine seconds in, watching the status API:</p>
+<table>
+<thead>
+<tr>
+<th>Time</th>
+<th>Legs</th>
+<th>Bytes forwarded</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>8 s</td>
+<td>2</td>
+<td>472,444</td>
+</tr>
+<tr>
+<td>12 s</td>
+<td>1</td>
+<td>708,008</td>
+</tr>
+<tr>
+<td>16 s</td>
+<td>1</td>
+<td>933,044</td>
+</tr>
+</tbody></table>
+<p>The leg left the <code>legs[]</code> list, the byte counter kept growing, and <code>outputConnected</code> stayed <code>true</code>. The server behind Goryu saw an unbroken stream. Each leg reports its own round-trip time, loss, retransmissions and buffer, which is what you want when you are deciding which uplink is the weak one.</p>
+<h2 id="with-a-real-encoder-over-the-internet">With a real encoder, over the internet</h2>
+<p>This is how we run it: Goryu in front of SRS carries our live events, a few days every week.</p>
+<p>We pointed an AJA BRIDGE LIVE at the Goryu relay (v3.3.0) on our Bunryu server, a Google Cloud VM in Mumbai, which forwards to the SRS on the same host. AJA lists SRT bonding over the public internet as a feature from firmware v1.16 (<a href="https://www.aja.com/pdf/2024/AJA_BRIDGE-LIVE_ReleaseNotes_v1.16.pdf">release notes</a>), and it needs the Annual Maintenance Option. Four minutes after the relay started, its status API showed this for the two legs:</p>
+<table>
+<thead>
+<tr>
+<th>Per leg</th>
+<th>Leg A</th>
+<th>Leg B</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Round-trip time</td>
+<td>44.0 ms</td>
+<td>40.8 ms</td>
+</tr>
+<tr>
+<td>Receive rate</td>
+<td>22.6 Mbps</td>
+<td>22.6 Mbps</td>
+</tr>
+<tr>
+<td>Packets received</td>
+<td>491,703</td>
+<td>491,737</td>
+</tr>
+<tr>
+<td>Packets lost on this leg</td>
+<td>48</td>
+<td>157</td>
+</tr>
+<tr>
+<td>Retransmissions</td>
+<td>8</td>
+<td>208</td>
+</tr>
+<tr>
+<td>Dropped for arriving late</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Receive buffer</td>
+<td>242 ms</td>
+<td>239 ms</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>Two full copies.</strong> In broadcast mode each leg carries the whole stream, so both show about 22.6 Mbps. The two legs came from distinct public addresses, with 240 ms of latency.</li>
+<li><strong>Real loss, handled.</strong> Each leg lost a small share of its packets (about 0.01% and 0.03%) and asked for retransmissions, and nothing arrived too late. Goryu reports loss per leg, not for the merged stream, so this shows how each link behaved, not what the merged stream lost.</li>
+<li><strong>Downstream.</strong> Zero retry failures and no error on the stream.</li>
+</ul>
+<p>The relay&#39;s journal covers five days. It records 18 bonded sessions and no plain ones, with no downstream retries and no failed connects. The longest session ran 21 hours 51 minutes and forwarded 215.8 GB, about 22 Mbps on average, and it ended only because the service was stopped for maintenance. These sessions are our regular use of the relay. The snapshot above and the cable pull were taken on a test feed, not during a live event.</p>
+<h2 id="pulling-one-cable">Pulling one cable</h2>
+<p>With the stream running, we unplugged one of the encoder&#39;s two LAN cables for about 45 seconds and plugged it back in, while recording the relay&#39;s status once a second. These are the samples around the event, on the VM&#39;s clock:</p>
+<table>
+<thead>
+<tr>
+<th>Time</th>
+<th>Legs</th>
+<th>Bytes forwarded</th>
+<th>What changed</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>14:22:37</td>
+<td>2</td>
+<td>2,713,522,252</td>
+<td>both legs running</td>
+</tr>
+<tr>
+<td>14:22:41</td>
+<td>1</td>
+<td>2,725,683,408</td>
+<td>one leg gone from <code>legs[]</code></td>
+</tr>
+<tr>
+<td>14:23:22</td>
+<td>1</td>
+<td>2,837,954,000</td>
+<td>still one leg</td>
+</tr>
+<tr>
+<td>14:23:27</td>
+<td>2</td>
+<td>2,852,886,652</td>
+<td>the leg is back, with no restart</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>The stream never paused.</strong> Between 14:22:37 and 14:23:27 the relay forwarded 139.4 MB in 50 seconds, which is 22.3 Mbps. In steady state before the pull it was 21.9 Mbps. Over the whole event <code>outputConnected</code> stayed <code>true</code>, <code>retryFailures</code> stayed 0 and no error was recorded, so SRS saw one unbroken connection.</li>
+<li><strong>The leg came back by itself.</strong> Nobody touched Goryu or the encoder after the cable went back in. The status showed the leg absent for about 46 seconds, which matches the 45-second pull.</li>
+<li><strong>One oddity.</strong> The rejoined leg reports 7,977 lost packets from the moment it appears. That is roughly the first 3.7 seconds of the stream at this bitrate, so it is probably the gap before the leg joined being counted as loss. We have not confirmed that, and the merged stream did not slow down.</li>
+<li><strong>Nothing in the log, in v3.3.0.</strong> The journal has no line for the leg dropping or for it coming back. The status API shows it live, but afterwards only the counters remain. The next release, v3.4.0, logs both: one line per change with the leg&#39;s address and how many legs remain, such as <code>Bonded leg left streamid=... leg=&lt;ip&gt;:&lt;port&gt; legs=1</code>, and <code>Bonded leg joined ...</code> when it returns. A leg that flaps is limited to 12 lines per 30 seconds and then summarised, so a bad link cannot flood the journal. Bunryu writes the same changes to the pipeline&#39;s log.</li>
+</ul>
+<h2 id="what-we-did-not-test">What we did not test</h2>
+<ul>
+<li><strong>Different providers and degraded links.</strong> The cable pull is a clean failure: the link went away and came back. The relay cannot tell whether the two paths use different providers, and we have not tested a link that degrades with heavy loss or congestion instead of disconnecting. The loopback test above is the only run that exercised a leg closing from the sender&#39;s side.</li>
+<li><strong>Switchover on a real link.</strong> We tested both group types on loopback legs. We have not measured how many packets a main/backup switchover loses on a link that degrades before it dies, because loopback legs never do.</li>
+<li><strong>Other things worth knowing.</strong> By default one passphrase covers both the input and the downstream connection; from v3.4.0 <code>output_passphrase</code> gives the server its own, or none. The release is Linux x86_64 only.</li>
+</ul>
+<h2 id="takeaways">Takeaways</h2>
+<ul>
+<li><strong>Bonding needs both ends.</strong> The receiving server is as much a part of it as the encoder, and the open source ones mostly do not accept groups yet.</li>
+<li><strong>A relay is a small, replaceable piece.</strong> Goryu is about 2,800 lines of C and a config of six fields (a seventh is optional), so you can read all of it before trusting it with a live stream.</li>
+<li><strong>Check the sender first.</strong> The hard part today is finding something that sends a libsrt group, not receiving it. Of the hardware we know of, the AJA BRIDGE LIVE is the one we have seen do it.</li>
+</ul>
+<p>Goryu and its <a href="https://live-miracles.github.io/projects/goryu/docs/">documentation</a> are open source (MIT), and we would like to hear from anyone who tries it on real links.</p>
+</article>
+          <a class="link text-base-content/50 text-sm" href="https://github.com/live-miracles/live-miracles.github.io/blob/master/blog/2026-10-22-bonded-srt-for-srs-mediamtx-restreamer.md">Edit this post on GitHub</a>
+          <footer class="text-base-content/50 border-base-content/10 mt-auto border-t pt-6 pb-2 text-sm">
+            Live Miracles · <a class="link" href="https://github.com/live-miracles">github.com/live-miracles</a>
+          </footer>
+        </main>
+      </div>
+      <aside class="drawer-side z-30">
+        <label for="project-drawer" aria-label="Close projects" class="drawer-overlay"></label>
+        <nav class="border-base-content/10 bg-base-200 min-h-full w-80 border-r p-4 lg:group-data-[rail]/drawer:w-16 lg:group-data-[rail]/drawer:p-2" aria-label="Projects">
+          <div class="mb-6 flex items-center justify-between gap-2 lg:group-data-[rail]/drawer:flex-col lg:group-data-[rail]/drawer:gap-3">
+            <a href="/" title="Live Miracles" aria-label="Live Miracles" class="rounded-box flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:p-0">
+              <img src="/assets/logo.png" alt="" class="rounded-box size-11" />
+              <span class="lg:group-data-[rail]/drawer:hidden">
+                <span class="block text-xl font-bold">Live Miracles</span>
+                <span class="text-base-content/58 text-sm">Open tools for live teams</span>
+              </span>
+            </a>
+            <button type="button" id="sidebar-toggle" class="btn btn-ghost btn-sm btn-square hidden lg:inline-flex lg:group-data-[rail]/drawer:rotate-180" aria-label="Collapse projects to icons"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M11 17l-5-5 5-5M18 17l-5-5 5-5" /></svg></button>
+          </div>
+          <a href="/blog/" title="Blog" aria-label="Blog" class="rounded-box hover:bg-base-100 mb-5 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:mb-3 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 bg-base-100 text-primary font-semibold" aria-current="page">
+            <svg xmlns="http://www.w3.org/2000/svg" class="size-6 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 5h13a2 2 0 0 1 2 2v12H6a2 2 0 0 1-2-2V5Z"/><path d="M8 9h7M8 13h7M8 17h4"/></svg>
+            <span class="lg:group-data-[rail]/drawer:hidden">Blog</span>
+          </a>
+          <div class="mb-5 lg:group-data-[rail]/drawer:mb-3">
+              
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase lg:group-data-[rail]/drawer:hidden">Streaming &amp; transport</div>
+              <a href="/projects/bunryu/" title="Bunryu" aria-label="Bunryu" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+                <img src="/assets/bunryu-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span class="lg:group-data-[rail]/drawer:hidden">Bunryu</span>
+              </a><a href="/projects/goryu/" title="Goryu" aria-label="Goryu" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+                <img src="/assets/goryu-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span class="lg:group-data-[rail]/drawer:hidden">Goryu</span>
+              </a><a href="/projects/delayed-yt/" title="Delayed YouTube" aria-label="Delayed YouTube" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+                <img src="https://live-miracles.github.io/delayed-yt/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span class="lg:group-data-[rail]/drawer:hidden">Delayed YouTube</span>
+              </a>
+            </div><div class="mb-5 lg:group-data-[rail]/drawer:mb-3">
+              <hr class="border-base-content/10 mb-3 hidden lg:group-data-[rail]/drawer:block" />
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase lg:group-data-[rail]/drawer:hidden">vMix production</div>
+              <a href="/projects/vmix-master/" title="vMix Master" aria-label="vMix Master" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+                <img src="https://live-miracles.github.io/vmix-master/logo.svg" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span class="lg:group-data-[rail]/drawer:hidden">vMix Master</span>
+              </a><a href="/projects/folder-player/" title="vMix Folder Player" aria-label="vMix Folder Player" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+                <img src="/assets/folder-player-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span class="lg:group-data-[rail]/drawer:hidden">vMix Folder Player</span>
+              </a>
+            </div><div class="mb-5 lg:group-data-[rail]/drawer:mb-3">
+              <hr class="border-base-content/10 mb-3 hidden lg:group-data-[rail]/drawer:block" />
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase lg:group-data-[rail]/drawer:hidden">Monitoring &amp; operations</div>
+              <a href="/projects/live-gallery/" title="Live Gallery" aria-label="Live Gallery" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+                <img src="/assets/live-gallery-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span class="lg:group-data-[rail]/drawer:hidden">Live Gallery</span>
+              </a><a href="/projects/wake-up-support/" title="Wake Up Support" aria-label="Wake Up Support" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">W</span>
+                <span class="lg:group-data-[rail]/drawer:hidden">Wake Up Support</span>
+              </a>
+            </div><div class="mb-5 lg:group-data-[rail]/drawer:mb-3">
+              <hr class="border-base-content/10 mb-3 hidden lg:group-data-[rail]/drawer:block" />
+              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase lg:group-data-[rail]/drawer:hidden">Event workflows</div>
+              <a href="/projects/key-vault/" title="Key Vault" aria-label="Key Vault" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+                <img src="https://live-miracles.github.io/key-vault/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span class="lg:group-data-[rail]/drawer:hidden">Key Vault</span>
+              </a><a href="/projects/live-generator/" title="Live Generator" aria-label="Live Generator" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">L</span>
+                <span class="lg:group-data-[rail]/drawer:hidden">Live Generator</span>
+              </a><a href="/projects/multi-lang-qa/" title="Multi Lang QA" aria-label="Multi Lang QA" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
+                <img src="https://live-miracles.github.io/multi-lang-qa/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
+                <span class="lg:group-data-[rail]/drawer:hidden">Multi Lang QA</span>
+              </a>
+            </div>
+        </nav>
+      </aside>
+      <script>
+        window.setSidebarRail(window.sidebarRail());
+        document.getElementById('sidebar-toggle').addEventListener('click', function () {
+          var rail = !window.sidebarRail();
+          try {
+            localStorage.setItem('sidebar-rail', rail ? '1' : '0');
+          } catch (e) {}
+          window.setSidebarRail(rail);
+        });
+      </script>
+    </div>
+    <dialog id="lightbox" class="lightbox" aria-label="Enlarged image">
+      <button type="button" class="btn btn-circle btn-sm lightbox-close" aria-label="Close image"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg></button>
+      <div class="lightbox-frame"><img alt="" /></div>
+    </dialog>
+    <script>
+      (function () {
+        var dialog = document.getElementById('lightbox');
+        if (!dialog || !dialog.showModal) return;
+        var shown = dialog.querySelector('img');
+        function zoomable(img) {
+          return !img.closest('a') && img.naturalWidth >= 300 && img.naturalHeight >= 100;
+        }
+        function mark(img) {
+          if (img.dataset.zoom || !zoomable(img)) return;
+          img.dataset.zoom = '1';
+          img.classList.add('zoomable');
+          img.tabIndex = 0;
+          img.setAttribute('role', 'button');
+          img.setAttribute('aria-label', 'Enlarge image: ' + (img.alt || 'screenshot'));
+        }
+        function open(img) {
+          shown.src = img.currentSrc || img.src;
+          shown.alt = img.alt;
+          shown.classList.remove('actual');
+          dialog.showModal();
+          dialog.scrollTo(0, 0);
+        }
+        document.querySelectorAll('.readme img').forEach(function (img) {
+          if (img.complete) mark(img);
+          else img.addEventListener('load', function () { mark(img); }, { once: true });
+        });
+        document.addEventListener('click', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom) open(img);
+        });
+        document.addEventListener('keydown', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom && (event.key === 'Enter' || event.key === ' ')) {
+            event.preventDefault();
+            open(img);
+          }
+        });
+        shown.addEventListener('click', function () {
+          shown.classList.toggle('actual');
+        });
+        dialog.addEventListener('click', function (event) {
+          if (event.target !== shown) dialog.close();
+        });
+      })();
+    </script>
+  </body>
+</html>
