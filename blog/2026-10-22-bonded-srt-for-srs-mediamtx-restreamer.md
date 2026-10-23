@@ -122,7 +122,7 @@ The leg left the `legs[]` list, the byte counter kept growing, and `outputConnec
 
 ## With a real encoder, over the internet
 
-This is how we run it: Goryu in front of SRS carries our live events, a few days every week.
+This is how we run it: Goryu in front of SRS (known as srt-bonding-relay until this month) has carried our live events for the past few months, a few days every week.
 
 We pointed an AJA BRIDGE LIVE at the Goryu relay (v3.3.0) on our Bunryu server, a Google Cloud VM in Mumbai, which forwards to the SRS on the same host. AJA lists SRT bonding over the public internet as a feature from firmware v1.16 ([release notes](https://www.aja.com/pdf/2024/AJA_BRIDGE-LIVE_ReleaseNotes_v1.16.pdf)), and it needs the Annual Maintenance Option. Four minutes after the relay started, its status API showed this for the two legs:
 
