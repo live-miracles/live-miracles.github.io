@@ -213,7 +213,13 @@ On reinstall it leaves each file&#39;s passphrase exactly as deployed — it
 doesn&#39;t compare, regenerate, or sync the two. SRS rejects SRT connections
 without the passphrase at the handshake, for publish and play alike; the
 dashboard&#39;s SRT publish URLs include it.</p>
-<p>To change or disable it, edit both files by hand and restart SRS and the
+<p>To replace it with a new random one, use <strong>Reset</strong> under <strong>SRT Passphrase</strong> in
+Settings. The button is greyed out, with the reason, while any input is live or any output is not stopped. Otherwise it writes the
+new value to both files and shows a banner on every page. SRS and the relay read their file only at
+startup, so reboot the server (or restart the container) afterwards, then update
+the SRT URL in every encoder. Until then they, and the dashboard, keep the old
+passphrase. The banner clears when the app starts again.</p>
+<p>To set your own or disable it, edit both files by hand and restart SRS and the
 relay: <code>passphrase ;</code> in <code>srs.conf</code>, <code>&quot;passphrase&quot;: &quot;&quot;</code> in
 <code>goryu.json</code>. An empty value in both disables the passphrase
 check entirely — SRS and the relay treat empty the same as unset.</p>

@@ -115,7 +115,7 @@ JSON, <code>{ &quot;error&quot;: &quot;…&quot; }</code>; an unexpected failure
 <tbody><tr>
 <td>GET</td>
 <td><code>/api/config</code></td>
-<td>Pipelines, outputs, encodings, stream keys, server name</td>
+<td>Pipelines, outputs, encodings, stream keys, server name. <code>srtPassphrasePending</code> is <code>true</code> while a reset passphrase is waiting for the restart</td>
 </tr>
 <tr>
 <td>GET</td>
@@ -276,6 +276,11 @@ JSON, <code>{ &quot;error&quot;: &quot;…&quot; }</code>; an unexpected failure
 <td>POST</td>
 <td><code>/api/settings/regenerate-stream-keys</code></td>
 <td>Regenerate all stream keys</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/settings/reset-srt-passphrase</code></td>
+<td>Write a new random SRT passphrase to <code>srs.conf</code> and <code>goryu.json</code> and answer <code>{ ok: true }</code> (the value is not returned). <code>409</code> while an input is live or an output is not stopped; <code>500</code> if a file can&#39;t be edited (nothing is left changed). SRS and Goryu enforce it after they restart, and the app shows it after its own restart</td>
 </tr>
 <tr>
 <td>POST</td>

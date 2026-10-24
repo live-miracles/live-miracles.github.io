@@ -260,6 +260,10 @@ destination), it is replaced by <code>stderrTailSameAsPrevious: true</code>.</li
 (duration, number of polls it was active, last message). An alert absent for
 six polls (~30 s) ends its episode, so a flickering condition is one episode. The
 dashboard shows the episode&#39;s start (&quot;since 09:18&quot;) next to the alert.</li>
+<li><strong>Publisher address:</strong> <code>publisher-source</code> when a publisher connects, with the
+encoder&#39;s address (<code>rtmp from &lt;ip&gt;</code>, <code>srt from &lt;ip&gt;</code>, <code>srt via relay from &lt;ip&gt;:&lt;port&gt;</code>);
+the pipeline log gets the same line. A bonded input has none: its legs are logged
+as they join and leave.</li>
 <li><strong>Publish hooks:</strong> <code>publish-allowed</code>, and <code>publish-rejected</code> for each rejection
 that is logged. Repeats are throttled to one journal line per minute per key.
 The number not logged goes on the next line, or, if the attempts stopped, on a

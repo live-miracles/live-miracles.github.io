@@ -158,9 +158,11 @@ tagged <code>X.Y.Z</code>, <code>X.Y</code> and <code>latest</code>; pin an exac
 curl http://127.0.0.1:8081/status
 </code></pre>
 <p>To build it yourself instead (the image installs a published release):</p>
-<pre><code class="language-bash">docker build -t goryu docker                                             # newest release
+<pre><code class="language-bash">docker build --no-cache -t goryu docker                                  # newest release
 docker build --build-arg GORYU_VERSION=v3.4.0 -t goryu:v3.4.0 docker     # a pinned one
 </code></pre>
+<p><code>--no-cache</code> matters for <code>latest</code>: Docker cannot see that the newest release changed, so
+a cached build keeps the release it first downloaded.</p>
 <p>Use host networking: the status API listens on <code>127.0.0.1</code> inside the container, so a
 published port cannot reach it. The config must be readable by uid 10001 (<code>chmod 644</code>),
 and is read only at startup, so <code>docker restart goryu</code> after changing it. The log is
@@ -169,11 +171,14 @@ the container&#39;s stdout (<code>docker logs goryu</code>). Open the input port
 <p>To see the whole path with no hardware, the compose file runs MediaMTX and Goryu, and
 its <code>demo</code> profile adds a bonded test sender (a test pattern over two legs on
 <code>127.0.0.1</code> and <code>127.0.0.2</code>):</p>
-<pre><code class="language-bash">docker compose -f docker/compose.yaml up -d --build
+<pre><code class="language-bash">docker compose -f docker/compose.yaml up -d
 docker compose -f docker/compose.yaml --profile demo up -d --build sender
 curl -s http://127.0.0.1:8081/status | jq &#39;.streamStates[0] | {streamId, bonded: .input.bonded, legs: (.input.legs | length)}&#39;
 ffplay &#39;srt://127.0.0.1:8890?streamid=read:demo&#39;
 </code></pre>
+<p>To watch the stream survive a failing link, start the sender with
+<code>SENDER_ARGS=&quot;--drop-leg 1 --drop-after 20&quot;</code>: the second leg closes after 20 s,
+<code>legs</code> goes from 2 to 1 and <code>forwardedBytes</code> keeps growing.</p>
 <p>The first sender build compiles libsrt, which takes a few minutes. Stop everything with
 <code>docker compose -f docker/compose.yaml --profile demo down</code>.</p>
 <h2 id="bunryu">Bunryu</h2>

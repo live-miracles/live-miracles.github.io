@@ -125,7 +125,8 @@ goes in the matching <code>tests/unit/test_*.c</code>.</li>
 ffmpeg publishers on spare ports (<code>E2E_BASE_PORT</code>, default 24000) and a private
 work dir, so a running relay is not touched. They need <code>ffmpeg</code> with SRT, <code>curl</code>,
 <code>jq</code> and <code>ss</code> (plus Docker for the bonded caller), and take about three minutes.
-Pass scenario names to run some: <code>cli bad_config uri_mode forward downstream_down duplicate takeover two_streams passphrase sigterm shutdown_silent churn bonded bonded_legs bonded_flap bonded_backup bonded_duplicate bonded_takeover bonded_passphrase bonded_shutdown bonded_abrupt_end</code>.</li>
+A scenario with a failed check prints the relay&#39;s last 40 log lines and the status
+API response, because the work dir is gone once CI ends. Pass scenario names to run some: <code>cli bad_config uri_mode forward downstream_down duplicate takeover two_streams passphrase sigterm shutdown_silent churn bonded bonded_legs bonded_flap bonded_backup bonded_duplicate bonded_takeover bonded_passphrase bonded_shutdown bonded_abrupt_end</code>.</li>
 <li><strong>Bonded input is simulated.</strong> ffmpeg cannot open a socket group, so
 <code>tests/e2e/bonded_caller.c</code> does: a small libsrt caller that reads MPEG-TS from
 stdin and sends it as a broadcast group (or a main/backup one, <code>--type backup --weights 10,5</code>) with one leg per <code>--locals</code> address. Legs
@@ -146,8 +147,9 @@ installs a published release, and checks the version, that it does not run as ro
 that a missing config is refused, that the status API answers, that <code>docker stop</code>
 ends it with exit 0 in under 5 s (it is PID 1, so this proves SIGTERM is handled), and
 that <code>compose.yaml</code> is valid. It tests the packaging of a release, not the commit&#39;s
-source. <code>DEMO=1</code> also runs the compose stack with the bonded test sender and reads
-the stream back from MediaMTX; it builds libsrt once, so it is not in CI.</li>
+source. <code>DEMO=1</code> also runs the compose stack (which pulls the published <code>latest</code> image) with the
+bonded test sender and reads the stream back from MediaMTX; the sender build compiles
+libsrt once, so it is not in CI.</li>
 <li>The takeover scenario holds a publisher&#39;s SRT connection open without sending
 media (ffmpeg remuxing a FIFO). A <code>SIGSTOP</code>ped ffmpeg does not work: libsrt&#39;s own
 5 s idle timeout drops its connection before the relay&#39;s staleness check can run.</li>
@@ -176,14 +178,17 @@ into the binary at build time, so <code>goryu --version</code> prints it. Changi
 <code>VERSION</code> after an archive was built does not change that archive.</p>
 <h2 id="releases">Releases</h2>
 <p>A release is created by pushing a tag equal to <code>VERSION</code>. To cut one, update
-<code>VERSION</code>, commit, then:</p>
+<code>VERSION</code>, write <code>.github/release-notes/&lt;tag&gt;.md</code> (see the newest one for the shape:
+what changed for users, an Upgrading section, install lines and the compare link),
+commit, then:</p>
 <pre><code class="language-bash">git tag v3.2.1
 git push origin master v3.2.1
 </code></pre>
 <p>The release workflow (<code>.github/workflows/release.yml</code>) runs the CI jobs first,
 then fails if the tag and <code>VERSION</code> differ, builds the archive with Docker,
-attests its build provenance, and creates the GitHub Release with generated
-notes. The release carries the archive and <code>checksums.sha256</code>.</p>
+attests its build provenance, and creates the GitHub Release with the notes file
+(generated commit titles with a warning if the file is missing). The release
+carries the archive and <code>checksums.sha256</code>.</p>
 <p>A published release is never overwritten: if the release already exists the
 workflow fails. Fix forward with a new version.</p>
 <p>To build the archive locally:</p>
