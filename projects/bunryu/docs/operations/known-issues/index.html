@@ -93,7 +93,7 @@
               <div class="min-w-0"><details class="rounded-box border-base-content/10 bg-base-300/46 text-base-content/68 mb-7 border p-4 text-sm backdrop-blur">
               <summary class="text-base-content/80 cursor-pointer font-semibold">On this page</summary>
               <ol class="mt-3 space-y-2">
-                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#the-overview-is-one-long-page">The Overview is one long page</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#short-cpu-spikes-from-host-package-inventory-checks-every-10-min">Short CPU spikes from host package inventory checks every 10 min</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#an-input-outage-over-5-s-makes-shared-encodes-restart-when-the-input-returns">An input outage over 5 s makes shared encodes restart when the input returns</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#srs-srt_to_rtmp-damages-audio-and-video-avoided-not-used">SRS srt_to_rtmp damages audio and video (avoided, not used)</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#srs-logs-srts_broken-errors-for-every-srt-play-disconnect-including-clean-ones">SRS logs SRTS_BROKEN errors for every SRT play disconnect, including clean ones</a></li>
+                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#the-overview-is-one-long-page">The Overview is one long page</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#short-cpu-spikes-from-host-package-inventory-checks-every-10-min">Short CPU spikes from host package inventory checks every 10 min</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#an-input-outage-over-5-s-makes-shared-encodes-restart-when-the-input-returns">An input outage over 5 s makes shared encodes restart when the input returns</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#a-shared-encode-can-stay-up-while-its-outputs-cannot-read-it">A shared encode can stay up while its outputs cannot read it</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#srs-srt_to_rtmp-damages-audio-and-video-avoided-not-used">SRS srt_to_rtmp damages audio and video (avoided, not used)</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#srs-logs-srts_broken-errors-for-every-srt-play-disconnect-including-clean-ones">SRS logs SRTS_BROKEN errors for every SRT play disconnect, including clean ones</a></li>
               </ol>
             </details><article class="readme min-w-0"><p>Translation-specific limitations are listed on the
 <a href="/projects/bunryu/docs/usage/translation/#known-limitations">Translation outputs</a> page.</p>
@@ -128,6 +128,17 @@ read the input directly (plain copy, several tracks, or a recipe used by only on
 output) are not interrupted. See
 <a href="/projects/bunryu/docs/operations/reliability/#shared-encodes">Reliability</a>. Workaround: none needed; the
 history records are expected after an input outage.</p>
+<h2 id="a-shared-encode-can-stay-up-while-its-outputs-cannot-read-it">A shared encode can stay up while its outputs cannot read it</h2>
+<p>On 2026-10-25 a <a href="/projects/bunryu/docs/usage/outputs/#shared-encodes">shared encode</a> kept running
+and writing at its normal bitrate for 25 minutes while every output reading it
+(several YouTube keys) failed to get any data from it, restarted about every 50 s and
+was stopped after 5 failed attempts. Pipelines started at the same moment with the
+same settings were fine. Restarting the shared encode cleared it. The cause inside
+SRS or the encode is not established. The output&#39;s History now reads &quot;No input data&quot; and
+shows the shared encode&#39;s and SRS&#39;s state, which should show it the next time.
+Workaround: stop every output of the pipeline, wait about 20 s until its shared
+encode stops, then start them again. Details in
+<a href="/projects/bunryu/docs/reference/design-decisions/#an-output-that-never-connected-is-reported-as-waiting-for-input-and-restarts-record-the-input-source">the design decision</a>.</p>
 <h2 id="srs-srt_to_rtmp-damages-audio-and-video-avoided-not-used">SRS <code>srt_to_rtmp</code> damages audio and video (avoided, not used)</h2>
 <p>SRS&#39;s native <code>srt_to_rtmp</code> remuxes an SRT publish into the RTMP layer so it can
 be played back over RTMP. Testing on SRS 6.0-r2 found:</p>

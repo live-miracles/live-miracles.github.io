@@ -93,7 +93,7 @@
               <div class="min-w-0"><details class="rounded-box border-base-content/10 bg-base-300/46 text-base-content/68 mb-7 border p-4 text-sm backdrop-blur">
               <summary class="text-base-content/80 cursor-pointer font-semibold">On this page</summary>
               <ol class="mt-3 space-y-2">
-                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#watchdogs">Watchdogs</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#host-resource-alerts">Host resource alerts</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#falling-behind-realtime">Falling behind realtime</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#shared-encodes">Shared encodes</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#input-timestamp-fault-detection">Input timestamp fault detection</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#input-frame-rate">Input frame rate</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#flapping-inputs">Flapping inputs</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#encoder-restarts-do-not-restart-outputs">Encoder restarts do not restart outputs</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#srt-input-output-stalls">SRT-input output stalls</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#ffmpeg-memory-leaks-on-corrupt-input">FFmpeg memory leaks on corrupt input</a></li>
+                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#watchdogs">Watchdogs</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#host-resource-alerts">Host resource alerts</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#falling-behind-realtime">Falling behind realtime</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#shared-encodes">Shared encodes</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#input-timestamp-fault-detection">Input timestamp fault detection</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#input-frame-rate">Input frame rate</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#input-keyframe-interval">Input keyframe interval</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#flapping-inputs">Flapping inputs</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#encoder-restarts-do-not-restart-outputs">Encoder restarts do not restart outputs</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#srt-input-output-stalls">SRT-input output stalls</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#ffmpeg-memory-leaks-on-corrupt-input">FFmpeg memory leaks on corrupt input</a></li>
               </ol>
             </details><article class="readme min-w-0"><p>Bunryu is designed to keep running through long live events: failures are
 isolated to one output, recovered automatically where it is safe, and recorded
@@ -126,7 +126,7 @@ the failure modes they handle.</p>
 <td>Remote RTMP socket watchdog</td>
 <td>Running outputs with a remote RTMP/RTMPS destination</td>
 <td>After socket warmup and grace, if the destination socket is missing or remains in a closing state such as <code>CLOSE-WAIT</code></td>
-<td>Uses one <code>ss -H -tanp</code> snapshot per watchdog interval; a local RTMP/RTMPS destination is ignored because local input/output sockets are ambiguous</td>
+<td>Uses one <code>ss -H -tanp</code> snapshot per watchdog interval; a local RTMP/RTMPS destination is ignored because local input/output sockets are ambiguous. A missing socket on an output that has written nothing yet is reported as &quot;No input data&quot; instead (see below)</td>
 </tr>
 <tr>
 <td>Output memory watchdog</td>
@@ -152,13 +152,31 @@ the failure modes they handle.</p>
 fresh process while the output&#39;s desired state remains <code>running</code>. The socket
 watchdog is advisory: if <code>ss</code> fails or times out, it does not restart anything,
 and a socket warning does not prevent the other watchdogs from acting.</p>
+<p><strong>No input data.</strong> FFmpeg opens its destination only after it has read enough of its
+input. An output that has written nothing and never connected to its destination
+is therefore waiting for its input, not blocked by the destination, and the socket
+watchdog says so: &quot;No input data: ffmpeg has written nothing and never connected to
+the destination&quot;. Before the socket or progress watchdog restarts an output, it reads
+that output&#39;s stream from SRS (waiting at most 2 s) and adds <code>input_source</code>,
+<code>srs_stream</code> (publisher, reader count, bitrate, frames, codecs), <code>srs_readers</code> (each
+reader of the stream with how long it has been connected and how many bytes SRS has
+sent it; up to 10, the ones sent least first) and, for a shared output, <code>shared_encode</code> (process state,
+readiness, uptime, bitrate) to the History record, and an <code>inputSource</code> object to the
+<code>ffmpeg-restart</code> diagnostic event. The stream&#39;s send rate is the sum over all its
+readers, so only <code>srs_readers</code> shows whether SRS sent the stuck reader anything.
+Readers all connect from this host and cannot be matched to an output: the stuck one
+is usually the youngest or the one with the least sent. SRS is asked once for
+everything (streams and connections) and the answer is reused for 3 s, so many
+outputs found stuck together cost SRS one request pair. If SRS does not answer, the
+line says so and the restart goes ahead. Why:
+<a href="/projects/bunryu/docs/reference/design-decisions/#an-output-that-never-connected-is-reported-as-waiting-for-input-and-restarts-record-the-input-source">the 2026-10-25 shared-encode incident</a>.</p>
 <p><strong>Blocked destinations.</strong> Every RTMP/RTMPS output carries <code>-rw_timeout 10000000</code>
 (10 s) before its destination URL, so FFmpeg ends a connection to a destination that
 stopped answering instead of waiting for the progress watchdog: a connect that never
 completes ends after 5 s (FFmpeg&#39;s own timeout), a destination that never answers
 after 10 s, and one that stops reading mid-stream after 30 s for RTMP (three times
 the value) or about 10 s for RTMPS. The socket watchdog cannot see these, because
-the socket stays ESTABLISHED. The exit shows in the Error History as &quot;Connection
+the socket stays ESTABLISHED. The exit shows in the History as &quot;Connection
 timed out&quot; (or &quot;Error closing file: Input/output error&quot; for RTMPS mid-stream) and
 the retry loop takes over. SRT destinations need no such option: libsrt ends a
 destination that never answers after about 4 s and one that goes silent mid-stream
@@ -180,7 +198,7 @@ them (staggered, with an <code>output-restarted-by-backstop</code> diagnostics e
 output has to look that way on two checks in a row, so it does not race the
 normal staggered start when an input comes online. Normally nothing matches; it
 exists for unexpected errors, such as a start that threw. Such a start leaves
-&quot;Start failed: <error>&quot; in the output&#39;s Error History (shown in red), and a backstop
+&quot;Start failed: <error>&quot; in the output&#39;s History (shown in red), and a backstop
 start leaves &quot;Watchdog: nothing was starting this output; starting it&quot;, each once
 until the output spawns again, so a start that keeps failing does not fill the
 history. However a start is triggered (API, retry, health poll or backstop), the
@@ -212,6 +230,12 @@ succeeds:</p>
 <td>Immediate probe (staggered across pipelines), then retried every <code>FFPROBE_FAILED_REFRESH_MS</code> (30s) while it keeps failing</td>
 <td>Stops re-probing once a probe succeeds for the current publisher; a new probe cycle starts on the next publisher change. Every failed probe is written to diagnostics as <code>media-probe-failed</code> (reason <code>timeout</code>/<code>exit</code>/<code>parse</code>/<code>unusable</code>, elapsed time, exit status, ffprobe stderr tail) and the first failure and the later recovery per publisher are added to the pipeline log (<code>probe_failed</code> / <code>probe_recovered</code>). Input liveness and output recovery do not wait for a valid ffprobe result — ffprobe fills in media/track details when available.</td>
 </tr>
+<tr>
+<td>Keyframe interval</td>
+<td>Each publisher, once, 60 s after its first successful probe</td>
+<td>One more ffprobe that reads the video packets for 12 s, at most 4 at a time (the rest queue)</td>
+<td>Never retried: a failed check is a <code>keyframe-probe-failed</code> diagnostics event and leaves the media state alone. See <a href="#input-keyframe-interval">Input keyframe interval</a>.</td>
+</tr>
 </tbody></table>
 <p><strong>Control-plane errors.</strong> The health poll and the output watchdog
 each catch errors from their own tick and run again on the next one. They log the
@@ -224,8 +248,8 @@ systemd restarts it, instead of running without a dashboard. A diagnostics write
 failure (disk full, directory unwritable) drops and counts events instead of
 crashing; see
 <a href="/projects/bunryu/docs/operations/configuration/">Configuration</a>. On SIGTERM each shutdown step runs on its own,
-so one that throws cannot stop the others or the exit. An output whose stored Error
-History cannot be read is treated as having none (logged once as <code>[db] unreadable output Error History</code>) instead of failing every output listing; its next error
+so one that throws cannot stop the others or the exit. An output whose stored History
+cannot be read is treated as having none (logged once as <code>[db] unreadable output History</code>) instead of failing every output listing; its next error
 replaces it.</p>
 <p><strong>Service restarts.</strong> The three systemd units restart a process 2 s after it exits
 (<code>Restart=always</code>, <code>RestartSec=2</code>) and set <code>StartLimitIntervalSec=0</code>. Without it,
@@ -318,7 +342,7 @@ wall time over windows of 30 s, and when two windows in a row run below 0.9x the
 shows &quot;Output is running at 0.62x realtime and falling behind live&quot;. One good window
 clears it. It is a warning only: nothing is restarted, and it is recorded like the
 other card warnings (an <code>ffmpeg-warning-started</code> / <code>ffmpeg-warning-ended</code> pair of
-diagnostics events with <code>kind: falling-behind</code>, and an Error History record when it
+diagnostics events with <code>kind: falling-behind</code>, and a History record when it
 ends). The card shows when the warning began (&quot;since 09:18&quot;). The last finished
 window&#39;s speed is also in the health data (<code>speed</code>) and on the card&#39;s badge when it is
 below 0.95x or above 1.05x; the first window after a start is not reported, because
@@ -338,7 +362,7 @@ pipeline&#39;s <code>input-low-framerate</code> alert says which side it is.</li
 encode</em> (see <a href="/projects/bunryu/docs/usage/outputs/#shared-encodes">Outputs</a>). It is an ordinary
 output row, so it is supervised exactly like one: the same retry back-off
 (see <a href="#watchdogs">Retries</a>), output progress, memory and socket
-watchdogs (with the memory limit of its video encoding), Error History and
+watchdogs (with the memory limit of its video encoding), History and
 diagnostics. The outputs that read it are ordinary outputs that copy from it.</p>
 <ul>
 <li><strong>When an encode exists.</strong> Only when at least two outputs of a pipeline are
@@ -363,7 +387,7 @@ encode does.</li>
 <li><strong>When it exits on its own</strong> (crash, a watchdog restart, a refused publish), each
 output that reads it that is running is stopped and rescheduled through the normal
 retry path and waits for the encode; each such output, running or already
-waiting, gets one Error History record &quot;Shared encode … failed: …&quot; with the exit
+waiting, gets one History record &quot;Shared encode … failed: …&quot; with the exit
 status or the watchdog reason and the stderr tail, and no second crash record for
 its own stop. The diagnostics event <code>rendition-dependents-restarted</code> lists them.
 A deliberate stop does not do this: an idle stop happens only when no reader is
@@ -396,7 +420,7 @@ one output within 5 s.</li>
 reads one, <code>renditionId</code>; the once-a-minute <code>health-snapshot</code> has <code>role</code>,
 <code>renditionId</code> and <code>ready</code> per output.</li>
 <li><strong>Recovery after a restart.</strong> The rows live in the database, so a shared encode and
-its Error History survive an app restart for as long as two outputs use its recipe. An
+its History survive an app restart for as long as two outputs use its recipe. An
 encode left behind by a crashed app is killed at startup with the other orphaned
 FFmpeg processes.</li>
 </ul>
@@ -443,19 +467,26 @@ unstable&quot; alert, and nothing is written to the pipeline <strong>History</st
 input and pipeline issues only), because the cause (encoder, network, relay or the
 output itself) cannot be told from the warnings alone. Each finished burst (a
 timestamp burst, or a decode-only burst of 10 s or more; stopped after 30 s of
-quiet, or ended with the ffmpeg exit) is recorded in the output&#39;s own <strong>Error
-History</strong> (the error button on the output) as a <code>warning</code> record with the duration,
+quiet, or ended with the ffmpeg exit) is recorded in the output&#39;s own <strong>History</strong>
+(the history button on the output) as a <code>warning</code> record with the duration,
 warning count and first line. Per output, each class of burst is recorded at most
 once per 10 minutes, and the diagnostics events always carry every burst. That
 history keeps the last 10 records per output, of which at most 5 may be warnings, so
 warnings can never push crashes and stops out; warnings never count as the output&#39;s
-current error. Crashes, watchdog restarts and stops are recorded there as before.</p>
+current error. Crashes, watchdog restarts and stops are recorded there as before.
+A crash that repeats with the same first and last line (numbers blanked) is not a new
+record but a count on the last one, so one failure that repeats for an hour takes one
+of the 10 slots, not all of them. When an output with a current crash has run for 60 s
+(the same limit that ends a failed-attempt streak) and is writing data, the watchdog
+tick marks that crash recovered (for outputs run by the translation mixer too, from
+the status and progress it reports) and logs an <code>output-recovered</code> event; the crash stops
+being the current error, and a later crash of the same kind is a new record.</p>
 <p>The warnings that otherwise only show on the output card are recorded the same way,
 once per episode: high memory usage (70 % or more of the output&#39;s limit), an
 unhealthy destination socket, and the FFmpeg media clock running fast. An episode
 logs an <code>ffmpeg-warning-started</code> diagnostics event, and when it clears (or the
 process exits) an <code>ffmpeg-warning-ended</code> event with the duration plus one <code>warning</code>
-record in the output&#39;s Error History. These share the 5 warning slots and the
+record in the output&#39;s History. These share the 5 warning slots and the
 10-minute-per-kind limit above. A warning that escalates to a watchdog restart
 therefore appears twice: the build-up as a <code>warning</code>, then the restart as a crash.</p>
 <p>This is detection and reporting only: outputs are not restarted automatically,
@@ -480,13 +511,33 @@ publish, and a new publisher restarts the measurement. SRT inputs are not checke
 with <code>srt_to_rtmp off</code> SRS does not count their frames (<code>frames</code> stays 0). An SRT
 input through Goryu has loss, drop and retransmission alerts from the relay; one
 sent straight to SRS port 10080 has no link-quality alerts today.</p>
+<h2 id="input-keyframe-interval">Input keyframe interval</h2>
+<p>Once per publisher, 60 s after its first successful probe, a second ffprobe reads the
+input&#39;s video packets for 12 s (demuxing only, no decoding) and measures the gaps
+between keyframes. The result (count, mean and longest gap) is <code>input.keyframes</code> in
+<code>/api/health</code>, the <strong>Keyframes</strong> row of the pipeline panel, and a <code>keyframe-interval</code>
+diagnostics event. If the longest gap is over 4.25 s (YouTube&#39;s limit is 4 s; the
+margin is frame-rate rounding), the pipeline gets an <code>input-keyframe-interval</code>
+warning alert and one <code>keyframe_interval</code> line in the pipeline log. Only a window of
+at least 10 s can raise it, so a stream that ends while being read proves nothing. A
+single keyframe or none in the window is a gap as long as the window.</p>
+<p>It is reporting only, like the other input alerts. Limits: it is one snapshot per
+publisher, taken a minute in so that a start-up transient is not what is shown, so
+an encoder setting changed later is seen after the next reconnect, and the value
+appears (and the alert can start) only a minute after the input goes live;
+a keyframe forced by a scene cut makes a gap shorter, which never raises the alert.
+Checks queue (4 at a time) so that a mass reconnect does not start dozens of
+ffprobe processes at once; a queued check whose publisher changed is dropped. The
+cost and the reasons are in the
+<a href="/projects/bunryu/docs/reference/design-decisions/#measure-the-keyframe-interval-once-per-publisher-in-a-second-ffprobe-and-only-report-it">design decision</a>.</p>
 <h2 id="flapping-inputs">Flapping inputs</h2>
 <p>When an input disconnects 3 or more times within 5 minutes (a bad uplink, a
 crashing encoder), the pipeline gets an <code>input-flapping</code> warning alert saying how
 many times. It is reporting only, like the other alerts, and it clears once fewer
 than 3 disconnects remain inside the window. Each disconnect is still its own line in
 the pipeline log; the alert is what makes a pattern visible without reading it.</p>
-<p>Input alerts (<code>input-flapping</code>, <code>input-low-framerate</code>, <code>input-high-framerate</code>) belong
+<p>Input alerts (<code>input-flapping</code>, <code>input-low-framerate</code>, <code>input-high-framerate</code>,
+<code>input-keyframe-interval</code>) belong
 to the input itself, so they show on every input, RTMP included: the pipeline&#39;s
 status icon and the Inputs table&#39;s status and Issues column turn to warning, with the
 time the alert began. The SRT link-quality alerts (loss, drops, retransmissions,
@@ -514,7 +565,7 @@ first probe after a server start only records one.</li>
 formats cannot start a restart storm; a change inside that window is only reported.</li>
 <li>Each restart is an <code>input-format-changed</code> diagnostics event (outputs restarted,
 <code>suppressed</code>), a line in the pipeline log, and a &quot;Restarted: input format changed
-from … to …&quot; record in each output&#39;s Error History (a deliberate stop, not a crash).</li>
+from … to …&quot; record in each output&#39;s History (a deliberate stop, not a crash).</li>
 </ul>
 <p>Restarting outputs automatically whenever the input restarts is <strong>not implemented</strong>
 because the server cannot reliably tell an encoder restart from a network

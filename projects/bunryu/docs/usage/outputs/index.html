@@ -229,17 +229,19 @@ restart the encode that its other outputs use). You cannot create, edit, delete,
 and you cannot point an output at the server&#39;s internal <code>internal</code> RTMP app. They
 are not counted among your outputs.</p>
 <p><strong>In the dashboard.</strong> The pipeline&#39;s side column has a <strong>Shared encodes</strong> card
-with one row per encode, laid out like an output card: status, a restart button
+with one row per encode, laid out like an output card: a status dot split like the SRT
+Relay&#39;s (the left half is the encode&#39;s FFmpeg, the right half the pipeline&#39;s SRS input;
+hover for what is wrong on each side, and it is grey while no output uses the encode), a restart button
 (after a confirmation; its outputs reconnect), the encoding as badges (the video
 encoding unless it is <code>copy</code>, and the audio track as <code>T1</code>, <code>T2</code>, …, where <code>T1</code> is
-track 0), how many outputs use it and how many are reading it now (&quot;2 outs · 1
-read&quot;), uptime, bitrate, CPU, memory, the failure count and <strong>History</strong> (its Error
-History), followed by the last error. While an output&#39;s encode is not up, the
+track 0), its uptime, how many outputs use it and how many are reading it now (&quot;2 outs · 1
+read&quot;), CPU, memory (and the bitrate when it is unusual, as on an output
+card), the failure count and <strong>History</strong>, followed by the last error. While an output&#39;s encode is not up, the
 output shows a warning (&quot;Waiting for Shared encode …&quot;, or &quot;Shared encode failed:
 …&quot;), not an error. The pipeline&#39;s &quot;N readers&quot; counts only what reads the input
 itself, not outputs that read a shared encode.</p>
 <p><strong>When a shared encode fails,</strong> every output that uses it is restarted and waits
-for the encode to come back; each of them gets one Error History record &quot;Shared
+for the encode to come back; each of them gets one History record &quot;Shared
 encode … failed: …&quot; naming the cause, so its card explains the reconnect. Other
 recipes, other pipelines and outputs that read the input directly are not
 affected. See <a href="/projects/bunryu/docs/operations/reliability/#shared-encodes">Reliability</a>.</p>
@@ -276,25 +278,47 @@ sequence.</li>
 starts them staggered at 200 ms intervals. An output&#39;s desired state is saved,
 so outputs that were running are started again automatically when the input
 comes back or the server restarts.</p>
+<p>With many outputs, use the bar above the list: the filter box matches an output&#39;s name
+or destination as you type, and <strong>Problems</strong> keeps only outputs with an error or a
+warning (the same ones the card colors red or yellow). The badges count the pipeline&#39;s
+outputs: running and stopped are every output (so they add up to the total), while errors
+and warnings count the outputs with one, stopped or not. &quot;8 of 44&quot; shows how many the
+filter leaves. The filter is per browser, starts empty
+for each pipeline you select, and only changes what is listed: <strong>Start all</strong>, <strong>Stop all</strong>
+and Copy still act on every output of the pipeline. While it hides outputs the cards can&#39;t be
+dragged, because the saved order covers all of them.</p>
 <h3 id="overview">Overview</h3>
 <p>The dashboard&#39;s <strong>Overview</strong> lists every input and every output in two tables. The
 <strong>All</strong>, <strong>Active</strong> and <strong>Issues</strong> tabs narrow both: Active hides what is offline or
 stopped, and Issues keeps only warnings and errors, plus an offline input whose outputs
-are affected, with the reason. The search box on each table&#39;s heading line filters it by
-name as you type; an output matches on its own name or its pipeline&#39;s. The heading badge
+are affected, with the reason. The search box on each table&#39;s heading line filters it as
+you type. An input matches on its name, stream key or publish URL; an output on its own
+name, its pipeline&#39;s name or its destination URL, so a full URL or a stream key finds it. The heading badge
 shows how many rows are left (&quot;20 of 500&quot;).</p>
-<p>The output card shows status, uptime, bitrate, CPU and memory. When the output&#39;s speed
+<p>The output card shows status, uptime, CPU and memory. It adds the bitrate only when it is
+unusual: below 60% or above 140% of the input&#39;s, when the output copies the video and the
+input&#39;s rate is known, or below 200 kbps. An output with a video encode always shows it
+(there is nothing to compare with). When the output&#39;s speed
 (media produced per second of wall time, 1.00x is realtime, measured over 30 s windows)
 is below 0.95x the badge adds it in yellow (&quot;0.88x&quot;); above 1.05x it adds it in the
-normal color, which is usually a backlog draining after a stall. In between, and
-always, the badge&#39;s tooltip shows it. The speed is not shown for the first minute after a
+normal color, which is usually a backlog draining after a stall. In between it is not
+shown. The badge&#39;s tooltip names the figures it shows. The speed is not shown for the first minute after a
 start. An output that failed
 shows its failed attempts since it was last started and, while it waits to try again,
 when the next attempt is due (&quot;retry in 8 s&quot;). Problems appear on
 the card as warnings, each with the time it began (&quot;since 09:18&quot;), and every crash, watchdog restart and finished warning
-episode is kept in the output&#39;s <strong>Error History</strong> with the FFmpeg stderr tail.
-The History button is red while the latest record is a crash or watchdog restart;
-after a stop, or with only warnings, it keeps the normal color. The exception is an
+episode is kept in the output&#39;s <strong>History</strong> with the FFmpeg stderr tail,
+together with every stop and every start you make with <strong>Start</strong> (a &quot;started&quot; record).
+Both this history and the pipeline&#39;s <strong>History</strong> list the oldest entry first and open scrolled to the newest, like the logs.
+A crash that repeats the same way (a different pid or uptime does not count as
+different) is one record with a count (&quot;×19&quot;), its first and latest time and the
+detail of the first. The History button and the card are red while the latest record
+is a crash or watchdog restart. When the output has then run for a minute and is
+writing data, the crash is marked <strong>recovered</strong> (with the time), the card and the
+button return to the normal color and the retry count starts over; the record stays in
+the History. A record that holds a long FFmpeg log shows only its error line (the last
+line, as on the card) with <strong>Show full log</strong> to expand it, and its copy button puts the
+whole log on the clipboard. After a stop, or with only warnings, the button keeps the normal color. The exception is an
 output you stop after 5 failed attempts in a row: its card keeps a red &quot;Stopped
 after 5 failed attempts&quot; line with the last error, and the History button stays red,
 until you start the output again.
@@ -313,9 +337,9 @@ unreachable, or the host runs low on memory or disk space. It beeps when the pro
 keeps failing beeps only when it starts failing. Warnings and the host CPU alert do not
 beep; the host alerts are listed in Server Logs under Server events.</p>
 <p>The bell in the navbar mutes and unmutes the beeps; hover it for the volume slider.
-Both settings are kept in the browser. Browsers play sound only after the page has been
-clicked once, so the bell turns yellow until then: click anywhere on the dashboard after
-opening it. See <a href="/projects/bunryu/docs/reference/design-decisions/#alert-sound-beeps-for-new-problems-only-in-the-browser">the design decision</a>.</p>
+Both settings are kept in the browser and shared by tabs on the same site. The dashboard
+tries to enable audio when it opens. Some browsers require a click or key press before
+they allow sound; the bell still shows your saved mute setting. See <a href="/projects/bunryu/docs/reference/design-decisions/#alert-sound-beeps-for-new-problems-only-in-the-browser">the design decision</a>.</p>
 </article><a class="link text-base-content/50 mt-6 inline-block text-sm" href="https://github.com/live-miracles/bunryu/blob/master/docs/2-usage/2-outputs.md">Edit this page on GitHub</a><div class="border-base-content/10 mt-10 grid gap-3 border-t pt-6 sm:grid-cols-2">
               <a class="rounded-box border-base-content/10 hover:border-primary/50 border p-4" href="/projects/bunryu/docs/usage/publishing/"><div class="text-base-content/50 text-xs">Previous</div><div class="font-semibold">Publishing to a pipeline</div></a>
               <a class="rounded-box border-base-content/10 hover:border-primary/50 border p-4 sm:text-right" href="/projects/bunryu/docs/usage/translation/"><div class="text-base-content/50 text-xs">Next</div><div class="font-semibold">Translation outputs</div></a>

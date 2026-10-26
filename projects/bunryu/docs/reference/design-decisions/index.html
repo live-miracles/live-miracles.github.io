@@ -93,7 +93,7 @@
               <div class="min-w-0"><details class="rounded-box border-base-content/10 bg-base-300/46 text-base-content/68 mb-7 border p-4 text-sm backdrop-blur">
               <summary class="text-base-content/80 cursor-pointer font-semibold">On this page</summary>
               <ol class="mt-3 space-y-2">
-                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#current-architecture-in-one-paragraph">Current architecture in one paragraph</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#media-server">Media server</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#use-srs-for-ingest-from-the-official-release">Use SRS for ingest, from the official release</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#keep-srss-srt_to_rtmp-off-ffmpeg-converts-srt-inputs">Keep SRS&#39;s srt_to_rtmp off; FFmpeg converts SRT inputs</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-use-srss-built-in-forwarding-for-outputs">Don&#39;t use SRS&#39;s built-in forwarding for outputs</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-use-mediamtx-for-srt-ingest-or-srtrtmp-conversion">Don&#39;t use MediaMTX for SRT ingest or SRT→RTMP conversion</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-build-on-datarhei-restreamer">Don&#39;t build on datarhei Restreamer</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-build-our-own-media-server">Don&#39;t build our own media server</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#srt-ingest">SRT ingest</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#a-separate-relay-accepts-bonded-srt-because-neither-ffmpeg-nor-srs-can">A separate relay accepts bonded SRT, because neither FFmpeg nor SRS can</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#plain-srt-goes-directly-to-srs-by-default-the-relay-also-accepts-it">Plain SRT goes directly to SRS by default; the relay also accepts it</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#link-stats-for-a-direct-srt-input-are-not-read-from-srss-log">Link stats for a direct SRT input are not read from SRS&#39;s log</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#a-lost-bonded-leg-is-found-by-counting-legs-because-the-relay-drops-it-instead-of-reporting-broken">A lost bonded leg is found by counting legs, because the relay drops it instead of reporting broken</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#outputs-pull-from-srs-not-from-the-relay">Outputs pull from SRS, not from the relay</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#keep-goryu-in-its-own-repository">Keep goryu in its own repository</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#raise-the-kernel-udp-buffer-ceiling-but-dont-alert-on-it">Raise the kernel UDP buffer ceiling, but don&#39;t alert on it</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#outputs-and-preview">Outputs and preview</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#one-ffmpeg-process-per-output">One FFmpeg process per output</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#outputs-with-the-same-encode-share-one-ffmpeg-shared-encodes">Outputs with the same encode share one FFmpeg (shared encodes)</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#preview-copies-the-video-only-audio-is-encoded">Preview copies the video; only audio is encoded</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#give-up-on-a-blocked-rtmprtmps-destination-with-an-output--rw_timeout">Give up on a blocked RTMP/RTMPS destination with an output -rw_timeout</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-add-an-ss--ti-ack-progress-check--rw_timeout-is-the-knob">Don&#39;t add an ss -ti ack-progress check; -rw_timeout is the knob</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#srt-destinations-need-no-output-timeout">SRT destinations need no output timeout</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#sizing">Sizing</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#sizing-guidance-is-a-measured-table-not-a-calculator">Sizing guidance is a measured table, not a calculator</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#no-hard-cap-on-inputs-or-outputs-the-stream-key-count-is-a-setting">No hard cap on inputs or outputs; the stream key count is a setting</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#dashboard">Dashboard</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#installable-as-an-app-with-a-manifest-only-no-service-worker">Installable as an app with a manifest only, no service worker</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#the-overview-filters-in-the-browser-and-searches-names-only">The Overview filters in the browser, and searches names only</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#alert-sound-beeps-for-new-problems-only-in-the-browser">Alert sound beeps for new problems only, in the browser</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-probe-platform-hosts-from-the-server">Don&#39;t probe platform hosts from the server</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#tooling">Tooling</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#eslint-checks-promise-handling-prettier-stays-the-formatter">ESLint checks promise handling; Prettier stays the formatter</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#logging-and-diagnostics">Logging and diagnostics</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#keep-the-process-running-after-an-uncaught-error">Keep the process running after an uncaught error</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#diagnostics-ideas-taken-from-srs-mediamtx-and-restream-krsna">Diagnostics ideas taken from SRS, MediaMTX and restream-krsna</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#warn-when-an-output-falls-behind-realtime-measured-from-its-media-clock">Warn when an output falls behind realtime, measured from its media clock</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#host-resource-alerts-cpu-pressure-memory-and-disk">Host resource alerts: CPU pressure, memory and disk</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#failures-that-need-an-operator-exit-with-status-78-which-systemd-does-not-restart">Failures that need an operator exit with status 78, which systemd does not restart</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#keep-a-fixed-2-s-systemd-restart-delay-with-no-back-off">Keep a fixed 2 s systemd restart delay, with no back-off</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#hints-are-a-dashboard-lookup-not-an-api-field">Hints are a dashboard lookup, not an API field</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#restart-outputs-when-a-reconnecting-encoder-changes-format-not-when-it-merely-reconnects">Restart outputs when a reconnecting encoder changes format, not when it merely reconnects</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#ingest-protection">Ingest protection</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-ban-abusive-ingest-clients-with-fail2ban">Don&#39;t ban abusive ingest clients with fail2ban</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#install-and-secrets">Install and secrets</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#the-initial-dashboard-password-is-supplied-never-generated-or-printed-the-app-config-lives-in-etcbunryu">The initial dashboard password is supplied, never generated or printed; the app config lives in /etc/bunryu</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#the-srt-passphrase-is-reset-from-settings-by-rewriting-both-files-the-app-does-not-restart-srs-or-goryu">The SRT passphrase is reset from Settings by rewriting both files; the app does not restart SRS or Goryu</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#the-docker-image-is-x86_64-only-arm-hosts-run-it-emulated-for-development">The Docker image is x86_64 only; ARM hosts run it emulated, for development</a></li>
+                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#current-architecture-in-one-paragraph">Current architecture in one paragraph</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#media-server">Media server</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#use-srs-for-ingest-from-the-official-release">Use SRS for ingest, from the official release</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#keep-srss-srt_to_rtmp-off-ffmpeg-converts-srt-inputs">Keep SRS&#39;s srt_to_rtmp off; FFmpeg converts SRT inputs</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-use-srss-built-in-forwarding-for-outputs">Don&#39;t use SRS&#39;s built-in forwarding for outputs</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-use-mediamtx-for-srt-ingest-or-srtrtmp-conversion">Don&#39;t use MediaMTX for SRT ingest or SRT→RTMP conversion</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-build-on-datarhei-restreamer">Don&#39;t build on datarhei Restreamer</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-build-our-own-media-server">Don&#39;t build our own media server</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#srt-ingest">SRT ingest</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#a-separate-relay-accepts-bonded-srt-because-neither-ffmpeg-nor-srs-can">A separate relay accepts bonded SRT, because neither FFmpeg nor SRS can</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#plain-srt-goes-directly-to-srs-by-default-the-relay-also-accepts-it">Plain SRT goes directly to SRS by default; the relay also accepts it</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#link-stats-for-a-direct-srt-input-are-not-read-from-srss-log">Link stats for a direct SRT input are not read from SRS&#39;s log</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#a-lost-bonded-leg-is-found-by-counting-legs-because-the-relay-drops-it-instead-of-reporting-broken">A lost bonded leg is found by counting legs, because the relay drops it instead of reporting broken</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#srt-loss-retransmit-and-drop-figures-cover-the-last-10-minutes-not-the-session">SRT loss, retransmit and drop figures cover the last 10 minutes, not the session</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#relay-stream-errors-go-to-the-pipeline-log-merged-while-they-repeat">Relay stream errors go to the pipeline log, merged while they repeat</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#outputs-pull-from-srs-not-from-the-relay">Outputs pull from SRS, not from the relay</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#keep-goryu-in-its-own-repository">Keep goryu in its own repository</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#raise-the-kernel-udp-buffer-ceiling-but-dont-alert-on-it">Raise the kernel UDP buffer ceiling, but don&#39;t alert on it</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#outputs-and-preview">Outputs and preview</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#one-ffmpeg-process-per-output">One FFmpeg process per output</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#outputs-with-the-same-encode-share-one-ffmpeg-shared-encodes">Outputs with the same encode share one FFmpeg (shared encodes)</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#preview-copies-the-video-only-audio-is-encoded">Preview copies the video; only audio is encoded</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#give-up-on-a-blocked-rtmprtmps-destination-with-an-output--rw_timeout">Give up on a blocked RTMP/RTMPS destination with an output -rw_timeout</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#an-output-that-never-connected-is-reported-as-waiting-for-input-and-restarts-record-the-input-source">An output that never connected is reported as waiting for input, and restarts record the input source</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#a-repeated-crash-is-one-history-record-and-recovery-is-a-field-on-it">A repeated crash is one History record, and recovery is a field on it</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-add-an-ss--ti-ack-progress-check--rw_timeout-is-the-knob">Don&#39;t add an ss -ti ack-progress check; -rw_timeout is the knob</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#srt-destinations-need-no-output-timeout">SRT destinations need no output timeout</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#sizing">Sizing</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#sizing-guidance-is-a-measured-table-not-a-calculator">Sizing guidance is a measured table, not a calculator</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#no-hard-cap-on-inputs-or-outputs-the-stream-key-count-is-a-setting">No hard cap on inputs or outputs; the stream key count is a setting</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#dashboard">Dashboard</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#installable-as-an-app-with-a-manifest-only-no-service-worker">Installable as an app with a manifest only, no service worker</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#every-two-half-status-dot-has-the-same-hover">Every two-half status dot has the same hover</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#the-overview-filters-in-the-browser-and-searches-names-keys-and-urls">The Overview filters in the browser, and searches names, keys and URLs</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#the-outputs-list-has-a-filter-bar-and-a-pipelines-problems-filter-means-what-the-card-shows">The Outputs list has a filter bar, and a pipeline&#39;s Problems filter means what the card shows</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#an-outputs-bitrate-is-shown-only-when-it-is-off-the-inputs">An output&#39;s bitrate is shown only when it is off the input&#39;s</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#alert-sound-beeps-for-new-problems-only-in-the-browser">Alert sound beeps for new problems only, in the browser</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-probe-platform-hosts-from-the-server">Don&#39;t probe platform hosts from the server</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#tooling">Tooling</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#eslint-checks-promise-handling-prettier-stays-the-formatter">ESLint checks promise handling; Prettier stays the formatter</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#logging-and-diagnostics">Logging and diagnostics</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#keep-the-process-running-after-an-uncaught-error">Keep the process running after an uncaught error</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#diagnostics-ideas-taken-from-srs-mediamtx-and-restream-krsna">Diagnostics ideas taken from SRS, MediaMTX and restream-krsna</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#warn-when-an-output-falls-behind-realtime-measured-from-its-media-clock">Warn when an output falls behind realtime, measured from its media clock</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#host-resource-alerts-cpu-pressure-memory-and-disk">Host resource alerts: CPU pressure, memory and disk</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#failures-that-need-an-operator-exit-with-status-78-which-systemd-does-not-restart">Failures that need an operator exit with status 78, which systemd does not restart</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#keep-a-fixed-2-s-systemd-restart-delay-with-no-back-off">Keep a fixed 2 s systemd restart delay, with no back-off</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#hints-are-a-dashboard-lookup-not-an-api-field">Hints are a dashboard lookup, not an API field</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#restart-outputs-when-a-reconnecting-encoder-changes-format-not-when-it-merely-reconnects">Restart outputs when a reconnecting encoder changes format, not when it merely reconnects</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#measure-the-keyframe-interval-once-per-publisher-in-a-second-ffprobe-and-only-report-it">Measure the keyframe interval once per publisher, in a second ffprobe, and only report it</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#ingest-protection">Ingest protection</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#dont-ban-abusive-ingest-clients-with-fail2ban">Don&#39;t ban abusive ingest clients with fail2ban</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#install-and-secrets">Install and secrets</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#the-initial-dashboard-password-is-supplied-never-generated-or-printed-the-app-config-lives-in-etcbunryu">The initial dashboard password is supplied, never generated or printed; the app config lives in /etc/bunryu</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#the-srt-passphrase-is-reset-from-settings-by-rewriting-both-files-the-app-does-not-restart-srs-or-goryu">The SRT passphrase is reset from Settings by rewriting both files; the app does not restart SRS or Goryu</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#the-docker-image-is-x86_64-only-arm-hosts-run-it-emulated-for-development">The Docker image is x86_64 only; ARM hosts run it emulated, for development</a></li>
               </ol>
             </details><article class="readme min-w-0"><p>Why Bunryu is built the way it is, and why some obvious alternatives are not
 used. Each entry gives the decision, the reasons, the evidence behind them, and
@@ -369,6 +369,50 @@ no other leg is running, and <code>pending</code> still is one.</p>
 <p><strong>Cost, and when to revisit:</strong> an encoder deliberately run with fewer legs keeps the
 warning until the input reconnects. Revisit if the relay starts reporting lost legs
 itself.</p>
+<h3 id="srt-loss-retransmit-and-drop-figures-cover-the-last-10-minutes-not-the-session">SRT loss, retransmit and drop figures cover the last 10 minutes, not the session</h3>
+<p><strong>Decision:</strong> the SRT Relay card and the Overview table show loss / retransmit / drop
+as growth over the last 10 minutes (<code>recent</code> in <code>/api/health</code>, computed from the 5 s
+poll&#39;s cumulative counters). The totals since connect stay in the
+details dialog. A bonded group shows only its Drop, marked when above zero; per-leg
+drops are not marked.</p>
+<p><strong>Why:</strong> the relay&#39;s counters only grow, so on a long event they say nothing about the
+link now. The bonded stream on the production VM (2026-10-25, two legs, about 9 Mbit/s,
+10.4 h of per-minute snapshots) showed 10.1 k lost and 3 k dropped packets on one leg,
+which reads as a bad link, while most minutes had no loss at all and the rest came in
+bursts.</p>
+<p><strong>Why 10 minutes and not 1:</strong> over those 623 minutes, 39 % had loss on a leg and 8 %
+had a leg drop, in bursts. A 1-minute figure is zero most of the time and a burst is
+gone from it a minute later, so an operator glancing at the card misses it; 10 minutes
+keeps a burst on screen long enough to see, and matches the dialog&#39;s 10-minute history
+step. The alerts keep their own 1-minute window, which is for
+reacting, not for looking back.</p>
+<p><strong>Why the group&#39;s Drop is the one marked:</strong> a leg&#39;s drop is a packet that leg did not
+deliver in time, and the other leg usually did. Leg drops happened in 52 of the 623
+minutes but the group&#39;s only in 2 (286 packets in total), and only those reached the
+stream.</p>
+<p><strong>Revisit when:</strong> operators ask for another window (the window is <code>SRT_RECENT_WINDOW_MS</code>
+in <code>src/utils/srtRecent.ts</code>), or the dialog&#39;s cumulative graphs are changed to rates.</p>
+<h3 id="relay-stream-errors-go-to-the-pipeline-log-merged-while-they-repeat">Relay stream errors go to the pipeline log, merged while they repeat</h3>
+<p><strong>Decision:</strong> the health poll writes the error Goryu holds for a stream (<code>lastError</code>)
+to the pipeline log as a <code>relay_error</code> line and to the diagnostics (<code>relay-stream-error</code>).
+A repeat of the same error within 10 minutes of its last occurrence updates that one
+line to &quot;(seen N times over …)&quot; and sends diagnostics at most once a minute. An error
+already held when the dashboard starts is not logged again unless it is under 30 s old.</p>
+<p><strong>Why:</strong> Goryu keeps one error per stream and zeroes it when the session ends
+(<code>remove_stream_state</code>) or a new one starts, so after an incident nothing shows what
+the relay had said. Its journal has it, but not next to the pipeline&#39;s other events.</p>
+<p><strong>Why merge:</strong> read in Goryu (<code>session.c</code>, <code>backoff.c</code>): a stream that cannot publish
+downstream retries on a 1, 2, 4, 8, 16 s backoff, then every 16 s without end, and sets
+the error each time. A rejected stream key is the realistic case, and it would add
+about 225 lines an hour to a log that keeps 100. The text also differs between
+occurrences (&quot;retrying in 4000 ms&quot;, the input peer&#39;s port, which changes on every
+reconnect), so the merge compares the text without the delay and with ports masked.
+The stream id (it holds the key) is dropped from the logged line.</p>
+<p><strong>Not done:</strong> a separate persisted History list or API route for relay errors. They
+are rare and one-off in practice, and the pipeline log already is the history; the
+relay card&#39;s History button shows the one error the relay holds now.</p>
+<p><strong>Revisit when:</strong> the log shows a relay error merged many times a day, which would
+point at a cause worth an alert of its own.</p>
 <h3 id="outputs-pull-from-srs-not-from-the-relay">Outputs pull from SRS, not from the relay</h3>
 <p><strong>Decision:</strong> the relay stays a byte-level pipe (one input, one downstream SRT
 connection) and doesn&#39;t serve readers.</p>
@@ -472,7 +516,7 @@ pipeline.</li>
 <ul>
 <li><strong>A rendition is an output row</strong> of the same pipeline, recognised by its URL
 (<code>rtmp://127.0.0.1:&lt;port&gt;/internal/r&lt;id&gt;_&lt;video&gt;_a&lt;audio&gt;</code>). It reuses the output
-service&#39;s supervision, watchdogs, retry back-off, Error History, stats and
+service&#39;s supervision, watchdogs, retry back-off, History, stats and
 health unchanged. A reconciler (one tick per second) creates, removes, starts and
 idle-stops the rows.</li>
 <li><strong>No schema change and no config option,</strong> so the production database is not
@@ -498,7 +542,7 @@ delete renditions or point an output at the app; SRS&#39;s publish hook accepts 
 only over RTMP from loopback for a running rendition row.</li>
 <li><strong>Readiness is local</strong> (process running and data written), not the 5 s health
 poll. When a rendition exits on its own its readers are restarted and wait for it;
-each gets an Error History record naming the cause. After 15 s with no running
+each gets a History record naming the cause. After 15 s with no running
 reader it stops, so a quick stop/start does not restart the shared encode.</li>
 </ul>
 <p><strong>Evidence</strong> (local isolated stack, 2026-10-17, SRS 6.0-r2, FFmpeg 7.1.4, one
@@ -656,6 +700,86 @@ default does not verify).</p>
 <p><strong>Revisit when:</strong> outputs restart with &quot;Connection timed out&quot; against a healthy
 platform (raise the value), or FFmpeg is upgraded (the regression test checks the
 mechanism).</p>
+<h3 id="an-output-that-never-connected-is-reported-as-waiting-for-input-and-restarts-record-the-input-source">An output that never connected is reported as waiting for input, and restarts record the input source</h3>
+<p><strong>Decision (October 2026):</strong> when the socket watchdog finds no destination socket on
+an output that has written nothing, it reports &quot;No input data&quot; instead of &quot;Destination
+socket unhealthy&quot;. Before the socket or progress watchdog restarts an output, it reads
+the output&#39;s stream from SRS (at most 2 s, <code>/api/v1/streams</code>) and, for a shared
+output, the shared encode&#39;s state, and puts both in the History record and the
+<code>ffmpeg-restart</code> diagnostic event. The input&#39;s <code>-rw_timeout</code> stays at 10 minutes.</p>
+<p><strong>Incident (2026-10-25, pipeline 12):</strong> a shared encode ran and wrote at 2.4-2.5 Mbps
+for 25 minutes (its health snapshots) while the YouTube output reading it from SRS
+failed 19 times in a row; a second key on the same pipeline failed the same way. Every
+attempt ended with an empty stderr but <code>Error opening input file rtmp://127.0.0.1:21935/internal/r12_copy_a0</code>, and its only socket was the one to SRS:
+it never connected to YouTube. The watchdog blamed the destination (&quot;RTMP socket
+missing&quot;) because that is the only thing it checked. Three other pipelines started in
+the same 15 s with the same settings worked. Once the outputs were stopped and the
+shared encode idle-stopped, the next start worked. SRS ran at log level <code>warn</code> and
+logged nothing about the stream, so the state inside SRS was not recorded.</p>
+<p><strong>Why these changes:</strong> the misleading wording sent the investigation to YouTube; and
+the one fact that would have told an input fault from a destination fault (what SRS
+held for the stream at that moment) was not captured.</p>
+<p><strong>Where the evidence is recorded:</strong> in each output&#39;s own History and in the
+diagnostics, per output. Recording it once per source stream (in the pipeline History,
+with the other outputs pointing at it) would stop the repeats and the SRS calls, and
+is the same fault for outputs that read the input directly; it was left out for now
+because the 3 s shared request already bounds the load and per-output records are
+enough while this has been seen once. It would relax the convention that outputs do
+not write to the pipeline History. Revisit if many outputs failing together make the
+repeats a problem.</p>
+<p><strong>Why not a shorter input <code>-rw_timeout</code>:</strong> it also bounds every read while running, so
+a brief gap in the input would restart outputs and eat their 5-attempt budget. The
+10 minutes exist for publisher-less pulls (see the entry on blocked destinations
+above); the watchdogs end a stuck open after about 45-50 s anyway.</p>
+<p><strong>Not done (a possible feature):</strong> restarting the shared encode automatically after
+repeated failed reads, which is what fixed this by hand and would have cut 25 minutes
+to about 2. It is held back because the cause is unknown and the fix has been seen
+to work once. If it is built, the design to start from:</p>
+<ul>
+<li><strong>Act only when all of these hold:</strong> the reader wrote nothing and failed twice in
+a row; its shared encode is running and has written data; no other reader of that
+encode is producing data (restarting would cut a healthy output); SRS lists the
+stream as publishing and has sent nothing to that reader (this separates a broken
+path from a destination problem such as a DNS hang, which looks the same from
+outside).</li>
+<li><strong>Bound it:</strong> at most one automatic restart per shared encode per 10 minutes, with
+a diagnostics event and a History record on every affected output.</li>
+<li><strong>Copy the manual recovery, not a quick restart:</strong> stop the failing readers and the
+shared encode, wait about 20 s, start the encode and let the readers follow. The
+manual fix included a gap with no readers; if SRS keeps its stream object alive
+while a reader keeps reconnecting, a plain restart of the encode could leave the
+fault in place.</li>
+<li><strong>Test the mechanics only:</strong> the fault cannot be reproduced on the test stack, so
+fault tests can cover the conditions, the bound, the sequence and that a healthy
+sibling blocks it, not whether it cures the fault.</li>
+</ul>
+<p><strong>Revisit when:</strong> the fault happens again and the new History records (SRS stream
+state, shared encode state) show where the bad state is. Build the restart then if it
+is in SRS or the encode, and fix it at the source if it is something else.</p>
+<h3 id="a-repeated-crash-is-one-history-record-and-recovery-is-a-field-on-it">A repeated crash is one History record, and recovery is a field on it</h3>
+<p><strong>Decision (October 2026):</strong> an output&#39;s History keeps at most 10 records. A crash
+with the same signature as the previous crash record (first and last line, numbers and
+addresses blanked, nothing but warnings in between) increments <code>count</code> and <code>lastTs</code>
+on that record instead of adding one. When an output with a current crash has run for
+60 s and is writing data, the crash gets <code>recoveredTs</code>, which ends its time as the
+current error. No separate &quot;recovered&quot; record is written.</p>
+<p><strong>Why:</strong> a failure that repeats gets one slot instead of up to ten: on 2026-10-25
+the first output failed 19 times in a row the same way, which with one record per
+attempt leaves only the last ten copies and none of the records before them. And an
+output that restarted by itself stayed red until someone stopped and started it,
+because nothing but a stop or a start supersedes a crash. A separate recovery record
+would have taken a slot per episode for no information the crash does not carry.</p>
+<p><strong>Choices:</strong> the first crash keeps its message (nearest the onset, the most useful),
+and later ones are in the diagnostics events; <code>lastTs</code> is what the card shows as the
+time of the error. 60 s is the limit that already ends a failed-attempt streak, so an
+output that crashes again seconds after restarting does not flash normal in between.
+The retry count starts over at recovery. A crash after a recovery is a new record even
+with the same text, so a flapping output is still visible as separate episodes.</p>
+<p><strong>Translation outputs</strong> run in the translation mixer&#39;s own process and only report
+their status and progress to the output service, so the watchdog tick visits them
+separately (by what they reported) and applies the same recovery rule.</p>
+<p><strong>Revisit when:</strong> distinct failures are being merged (widen the signature) or a
+flapping output fills the History with episodes.</p>
 <h3 id="dont-add-an-ss--ti-ack-progress-check--rw_timeout-is-the-knob">Don&#39;t add an <code>ss -ti</code> ack-progress check; <code>-rw_timeout</code> is the knob</h3>
 <p><strong>Decision (October 2026):</strong> the socket watchdog keeps reading only the socket state
 from <code>ss -tanp</code>. It does not read <code>ss -ti</code> to notice a connection that stays
@@ -907,34 +1031,110 @@ redirected to the Access login and silently ignored.</li>
 </ul>
 <p><strong>Revisit</strong> if push notifications or an offline page are wanted; both need a
 service worker and a cache policy that keeps deploys from going stale.</p>
-<h3 id="the-overview-filters-in-the-browser-and-searches-names-only">The Overview filters in the browser, and searches names only</h3>
+<h3 id="every-two-half-status-dot-has-the-same-hover">Every two-half status dot has the same hover</h3>
+<p><strong>Decision:</strong> the pipeline list, the SRT Relay card and a shared encode row share one
+renderer (<code>public/ts/features/status-tooltip.ts</code>). The hover has a heading per half
+(pipeline: Input, Outputs; relay: SRT input, Forward to SRS; shared encode: FFmpeg,
+SRS input), then that half&#39;s problems or one muted line, &quot;OK&quot; or why it is off. A
+switched-off encode shows a single &quot;Idle&quot; line. The gradient comes from one helper too.</p>
+<p><strong>Why:</strong> the three had grown apart: the pipeline dot listed problems in one mixed list
+and showed nothing when healthy, the relay dot listed problems or one sentence, and the
+shared encode dot had headed halves. With the same dot shape on all three, a reader
+expects the same hover, and a mixed list does not say which half to look at.</p>
+<p><strong>In the pipeline&#39;s hover</strong> the relay&#39;s problems sit under Input, because the dot&#39;s left
+half already takes the relay&#39;s colour; the outputs sit under Outputs.</p>
+<h3 id="the-overview-filters-in-the-browser-and-searches-names-keys-and-urls">The Overview filters in the browser, and searches names, keys and URLs</h3>
 <p><strong>Decision:</strong> each Overview table has its own search box on its heading line, matching
-the pipeline or output name as plain, case-insensitive text. It filters the rows already
-in the browser and combines with the All/Active/Issues tabs. The Issues tab also lists an
+as plain, case-insensitive text: an input&#39;s name, stream key and publish URLs, an output&#39;s
+own name, its pipeline&#39;s name and its destination URL. It filters the rows already in the
+browser and combines with the All/Active/Issues tabs. The Issues tab also lists an
 offline input when outputs of its pipeline are in trouble, and the heading badges show
 &quot;shown of total&quot;.</p>
 <p><strong>Why:</strong></p>
 <ul>
-<li><strong>At 50 inputs and 500 outputs the Overview is about 32 screens</strong>
+<li><p><strong>At 50 inputs and 500 outputs the Overview is about 32 screens</strong>
 (<a href="/projects/bunryu/docs/getting-started/sizing/#the-dashboard-at-the-supported-ceiling">Sizing</a>), and
 finding one output meant scrolling. The page already holds all 500 rows (about 18 KB
-gzipped each refresh), so a server-side search would add an API route for nothing.</li>
-<li><strong>Two boxes, not one:</strong> the tables have different rows and an output matches on its
-pipeline&#39;s name too, so one box would filter two lists by different rules.</li>
-<li><strong>An offline input stays &quot;off&quot; everywhere else.</strong> An idle pipeline before a show is
+gzipped each refresh), so a server-side search would add an API route for nothing.</p>
+</li>
+<li><p><strong>Two boxes, not one:</strong> the tables have different rows and an output matches on its
+pipeline&#39;s name too, so one box would filter two lists by different rules.</p>
+</li>
+<li><p><strong>An offline input stays &quot;off&quot; everywhere else.</strong> An idle pipeline before a show is
 normal, so marking it a warning would turn the sidebar yellow for every unused
 pipeline. It is an issue only where an operator is looking for causes: the Issues view
 with affected outputs. Before, that view listed 20 affected outputs and &quot;No input
-issues&quot; while two inputs were down.</li>
-<li><strong>A heading that says 500 above a list of 20</strong> hid how much a filter had removed.</li>
+issues&quot; while two inputs were down.</p>
+</li>
+<li><p><strong>A heading that says 500 above a list of 20</strong> hid how much a filter had removed.</p>
+</li>
+<li><p><strong>URLs and keys were added at the operators&#39; request (October 2026).</strong> The first
+version matched names only, because a destination URL can hold a platform stream key.
+But finding &quot;the output that sends to this URL&quot; or &quot;the input with this key&quot; is what
+operators search for, and the search shows nothing new: the rows still display what
+they did, and anyone who can type in the box can already open the output or input to
+read the same URL. The match is local to the browser; nothing is sent.</p>
+</li>
 </ul>
-<p><strong>Not adopted:</strong> matching destinations or statuses (the destination URL can hold a
-platform stream key), regular expressions, and a search that also covers the SRT Relay
-table.</p>
+<p><strong>Not adopted:</strong> matching statuses, regular expressions, and a search that also covers
+the SRT Relay table.</p>
 <p><strong>Tested:</strong> 50 pipelines and 500 outputs on the test stack, typing during the 5 s
 refresh (focus, text and caret survive it).</p>
-<p><strong>Revisit when:</strong> operators ask to search by destination host or status, or the output
-limit rises.</p>
+<p><strong>Revisit when:</strong> operators ask to search by status, or the output limit rises.</p>
+<h3 id="the-outputs-list-has-a-filter-bar-and-a-pipelines-problems-filter-means-what-the-card-shows">The Outputs list has a filter bar, and a pipeline&#39;s Problems filter means what the card shows</h3>
+<p><strong>Decision (October 2026):</strong> above a pipeline&#39;s outputs sit a filter box (name or
+destination URL), a <strong>Problems</strong> toggle and badges counting errors, warnings, running and
+stopped, with &quot;8 of 44&quot; while a filter hides outputs. <strong>Problems</strong> keeps an output with an
+error or any warning its card shows: a crash being retried, a stop after repeated
+failures, a warning from the running output, &quot;Same destination as …&quot; and the encoding
+advice. The filter is per browser, starts empty for each pipeline, and cards cannot be
+dragged while it hides any.</p>
+<p><strong>Why:</strong></p>
+<ul>
+<li><strong>A failing output among 100 meant scrolling about 6 screens</strong> (a healthy card is 56
+px). The Overview already filters, but only across pipelines and without the card&#39;s
+warnings.</li>
+<li><strong>The sidebar&#39;s counts are not enough.</strong> They count each output&#39;s live status, so they
+leave out the card-only warnings (a same-destination warning on a running output, advice
+on a stopped one). The badges and the filter use the card&#39;s rule, so what is yellow or
+red is what Problems keeps. The two sets of counts differ for that reason.</li>
+<li><strong>Running and stopped are the outputs&#39; own state, and errors and warnings overlap
+them.</strong> A first version put each output in its most severe bucket only, so the badges
+added up to the total, but a stopped output with a warning was missing from &quot;stopped&quot;.
+That read as lost outputs; the overlap is easier to read than the sum.</li>
+<li><strong>No dragging while filtered:</strong> the saved order lists every output, so a drag of only
+the visible cards would drop the hidden ones from it.</li>
+</ul>
+<p><strong>Not adopted:</strong> a one-line row mode (a healthy output is already one row in a normal
+width; the height is in warning lines), and a sort that puts problems first (the saved
+manual order stays).</p>
+<p><strong>Revisit when:</strong> repeated warnings across many outputs keep filling the list (grouping
+identical warning lines was left out), or the sidebar counts confuse operators.</p>
+<h3 id="an-outputs-bitrate-is-shown-only-when-it-is-off-the-inputs">An output&#39;s bitrate is shown only when it is off the input&#39;s</h3>
+<p><strong>Decision (October 2026):</strong> the output badge (and a shared encode&#39;s) leaves out the
+bitrate while it is between 60% and 140% of the pipeline input&#39;s, when the output copies
+the video and the input&#39;s rate is known. Below 200 kbps it always shows, and an output
+with a video encode or without an input rate always shows it. The speed is shown only
+outside 0.95x to 1.05x, with no mention in the tooltip.</p>
+<p><strong>Why:</strong></p>
+<ul>
+<li><strong>Every healthy copy output printed the same &quot;8.0 Mbps&quot;</strong>, which carried no
+information until it differed, and it was clutter on 100 rows.</li>
+<li><strong>The band is wide because the numbers differ for normal reasons.</strong> On an SRT input
+SRS reported 8.9 Mbps and the goryu legs 9.2 (libsrt counts 44 header bytes in each
+1316-byte packet, +3.3%), while copy outputs read 8.2 and 8.0: FLV carries less
+container overhead than MPEG-TS. FFmpeg&#39;s <code>bitrate=</code> is also an average since the
+output started, not the current rate.</li>
+<li><strong>A faulty output is caught elsewhere too:</strong> below the 200 kbps minimum or with no
+bitrate the card warns, and the stall watchdog restarts a frozen output.</li>
+</ul>
+<p><strong>Limit:</strong> because the figure is a lifetime average, a drop in a long-running output
+moves it slowly and may not leave the band. A rate over the last 30 s (the delta of
+<code>total_size</code>, as the speed already uses <code>out_time</code>) would react in seconds but changes
+what <code>bitrateKbps</code> means in the API, the Overview and the low-bitrate warning, so it was
+not done.</p>
+<p><strong>Revisit when:</strong> operators miss a slow drop (switch to the windowed rate), or the band
+hides a real fault.</p>
 <h3 id="alert-sound-beeps-for-new-problems-only-in-the-browser">Alert sound beeps for new problems only, in the browser</h3>
 <p><strong>Decision:</strong> the dashboard beeps once a second for 5 s when a problem appears that was
 not there at the previous 5 s poll:</p>
@@ -946,7 +1146,9 @@ not there at the previous 5 s poll:</p>
 <li>an output crashing or being restarted by a watchdog.</li>
 </ul>
 <p>A problem that lasts stays silent. The bell in the navbar mutes it, and its slider sets
-the volume (0–500%); both are kept per browser. The beep and control are ported from
+the volume (0–500%); both are kept in browser local storage and shared by tabs on the
+same site. The page tries to resume audio on startup; if browser autoplay policy blocks
+it, the bell still reflects the saved mute setting. The beep and control are ported from
 live-gallery&#39;s alert beeps, so both tools sound alike.</p>
 <p><strong>Why:</strong></p>
 <ul>
@@ -989,7 +1191,7 @@ tab open at the time saw them.</li>
 <li><strong>It raised no alert.</strong> Nothing in the health poll, the alerts or the beeps used
 the result, so it could not warn during a live event.</li>
 <li><strong>The outputs already say the same.</strong> A destination that refuses or times out
-shows in that output&#39;s Error History (FFmpeg&#39;s stderr tail and exit reason), in the
+shows in that output&#39;s History (FFmpeg&#39;s stderr tail and exit reason), in the
 socket watchdog&#39;s findings and in its retry state, per output and with a
 timestamp. The probe added only &quot;is the platform down or just this output?&quot;, and
 only for someone who looked.</li>
@@ -1063,7 +1265,7 @@ unwritable diagnostics directory at startup. The health poll and the host-probe 
 (since removed, see <a href="#dont-probe-platform-hosts-from-the-server">Don&#39;t probe platform hosts from the server</a>)
 had <code>try</code>/<code>finally</code> with no <code>catch</code>, the same pattern the ffprobe fix (see the
 ESLint entry above) removed. Regression tests cover a write-stream error, an
-unwritable directory, a throwing health poll, a corrupt Error History row, <code>runLogged</code>
+unwritable directory, a throwing health poll, a corrupt History row, <code>runLogged</code>
 and the JSON error handler.</p>
 <p><strong>Revisit when:</strong> an incident shows the process kept running in a broken state
 after an uncaught error. Then exit on <code>uncaughtException</code> and rely on systemd.</p>
@@ -1088,9 +1290,28 @@ scrapes it yet, and it would be a new port or route to secure.</li>
 state and UI.</li>
 <li><strong>Logs in SQLite</strong> (krsna). JSONL plus journald is enough at this size.</li>
 </ul>
+<p>Reviewed again on 2026-10-25, when krsna had added alert notifications, picture and
+sound checks, destination anomaly baselines and a keyframe-interval verdict. Adopted:
+the keyframe check, as a <a href="#measure-the-keyframe-interval-once-per-publisher-in-a-second-ffprobe-and-only-report-it">one-time ffprobe per publisher</a>.
+Not adopted:</p>
+<ul>
+<li><strong>Alert notifications</strong> (Slack, Discord, signed webhooks, Web Push). The operators
+do not need the server to send them.</li>
+<li><strong>Picture and sound checks</strong> (frozen or black picture, silent track). <code>live-gallery</code>
+already checks the outputs this way, and krsna&#39;s own cost is about 2 % of a core per
+checked pipeline.</li>
+<li><strong>Destination anomaly baselines</strong> (each output learns its usual delivery, round
+trip and retransmits and is flagged when it drifts). None of the six incidents in
+<code>fail-reports/</code> (2026-07-10 to 2026-10-25) was a slow degradation: each was a step
+change or an outright failure (an OOM kill, a log flood, a 30 s timestamp offset, a
+shared encode that delivered nothing), which the existing watchdogs and alerts
+already catch. A baseline adds three tuned thresholds (warm-up, deviation, run
+length) with no incident behind them.</li>
+</ul>
 <p><strong>Revisit when:</strong> someone wants external alerting (add <code>/metrics</code>, loopback-only),
 or an incident shows outputs connected but not keeping up (add the delivery
-ratio; <code>outputSockets.ts</code> already reads <code>ss</code>).</p>
+ratio; <code>outputSockets.ts</code> already reads <code>ss</code>), or an incident shows a destination
+getting steadily worse while staying green (add the baselines).</p>
 <h3 id="warn-when-an-output-falls-behind-realtime-measured-from-its-media-clock">Warn when an output falls behind realtime, measured from its media clock</h3>
 <p><strong>Decision (October 2026):</strong> every output gets a &quot;falling behind&quot; card warning when
 its media clock runs below 0.9x wall time over two 30 s windows in a row. The speed
@@ -1293,6 +1514,62 @@ restarting every output on every new publisher (the rejected approach above); a
 <p><strong>Revisit when:</strong> a format change turns out not to need a restart for some destination
 type, or probes after a reconnect prove unreliable enough to report a change that did
 not happen.</p>
+<h3 id="measure-the-keyframe-interval-once-per-publisher-in-a-second-ffprobe-and-only-report-it">Measure the keyframe interval once per publisher, in a second ffprobe, and only report it</h3>
+<p><strong>Decision (October 2026):</strong> 60 s after a publisher&#39;s first successful probe, a second
+<code>ffprobe -select_streams v:0 -show_entries packet=pts_time,dts_time,flags -read_intervals %+12</code>
+reads 12 s of video packets and measures the gaps between keyframes. The result is
+<code>input.keyframes</code> in <code>/api/health</code>, a <strong>Keyframes</strong> row in the pipeline panel and a
+diagnostics event. A longest gap over 4.25 s raises the <code>input-keyframe-interval</code>
+warning alert. Nothing is restarted or rejected.</p>
+<p><strong>Why:</strong></p>
+<ul>
+<li><strong>A long keyframe interval is an encoder setting that breaks a destination without
+any error on our side</strong>: YouTube needs a keyframe at least every 4 s and recommends
+2 s, and copy-mode outputs forward the gaps unchanged. Before this nothing showed
+the interval, and the only trace was a slow preview start (a documented side effect).
+krsna&#39;s flight recorder judges the same thing continuously.</li>
+<li><strong>Once per publisher is enough and cheap.</strong> The interval is an encoder setting, so
+it is fixed until the encoder is reconfigured or reconnects, and a reconnect is a
+new publisher and is measured again. Demuxing only: 0.03 s of CPU for the whole window
+on a 1080p50 6 Mbit/s clip.</li>
+<li><strong>60 s after the probe, not right away.</strong> Measured straight after connecting, a
+chained input showed a start-up transient as if it were its setting. On 2026-10-26 a
+pipeline fed by another pipeline&#39;s output read 5 keyframes in 12 s, mean 2.5 s and
+longest 4.0 s (one keyframe missing), while its source was still recovering from a
+reconnect (the shared encode restarted every ~6 s with <code>non-existing PPS 0 referenced</code>); minutes later both read a clean 2 s GOP, but the value stayed on the
+panel until the next reconnect. Waiting means one measurement of a settled stream,
+not a second one to correct the first. It also spreads the checks after a mass
+reconnect.</li>
+<li><strong>A second ffprobe, not a longer first one.</strong> Reading packets for 12 s in the first
+probe would delay the media state and the input-format check that restarts outputs,
+both of which depend on it.</li>
+<li><strong>Checks run at most 4 at a time.</strong> A live input is read in real time, so a check
+holds its ffprobe for about 10 to 12 s, and it has about 12 MB of private memory
+(measured from <code>/proc/&lt;pid&gt;/smaps_rollup</code>; the rest of its 29 MB RSS is the shared
+binary). After a mass reconnect the 200 ms probe stagger would start about 50 at
+once, which is about 600 MB on a host that has been 1 GB. The queue drops a job
+whose publisher changed while it waited.</li>
+<li><strong>12 s and 4.25 s.</strong> 12 s holds at least two keyframes for any interval up to 4 s
+with margin; 4.25 s is the platform limit plus frame-rate rounding. A window under
+10 s (the stream ended while it was read) cannot raise the alert.</li>
+</ul>
+<p><strong>Evidence:</strong> the test stack&#39;s publisher at <code>-g 50</code> (2 s) measured 6 keyframes, mean and
+longest 2.0 s, no alert, in 10.6 s; republished at <code>-g 150</code> it measured 2 keyframes,
+longest 6.0 s, and raised the alert. Unit tests cover the parsing (2 s, 4 s, 6 s,
+one keyframe, none, a cut-short window, <code>N/A</code> timestamps), the alert, once per
+publisher, the 60 s wait (and a publisher that changes during it), a failed check,
+shutdown killing an in-flight check and the concurrency limit; removing the limit, the
+wait or the shutdown kill fails its test. The 2 s and 6 s runs above were made with
+the check running right after the probe; with the wait, the end-to-end run below.</p>
+<p><strong>Not adopted:</strong> measuring right after connecting and again later if the result looks
+irregular (two probes, and a rule for &quot;irregular&quot;); a continuous check (a snapshot is what an encoder setting needs, and a
+rolling one needs a long-lived reader per input); an alert at 2 s (platforms
+recommend it, only 4 s is a limit); measuring from the SRS log or the live packets of
+the outputs (neither carries keyframe flags).</p>
+<p><strong>Revisit when:</strong> an encoder is found changing its keyframe interval mid-stream
+(re-measure periodically), 60 s turns out too short for a source that takes longer to
+settle, or the 4-at-a-time queue makes the result arrive too late on a very large
+reconnect.</p>
 <h2 id="ingest-protection">Ingest protection</h2>
 <h3 id="dont-ban-abusive-ingest-clients-with-fail2ban">Don&#39;t ban abusive ingest clients with fail2ban</h3>
 <p><strong>Decision:</strong> the repo does not install or manage fail2ban. The app logs rejected

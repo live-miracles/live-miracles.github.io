@@ -200,7 +200,7 @@ and we chose it over writing our own.</p>
 </tr>
 <tr>
 <td>Recovery</td>
-<td>Per-output watchdogs, bounded retries, Error History</td>
+<td>Per-output watchdogs, bounded retries, History</td>
 <td>Restart after a fixed delay, progress stall timeout, optional CPU and memory limits</td>
 <td>Not compared</td>
 <td>Not compared</td>
@@ -240,7 +240,7 @@ and we chose it over writing our own.</p>
 <li>Pick Restreamer if you want a setup wizard, a built-in player or public page for
 viewers, hardware encoding (Raspberry Pi, NVIDIA, Intel), or to run on ARM.</li>
 <li>Pick Bunryu for a Linux server that forwards many pipelines to many destinations
-through long events, where per-output recovery, an Error History with FFmpeg&#39;s
+through long events, where per-output recovery, a History with FFmpeg&#39;s
 last output, bonded SRT ingest or translation mixing matter.</li>
 </ul>
 <p>Its built-in SRT server uses gosrt, not libsrt, and in our trial its interface did not
@@ -258,8 +258,8 @@ and also restarts an output whose destination socket is half closed while FFmpeg
 still reports progress, a case seen on YouTube.</li>
 <li><strong>Limits.</strong> Core can kill a process above a CPU or memory limit. Bunryu enforces
 memory only: a CPU limit would kill encodes that are merely busy on a loaded host.</li>
-<li><strong>Evidence.</strong> Both keep FFmpeg&#39;s last output per run. Bunryu also keeps an Error
-History per output and writes timestamped diagnostics for every start, exit,
+<li><strong>Evidence.</strong> Both keep FFmpeg&#39;s last output per run. Bunryu also keeps a History
+per output and writes timestamped diagnostics for every start, exit,
 restart and watchdog action, and groups FFmpeg&#39;s repeated timestamp warnings.</li>
 </ul>
 <h2 id="srs">SRS</h2>

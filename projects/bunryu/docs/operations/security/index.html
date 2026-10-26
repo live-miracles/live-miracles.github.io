@@ -116,8 +116,8 @@ Behind a proxy set <code>trust_proxy</code>, or every user shares the proxy&#39;
 <li><strong>Headers:</strong> <code>X-Frame-Options: DENY</code>, <code>frame-ancestors &#39;none&#39;</code>, <code>nosniff</code>,
 <code>Referrer-Policy: no-referrer</code>. A full CSP is not possible until the dashboard&#39;s
 inline event handlers are removed.</li>
-<li><strong>Logs are not redacted:</strong> journald, the diagnostics files, the output Error
-History and the dashboard keep FFmpeg&#39;s stderr as-is, including full
+<li><strong>Logs are not redacted:</strong> journald, the diagnostics files, the output History
+and the dashboard keep FFmpeg&#39;s stderr as-is, including full
 destination URLs, stream keys and SRT passphrases. They are private to the
 server and its operators; redact before copying any of it into a commit or
 issue.</li>

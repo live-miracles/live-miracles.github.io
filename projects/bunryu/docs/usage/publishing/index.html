@@ -4,12 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Publishing to a pipeline — Bunryu</title>
-    <meta name="description" content="A pipeline is one live input. Creating a pipeline assigns it a stream key; the pipeline panel in the dashboard has a copy button for the full publish URL of every protocol, plus buttons to copy the se" />
+    <meta name="description" content="A pipeline is one live input. Creating a pipeline assigns it a stream key; the pipeline panel&#39;s Publish to this input card shows one input mode at a time (RTMP, SRT or SRT Relay), chosen with the butt" />
     <link rel="canonical" href="https://live-miracles.github.io/projects/bunryu/docs/usage/publishing/" />
     <meta property="og:site_name" content="Live Miracles" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Publishing to a pipeline — Bunryu" />
-    <meta property="og:description" content="A pipeline is one live input. Creating a pipeline assigns it a stream key; the pipeline panel in the dashboard has a copy button for the full publish URL of every protocol, plus buttons to copy the se" />
+    <meta property="og:description" content="A pipeline is one live input. Creating a pipeline assigns it a stream key; the pipeline panel&#39;s Publish to this input card shows one input mode at a time (RTMP, SRT or SRT Relay), chosen with the butt" />
     <meta property="og:url" content="https://live-miracles.github.io/projects/bunryu/docs/usage/publishing/" />
     <meta property="og:image" content="https://raw.githubusercontent.com/live-miracles/bunryu/master/public/logo.png" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -96,10 +96,16 @@
                 <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#test-commands">Test commands</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#without-a-camera-file-or-destination">Without a camera, file or destination</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#from-a-file">From a file</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#checking-the-input">Checking the input</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#preview">Preview</a></li>
               </ol>
             </details><article class="readme min-w-0"><p>A <strong>pipeline</strong> is one live input. Creating a pipeline assigns it a stream key;
-the pipeline panel in the dashboard has a copy button for the full publish URL
-of every protocol, plus buttons to copy the server URL, key, stream ID or
-passphrase separately for encoders that ask for them in separate fields. The
-panel does not display the URLs themselves.</p>
+the pipeline panel&#39;s <strong>Publish to this input</strong> card shows one input mode at a
+time (<strong>RTMP</strong>, <strong>SRT</strong> or <strong>SRT Relay</strong>), chosen with the buttons at its top. It
+follows the encoder: when a publisher connects the card switches to the mode it is
+using (marked with a green dot), and until the mode changes again a mode you picked
+stays. Each row shows a value, shortened with an ellipsis if it is long, and a
+copy button (two overlapping squares): server URL, key, stream ID or passphrase separately for encoders
+that ask for them in separate fields, and the full publish URL (SRT Relay has two: <strong>Bonded URL</strong> for an encoder that sends over several links, and <strong>Single-link URL</strong> for an ordinary one). The stream key and
+stream ID are masked after their <code>keyNN_</code> prefix (<code>key01_••••••••</code>) and the passphrase
+entirely; the eye button beside each shows the real value for 15 s, for typing it
+into an encoder by hand. Copy always copies the real value.</p>
 <table>
 <thead>
 <tr>
@@ -119,6 +125,11 @@ panel does not display the URLs themselves.</p>
 <td><code>srt://&lt;public-host&gt;:10080?streamid=#!::r=live/&lt;stream-key&gt;,m=publish&amp;passphrase=&lt;passphrase&gt;&amp;pbkeylen=16</code></td>
 </tr>
 <tr>
+<td>SRT via relay</td>
+<td>10081/udp</td>
+<td><code>srt://&lt;public-host&gt;:10081?mode=caller&amp;streamid=#!::r=live/&lt;stream-key&gt;,m=publish&amp;passphrase=&lt;passphrase&gt;&amp;pbkeylen=16</code></td>
+</tr>
+<tr>
 <td>Bonded SRT</td>
 <td>10081/udp</td>
 <td><code>srt://&lt;public-host&gt;:10081?mode=caller&amp;grouptype=broadcast&amp;streamid=#!::r=live/&lt;stream-key&gt;,m=publish&amp;passphrase=&lt;passphrase&gt;&amp;pbkeylen=16</code></td>
@@ -127,7 +138,10 @@ panel does not display the URLs themselves.</p>
 <p><code>&lt;public-host&gt;</code> is the <strong>Public Host</strong> set in Settings. It is empty on a new install:
 the dashboard shows a banner asking for it, and the publish URLs use <code>localhost</code> until
 you set it. The SRT passphrase is
-generated at install time and can be reset in Settings; see <a href="/projects/bunryu/docs/getting-started/install/#srs-and-srt-relay-config">SRS and SRT relay config</a>.</p>
+generated at install time and can be reset in Settings; see <a href="/projects/bunryu/docs/getting-started/install/#srs-and-srt-relay-config">SRS and SRT relay config</a>.
+The repository&#39;s default passphrase is for development; an installed server replaces it
+with a generated secret. Copy the current passphrase from the dashboard rather than
+assuming the default.</p>
 <p>Prefer SRT when the encoder supports it: it has fixed, predictable latency,
 survives lossy networks better than RTMP, and keeps every audio track. Use
 bonded SRT for encoders that send the same stream over several network links
@@ -143,7 +157,29 @@ optional. Plain SRT sent straight to port 10080 avoids the relay&#39;s extra hop
 The trade-off is visibility: SRS does not expose packet loss, retransmit or drop
 counters for an SRT publisher, so a stream sent straight to 10080 has no link
 statistics or loss alerts in the dashboard (its input card says so). Through the
-relay you get them, so use the bonded port when you want to watch the link.</p>
+relay you get them, so use the bonded port when you want to watch the link.
+With <strong>SRT Relay</strong> selected the pipeline also shows the SRT Relay card, which keeps a compact summary visible; select the <strong>Detailed stats</strong>
+icon (bars) beside the card&#39;s title to open a dialog sized to its input, per-leg, output and graph content, within the
+screen width. It refreshes live statistics with the dashboard&#39;s regular poll.</p>
+<p>The card&#39;s <strong>L / R / D</strong> figures (packets lost, retransmitted and dropped) count the
+<strong>last 10 minutes</strong>, not the whole session; the label shows the window (less than 10 min
+for the first minutes after a link connects), and hovering a figure names the
+counts. A link with nothing lately is dimmed so a burst stands out. A bonded input as a whole shows
+only <strong>Drop</strong>, the packets still missing after the legs backed each other up; that is
+what actually damages the stream, so it turns amber when it is above zero. A drop on one
+leg does not: the other leg usually delivered the packet. The Overview&#39;s SRT Relay table
+uses the same figures; the dialog&#39;s detailed rows (the totals since the stream connected) and graphs are cumulative.</p>
+<p>When the relay has recorded an error, a <strong>History</strong> button (clock icon, as on an
+output) appears beside the card&#39;s title and opens it. The relay keeps only its latest
+error per stream, and keeps it across reconnects, so the card shows the error line
+and turns the button red only while it is unresolved: the stream is up and has not
+forwarded a packet since the error. Once packets flow again, or the stream is idle,
+the line goes away and the error stays in History.</p>
+<p>Because the relay forgets that error when the session ends, each new one is also
+written to the pipeline log as &quot;Relay error: …&quot;. A stream that keeps failing the same
+way (a rejected key retries every few seconds) stays one line, updated to &quot;(seen N
+times over 3 min)&quot; instead of filling the log; N counts the errors a 5 s poll saw, so
+it can be lower than the relay&#39;s own retries.</p>
 <p>Whatever the protocol, the pipeline&#39;s log records the encoder&#39;s address each time a
 publisher connects (<code>Publisher: rtmp from &lt;ip&gt;</code>), which is how you tell afterwards
 which encoder was on a key. A bonded input logs its legs instead.</p>
@@ -185,6 +221,13 @@ stream. Preview either one.</p>
   -c:a aac -b:a 128k \
   -f mpegts &#39;srt://localhost:10080?streamid=#!::r=live/&lt;stream-key&gt;,m=publish&amp;passphrase=&lt;passphrase&gt;&amp;pbkeylen=16&#39;
 </code></pre>
+<p>For a normal single-link SRT connection through the relay, use port 10081 without
+<code>grouptype=broadcast</code>:</p>
+<pre><code class="language-bash">ffmpeg -re -stream_loop -1 -i video.mp4 \
+  -c:v libx264 -preset veryfast -b:v 2500k -x264-params &quot;repeat-headers=1&quot; \
+  -c:a aac -b:a 128k \
+  -f mpegts &#39;srt://localhost:10081?mode=caller&amp;streamid=#!::r=live/&lt;stream-key&gt;,m=publish&amp;passphrase=&lt;passphrase&gt;&amp;pbkeylen=16&#39;
+</code></pre>
 <p>SRT with multiple audio tracks (for example one per language):</p>
 <pre><code class="language-bash">ffmpeg -re -stream_loop -1 -i video.mp4 \
   -map 0 \
@@ -196,8 +239,12 @@ stream. Preview either one.</p>
 </code></pre>
 <h2 id="checking-the-input">Checking the input</h2>
 <p>Once a publisher connects, the pipeline turns live and the dashboard shows the
-input&#39;s codec, resolution, frame rate, bitrate and audio tracks (from <code>ffprobe</code>).
-<strong>Preview</strong> plays the input in the dashboard.</p>
+input&#39;s codec, resolution, frame rate, bitrate and audio tracks (from <code>ffprobe</code>),
+and how far apart its keyframes are (<strong>Keyframes</strong>, measured over 12 s of video about
+a minute after the publisher connects; &quot;1 in 12 s&quot; means a single keyframe in that time). YouTube needs a keyframe at least every 4 s
+and recommends 2 s; with a longer interval the pipeline gets a warning alert, and a
+preview starts late. Set the encoder&#39;s keyframe interval to 2 s (the commands above
+do). <strong>Preview</strong> plays the input in the dashboard.</p>
 <h3 id="preview">Preview</h3>
 <p>The preview is an HLS stream made by the server&#39;s FFmpeg. The input&#39;s video is
 copied unchanged, and only the audio is re-encoded to AAC.</p>

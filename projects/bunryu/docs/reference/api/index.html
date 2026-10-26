@@ -120,7 +120,7 @@ JSON, <code>{ &quot;error&quot;: &quot;…&quot; }</code>; an unexpected failure
 <tr>
 <td>GET</td>
 <td><code>/api/health</code></td>
-<td>Live input/output status snapshot (refreshed every 5s). An output has <code>warningReason</code> and <code>warningSinceMs</code> (when that warning began), and <code>nextRetryAtMs</code>, when its pending retry after a failure is due (else <code>null</code>); each pipeline alert has <code>sinceMs</code>, the time its current episode started, which stays the same while the alert lasts. An alert is one episode until it has been absent for six polls (~30 s). <code>hostAlerts</code> lists the open host resource alerts (<code>cpu</code>, <code>memory</code>, <code>disk</code>)</td>
+<td>Live input/output status snapshot (refreshed every 5s). An output has <code>warningReason</code> and <code>warningSinceMs</code> (when that warning began), and <code>nextRetryAtMs</code>, when its pending retry after a failure is due (else <code>null</code>); each pipeline alert has <code>sinceMs</code>, the time its current episode started, which stays the same while the alert lasts. An alert is one episode until it has been absent for six polls (~30 s). <code>pipelines.&lt;id&gt;.input.keyframes</code> is the keyframe check of the current publisher, <code>{ windowSec, spanSec, keyframes, meanGapSec, maxGapSec, checkedAt }</code> (<code>null</code> until it has run, or if it failed; <code>meanGapSec</code> is <code>null</code> below two keyframes), and the <code>input-keyframe-interval</code> alert is raised from it. <code>hostAlerts</code> lists the open host resource alerts (<code>cpu</code>, <code>memory</code>, <code>disk</code>). <code>srtBonding.input</code>, each of its <code>legs</code> and <code>srtBonding.output</code> have <code>recent</code>: <code>{ spanMs, packets, loss, retrans, drop }</code>, how much those cumulative counters grew over the last 10 minutes (<code>spanMs</code> is shorter just after connecting; a counter the relay does not report is <code>null</code>), or <code>null</code> until two polls exist</td>
 </tr>
 <tr>
 <td>GET</td>
@@ -245,17 +245,12 @@ JSON, <code>{ &quot;error&quot;: &quot;…&quot; }</code>; an unexpected failure
 <tr>
 <td>POST</td>
 <td><code>/api/pipelines/:id/outputs/:outId/restart</code></td>
-<td>Stop a running output and start it again; works for any output including a shared encode, whose outputs reconnect with it. Returns <code>{ ok: true }</code>, or 409 when the output is not running, is a translation output, or was restarted less than 5 s ago. Recorded in its Error History as &quot;Restarted by user&quot; (not a failure)</td>
+<td>Stop a running output and start it again; works for any output including a shared encode, whose outputs reconnect with it. Returns <code>{ ok: true }</code>, or 409 when the output is not running, is a translation output, or was restarted less than 5 s ago. Recorded in its History as &quot;Restarted by user&quot; (not a failure)</td>
 </tr>
 <tr>
 <td>GET</td>
 <td><code>/api/pipelines/:id/outputs/:outId/errors</code></td>
-<td>Output Error History (also for a shared encode)</td>
-</tr>
-<tr>
-<td>DELETE</td>
-<td><code>/api/pipelines/:id/outputs/:outId/errors</code></td>
-<td>Clear the Error History (also for a shared encode)</td>
+<td>Output History, oldest first (also for a shared encode). A repeated crash is one record with <code>count</code> and <code>lastTs</code>; <code>recoveredTs</code> is set once the output ran steadily again</td>
 </tr>
 <tr>
 <td>POST</td>
@@ -337,8 +332,8 @@ starts and stops it with the outputs that use it (it stops 15 s after the last
 one). The row is created within about a second of the second output being added,
 and removed once fewer than two are left and no output is still reading it.</li>
 <li><strong>You cannot change it.</strong> Update, delete, start and stop of a shared encode
-return <code>409 { &quot;error&quot;: &quot;Shared encodes are managed automatically&quot; }</code>. Its Error
-History can be read and cleared, and it can be restarted (<code>/restart</code>).</li>
+return <code>409 { &quot;error&quot;: &quot;Shared encodes are managed automatically&quot; }</code>. Its History
+can be read, and it can be restarted (<code>/restart</code>).</li>
 <li><strong>You cannot create outputs in the <code>internal</code> app.</strong> Create, bulk create and
 update refuse a destination that resolves to this host with a path under
 <code>/internal/</code> (<code>400</code>, &quot;the internal app is reserved for shared encodes&quot;).</li>
