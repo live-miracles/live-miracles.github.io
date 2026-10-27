@@ -4,14 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Live Gallery — Live Miracles</title>
-    <meta name="description" content="Desktop app for monitoring many live sources at once: YouTube, JW Player, Facebook, HLS, custom URLs and screen shares." />
+    <meta name="description" content="Multiviewer for monitoring many live streams at once: YouTube, JW Player, HLS, custom URLs and screen shares, with audio meters, solo/rotate audio and alerts for frozen video, silence and phase problems." />
     <link rel="canonical" href="https://live-miracles.github.io/projects/live-gallery/" />
     <meta property="og:site_name" content="Live Miracles" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Live Gallery — Live Miracles" />
-    <meta property="og:description" content="Desktop app for monitoring many live sources at once: YouTube, JW Player, Facebook, HLS, custom URLs and screen shares." />
+    <meta property="og:description" content="Multiviewer for monitoring many live streams at once: YouTube, JW Player, HLS, custom URLs and screen shares, with audio meters, solo/rotate audio and alerts for frozen video, silence and phase problems." />
     <meta property="og:url" content="https://live-miracles.github.io/projects/live-gallery/" />
-    <meta property="og:image" content="https://github.com/user-attachments/assets/61a912f2-2a03-4cb1-afeb-b618fc6ad01b" />
+    <meta property="og:image" content="https://raw.githubusercontent.com/live-miracles/live-gallery/master/frontend/logo.png" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="/assets/logo.png" type="image/png" />
     <link rel="alternate" type="application/rss+xml" title="Live Miracles blog" href="/blog/feed.xml" />
@@ -52,31 +52,70 @@
               <img src="/assets/live-gallery-logo.png" alt="" class="rounded-box size-14  shrink-0 object-contain" />
               <div class="min-w-0">
                 <h1 class="text-3xl font-bold sm:text-4xl">Live Gallery</h1>
-                <p class="text-base-content/78 mt-2 text-lg leading-7">Desktop app for monitoring many live sources at once: YouTube, JW Player, Facebook, HLS, custom URLs and screen shares.</p>
+                <p class="text-base-content/78 mt-2 text-lg leading-7">Multiviewer for monitoring many live streams at once: YouTube, JW Player, HLS, custom URLs and screen shares, with audio meters, solo/rotate audio and alerts for frozen video, silence and phase problems.</p>
               </div>
             </div>
             <div class="mt-5 flex flex-wrap items-center justify-between gap-4">
               <div class="flex flex-wrap gap-2"><a class="btn btn-sm btn-primary gap-2" href="https://github.com/live-miracles/live-gallery"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.79 23.39c.6.11.82-.26.82-.58v-2.02c-3.34.73-4.04-1.42-4.04-1.42-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.57A12 12 0 0 0 12 .5Z"/></svg><span>GitHub</span></a><a class="btn btn-sm btn-accent gap-2" href="https://github.com/live-miracles/live-gallery/releases"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg><span>Download</span></a></div>
-              <div class="text-base-content/58 flex flex-wrap gap-4 text-sm"><span class="inline-flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 2.5 2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.31l-5.8 3.05 1.11-6.46-4.7-4.58 6.49-.94L12 2.5Z"/></svg>1</span><span class="inline-flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="6" cy="4" r="2"/><circle cx="18" cy="4" r="2"/><circle cx="12" cy="20" r="2"/><path d="M6 6v3a3 3 0 0 0 3 3h3m6-6v3a3 3 0 0 1-3 3h-3m0 0v6"/></svg>0</span><span>TypeScript</span><span>Updated 2026-10-16</span></div>
+              <div class="text-base-content/58 flex flex-wrap gap-4 text-sm"><span class="inline-flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 2.5 2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.31l-5.8 3.05 1.11-6.46-4.7-4.58 6.49-.94L12 2.5Z"/></svg>1</span><span class="inline-flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="6" cy="4" r="2"/><circle cx="18" cy="4" r="2"/><circle cx="12" cy="20" r="2"/><path d="M6 6v3a3 3 0 0 0 3 3h3m6-6v3a3 3 0 0 1-3 3h-3m0 0v6"/></svg>0</span><span>TypeScript</span><span>MIT license</span><span>Updated 2026-10-27</span></div>
             </div>
-            <div class="mt-4 flex flex-wrap gap-2"><span class="badge badge-outline badge-sm">daisyui</span><span class="badge badge-outline badge-sm">electron</span><span class="badge badge-outline badge-sm">livestream</span><span class="badge badge-outline badge-sm">youtube</span><span class="badge badge-outline badge-sm">zoom</span></div>
+            <div class="mt-4 flex flex-wrap gap-2"><span class="badge badge-outline badge-sm">audio-meter</span><span class="badge badge-outline badge-sm">broadcast</span><span class="badge badge-outline badge-sm">cross-platform</span><span class="badge badge-outline badge-sm">daisyui</span><span class="badge badge-outline badge-sm">desktop-app</span><span class="badge badge-outline badge-sm">electron</span><span class="badge badge-outline badge-sm">hls</span><span class="badge badge-outline badge-sm">jwplayer</span><span class="badge badge-outline badge-sm">live-events</span><span class="badge badge-outline badge-sm">live-streaming</span><span class="badge badge-outline badge-sm">livestream</span><span class="badge badge-outline badge-sm">monitoring</span><span class="badge badge-outline badge-sm">multiviewer</span><span class="badge badge-outline badge-sm">screen-share</span><span class="badge badge-outline badge-sm">stream-monitoring</span><span class="badge badge-outline badge-sm">tailwindcss</span><span class="badge badge-outline badge-sm">typescript</span><span class="badge badge-outline badge-sm">youtube</span><span class="badge badge-outline badge-sm">youtube-live</span><span class="badge badge-outline badge-sm">zoom</span></div>
             
             <div class="mt-7"><details class="rounded-box border-base-content/10 bg-base-300/46 text-base-content/68 mb-7 border p-4 text-sm backdrop-blur">
               <summary class="text-base-content/80 cursor-pointer font-semibold">On this page</summary>
               <ol class="mt-3 space-y-2">
-                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#download">Download</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#features">Features</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#development">Development</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#packaging">Packaging</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#publishing">Publishing</a></li>
+                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#features">Features</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#why-the-audio-checks-matter">Why the audio checks matter</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#monitor-zoom-or-any-desktop-app">Monitor Zoom or any desktop app</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#download">Download</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#quick-start">Quick start</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#get-help-and-give-feedback">Get help and give feedback</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#contributing">Contributing</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#development">Development</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#packaging">Packaging</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#publishing">Publishing</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#license">License</a></li>
               </ol>
-            </details><article class="readme min-w-0"><p>Live Gallery is an Electron app for monitoring multiple live sources at once:
-YouTube, privacy-enhanced YouTube embeds, JW Player, VdoCipher, Facebook embeds,
-custom URLs, HLS links, and screen shares.</p>
-<img width="1372" height="380" alt="image" src="https://github.com/user-attachments/assets/61a912f2-2a03-4cb1-afeb-b618fc6ad01b" />
+            </details><article class="readme min-w-0"><img src="https://raw.githubusercontent.com/live-miracles/live-gallery/master/frontend/logo.png" alt="Live Gallery logo" width="96" align="right" />
 
-<h2 id="download">Download</h2>
-<p>Live Gallery is available for Windows, macOS, and Linux. You do not need to
-install Node.js or download the source code to use it.</p>
+<p><em>Open-source multiviewer for live streams: watch many at once, hear the one that matters, and get alerted when one breaks.</em></p>
+<p><a href="https://github.com/live-miracles/live-gallery/actions/workflows/ci.yml"><img src="https://github.com/live-miracles/live-gallery/actions/workflows/ci.yml/badge.svg" alt="CI" loading="lazy" /></a>
+<a href="https://github.com/live-miracles/live-gallery/releases/latest"><img src="https://img.shields.io/github/v/release/live-miracles/live-gallery" alt="Latest release" loading="lazy" /></a>
+<a href="https://github.com/live-miracles/live-gallery/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License: MIT" loading="lazy" /></a>
+<a href="https://live-miracles.github.io/projects/live-gallery/"><img src="https://img.shields.io/badge/website-live--miracles.github.io-blue.svg" alt="Website" loading="lazy" /></a></p>
+<p><strong>Live Gallery is a desktop app for monitoring many live streams in one window.</strong> Put YouTube, JW Player, HLS and other players side by side, see a live audio meter on every box, solo or rotate the audio between them, and let the app warn you about frozen video, silence, clipping and broken stereo before your viewers do.</p>
+<p>It was built by a team that streams large live events to viewers around the world, where one bad feed among twenty is easy to miss. Windows, macOS and Linux installers are free, and nothing needs to be installed besides the app.</p>
+<table>
+<thead>
+<tr>
+<th><a href="#download">Download</a></th>
+<th><a href="https://github.com/live-miracles/live-gallery/discussions">Get help</a></th>
+<th><a href="https://github.com/live-miracles/live-gallery/issues/new/choose">Report a bug</a></th>
+</tr>
+</thead>
+</table>
+<img width="1372" height="380" alt="Live Gallery showing several live streams with audio meters" src="https://github.com/user-attachments/assets/61a912f2-2a03-4cb1-afeb-b618fc6ad01b" />
+
+<p><strong>Who it&#39;s for:</strong> stream operators, AV and church-tech teams, newsrooms and anyone who has to keep an eye on several live feeds at once, such as the main stream, its backups and each language channel. <strong>Who it isn&#39;t for:</strong> recording or restreaming (it only watches), or a hosted service (it runs on your computer).</p>
+<h2 id="features">Features</h2>
+<ul>
+<li><strong>Many sources, one window.</strong> Add YouTube (including privacy-enhanced <code>youtube-nocookie</code>), JW Player, VdoCipher, HLS (<code>.m3u8</code>) and other embeddable pages as custom URLs, local files, and screen shares with a chosen audio input, which also covers Zoom and any other desktop app. Drag boxes to reorder them.</li>
+<li><strong>Audio meters on every box.</strong> Separate left and right levels, so you can see a one-sided or silent feed at a glance.</li>
+<li><strong>Mute, solo and rotate.</strong> Hear one stream at a time, or turn on rotation to move the audio across boxes you pick (for example <code>1 3 5-8</code>) every few seconds.</li>
+<li><strong>Alerts that catch real problems.</strong> Every alert is switchable, has a documented threshold, and keeps a five-minute history:<ul>
+<li>Video: buffering, repeated buffering, frozen picture.</li>
+<li>Audio: silence, dropouts, clipping, one channel missing, left/right level imbalance, and phase mismatch (left and right cancelling out when played in mono).</li>
+<li>An optional alert beep with its own volume control.</li>
+</ul>
+</li>
+<li><strong>Player commands.</strong> Jump YouTube players to LIVE or to the lowest fixed quality in one click.</li>
+<li><strong>Presets.</strong> Save and load layouts, export them as JSON, or paste a list of YouTube links to build a wall in seconds.</li>
+<li><strong>Built for long shifts.</strong> Box zoom up to 1000%, an interface size setting for accessibility, a stereo/mono output switch, and the app reopens on the same display, position and full-screen state.</li>
+</ul>
+<h2 id="why-the-audio-checks-matter">Why the audio checks matter</h2>
+<p>During one live event, a suspected faulty audio embedder made the left and right channels cancel each other. Both meters were moving and the left channel sounded fine, yet more than 20 streams had broken audio for viewers. The phase mismatch and channel alerts exist because of that incident. Read the story: <a href="https://live-miracles.github.io/blog/one-faulty-embedder-20-streams/">One faulty audio embedder disrupted 20 live streams</a>.</p>
+<h2 id="monitor-zoom-or-any-desktop-app">Monitor Zoom or any desktop app</h2>
+<p>Anything you can see on your screen can be a box, so Live Gallery also works with Zoom meetings, webinars and other apps that have no embeddable player. You need a virtual audio cable (for example <a href="https://vb-audio.com/Cable/">VB-Cable</a> on Windows or <a href="https://existential.audio/blackhole/">BlackHole</a> on macOS) so Live Gallery can listen to the meeting audio:</p>
 <ol>
-<li>Open the <a href="https://github.com/live-miracles/live-gallery/releases">Live Gallery Releases page</a>.</li>
-<li>Open the newest release at the top of the page.</li>
+<li>In Zoom, open <strong>Settings → Audio</strong> and set the <strong>Speaker</strong> to the virtual audio cable.</li>
+<li>In Live Gallery, add a box, choose <strong>Screen Share</strong> and select the Zoom window.</li>
+<li>In the same box, choose the virtual cable as the audio input.</li>
+</ol>
+<p>The box then shows the Zoom video with live audio meters and alerts, like any other source. Because Zoom plays its sound only into the cable, you won&#39;t hear it on your own speakers unless you route the cable&#39;s audio to them.</p>
+<h2 id="download">Download</h2>
+<p>You do not need to install Node.js or download the source code to use it.</p>
+<ol>
+<li>Open the <a href="https://github.com/live-miracles/live-gallery/releases/latest">Live Gallery Releases page</a>.</li>
 <li>Under <strong>Assets</strong>, download the installer for your platform:<ul>
 <li>Windows: <code>windows-x64.exe</code></li>
 <li>macOS Intel: <code>macos-x64.dmg</code> (or <code>macos-x64.zip</code>)</li>
@@ -87,21 +126,24 @@ install Node.js or download the source code to use it.</p>
 </li>
 <li>Open the downloaded file and follow the installation steps.</li>
 </ol>
-<p>After installation, start Live Gallery from the Start menu or its desktop
-shortcut. If GitHub shows the release notes collapsed, click <strong>Assets</strong> to see
-the installer download.</p>
-<p>For support, please <a href="https://github.com/live-miracles/live-gallery/issues">open a GitHub issue</a>.</p>
-<h2 id="features">Features</h2>
+<p>The installers are not code-signed yet, so Windows SmartScreen or macOS Gatekeeper may warn you the first time. On Windows choose <strong>More info → Run anyway</strong>. On macOS, right-click the app and choose <strong>Open</strong>.</p>
+<h2 id="quick-start">Quick start</h2>
+<ol>
+<li>Click <strong>+</strong> to add a box, pick the source type, paste a URL or ID and save.</li>
+<li>Repeat for each stream, or use <strong>Preset → Import Preset (Clipboard)</strong> with one YouTube link per line.</li>
+<li>Use the speaker button on a box to solo it, or enable <strong>Rotate audio</strong> to cycle through boxes.</li>
+<li>Open <strong>Settings</strong> to choose which alerts are on. The Alerts button shows active alerts and the last five minutes of history.</li>
+</ol>
+<p>The in-app <strong>Docs</strong> button explains boxes, presets and rotation.</p>
+<h2 id="get-help-and-give-feedback">Get help and give feedback</h2>
 <ul>
-<li>Monitor several live players in one desktop window.</li>
-<li>Add YouTube, YouTube no-cookie, JW Player, VdoCipher, HLS, custom URL,
-and screen-share boxes.</li>
-<li>Mute, solo, and rotate audio between boxes.</li>
-<li>Show audio levels for active streams.</li>
-<li>Send supported player commands, including YouTube LIVE and lowest fixed quality.</li>
-<li>Package and publish Windows, macOS, and Linux installers with Electron
-Builder.</li>
+<li><strong>Questions and ideas:</strong> <a href="https://github.com/live-miracles/live-gallery/discussions">GitHub Discussions</a>.</li>
+<li><strong>Bugs:</strong> <a href="https://github.com/live-miracles/live-gallery/issues/new/choose">open an issue</a> with your operating system, the Live Gallery version and the source type involved.</li>
+<li><strong>More projects from the team:</strong> <a href="https://live-miracles.github.io/">live-miracles.github.io</a> lists the rest of the open-source streaming tools we use, such as <a href="https://live-miracles.github.io/projects/bunryu/">Bunryu</a> for restreaming.</li>
 </ul>
+<p>If Live Gallery is useful to you, a star on GitHub helps other stream operators find it.</p>
+<h2 id="contributing">Contributing</h2>
+<p>Contributions are welcome, from typo fixes to new source types. See <a href="https://github.com/live-miracles/live-gallery/blob/master/CONTRIBUTING.md">CONTRIBUTING.md</a> for how to run the app from source and what a good pull request looks like.</p>
 <h2 id="development">Development</h2>
 <p>Install dependencies, build TypeScript/CSS, then start the Electron app in watch
 mode:</p>
@@ -128,6 +170,8 @@ git push origin master --tags
 </code></pre>
 <p>The tag push starts the release workflow, builds installers on Windows, macOS,
 and Linux, and publishes them to a GitHub release for that tag.</p>
+<h2 id="license">License</h2>
+<p><a href="https://github.com/live-miracles/live-gallery/blob/master/LICENSE">MIT</a> © Live Stream Miracles</p>
 </article></div>
           </section>
           <footer class="text-base-content/50 border-base-content/10 mt-auto border-t pt-6 pb-2 text-sm">
