@@ -78,7 +78,7 @@ const projects = [
         name: 'Live Gallery',
         category: 'monitoring',
         summary:
-            'Desktop app for monitoring many live sources at once: YouTube, JW Player, Facebook, HLS, custom URLs and screen shares.',
+            'Multiviewer for monitoring many live streams at once: YouTube, JW Player, HLS, custom URLs and screen shares, with audio meters, solo/rotate audio and alerts for frozen video, silence and phase problems.',
         icon: '/assets/live-gallery-logo.png',
         download: `https://github.com/${organization}/live-gallery/releases`,
     },
