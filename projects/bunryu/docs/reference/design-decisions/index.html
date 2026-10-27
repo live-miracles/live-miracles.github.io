@@ -11,7 +11,7 @@
     <meta property="og:title" content="Design decisions — Bunryu" />
     <meta property="og:description" content="Why Bunryu is built the way it is, and why some obvious alternatives are not used. Each entry gives the decision, the reasons, the evidence behind them, and what would make it worth revisiting. Most o" />
     <meta property="og:url" content="https://live-miracles.github.io/projects/bunryu/docs/reference/design-decisions/" />
-    <meta property="og:image" content="https://raw.githubusercontent.com/live-miracles/bunryu/master/public/logo.png" />
+    <meta property="og:image" content="https://live-miracles.github.io/assets/social/bunryu.png" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="/assets/logo.png" type="image/png" />
     <link rel="alternate" type="application/rss+xml" title="Live Miracles blog" href="/blog/feed.xml" />
@@ -373,7 +373,7 @@ itself.</p>
 <p><strong>Decision:</strong> the SRT Relay card and the Overview table show loss / retransmit / drop
 as growth over the last 10 minutes (<code>recent</code> in <code>/api/health</code>, computed from the 5 s
 poll&#39;s cumulative counters). The totals since connect stay in the
-details dialog. A bonded group shows only its Drop, marked when above zero; per-leg
+details dialog. A bonded group fills in only its Drop (L and R show a dash), marked when above zero; per-leg
 drops are not marked.</p>
 <p><strong>Why:</strong> the relay&#39;s counters only grow, so on a long event they say nothing about the
 link now. The bonded stream on the production VM (2026-10-25, two legs, about 9 Mbit/s,
@@ -1308,6 +1308,28 @@ shared encode that delivered nothing), which the existing watchdogs and alerts
 already catch. A baseline adds three tuned thresholds (warm-up, deviation, run
 length) with no incident behind them.</li>
 </ul>
+<p>Its rebuilt dashboard (a fleet console for thousands of outputs, with roles, tours and a
+command palette) mostly does not fit a 50-input, 10-viewer tool. Three small things did,
+adopted on 2026-10-26:</p>
+<ul>
+<li><strong>Secondary text meets WCAG AA contrast.</strong> Measured on the pipeline page, 15 of 73
+texts were below 4.5:1 (labels and timestamps dimmed with <code>opacity-60</code> or <code>opacity-40</code>
+were at 2.6 to 4.0, daisyUI&#39;s table headers at 4.1, inactive tabs at 3.3). One
+<code>text-muted</code> class (82 %) now carries all secondary text, and an audit of the
+pipeline and Overview pages finds none below AA (66 and 140 texts). Dimming that
+means &quot;inactive&quot; (a quiet SRT figure, a disabled button) stays on the opacity
+utilities.</li>
+<li><strong>Ages instead of clock times</strong> (&quot;probed 2 min ago&quot;, &quot;since 3 min ago&quot;; the exact
+time on hover), because &quot;probed 14:07&quot; does not say whether it is stale. They count
+from the health snapshot&#39;s own time, so a skewed browser clock does not change them.
+History keeps full dates and times for incident review.</li>
+<li><strong>Inline validation.</strong> The output editor&#39;s port, latency, passphrase length and
+custom RTMP URL carry native constraints and turn red once edited and invalid
+(<code>:user-invalid</code>), instead of only after Save. The Save check stays the authority.</li>
+</ul>
+<p>Not adopted from the dashboard: light theme and density switch, command palette, tours
+and guide pages, roles, per-group charts, and a last-minute ingest-rate sparkline per
+pipeline (the low-bitrate warning already covers the serious case).</p>
 <p><strong>Revisit when:</strong> someone wants external alerting (add <code>/metrics</code>, loopback-only),
 or an incident shows outputs connected but not keeping up (add the delivery
 ratio; <code>outputSockets.ts</code> already reads <code>ss</code>), or an incident shows a destination

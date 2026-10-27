@@ -11,7 +11,7 @@
     <meta property="og:title" content="Introduction — Bunryu" />
     <meta property="og:description" content="Bunryu is a self-hosted restreaming server for long live events. It takes live inputs over RTMP, SRT and bonded SRT, manages each one as a pipeline, and forwards every pipeline to any number of RTMP, " />
     <meta property="og:url" content="https://live-miracles.github.io/projects/bunryu/docs/getting-started/introduction/" />
-    <meta property="og:image" content="https://raw.githubusercontent.com/live-miracles/bunryu/master/public/logo.png" />
+    <meta property="og:image" content="https://live-miracles.github.io/assets/social/bunryu.png" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="/assets/logo.png" type="image/png" />
     <link rel="alternate" type="application/rss+xml" title="Live Miracles blog" href="/blog/feed.xml" />
@@ -196,9 +196,10 @@ all clients, so extra browser tabs do not multiply SRS or ffprobe work, and
 config changes from another session are picked up through the health poll. About
 10 simultaneous clients is fine; more is not tuned or tested.</p>
 <p><strong>Dashboard on a phone.</strong> The dashboard is designed for a desktop browser. Below
-1024 px wide the columns stack into one and wide tables scroll sideways. That is
-enough to check state or start and stop an output from a phone, not to edit
-(drag-to-reorder does not work on touch screens).</p>
+1280 px wide the pipeline&#39;s panels (details and outputs) share one scrolling column
+next to the pipeline list, and below 768 px everything stacks into a single column
+and wide tables scroll sideways. That is enough to check state or start and stop an
+output from a phone, not to edit (drag-to-reorder does not work on touch screens).</p>
 <h2 id="is-it-a-good-fit">Is it a good fit?</h2>
 <p>Good fit:</p>
 <ul>

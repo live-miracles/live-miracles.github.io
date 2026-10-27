@@ -11,7 +11,7 @@
     <meta property="og:title" content="REST API — Bunryu" />
     <meta property="og:description" content="All routes below sit behind the session-cookie auth middleware except /api/ready and /api/auth/login. HLS preview files under /hls use the same session cookie. SRS&#39;s on_publish/on_play hooks are not o" />
     <meta property="og:url" content="https://live-miracles.github.io/projects/bunryu/docs/reference/api/" />
-    <meta property="og:image" content="https://raw.githubusercontent.com/live-miracles/bunryu/master/public/logo.png" />
+    <meta property="og:image" content="https://live-miracles.github.io/assets/social/bunryu.png" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="/assets/logo.png" type="image/png" />
     <link rel="alternate" type="application/rss+xml" title="Live Miracles blog" href="/blog/feed.xml" />
@@ -130,7 +130,7 @@ JSON, <code>{ &quot;error&quot;: &quot;…&quot; }</code>; an unexpected failure
 <tr>
 <td>GET</td>
 <td><code>/api/version</code></td>
-<td>App, SRS, relay, FFmpeg and Node versions, git commit, OS, kernel and CPU model (cached after the first request)</td>
+<td>App, SRS, relay, FFmpeg and Node versions, git commit, OS, kernel and CPU model (cached after the first request), and the kernel&#39;s UDP buffer caps <code>rmemMaxBytes</code> / <code>wmemMaxBytes</code> (read on every request, <code>null</code> if unreadable)</td>
 </tr>
 <tr>
 <td>GET</td>

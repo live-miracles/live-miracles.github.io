@@ -11,7 +11,7 @@
     <meta property="og:title" content="Publishing to a pipeline — Bunryu" />
     <meta property="og:description" content="A pipeline is one live input. Creating a pipeline assigns it a stream key; the pipeline panel&#39;s Publish to this input card shows one input mode at a time (RTMP, SRT or SRT Relay), chosen with the butt" />
     <meta property="og:url" content="https://live-miracles.github.io/projects/bunryu/docs/usage/publishing/" />
-    <meta property="og:image" content="https://raw.githubusercontent.com/live-miracles/bunryu/master/public/logo.png" />
+    <meta property="og:image" content="https://live-miracles.github.io/assets/social/bunryu.png" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="/assets/logo.png" type="image/png" />
     <link rel="alternate" type="application/rss+xml" title="Live Miracles blog" href="/blog/feed.xml" />
@@ -158,14 +158,19 @@ The trade-off is visibility: SRS does not expose packet loss, retransmit or drop
 counters for an SRT publisher, so a stream sent straight to 10080 has no link
 statistics or loss alerts in the dashboard (its input card says so). Through the
 relay you get them, so use the bonded port when you want to watch the link.
-With <strong>SRT Relay</strong> selected the pipeline also shows the SRT Relay card, which keeps a compact summary visible; select the <strong>Detailed stats</strong>
-icon (bars) beside the card&#39;s title to open a dialog sized to its input, per-leg, output and graph content, within the
-screen width. It refreshes live statistics with the dashboard&#39;s regular poll.</p>
+While an encoder is publishing through the relay, the pipeline shows the SRT Relay card
+under the input&#39;s video and audio details, whichever Publish mode is selected. It keeps a compact summary
+visible; select the <strong>Detailed stats</strong> icon (bars) in the card&#39;s top right corner to open a dialog sized to its
+input, per-leg, output and graph content, within the screen width. It refreshes live statistics with the dashboard&#39;s regular poll.
+At the top of the dialog each leg has its own loss and drop charts, each with its own value axis, so a
+leg with far larger counts does not flatten the others. The axis spans the counts in the
+window, not zero up, so a new drop stands out even after hours of accumulated ones. A leg&#39;s two
+charts sit side by side when the dialog is wide enough.</p>
 <p>The card&#39;s <strong>L / R / D</strong> figures (packets lost, retransmitted and dropped) count the
 <strong>last 10 minutes</strong>, not the whole session; the label shows the window (less than 10 min
 for the first minutes after a link connects), and hovering a figure names the
-counts. A link with nothing lately is dimmed so a burst stands out. A bonded input as a whole shows
-only <strong>Drop</strong>, the packets still missing after the legs backed each other up; that is
+counts. A link with nothing lately is dimmed so a burst stands out. A bonded input as a whole fills in
+only <strong>D</strong> (Drop; L and R show a dash), the packets still missing after the legs backed each other up; that is
 what actually damages the stream, so it turns amber when it is above zero. A drop on one
 leg does not: the other leg usually delivered the packet. The Overview&#39;s SRT Relay table
 uses the same figures; the dialog&#39;s detailed rows (the totals since the stream connected) and graphs are cumulative.</p>

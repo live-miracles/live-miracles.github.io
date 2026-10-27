@@ -11,7 +11,7 @@
     <meta property="og:title" content="Reliability — Bunryu" />
     <meta property="og:description" content="Bunryu is designed to keep running through long live events: failures are isolated to one output, recovered automatically where it is safe, and recorded so they can be explained afterwards. This page " />
     <meta property="og:url" content="https://live-miracles.github.io/projects/bunryu/docs/operations/reliability/" />
-    <meta property="og:image" content="https://raw.githubusercontent.com/live-miracles/bunryu/master/public/logo.png" />
+    <meta property="og:image" content="https://live-miracles.github.io/assets/social/bunryu.png" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="/assets/logo.png" type="image/png" />
     <link rel="alternate" type="application/rss+xml" title="Live Miracles blog" href="/blog/feed.xml" />
@@ -343,7 +343,7 @@ shows &quot;Output is running at 0.62x realtime and falling behind live&quot;. O
 clears it. It is a warning only: nothing is restarted, and it is recorded like the
 other card warnings (an <code>ffmpeg-warning-started</code> / <code>ffmpeg-warning-ended</code> pair of
 diagnostics events with <code>kind: falling-behind</code>, and a History record when it
-ends). The card shows when the warning began (&quot;since 09:18&quot;). The last finished
+ends). The card shows how long ago the warning began (&quot;since 3 min ago&quot;). The last finished
 window&#39;s speed is also in the health data (<code>speed</code>) and on the card&#39;s badge when it is
 below 0.95x or above 1.05x; the first window after a start is not reported, because
 FFmpeg reads its probe data faster than realtime and it would read high on every start.</p>

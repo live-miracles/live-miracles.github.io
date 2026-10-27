@@ -11,7 +11,7 @@
     <meta property="og:title" content="Configuration — Bunryu" />
     <meta property="og:description" content="The app reads runtime settings from bunryu.json. A dev checkout reads the one in the app root; the native install keeps it at /etc/bunryu/bunryu.json next to srs.conf and goryu.json (outside the git c" />
     <meta property="og:url" content="https://live-miracles.github.io/projects/bunryu/docs/operations/configuration/" />
-    <meta property="og:image" content="https://raw.githubusercontent.com/live-miracles/bunryu/master/public/logo.png" />
+    <meta property="og:image" content="https://live-miracles.github.io/assets/social/bunryu.png" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="/assets/logo.png" type="image/png" />
     <link rel="alternate" type="application/rss+xml" title="Live Miracles blog" href="/blog/feed.xml" />
@@ -259,7 +259,7 @@ destination), it is replaced by <code>stderrTailSameAsPrevious: true</code>.</li
 <li><strong>Pipeline alerts:</strong> <code>pipeline-alert-started</code> and <code>pipeline-alert-ended</code>
 (duration, number of polls it was active, last message). An alert absent for
 six polls (~30 s) ends its episode, so a flickering condition is one episode. The
-dashboard shows the episode&#39;s start (&quot;since 09:18&quot;) next to the alert.</li>
+dashboard shows how long ago the episode started (&quot;since 3 min ago&quot;) next to the alert.</li>
 <li><strong>Publisher address:</strong> <code>publisher-source</code> when a publisher connects, with the
 encoder&#39;s address (<code>rtmp from &lt;ip&gt;</code>, <code>srt from &lt;ip&gt;</code>, <code>srt via relay from &lt;ip&gt;:&lt;port&gt;</code>);
 the pipeline log gets the same line. A bonded input has none: its legs are logged
@@ -293,7 +293,8 @@ persistent journald with a seven-day retention limit, 1 GB system journal cap,
 for a 12 MB UDP buffer per socket and the kernel caps the request at that
 ceiling; sockets that ask for nothing keep the default size. The services read it
 when they create their sockets, so a change needs a restart of SRS and goryu.
-The ceilings the control plane started under are in its <code>server-started</code> diagnostics event.
+The current ceilings are shown in Settings under Server information (UDP buffer cap), and the
+ones the control plane started under are in its <code>server-started</code> diagnostics event.
 The ingest sockets are the ones to check: <code>sudo ss -uanmp</code> shows each socket&#39;s
 buffer as <code>rb</code> (24576000 for SRS on 10080 and goryu on 10081) and its drops as
 <code>d</code>, and <code>nstat -az UdpRcvbufErrors</code> counts drops host-wide. In Docker the
