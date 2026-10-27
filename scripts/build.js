@@ -240,6 +240,14 @@ function renderMarkdown(markdown, project, repoPath, siteUrls) {
     return { html, toc, ogImage };
 }
 
+// The link-preview card of the home page (`home`) or of a project (its id) is
+// ui/assets/social/<name>.png, 1280x640. Without one, a project falls back to the
+// first screenshot of its README.
+function socialImage(name) {
+    const file = path.join(root, 'ui', 'assets', 'social', `${name}.png`);
+    return fs.existsSync(file) ? `${siteUrl}/assets/social/${name}.png` : undefined;
+}
+
 function projectUrl(project) {
     return `/projects/${project.id}/`;
 }
@@ -530,6 +538,7 @@ function homePage(data, posts) {
         title: `${siteName} — open tools for live production and streaming`,
         description: siteDescription,
         canonicalPath: '/',
+        ogImage: socialImage('home'),
         activeId: null,
         body,
     });
@@ -665,7 +674,7 @@ function projectPage({ project, repo, readme, docs }) {
         title: `${project.name} — ${siteName}`,
         description: project.summary,
         canonicalPath: projectUrl(project),
-        ogImage: readme?.ogImage,
+        ogImage: socialImage(project.id) || readme?.ogImage,
         activeId: project.id,
         body: projectFrame({
             project,
@@ -700,7 +709,7 @@ function docsIndexPage({ project, repo, readme, docs, docsIndex }) {
         title: `${project.name} documentation — ${siteName}`,
         description: `Documentation for ${project.name}: ${project.summary}`,
         canonicalPath: docsUrl(project),
-        ogImage: readme?.ogImage,
+        ogImage: socialImage(project.id) || readme?.ogImage,
         railByDefault: true,
         activeId: project.id,
         body: projectFrame({
@@ -728,7 +737,7 @@ function docPage({ project, repo, readme, docs }, doc, index) {
         title: `${doc.title} — ${project.name}`,
         description: doc.description || `${doc.title}: ${project.name} documentation.`,
         canonicalPath: doc.url,
-        ogImage: doc.rendered.ogImage || readme?.ogImage,
+        ogImage: doc.rendered.ogImage || socialImage(project.id) || readme?.ogImage,
         railByDefault: true,
         activeId: project.id,
         body: projectFrame({

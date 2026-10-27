@@ -54,6 +54,15 @@ README, stars, license and topics come from GitHub at build time. The publish
 workflow also runs daily, so README changes in a project repository show up on
 the site within a day.
 
+## Link-preview images
+
+The card shown when a page is shared is `ui/assets/social/<name>.png` (1280×640, the
+size GitHub's social preview also wants): `home.png` for the home page and
+`<project id>.png` for a project's page and its docs. A project without one uses
+the first screenshot in its README. The projects keep no copy: upload the same file
+under Settings → Social preview of the project's repository (GitHub offers no API
+for it).
+
 ## Development
 
 Install dependencies:
