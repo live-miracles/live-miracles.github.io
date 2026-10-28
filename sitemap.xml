@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://live-miracles.github.io/</loc><lastmod>2026-10-27</lastmod></url>
+  <url><loc>https://live-miracles.github.io/</loc><lastmod>2026-10-28</lastmod></url>
   <url><loc>https://live-miracles.github.io/blog/</loc><lastmod>2026-10-22</lastmod></url>
   <url><loc>https://live-miracles.github.io/blog/one-faulty-embedder-20-streams/</loc><lastmod>2026-10-22</lastmod></url>
   <url><loc>https://live-miracles.github.io/blog/srs-mediamtx-restreamer-reject-bonded-srt/</loc><lastmod>2026-10-22</lastmod></url>
@@ -51,6 +51,15 @@
   <url><loc>https://live-miracles.github.io/projects/vmix-master/docs/reference/audio-levels/</loc><lastmod>2026-10-27</lastmod></url>
   <url><loc>https://live-miracles.github.io/projects/folder-player/</loc><lastmod>2026-09-06</lastmod></url>
   <url><loc>https://live-miracles.github.io/projects/live-gallery/</loc><lastmod>2026-10-27</lastmod></url>
+  <url><loc>https://live-miracles.github.io/projects/live-gallery/docs/</loc><lastmod>2026-10-27</lastmod></url>
+  <url><loc>https://live-miracles.github.io/projects/live-gallery/docs/getting-started/quick-start/</loc><lastmod>2026-10-27</lastmod></url>
+  <url><loc>https://live-miracles.github.io/projects/live-gallery/docs/usage/boxes/</loc><lastmod>2026-10-27</lastmod></url>
+  <url><loc>https://live-miracles.github.io/projects/live-gallery/docs/usage/presets/</loc><lastmod>2026-10-27</lastmod></url>
+  <url><loc>https://live-miracles.github.io/projects/live-gallery/docs/usage/rotating-audio/</loc><lastmod>2026-10-27</lastmod></url>
+  <url><loc>https://live-miracles.github.io/projects/live-gallery/docs/usage/youtube-controls/</loc><lastmod>2026-10-27</lastmod></url>
+  <url><loc>https://live-miracles.github.io/projects/live-gallery/docs/usage/monitor-zoom/</loc><lastmod>2026-10-27</lastmod></url>
+  <url><loc>https://live-miracles.github.io/projects/live-gallery/docs/reference/alerts/</loc><lastmod>2026-10-27</lastmod></url>
+  <url><loc>https://live-miracles.github.io/projects/live-gallery/docs/reference/shortcuts/</loc><lastmod>2026-10-27</lastmod></url>
   <url><loc>https://live-miracles.github.io/projects/wake-up-support/</loc><lastmod>2026-09-14</lastmod></url>
   <url><loc>https://live-miracles.github.io/projects/key-vault/</loc><lastmod>2026-09-30</lastmod></url>
   <url><loc>https://live-miracles.github.io/projects/live-generator/</loc><lastmod>2026-03-16</lastmod></url>
