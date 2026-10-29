@@ -3,8 +3,9 @@
     themes: dim --default;
 }
 
-@source '../scripts/*.js';
+@source '../scripts/**/*.js';
 @source not '../dist';
+@source not '../dist.next-*';
 
 @layer base {
     html {

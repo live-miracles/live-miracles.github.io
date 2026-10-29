@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
-const { parseFrontMatter, loadPosts, blogImageUrl } = require('./blog');
+const { parseFrontMatter, loadPosts, blogImageUrl, renderFeed } = require('./blog');
 
 function post({ title = 'A title', date = '2026-01-02', draft = false, extra = '' } = {}) {
     return `---\ntitle: ${title}\ndate: ${date}\ntags: [one, two]\nsummary: A summary.\ndraft: ${draft}\n${extra}---\n\nBody.\n`;
@@ -97,4 +97,32 @@ test('blogImageUrl serves relative images from /blog/ and leaves other URLs alon
     assert.equal(blogImageUrl('./images/a.png'), '/blog/images/a.png');
     assert.equal(blogImageUrl('https://example.com/a.png'), 'https://example.com/a.png');
     assert.equal(blogImageUrl('/assets/logo.png'), '/assets/logo.png');
+});
+
+test('loadPosts renders each post: heading anchors, /blog/ images, links as written', () => {
+    const body =
+        '# Kept\n\n## Part one\n\n## Part one\n\n![shot](images/s.png "A shot") [x](docs/y.md)\n';
+    const dir = blogDir({
+        '2026-01-02-p.md': post().replace('Body.\n', body),
+    });
+    const [loaded] = loadPosts(dir);
+    assert.equal(loaded.url, '/blog/p/');
+    assert.match(loaded.html, /<h1 id="kept">Kept<\/h1>/);
+    assert.match(loaded.html, /<h2 id="part-one">/);
+    assert.match(loaded.html, /<h2 id="part-one-1">/);
+    assert.match(loaded.html, /<img src="\/blog\/images\/s\.png" alt="shot" title="A shot"/);
+    assert.match(loaded.html, /href="docs\/y\.md"/);
+});
+
+test('renderFeed lists posts with absolute links, RFC 822 dates and escaped text', () => {
+    const dir = blogDir({
+        '2026-01-02-one.md': post({ title: 'Fish & chips' }),
+        '2026-03-04-two.md': post({ date: '2026-03-04' }),
+    });
+    const feed = renderFeed(loadPosts(dir), { siteUrl: 'https://x.test', siteName: 'Site' });
+    assert.match(feed, /<title>Site blog<\/title>/);
+    assert.match(feed, /<title>Fish &amp; chips<\/title>/);
+    assert.match(feed, /<link>https:\/\/x\.test\/blog\/one\/<\/link>/);
+    assert.match(feed, /<pubDate>Wed, 04 Mar 2026 00:00:00 GMT<\/pubDate>/);
+    assert.ok(feed.indexOf('/blog/two/') < feed.indexOf('/blog/one/'));
 });

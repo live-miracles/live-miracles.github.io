@@ -68,3 +68,21 @@ test('ignores link-looking text in code spans and fenced blocks', () => {
     const result = check(dir);
     assert.equal(result.code, 0, result.out);
 });
+
+test('accepts a folder link without a trailing slash and checks an anchor on a root link', () => {
+    const ok = project({
+        'README.md': '# P\n\n## Install\n',
+        'docs/README.md': '# Docs\n[a](a.md)\n',
+        'docs/a.md': '# A\n\n[docs](../docs) [root](../#install)\n',
+    });
+    assert.equal(check(ok).code, 0);
+
+    const bad = project({
+        'README.md': '# P\n\n## Install\n',
+        'docs/README.md': '# Docs\n[a](a.md)\n',
+        'docs/a.md': '# A\n\n[root](../#nothing)\n',
+    });
+    const result = check(bad);
+    assert.equal(result.code, 1);
+    assert.match(result.out, /no matching heading in README\.md/);
+});

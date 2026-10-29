@@ -1,4 +1,5 @@
-// Renders the site into dist/: a home page listing every project, one static
+// Renders the site into dist/ (built aside and swapped in once complete, so a
+// failed build leaves the previous dist/ in place): a home page listing every project, one static
 // page per project at /projects/<id>/ built from its README on master, plus
 // sitemap.xml, robots.txt and 404.html. Pages are plain HTML (no client-side
 // rendering) so search engines and link previews see each project.
@@ -9,8 +10,8 @@
 // (/projects/<id>/docs/getting-started/docker/). Relative links between the
 // README and docs pages are rewritten to the site's URLs.
 //
-// GitHub data is fetched at build time. Set GITHUB_TOKEN to avoid the API's
-// unauthenticated rate limit. A project whose README or metadata cannot be
+// GitHub data is fetched at build time (see project-source.js). Set GITHUB_TOKEN
+// to avoid the API's unauthenticated rate limit. A project whose README or metadata cannot be
 // fetched still gets a page (summary and links) and the build logs a warning.
 // LOCAL_PROJECTS=<id>=<path>[,<id>=<path>] reads a project's README and docs
 // from a local checkout instead, to preview documentation before pushing it.
@@ -21,14 +22,14 @@
 // RSS feed at /blog/feed.xml (see blog.js); posts marked `draft: true` are left out
 // unless BLOG_DRAFTS=1 is set, to preview them locally.
 
-const crypto = require('node:crypto');
 const fs = require('node:fs');
 const path = require('node:path');
 const { execFileSync } = require('node:child_process');
-const { Marked } = require('marked');
 const { organization, categories, projects } = require('./projects');
-const { stripTags, githubSlug } = require('./markdown-text');
-const { loadPosts, blogImageUrl } = require('./blog');
+const { escapeHtml, stripTags } = require('./markdown-text');
+const { parseMarkdownPage, linkResolver, absoluteUrl } = require('./markdown-page');
+const { loadPosts, renderFeed, blogDescription } = require('./blog');
+const { createProjectSource, parseLocalProjects } = require('./project-source');
 
 const root = path.resolve(__dirname, '..');
 const dist = path.join(root, 'dist');
@@ -37,8 +38,14 @@ const siteName = 'Live Miracles';
 const siteDescription =
     'Open-source tools for live production teams: restreaming, SRT bonding, vMix control, stream monitoring and multilingual event workflows.';
 const branch = 'master';
-const fetchTimeoutMs = 15000;
-const cacheDir = process.env.BUILD_CACHE_DIR;
+const localProjects = parseLocalProjects(process.env.LOCAL_PROJECTS);
+const source = createProjectSource({
+    organization,
+    branch,
+    token: process.env.GITHUB_TOKEN,
+    localProjects,
+    cacheDir: process.env.BUILD_CACHE_DIR,
+});
 
 const iconClass = 'size-4 shrink-0';
 const icons = {
@@ -54,189 +61,15 @@ const icons = {
     blog: `<svg xmlns="http://www.w3.org/2000/svg" class="size-6 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 5h13a2 2 0 0 1 2 2v12H6a2 2 0 0 1-2-2V5Z"/><path d="M8 9h7M8 13h7M8 17h4"/></svg>`,
 };
 
-function escapeHtml(value) {
-    return String(value)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
-}
-
 const compact = new Intl.NumberFormat('en', { notation: 'compact', maximumFractionDigits: 1 });
-
-// Only successful responses are cached, so a failed fetch is retried next build.
-async function fetchWithRetry(url, options = {}) {
-    if (!cacheDir) return fetchUncached(url, options);
-    const file = path.join(cacheDir, crypto.createHash('sha256').update(url).digest('hex'));
-    if (fs.existsSync(file)) return new Response(fs.readFileSync(file));
-    const body = Buffer.from(await (await fetchUncached(url, options)).arrayBuffer());
-    fs.mkdirSync(cacheDir, { recursive: true });
-    fs.writeFileSync(file, body);
-    return new Response(body);
-}
-
-async function fetchUncached(url, options) {
-    let lastError;
-    for (let attempt = 1; attempt <= 2; attempt += 1) {
-        try {
-            const response = await fetch(url, {
-                ...options,
-                signal: AbortSignal.timeout(fetchTimeoutMs),
-            });
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-            return response;
-        } catch (error) {
-            lastError = error;
-        }
-    }
-    throw new Error(`${url}: ${lastError.message}`);
-}
-
-async function fetchRepo(id) {
-    const headers = { Accept: 'application/vnd.github+json' };
-    if (process.env.GITHUB_TOKEN) headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
-    const response = await fetchWithRetry(`https://api.github.com/repos/${organization}/${id}`, {
-        headers,
-    });
-    return response.json();
-}
-
-const localProjects = new Map(
-    (process.env.LOCAL_PROJECTS ?? '')
-        .split(',')
-        .filter(Boolean)
-        .map((entry) => entry.split('=')),
-);
-
-async function fetchFile(id, repoPath) {
-    const local = localProjects.get(id);
-    if (local) return fs.readFileSync(path.join(local, repoPath), 'utf8');
-    const response = await fetchWithRetry(
-        `https://raw.githubusercontent.com/${organization}/${id}/${branch}/${repoPath}`,
-    );
-    return response.text();
-}
-
-// Markdown files under docs/, as repository paths. Local checkouts list only
-// files git would track, so gitignored notes are never published.
-async function listDocs(id) {
-    let paths;
-    const local = localProjects.get(id);
-    if (local) {
-        paths = execFileSync(
-            'git',
-            ['-C', local, 'ls-files', '--cached', '--others', '--exclude-standard', 'docs'],
-            { encoding: 'utf8' },
-        ).split('\n');
-    } else {
-        const headers = { Accept: 'application/vnd.github+json' };
-        if (process.env.GITHUB_TOKEN) headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
-        const response = await fetchWithRetry(
-            `https://api.github.com/repos/${organization}/${id}/git/trees/${branch}?recursive=1`,
-            { headers },
-        );
-        paths = (await response.json()).tree.map((entry) => entry.path);
-    }
-    return paths
-        .filter((repoPath) => /^docs\/.+\.md$/.test(repoPath) && repoPath !== 'docs/README.md')
-        .sort((a, b) => a.localeCompare(b, 'en', { numeric: true }));
-}
-
-function stripOrder(name) {
-    return name.replace(/\.md$/, '').replace(/^\d+-/, '');
-}
-
-function humanize(name) {
-    const words = stripOrder(name).replace(/-/g, ' ');
-    return words.charAt(0).toUpperCase() + words.slice(1);
-}
-
-async function fetchDocs(project) {
-    const repoPaths = await listDocs(project.id);
-    const docs = [];
-    for (const repoPath of repoPaths) {
-        const parts = repoPath.split('/').slice(1);
-        const markdown = await fetchFile(project.id, repoPath);
-        const title = markdown.match(/^# (.+)$/m)?.[1].trim() ?? humanize(parts.at(-1));
-        docs.push({
-            repoPath,
-            markdown,
-            title: stripTags(title.replace(/`/g, '')),
-            section: parts.length > 1 ? humanize(parts[0]) : null,
-            url: `${projectUrl(project)}docs/${parts.map(stripOrder).join('/')}/`,
-        });
-    }
-    return docs;
-}
-
-function absoluteUrl(value, base) {
-    if (!value || /^([a-z][a-z0-9+.-]*:|#|\/\/)/i.test(value)) return value;
-    return new URL(value, base).href;
-}
-
-// Rewrites a link found in <repoPath>: README and docs pages go to their
-// pages on this site, other repository files to GitHub, anchors stay as they
-// are.
-function linkResolver(project, repoPath, siteUrls) {
-    const blobBase = `https://github.com/${organization}/${project.id}/blob/${branch}/`;
-    return (href) => {
-        if (!href || /^([a-z][a-z0-9+.-]*:|#|\/\/)/i.test(href)) return href;
-        const resolved = new URL(href, `https://repo.invalid/${repoPath}`);
-        const target = decodeURIComponent(resolved.pathname.slice(1)).replace(/\/$/, '/README.md');
-        const page = siteUrls.get(target);
-        if (page) return page + resolved.hash;
-        return new URL(href, blobBase + repoPath).href;
-    };
-}
 
 function renderMarkdown(markdown, project, repoPath, siteUrls) {
     const rawBase = `https://raw.githubusercontent.com/${organization}/${project.id}/${branch}/${repoPath}`;
-    const resolveLink = linkResolver(project, repoPath, siteUrls);
-    const slugCounts = new Map();
-    const toc = [];
-    const images = [];
-    let skippedTitle = false;
-
-    const marked = new Marked({ gfm: true, breaks: false });
-    marked.use({
-        walkTokens(token) {
-            if (token.type === 'image') token.href = absoluteUrl(token.href, rawBase);
-            if (token.type === 'link') token.href = resolveLink(token.href);
-        },
-        renderer: {
-            heading(text, level) {
-                // The page header already shows the project or page title.
-                if (level === 1 && !skippedTitle) {
-                    skippedTitle = true;
-                    return '';
-                }
-                const slug = githubSlug(text, slugCounts);
-                if (level === 2 || level === 3) toc.push({ slug, level, label: stripTags(text) });
-                return `<h${level} id="${slug}">${text}</h${level}>\n`;
-            },
-            image(href, title, text) {
-                images.push(href);
-                const titleAttr = title ? ` title="${escapeHtml(title)}"` : '';
-                return `<img src="${escapeHtml(href)}" alt="${escapeHtml(text)}"${titleAttr} loading="lazy" />`;
-            },
-            // Raw HTML in READMEs (mostly <img> tags) can carry relative URLs too.
-            html(html) {
-                return html.replace(/\s(src|href)="([^"]*)"/g, (match, attribute, value) => {
-                    const url =
-                        attribute === 'src' ? absoluteUrl(value, rawBase) : resolveLink(value);
-                    if (attribute === 'src') images.push(url);
-                    return ` ${attribute}="${url}"`;
-                });
-            },
-        },
+    const blobBase = `https://github.com/${organization}/${project.id}/blob/${branch}/`;
+    const { html, toc, ogImage } = parseMarkdownPage(markdown, {
+        rewriteLink: linkResolver({ blobBase, repoPath, siteUrls }),
+        rewriteImage: (href) => absoluteUrl(href, rawBase),
     });
-
-    const html = marked.parse(markdown);
-    // Link previews use the first real screenshot, not a status badge.
-    const ogImage = images.find(
-        (url) => /^https:\/\//.test(url) && !/\.svg(\?|$)|shields\.io|\/badge/i.test(url),
-    );
     return { html, toc, ogImage };
 }
 
@@ -751,10 +584,6 @@ function docPage({ project, repo, readme, docs }, doc, index) {
     });
 }
 
-function postUrl(post) {
-    return `/blog/${post.slug}/`;
-}
-
 function formatDate(date) {
     return new Date(`${date}T00:00:00Z`).toLocaleDateString('en-US', {
         year: 'numeric',
@@ -768,28 +597,6 @@ function tagBadges(tags) {
     return tags
         .map((tag) => `<span class="badge badge-outline badge-sm">${escapeHtml(tag)}</span>`)
         .join('');
-}
-
-// Posts are standalone: no project to resolve links against, so links stay as
-// written and relative images are served from /blog/ (see blogImageUrl).
-function renderPost(post) {
-    const slugCounts = new Map();
-    const marked = new Marked({ gfm: true, breaks: false });
-    marked.use({
-        walkTokens(token) {
-            if (token.type === 'image') token.href = blogImageUrl(token.href);
-        },
-        renderer: {
-            heading(text, level) {
-                return `<h${level} id="${githubSlug(text, slugCounts)}">${text}</h${level}>\n`;
-            },
-            image(href, title, text) {
-                const titleAttr = title ? ` title="${escapeHtml(title)}"` : '';
-                return `<img src="${escapeHtml(href)}" alt="${escapeHtml(text)}"${titleAttr} loading="lazy" />`;
-            },
-        },
-    });
-    return marked.parse(post.markdown);
 }
 
 // The header image of a post, written in front matter relative to blog/.
@@ -807,11 +614,11 @@ function blogIndexPage(posts) {
               <div class="card-body gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div class="flex min-w-0 flex-col gap-2">
                   <div class="text-base-content/60 text-sm"><time datetime="${post.date}">${formatDate(post.date)}</time></div>
-                  <h2 class="card-title"><a class="hover:text-primary" href="${postUrl(post)}">${escapeHtml(post.title)}</a></h2>
+                  <h2 class="card-title"><a class="hover:text-primary" href="${post.url}">${escapeHtml(post.title)}</a></h2>
                   <p class="text-base-content/70 text-sm leading-6">${escapeHtml(post.summary)}</p>
                   <div class="flex flex-wrap gap-2 pt-1">${tagBadges(post.tags)}</div>
                 </div>
-                ${post.image ? `<a href="${postUrl(post)}" tabindex="-1" aria-hidden="true" class="order-first shrink-0 sm:order-last sm:w-56 lg:w-64">${postImage(post, 'border-base-content/10 rounded-box w-full border')}</a>` : ''}
+                ${post.image ? `<a href="${post.url}" tabindex="-1" aria-hidden="true" class="order-first shrink-0 sm:order-last sm:w-56 lg:w-64">${postImage(post, 'border-base-content/10 rounded-box w-full border')}</a>` : ''}
               </div>
             </article>`,
               )
@@ -819,12 +626,12 @@ function blogIndexPage(posts) {
         : '<p class="text-base-content/70">No posts yet.</p>';
     return layout({
         title: `Blog — ${siteName}`,
-        description: 'Notes from running live events and building the tools behind them.',
+        description: blogDescription,
         canonicalPath: '/blog/',
         activeId: 'blog',
         body: `<header>
             <h1 class="text-3xl font-bold sm:text-4xl">Blog</h1>
-            <p class="text-base-content/64 mt-2">Notes from running live events and building the tools behind them. <a class="link" href="/blog/feed.xml">RSS feed</a></p>
+            <p class="text-base-content/64 mt-2">${escapeHtml(blogDescription)} <a class="link" href="/blog/feed.xml">RSS feed</a></p>
           </header>
           <div class="grid gap-4">${list}</div>`,
     });
@@ -834,7 +641,7 @@ function blogPostPage(post) {
     return layout({
         title: `${post.title} — ${siteName}`,
         description: post.summary,
-        canonicalPath: postUrl(post),
+        canonicalPath: post.url,
         activeId: 'blog',
         railByDefault: true,
         ogType: 'article',
@@ -858,30 +665,6 @@ function blogPostPage(post) {
     });
 }
 
-function blogFeed(posts) {
-    const items = posts
-        .map(
-            (post) => `    <item>
-      <title>${escapeHtml(post.title)}</title>
-      <link>${siteUrl}${postUrl(post)}</link>
-      <guid>${siteUrl}${postUrl(post)}</guid>
-      <pubDate>${new Date(`${post.date}T00:00:00Z`).toUTCString()}</pubDate>
-      <description>${escapeHtml(post.summary)}</description>
-    </item>`,
-        )
-        .join('\n');
-    return `<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0">
-  <channel>
-    <title>${siteName} blog</title>
-    <link>${siteUrl}/blog/</link>
-    <description>Notes from running live events and building the tools behind them.</description>
-${items}
-  </channel>
-</rss>
-`;
-}
-
 // The newest posts on the home page; nothing when there are none.
 function latestPosts(posts) {
     if (!posts.length) return '';
@@ -889,7 +672,7 @@ function latestPosts(posts) {
         .slice(0, 3)
         .map(
             (post) => `<li class="flex flex-wrap items-baseline justify-between gap-x-4">
-              <a class="link link-hover font-semibold" href="${postUrl(post)}">${escapeHtml(post.title)}</a>
+              <a class="link link-hover font-semibold" href="${post.url}">${escapeHtml(post.title)}</a>
               <time class="text-base-content/60 text-sm" datetime="${post.date}">${formatDate(post.date)}</time>
             </li>`,
         )
@@ -914,48 +697,47 @@ function notFoundPage() {
     });
 }
 
-function sitemap(data, posts) {
+// Every page the site renders from the data: its URL, when it last changed and
+// a function that renders it. The files written, the sitemap and the page count
+// all come from this list.
+function sitePages(data, posts) {
     const today = new Date().toISOString().slice(0, 10);
-    const urls = [{ loc: `${siteUrl}/`, lastmod: today }];
-    urls.push({ loc: `${siteUrl}/blog/`, lastmod: posts[0]?.date ?? today });
-    for (const post of posts) urls.push({ loc: `${siteUrl}${postUrl(post)}`, lastmod: post.date });
-    for (const { project, repo, docs } of data) {
-        const lastmod = repo?.pushed_at?.slice(0, 10) ?? today;
-        urls.push({ loc: `${siteUrl}${projectUrl(project)}`, lastmod });
-        if (docs.length) urls.push({ loc: `${siteUrl}${docsUrl(project)}`, lastmod });
-        for (const doc of docs) urls.push({ loc: `${siteUrl}${doc.url}`, lastmod });
+    const pages = [
+        { url: '/', lastmod: today, render: () => homePage(data, posts) },
+        { url: '/blog/', lastmod: posts[0]?.date ?? today, render: () => blogIndexPage(posts) },
+    ];
+    for (const post of posts) {
+        pages.push({ url: post.url, lastmod: post.date, render: () => blogPostPage(post) });
     }
-    return `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urls.map((url) => `  <url><loc>${url.loc}</loc><lastmod>${url.lastmod}</lastmod></url>`).join('\n')}
-</urlset>
-`;
+    for (const entry of data) {
+        const { project, repo, docs } = entry;
+        const lastmod = repo?.pushed_at?.slice(0, 10) ?? today;
+        pages.push({ url: projectUrl(project), lastmod, render: () => projectPage(entry) });
+        if (!docs.length) continue;
+        pages.push({ url: docsUrl(project), lastmod, render: () => docsIndexPage(entry) });
+        docs.forEach((doc, index) => {
+            pages.push({ url: doc.url, lastmod, render: () => docPage(entry, doc, index) });
+        });
+    }
+    return pages;
 }
 
-function writeFile(relativePath, content) {
-    const file = path.join(dist, relativePath);
-    fs.mkdirSync(path.dirname(file), { recursive: true });
-    fs.writeFileSync(file, content);
+function sitemap(pages) {
+    return `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${pages.map((page) => `  <url><loc>${siteUrl}${page.url}</loc><lastmod>${page.lastmod}</lastmod></url>`).join('\n')}
+</urlset>
+`;
 }
 
 // Fetches and renders one project's README and docs. Any failure leaves that
 // part empty (logged as a warning) instead of failing the whole build.
 async function loadProject(project) {
-    const [repo, readme, docs] = await Promise.allSettled([
-        fetchRepo(project.id),
-        fetchFile(project.id, 'README.md'),
-        fetchDocs(project),
-    ]);
-    for (const [label, result] of [
-        ['metadata', repo],
-        ['README', readme],
-        ['docs', docs],
-    ]) {
-        if (result.status === 'rejected') {
-            console.warn(`[warn] ${project.id}: ${label} unavailable (${result.reason.message})`);
-        }
+    const { repo, readme, docs, docsIndex, problems } = await source.load(project.id);
+    for (const { part, message } of problems) {
+        console.warn(`[warn] ${project.id}: ${part} unavailable (${message})`);
     }
-    const docList = docs.status === 'fulfilled' ? docs.value : [];
+    const docList = docs.map((doc) => ({ ...doc, url: `${projectUrl(project)}docs/${doc.slug}/` }));
 
     // Repository paths that have a page on this site, for link rewriting.
     const siteUrls = new Map([['README.md', projectUrl(project)]]);
@@ -969,70 +751,102 @@ async function loadProject(project) {
             ? stripTags(firstParagraph).replace(/\s+/g, ' ').slice(0, 200)
             : '';
     }
-    let docsIndex = null;
-    if (docList.length) {
-        try {
-            const markdown = await fetchFile(project.id, 'docs/README.md');
-            docsIndex = renderMarkdown(markdown, project, 'docs/README.md', siteUrls);
-        } catch {
-            // No docs/README.md: the index page lists the pages instead.
-        }
-    }
     return {
         project,
-        repo: repo.status === 'fulfilled' ? repo.value : null,
-        readme:
-            readme.status === 'fulfilled'
-                ? renderMarkdown(readme.value, project, 'README.md', siteUrls)
-                : null,
+        repo,
+        readme: readme === null ? null : renderMarkdown(readme, project, 'README.md', siteUrls),
         docs: docList,
-        docsIndex,
+        docsIndex:
+            docsIndex === null
+                ? null
+                : renderMarkdown(docsIndex, project, 'docs/README.md', siteUrls),
     };
 }
 
-async function main() {
-    fs.rmSync(dist, { recursive: true, force: true });
-    fs.mkdirSync(path.join(dist, 'assets'), { recursive: true });
-    fs.cpSync(path.join(root, 'ui', 'assets'), path.join(dist, 'assets'), { recursive: true });
+// Everything the build reads, so the dev server knows what to watch: the blog,
+// the UI, these scripts and, for a LOCAL_PROJECTS checkout, its README and docs/.
+function inputPaths() {
+    const paths = ['blog', 'ui', 'scripts'].map((name) => path.join(root, name));
+    for (const local of localProjects.values()) {
+        paths.push(path.resolve(local, 'docs'), path.resolve(local, 'README.md'));
+    }
+    return paths;
+}
+
+// Writes every file of the site into `out`, except the stylesheet.
+async function renderSite(out) {
+    function writeFile(relativePath, content) {
+        const file = path.join(out, relativePath);
+        fs.mkdirSync(path.dirname(file), { recursive: true });
+        fs.writeFileSync(file, content);
+    }
+
+    fs.cpSync(path.join(root, 'ui', 'assets'), path.join(out, 'assets'), { recursive: true });
     writeFile('.nojekyll', '');
 
     const data = await Promise.all(projects.map(loadProject));
     const posts = loadPosts(path.join(root, 'blog'), {
         includeDrafts: process.env.BLOG_DRAFTS === '1',
-    }).map((post) => ({
-        ...post,
-        html: renderPost(post),
-    }));
+    });
 
     const blogImages = path.join(root, 'blog', 'images');
     if (fs.existsSync(blogImages)) {
-        fs.cpSync(blogImages, path.join(dist, 'blog', 'images'), { recursive: true });
+        fs.cpSync(blogImages, path.join(out, 'blog', 'images'), { recursive: true });
     }
-    writeFile('index.html', homePage(data, posts));
-    writeFile(path.join('blog', 'index.html'), blogIndexPage(posts));
-    writeFile(path.join('blog', 'feed.xml'), blogFeed(posts));
-    for (const post of posts) writeFile(path.join(postUrl(post), 'index.html'), blogPostPage(post));
-    let pageCount = 0;
-    for (const entry of data) {
-        const base = path.join('projects', entry.project.id);
-        writeFile(path.join(base, 'index.html'), projectPage(entry));
-        if (entry.docs.length) {
-            writeFile(path.join(base, 'docs', 'index.html'), docsIndexPage(entry));
-            entry.docs.forEach((doc, index) => {
-                writeFile(path.join(doc.url, 'index.html'), docPage(entry, doc, index));
-            });
-        }
-        pageCount += 1 + (entry.docs.length ? entry.docs.length + 1 : 0);
-    }
+    writeFile(path.join('blog', 'feed.xml'), renderFeed(posts, { siteUrl, siteName }));
+    const pages = sitePages(data, posts);
+    for (const page of pages) writeFile(path.join(page.url, 'index.html'), page.render());
     writeFile('404.html', notFoundPage());
-    writeFile('sitemap.xml', sitemap(data, posts));
+    writeFile('sitemap.xml', sitemap(pages));
     writeFile('robots.txt', `User-agent: *\nAllow: /\nSitemap: ${siteUrl}/sitemap.xml\n`);
-    console.log(
-        `Built ${data.length} projects (${pageCount} pages) and ${posts.length} blog posts into dist/`,
+    return `${pages.length} pages (${data.length} projects, ${posts.length} blog posts)`;
+}
+
+// The utility classes come from the markup in these scripts (see ui/styles.css).
+function buildStyles(out) {
+    const bin = path.join(
+        root,
+        'node_modules',
+        '.bin',
+        process.platform === 'win32' ? 'tailwindcss.cmd' : 'tailwindcss',
+    );
+    execFileSync(
+        bin,
+        [
+            '-i',
+            path.join(root, 'ui', 'styles.css'),
+            '-o',
+            path.join(out, 'assets', 'styles.css'),
+            '--minify',
+        ],
+        { cwd: root, stdio: 'inherit' },
     );
 }
 
-main().catch((error) => {
-    console.error(error);
-    process.exitCode = 1;
-});
+// Builds into a folder of its own and swaps it in as dist/ once complete, so
+// dist/ is never half written and a failed build leaves the last one in place.
+// The folder sits beside dist/ (a rename needs one filesystem) and is ignored
+// by git and Tailwind like dist/ (see .gitignore and ui/styles.css).
+async function main() {
+    const stage = `${dist}.next-${process.pid}`;
+    fs.rmSync(stage, { recursive: true, force: true });
+    fs.mkdirSync(stage, { recursive: true });
+    try {
+        const summary = await renderSite(stage);
+        buildStyles(stage);
+        fs.rmSync(dist, { recursive: true, force: true });
+        fs.renameSync(stage, dist);
+        console.log(`Built ${summary} into dist/`);
+    } finally {
+        fs.rmSync(stage, { recursive: true, force: true });
+    }
+}
+
+if (require.main === module) {
+    main().catch((error) => {
+        console.error(error);
+        process.exitCode = 1;
+    });
+}
+
+module.exports = { sitePages, sitemap, inputPaths };

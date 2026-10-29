@@ -96,4 +96,4 @@ API rate limit):
 GITHUB_TOKEN=$(gh auth token) npm run build
 ```
 
-The build renders files into `dist/`. Generated CSS is not committed to this branch; the GitHub Actions workflow publishes the rendered site to the `gh-pages` branch.
+The build renders files into `dist/`, building aside and swapping the finished site in, so a failed build leaves the previous `dist/` in place. It also runs Tailwind, so `npm run build` is the only step. Generated CSS is not committed to this branch; the GitHub Actions workflow publishes the rendered site to the `gh-pages` branch.

@@ -17,8 +17,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { execFileSync } = require('node:child_process');
-const { Marked } = require('marked');
-const { githubSlug } = require('./markdown-text');
+const { parseMarkdownPage, resolveRepoLink, isRelativeLink } = require('./markdown-page');
 
 const projectDir = path.resolve(process.argv[2] ?? '.');
 
@@ -38,39 +37,10 @@ const pages = [...files]
     .filter((file) => file === 'README.md' || /^docs\/.+\.md$/.test(file))
     .sort((a, b) => a.localeCompare(b, 'en', { numeric: true }));
 
-// Links and heading anchors of one page, collected the way the site build
-// renders it (the first level-1 heading is the page title and has no anchor).
 function readPage(repoPath) {
-    const markdown = fs.readFileSync(path.join(projectDir, repoPath), 'utf8');
-    const links = [];
-    const slugs = new Set();
-    const slugCounts = new Map();
-    let skippedTitle = false;
-    const marked = new Marked({ gfm: true, breaks: false });
-    marked.use({
-        walkTokens(token) {
-            if (token.type === 'link' || token.type === 'image') {
-                links.push({ href: token.href, text: token.text });
-            }
-        },
-        renderer: {
-            heading(text, level) {
-                if (level === 1 && !skippedTitle) {
-                    skippedTitle = true;
-                    return '';
-                }
-                slugs.add(githubSlug(text, slugCounts));
-                return '';
-            },
-            html(html) {
-                for (const match of html.matchAll(/\s(?:src|href)="([^"]*)"/g)) {
-                    links.push({ href: match[1], text: match[1] });
-                }
-                return '';
-            },
-        },
-    });
-    marked.parse(markdown);
+    const { links, slugs } = parseMarkdownPage(
+        fs.readFileSync(path.join(projectDir, repoPath), 'utf8'),
+    );
     return { links, slugs };
 }
 
@@ -78,27 +48,19 @@ const parsed = new Map(pages.map((page) => [page, readPage(page)]));
 const problems = [];
 const linkedFromIndex = new Set();
 
-// The repository path a relative link points at, with the anchor split off.
-function resolveTarget(fromPage, href) {
-    const url = new URL(href, `https://repo.invalid/${fromPage}`);
-    return {
-        target: decodeURIComponent(url.pathname.slice(1)),
-        hash: decodeURIComponent(url.hash.slice(1)),
-    };
-}
-
-function targetExists(target) {
+// The repository path a link points at: the file, the folder's README, or a
+// folder without one. Null when none of them exists.
+function targetExists({ target, folderReadme }) {
     if (files.has(target)) return target;
+    if (files.has(folderReadme)) return folderReadme;
     const dir = target.replace(/\/$/, '');
-    // A link to a folder shows its README on GitHub and on the site.
-    if (files.has(`${dir}/README.md`)) return `${dir}/README.md`;
     if (dir === '' || [...files].some((file) => file.startsWith(`${dir}/`))) return dir;
     return null;
 }
 
 for (const [page, { links }] of parsed) {
     for (const { href, text } of links) {
-        if (!href || /^([a-z][a-z0-9+.-]*:|\/\/)/i.test(href)) continue;
+        if (!isRelativeLink(href)) continue;
         const label = `${page}: [${String(text).slice(0, 60)}](${href})`;
         if (href.startsWith('#')) {
             const slug = decodeURIComponent(href.slice(1));
@@ -107,10 +69,11 @@ for (const [page, { links }] of parsed) {
             }
             continue;
         }
-        const { target, hash } = resolveTarget(page, href);
-        const found = targetExists(target);
+        const resolved = resolveRepoLink(page, href);
+        const hash = decodeURIComponent(resolved.hash.slice(1));
+        const found = targetExists(resolved);
         if (!found) {
-            problems.push(`${label} points at a file that does not exist (${target})`);
+            problems.push(`${label} points at a file that does not exist (${resolved.target})`);
             continue;
         }
         if (page === 'docs/README.md') linkedFromIndex.add(found);

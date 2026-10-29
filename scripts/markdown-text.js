@@ -1,5 +1,14 @@
-// Text helpers shared by the site build and the docs link checker, so a link
-// the checker accepts is a link the build resolves.
+// Text helpers shared by the site build, the docs link checker and the Markdown
+// page reader.
+
+function escapeHtml(value) {
+    return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
 
 function decodeEntities(value) {
     return value
@@ -27,4 +36,4 @@ function githubSlug(text, counts) {
     return seen ? `${base}-${seen}` : base;
 }
 
-module.exports = { decodeEntities, stripTags, githubSlug };
+module.exports = { escapeHtml, decodeEntities, stripTags, githubSlug };

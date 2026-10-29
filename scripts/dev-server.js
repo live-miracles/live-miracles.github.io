@@ -1,13 +1,14 @@
-// Builds the site, serves dist/ and rebuilds when the blog, the UI, the build
-// scripts or a LOCAL_PROJECTS checkout's README and docs change. The browser is
-// not reloaded: refresh it after the "Rebuilt" line. GitHub responses are cached
-// for the session (see BUILD_CACHE_DIR in build.js), so a rebuild takes about 2 s
-// and does not touch the API rate limit; restart to fetch them again.
+// Builds the site, serves dist/ and rebuilds when anything the build reads
+// changes (see inputPaths in build.js). The browser is not reloaded: refresh it
+// after the "Rebuilt" line. GitHub responses are cached for the session (see
+// BUILD_CACHE_DIR in build.js), so a rebuild takes about 2 s and does not touch
+// the API rate limit; restart to fetch them again.
 
 const fs = require('node:fs');
 const net = require('node:net');
 const path = require('node:path');
 const { spawn } = require('node:child_process');
+const { inputPaths } = require('./build');
 
 const firstPort = 3000;
 const lastPort = 3010;
@@ -37,23 +38,12 @@ async function findAvailablePort() {
 
 function build() {
     return new Promise((resolve) => {
-        const child = spawn('npm', ['run', 'build'], {
+        const child = spawn(process.execPath, [path.join(__dirname, 'build.js')], {
             stdio: 'inherit',
             env: { ...process.env, BUILD_CACHE_DIR: cacheDir },
         });
         child.on('close', (code) => resolve(code === 0));
     });
-}
-
-// Directories and files to watch. A LOCAL_PROJECTS checkout contributes its
-// README and docs/, which build.js reads from disk.
-function watchTargets() {
-    const targets = ['blog', 'ui', 'scripts'].map((name) => path.join(root, name));
-    for (const entry of (process.env.LOCAL_PROJECTS ?? '').split(',').filter(Boolean)) {
-        const local = entry.split('=')[1];
-        targets.push(path.resolve(local, 'docs'), path.resolve(local, 'README.md'));
-    }
-    return targets;
 }
 
 function listFiles(target, files = []) {
@@ -77,7 +67,7 @@ function listFiles(target, files = []) {
 // editors that save by replacing the file, which fs.watch loses track of, and
 // added or deleted files.
 function snapshot() {
-    return watchTargets()
+    return inputPaths()
         .flatMap((target) => listFiles(target))
         .join('\n');
 }

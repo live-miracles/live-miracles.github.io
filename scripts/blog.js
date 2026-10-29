@@ -1,12 +1,16 @@
 // Reads the blog posts in blog/: Markdown files named YYYY-MM-DD-slug.md that
 // start with front matter (title, date, summary, tags, draft, and optionally
-// image and imageAlt for the header image). Drafts are not
-// built unless BLOG_DRAFTS=1 is set for a local preview. A post that cannot be read is skipped with a warning, so one bad file
-// never stops the site from building.
+// image and imageAlt for the header image). Each post comes with its page URL
+// and rendered HTML. Drafts are not built unless BLOG_DRAFTS=1 is set for a
+// local preview. A post that cannot be read or rendered is skipped with a
+// warning, so one bad file never stops the site from building.
 
 const fs = require('node:fs');
 const path = require('node:path');
+const { escapeHtml } = require('./markdown-text');
+const { parseMarkdownPage } = require('./markdown-page');
 
+const blogDescription = 'Notes from running live events and building the tools behind them.';
 const postFile = /^(\d{4}-\d{2}-\d{2})-(.+)\.md$/;
 
 function parseValue(raw) {
@@ -38,6 +42,12 @@ function parseFrontMatter(source) {
     return { data, body: source.slice(match[0].length) };
 }
 
+// Posts are standalone: no project to resolve links against, so links stay as
+// written and relative images are served from /blog/ (see blogImageUrl).
+function renderPost(markdown) {
+    return parseMarkdownPage(markdown, { rewriteImage: blogImageUrl, keepTitle: true }).html;
+}
+
 function readPost(file, name) {
     const [, fileDate, slug] = postFile.exec(name);
     const { data, body } = parseFrontMatter(fs.readFileSync(file, 'utf8'));
@@ -54,6 +64,7 @@ function readPost(file, name) {
     }
     return {
         slug,
+        url: `/blog/${slug}/`,
         title: data.title,
         date: data.date,
         summary: data.summary,
@@ -61,7 +72,7 @@ function readPost(file, name) {
         image: data.image ? blogImageUrl(data.image) : '',
         imageAlt: data.imageAlt || '',
         draft: data.draft === true,
-        markdown: body,
+        html: renderPost(body),
         sourcePath: `blog/${name}`,
     };
 }
@@ -89,4 +100,29 @@ function blogImageUrl(href) {
     return `/blog/${href.replace(/^\.\//, '')}`;
 }
 
-module.exports = { parseFrontMatter, loadPosts, blogImageUrl };
+// The RSS feed of `posts`, newest first as loadPosts returns them.
+function renderFeed(posts, { siteUrl, siteName }) {
+    const items = posts
+        .map(
+            (post) => `    <item>
+      <title>${escapeHtml(post.title)}</title>
+      <link>${siteUrl}${post.url}</link>
+      <guid>${siteUrl}${post.url}</guid>
+      <pubDate>${new Date(`${post.date}T00:00:00Z`).toUTCString()}</pubDate>
+      <description>${escapeHtml(post.summary)}</description>
+    </item>`,
+        )
+        .join('\n');
+    return `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>${siteName} blog</title>
+    <link>${siteUrl}/blog/</link>
+    <description>${blogDescription}</description>
+${items}
+  </channel>
+</rss>
+`;
+}
+
+module.exports = { parseFrontMatter, loadPosts, blogImageUrl, renderFeed, blogDescription };
