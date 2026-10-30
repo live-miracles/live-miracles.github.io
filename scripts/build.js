@@ -106,15 +106,21 @@ function linkButtons(project, style = 'pill') {
         .join('');
 }
 
-// One narrow column of content, centred on the page.
-function page(inner, width = 'max-w-[980px]') {
-    return `<div class="mx-auto w-full ${width} px-5 py-10 sm:px-6 sm:py-14">${inner}</div>`;
+// One narrow column of content, centred on the page, under a colour wash. A project's
+// pages take the wash from its category's tint.
+function page(inner, width = 'max-w-[980px]', tint) {
+    const style = tint ? ` style="--glow-a: color-mix(in srgb, ${tint} 30%, transparent)"` : '';
+    return `<div class="wash"${style}><div class="mx-auto w-full ${width} px-5 py-10 sm:px-6 sm:py-14">${inner}</div></div>`;
 }
 
 // A full-width band; neighbouring bands alternate between parchment and canvas so the
-// colour change itself divides the sections.
-function band(inner, shade, extra = '') {
-    return `<div class="${shade === 'parchment' ? 'bg-parchment' : 'bg-canvas'} ${extra}"><div class="mx-auto w-full max-w-[980px] px-5 sm:px-6">${inner}</div></div>`;
+// colour change itself divides the sections. A band with a tint also glows in that
+// colour; any shade other than parchment or canvas is used as a class.
+function band(inner, shade, extra = '', tint) {
+    const background =
+        { parchment: 'band band-parchment', canvas: 'band band-canvas' }[shade] ?? shade;
+    const style = tint ? ` style="--tint: ${tint}"` : '';
+    return `<div class="${background} ${extra}"${style}><div class="mx-auto w-full max-w-[980px] px-5 sm:px-6">${inner}</div></div>`;
 }
 
 function topbar(activeId) {
@@ -225,7 +231,7 @@ function layout({
   <body class="flex min-h-screen flex-col">
     ${topbar(activeId)}
     <main class="flex-1">${body}</main>
-    <footer class="caption bg-parchment text-muted border-line border-t">
+    <footer class="caption waves text-muted border-line border-t pb-28">
       <div class="mx-auto flex w-full max-w-[980px] flex-wrap items-center justify-between gap-x-6 gap-y-2 px-5 py-8 sm:px-6">
         <span>${siteName} · Open tools for live teams</span>
         <span class="flex gap-5">
@@ -256,7 +262,7 @@ function homePage(data, posts) {
         { stars: 0, forks: 0 },
     );
     const stat = (value, label) =>
-        `<div><div class="display text-4xl sm:text-5xl">${value}</div><div class="caption text-muted mt-1">${label}</div></div>`;
+        `<div><div class="display grad-text text-4xl sm:text-5xl">${value}</div><div class="caption text-muted mt-1">${label}</div></div>`;
 
     // The bands after the hero alternate shade; a card takes the opposite one so it
     // stands out from its band.
@@ -265,7 +271,7 @@ function homePage(data, posts) {
     const sections = categories
         .map((category, index) => {
             const shade = shadeAt(index);
-            const cardShade = shade === 'parchment' ? '' : 'bg-parchment';
+            const cardShade = shade === 'parchment' ? '' : 'card-alt';
             const cards = data
                 .filter(({ project }) => project.category === category.id)
                 .map(
@@ -287,35 +293,46 @@ function homePage(data, posts) {
                 .join('');
             return band(
                 `<section id="${category.id}" class="scroll-mt-12">
-            <h2 class="display display-lg">${escapeHtml(category.name)}</h2>
+            <h2 class="display display-lg tint-dot">${escapeHtml(category.name)}</h2>
             <p class="lead mt-2 mb-8">${escapeHtml(category.summary)}</p>
             <div class="grid gap-5 md:grid-cols-2">${cards}</div>
           </section>`,
                 shade,
                 'py-16 sm:py-20',
+                category.tint,
             );
         })
         .join('');
 
+    // Centred on small screens; on wide ones the text sits left and the print right, so
+    // the hero stays one screen tall.
     const hero = band(
-        `<section class="flex flex-col items-center py-20 text-center sm:py-28">
-            <p class="eyebrow">${siteName}</p>
-            <h1 class="display display-hero mt-3 max-w-3xl">Open tools for live teams.</h1>
-            <p class="lead mt-6 max-w-2xl">${escapeHtml(siteDescription)}</p>
-            <div class="mt-9 flex flex-wrap justify-center gap-3">
-              <a class="pill pill-primary pill-lg" href="#projects">Browse projects</a>
-              <a class="pill pill-lg" href="https://github.com/${organization}">View on GitHub</a>
+        `<section class="grid items-center gap-10 py-14 text-center sm:py-20 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:gap-16 lg:py-16 lg:text-left">
+            <div class="flex flex-col items-center lg:items-start">
+              <p class="eyebrow">${siteName}</p>
+              <h1 class="display display-hero mt-3 max-w-3xl">Open tools for <span class="grad-text">live teams.</span></h1>
+              <p class="lead mt-6 max-w-xl">${escapeHtml(siteDescription)}</p>
+              <div class="mt-8 flex flex-wrap justify-center gap-3 lg:justify-start">
+                <a class="pill pill-primary pill-lg" href="#projects">Browse projects</a>
+                <a class="pill pill-lg" href="https://github.com/${organization}">View on GitHub</a>
+              </div>
+              <p class="text-muted mt-10 max-w-md text-[0.9375rem]">
+                Built and used by a live-streaming team that runs large multilingual events.
+              </p>
+              <div class="mt-6 flex gap-12 sm:gap-16">
+                ${stat(projects.length, 'Projects')}
+                ${stat(compact.format(totals.stars), 'GitHub stars')}
+                ${stat(compact.format(totals.forks), 'Forks')}
+              </div>
             </div>
-            <p class="text-muted mt-14 max-w-xl text-[0.9375rem]">
-              Built and used by a live-streaming team that runs large multilingual events.
-            </p>
-            <div class="mt-8 flex gap-12 sm:gap-20">
-              ${stat(projects.length, 'Projects')}
-              ${stat(compact.format(totals.stars), 'GitHub stars')}
-              ${stat(compact.format(totals.forks), 'Forks')}
-            </div>
+            <figure class="mx-auto w-full max-w-md lg:max-w-none">
+              <div class="art aspect-[16/10] lg:aspect-square">
+                <img src="/assets/hokusai-great-wave.webp" width="720" height="720" fetchpriority="high"
+                  alt="The Great Wave off Kanagawa by Katsushika Hokusai: a towering wave about to break over fishing boats, with Mount Fuji in the distance" />
+              </div>
+            </figure>
           </section>`,
-        'canvas',
+        'wash-hero',
     );
 
     const body = `${hero}
@@ -421,7 +438,8 @@ function projectFrame({ project, repo, docs, activeUrl, header, content }) {
               <div class="min-w-0">${content}</div>
             </div>`
         : `<div class="mt-10">${content}</div>`;
-    return page(`${header}${tabs}${main}`);
+    const tint = categories.find((category) => category.id === project.category)?.tint;
+    return page(`${header}${tabs}${main}`, undefined, tint);
 }
 
 function projectHeader(project, repo) {
@@ -630,6 +648,7 @@ function latestPosts(posts, shade) {
           </section>`,
         shade,
         'py-16 sm:py-20',
+        '#c8553d',
     );
 }
 

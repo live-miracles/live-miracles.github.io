@@ -4,37 +4,52 @@
 @source not '../dist';
 @source not '../dist.next-*';
 
-/* Design tokens: a quiet light canvas with one blue accent, flipped for dark mode.
-   Utilities such as bg-canvas, text-muted or border-line come from these. */
+/* Design tokens. The palette comes from Hokusai's "Great Wave": indigo ink on warm paper,
+   with pale sky, cream and the coral of the boats as the glows. Dark mode is the same
+   print at night. Utilities such as bg-canvas, text-muted or border-line come from these. */
 :root {
     color-scheme: light;
-    --canvas: #ffffff;
-    --parchment: #f5f5f7;
-    --ink: #1d1d1f;
-    --muted: #6e6e73;
-    --line: rgb(0 0 0 / 0.1);
-    --chip: rgb(0 0 0 / 0.05);
-    --accent: #0066cc;
-    --accent-hover: #0071e3;
+    --canvas: #fdfbf7;
+    --parchment: #f4efe5;
+    --ink: #14213d;
+    --muted: #5c677d;
+    --line: rgb(20 33 61 / 0.12);
+    --chip: rgb(20 33 61 / 0.06);
+    --accent: #1b5fb0;
+    --accent-hover: #2573d0;
     --on-accent: #ffffff;
-    --nav: rgb(255 255 255 / 0.8);
-    --shadow: rgb(0 0 0 / 0.22) 3px 5px 30px;
+    --nav: rgb(253 251 247 / 0.8);
+    --shadow: rgb(20 33 61 / 0.28) 0 18px 50px;
+    --glow-a: rgb(52 120 196 / 0.22);
+    --glow-b: rgb(232 130 100 / 0.2);
+    --glow-c: rgb(236 200 120 / 0.22);
+    --grad-from: #1b5fb0;
+    --grad-to: #d9694f;
+    --seigaiha: url('/assets/seigaiha-light.svg');
+    --art-filter: none;
 }
 
 @media (prefers-color-scheme: dark) {
     :root {
         color-scheme: dark;
-        --canvas: #000000;
-        --parchment: #1d1d1f;
-        --ink: #f5f5f7;
-        --muted: #a1a1a6;
-        --line: rgb(255 255 255 / 0.14);
-        --chip: rgb(255 255 255 / 0.1);
-        --accent: #2997ff;
-        --accent-hover: #4ba8ff;
-        --on-accent: #000000;
-        --nav: rgb(0 0 0 / 0.72);
-        --shadow: rgb(0 0 0 / 0.6) 3px 5px 30px;
+        --canvas: #060b18;
+        --parchment: #0c1428;
+        --ink: #eef2fa;
+        --muted: #9aa7bf;
+        --line: rgb(255 255 255 / 0.12);
+        --chip: rgb(255 255 255 / 0.08);
+        --accent: #6db3ff;
+        --accent-hover: #8cc4ff;
+        --on-accent: #06142b;
+        --nav: rgb(6 11 24 / 0.72);
+        --shadow: rgb(0 0 0 / 0.7) 0 18px 50px;
+        --glow-a: rgb(60 130 220 / 0.48);
+        --glow-b: rgb(240 120 90 / 0.3);
+        --glow-c: rgb(240 190 100 / 0.12);
+        --grad-from: #7db8ff;
+        --grad-to: #ffa982;
+        --seigaiha: url('/assets/seigaiha-dark.svg');
+        --art-filter: brightness(0.92) saturate(1.05);
     }
 }
 
@@ -81,6 +96,89 @@
         html {
             scroll-behavior: auto;
         }
+    }
+}
+
+@layer components {
+    /* Soft colour washes: blue sky on the left, coral sun on the right. */
+    /* Behind project, docs and blog pages. The glows stay fixed to the window, so the
+       warmth is still there further down a long page. */
+    .wash {
+        background:
+            radial-gradient(800px 420px at 10% -60px, var(--glow-a), transparent 70%) fixed
+                no-repeat,
+            radial-gradient(700px 400px at 92% -60px, var(--glow-b), transparent 70%) fixed
+                no-repeat,
+            var(--canvas);
+    }
+
+    /* A section band: its category's colour glows from two corners over the base shade. */
+    .band {
+        background:
+            radial-gradient(
+                900px 380px at 0% 0%,
+                color-mix(in srgb, var(--tint, var(--accent)) 22%, transparent),
+                transparent 70%
+            ),
+            radial-gradient(
+                800px 360px at 100% 100%,
+                color-mix(in srgb, var(--tint, var(--accent)) 16%, transparent),
+                transparent 70%
+            ),
+            var(--band-bg);
+    }
+
+    .band-parchment {
+        --band-bg: var(--parchment);
+    }
+
+    .band-canvas {
+        --band-bg: var(--canvas);
+    }
+
+    .wash-hero {
+        background:
+            radial-gradient(55% 60% at 10% 0%, var(--glow-a), transparent 70%),
+            radial-gradient(45% 55% at 95% 5%, var(--glow-b), transparent 70%),
+            radial-gradient(60% 40% at 50% 100%, var(--glow-c), transparent 70%), var(--canvas);
+    }
+
+    /* A word or number filled with the print's blue-to-coral gradient. */
+    .grad-text {
+        background: linear-gradient(100deg, var(--grad-from), var(--grad-to));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+
+    /* The print under the hero, like a product shot on apple.com. */
+    .art {
+        overflow: hidden;
+        border-radius: 28px;
+        box-shadow: var(--shadow);
+    }
+
+    .art img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: var(--art-filter);
+    }
+
+    /* Seigaiha waves fading in from the top, behind the footer. */
+    .waves {
+        background:
+            linear-gradient(to bottom, var(--parchment) 15%, transparent 95%), var(--seigaiha),
+            var(--parchment);
+        background-size:
+            auto,
+            48px 24px,
+            auto;
+        background-position:
+            0 0,
+            0 100%,
+            0 0;
     }
 }
 
@@ -151,12 +249,21 @@
     }
 
     .pill-primary {
-        background: var(--accent);
+        border-color: transparent;
+        background: linear-gradient(
+            100deg,
+            var(--accent),
+            color-mix(in srgb, var(--accent) 70%, #d9694f)
+        );
         color: var(--on-accent);
     }
 
     .pill-primary:hover {
-        background: var(--accent-hover);
+        background: linear-gradient(
+            100deg,
+            var(--accent-hover),
+            color-mix(in srgb, var(--accent-hover) 70%, #d9694f)
+        );
     }
 
     .pill-lg {
@@ -210,9 +317,40 @@
         display: flex;
         flex-direction: column;
         gap: 0.75rem;
+        border: 1px solid var(--line);
         border-radius: 18px;
-        background: var(--canvas);
+        background:
+            radial-gradient(
+                110% 80% at 0% 0%,
+                color-mix(in srgb, var(--tint, var(--accent)) 16%, transparent),
+                transparent 65%
+            ),
+            var(--card-bg, var(--canvas));
         padding: 1.5rem;
+        transition:
+            transform 0.2s ease,
+            border-color 0.2s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-2px);
+        border-color: color-mix(in srgb, var(--tint, var(--accent)) 45%, transparent);
+    }
+
+    .card-alt {
+        --card-bg: var(--parchment);
+    }
+
+    /* The category's own colour on its small label and logo tile. */
+    .tint-dot::before {
+        content: '';
+        display: inline-block;
+        width: 0.38em;
+        height: 0.38em;
+        margin-right: 0.4em;
+        vertical-align: 0.08em;
+        border-radius: 9999px;
+        background: var(--tint, var(--accent));
     }
 
     .panel {

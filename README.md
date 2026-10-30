@@ -63,6 +63,14 @@ the first screenshot in its README. The projects keep no copy: upload the same f
 under Settings → Social preview of the project's repository (GitHub offers no API
 for it).
 
+## Look and artwork
+
+The palette comes from Hokusai's _The Great Wave off Kanagawa_ (c. 1831, public domain), shown
+on the home page as `ui/assets/hokusai-great-wave.webp` (a 720 px square crop, about 80 KB). The
+`seigaiha-*.svg` tiles are the wave pattern behind the footer. Colours switch with the
+visitor's light or dark setting (see the tokens at the top of `ui/styles.css`), and each
+category in `scripts/projects.js` has a `tint` that colours its cards and its project pages.
+
 ## Development
 
 Install dependencies:

@@ -9,21 +9,25 @@ const pages = `https://${organization}.github.io`;
 const categories = [
     {
         id: 'streaming',
+        tint: '#2f6fb3',
         name: 'Streaming & transport',
         summary: 'Ingest, forward and watch live streams reliably.',
     },
     {
         id: 'vmix',
+        tint: '#d9694f',
         name: 'vMix production',
         summary: 'Control and automate vMix systems during live shows.',
     },
     {
         id: 'monitoring',
+        tint: '#2a9d8f',
         name: 'Monitoring & operations',
         summary: 'Keep an eye on many feeds and machines at once.',
     },
     {
         id: 'events',
+        tint: '#d4a24c',
         name: 'Event workflows',
         summary: 'Google Workspace tools for scheduling, stream keys and audience Q&A.',
     },
