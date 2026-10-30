@@ -52,15 +52,10 @@
           </header>
           <img src="/blog/images/bonded-cover.jpg" alt="Two network links merging into one stream, labelled 2 links, 1 stream" class="mb-10 w-full rounded-2xl" loading="lazy" />
           <article class="readme min-w-0"><p>SRT bonding sends one live stream over several network links at once, for example two uplinks or two SIM cards. If one link degrades or dies, the receiver still has the data from the other, so the stream does not drop. libsrt implements it as a <em>socket group</em>.</p>
-<p>The catch is the receiving end. A server has to accept the group, and most open source media servers cannot. We run <a href="https://github.com/ossrs/srs">SRS</a> in <a href="https://github.com/live-miracles/bunryu">Bunryu</a>, so we wrote a small relay, <a href="https://github.com/live-miracles/goryu">Goryu</a>, that accepts the bonded group and forwards ordinary SRT to the server behind it. This post shows how to put it in front of SRS, MediaMTX or Restreamer, and what we actually checked.</p>
-<h2 id="the-problem">The problem</h2>
-<p>We sent a bonded broadcast group, two legs, straight at each server&#39;s SRT port. All three refused it. The sender&#39;s libsrt logs the reason:</p>
-<pre><code class="language-text">HS EXT: agent is a group member, but the listener did not respond with group ID. Rejecting.
-</code></pre>
-<p>That means the server&#39;s listener does not accept groups. The versions we tried were SRS 7.0.189, MediaMTX v1.21.2 and datarhei Core 16.16.0, which is the engine inside Restreamer. SRS has an open request for it (<a href="https://github.com/ossrs/srs/issues/4771">ossrs/srs#4771</a>), so that one may change.</p>
+<p>The catch is the receiving end. A server has to accept the group, and most open source media servers cannot. We run <a href="https://github.com/ossrs/srs">SRS</a> in <a href="https://github.com/live-miracles/bunryu">Bunryu</a>, so we wrote a small relay, <a href="https://github.com/live-miracles/goryu">Goryu</a>, that accepts the bonded group and forwards ordinary SRT to the server behind it. This post shows how to put it in front of SRS, MediaMTX or any SRT server, and what we actually checked.</p>
 <h2 id="the-fix-terminate-the-group-before-the-server">The fix: terminate the group before the server</h2>
 <p><img src="/blog/images/bonded-before-after.webp" alt="Sent directly, the bonded group is rejected by the server. Through Goryu, the legs are merged and the server receives one plain SRT stream" loading="lazy" /></p>
-<p>Goryu listens on one port with group connections enabled. libsrt merges the legs and drops the duplicate packets before Goryu reads anything, so Goryu sees one clean MPEG-TS stream. It then publishes that stream to your server as a normal single-link SRT caller, with the same <code>streamid</code>. The server never knows the input was bonded. An ordinary single-link SRT sender works on the same port.</p>
+<p>Goryu listens on one port (i.e. <code>10081</code>) with group connections enabled. libsrt merges the legs and drops the duplicate packets before Goryu reads anything, so Goryu sees one clean MPEG-TS stream. It automatically forwards that stream to your server&#39;s port (i.e. <code>10080</code>) as a normal single-link SRT caller, with the same <code>streamid</code>. The server never knows the input was bonded. An ordinary single-link SRT sender works on the same port.</p>
 <h2 id="try-it-with-mediamtx">Try it with MediaMTX</h2>
 <p>Start MediaMTX, then Goryu with a config that points at MediaMTX&#39;s SRT port (<code>8890</code>):</p>
 <pre><code class="language-bash">docker run -d --network host bluenviron/mediamtx
@@ -108,8 +103,7 @@ LD_LIBRARY_PATH=goryu/lib goryu/bin/goryu goryu.json
 </tbody></table>
 <p>SRS needs its SRT server enabled, and Core needs <code>CORE_SRT_ENABLE=true</code>. The <a href="https://live-miracles.github.io/projects/goryu/docs/usage/downstream-servers/">downstream servers page</a> has the details and the playback ids.</p>
 <h2 id="passphrases">Passphrases</h2>
-<p>SRT encrypts each hop on its own. By default Goryu uses one passphrase on both: set <code>passphrase</code> and the encoder must use it, and so must the server. That is awkward when Goryu runs next to the server, because the hop that crosses the internet is the encoder&#39;s.</p>
-<p>From v3.4.0 you can give the server side its own with <code>output_passphrase</code>: an empty string for a server without a passphrase, or a different one. Left out, it falls back to <code>passphrase</code>, so existing configs do not change.</p>
+<p>SRT encrypts each hop on its own. By default Goryu uses one passphrase on both: set <code>passphrase</code>. So similiarly to <code>streamid</code> the encoder will use the same <code>passphrase</code> as when directly connecting to the server. You can optionally give the server side its own <code>passphrase</code> with <code>output_passphrase</code>: an empty string for a server without a passphrase, or a different one.</p>
 <pre><code class="language-json">{
     &quot;input_host&quot;: &quot;0.0.0.0&quot;,
     &quot;input_port&quot;: 10081,
@@ -120,7 +114,7 @@ LD_LIBRARY_PATH=goryu/lib goryu/bin/goryu goryu.json
     &quot;output_passphrase&quot;: &quot;&quot;
 }
 </code></pre>
-<p>Each passphrase must be empty or 10 to 79 characters, the range libsrt accepts, and Goryu refuses to start otherwise. We checked this against a server that enforces its passphrase: encrypted input with a plain server, a different passphrase on each side, a plain input with an encrypted server, and the default. We also checked the two cases that must fail. An empty <code>output_passphrase</code> does not fall back to the input&#39;s, so a server that still requires one is refused. A server given the input&#39;s passphrase instead of its own is refused too. Neither passphrase appears in the relay&#39;s log.</p>
+<p>Each passphrase must be empty or 10 to 79 characters, the range libsrt accepts, and Goryu refuses to start otherwise.</p>
 <h2 id="sending-a-bonded-stream">Sending a bonded stream</h2>
 <p>This is the awkward part, and we would rather say so. FFmpeg cannot open a socket group, and libsrt&#39;s own <code>srt-live-transmit</code> takes one input and one output. <code>srt-test-live</code> from libsrt 1.5.6 failed to create a sending group when we tried it. Many encoders that advertise bonding use a vendor protocol with their own receiver instead of libsrt groups. The one hardware encoder we have confirmed sends a libsrt group to Goryu is the AJA BRIDGE LIVE, described below.</p>
 <p>For testing without hardware, there is a 196-line test caller in the Goryu repository, <code>bonded_caller.c</code>, that sends a broadcast group with one leg per local address, and can drop, add or flap a leg, or send a main/backup group. It is what every bonded test in the project uses, and the <a href="https://live-miracles.github.io/projects/goryu/docs/usage/sending-bonded-srt/">sending page</a> shows how to build and run it. If your encoder sends a libsrt broadcast group, point it at Goryu and it will work; if it speaks SRTLA or a vendor protocol, it will not, and the <a href="https://live-miracles.github.io/projects/goryu/docs/getting-started/alternatives/">alternatives page</a> says what to look at instead.</p>
@@ -255,19 +249,13 @@ LD_LIBRARY_PATH=goryu/lib goryu/bin/goryu goryu.json
 <li><strong>One oddity.</strong> The rejoined leg reports 7,977 lost packets from the moment it appears. That is roughly the first 3.7 seconds of the stream at this bitrate, so it is probably the gap before the leg joined being counted as loss. We have not confirmed that, and the merged stream did not slow down.</li>
 <li><strong>Nothing in the log, in v3.3.0.</strong> The journal has no line for the leg dropping or for it coming back. The status API shows it live, but afterwards only the counters remain. The next release, v3.4.0, logs both: one line per change with the leg&#39;s address and how many legs remain, such as <code>Bonded leg left streamid=... leg=&lt;ip&gt;:&lt;port&gt; legs=1</code>, and <code>Bonded leg joined ...</code> when it returns. A leg that flaps is limited to 12 lines per 30 seconds and then summarised, so a bad link cannot flood the journal. Bunryu writes the same changes to the pipeline&#39;s log.</li>
 </ul>
-<h2 id="what-we-did-not-test">What we did not test</h2>
-<ul>
-<li><strong>Different providers and degraded links.</strong> The cable pull is a clean failure: the link went away and came back. The relay cannot tell whether the two paths use different providers, and we have not tested a link that degrades with heavy loss or congestion instead of disconnecting. The loopback test above is the only run that exercised a leg closing from the sender&#39;s side.</li>
-<li><strong>Switchover on a real link.</strong> We tested both group types on loopback legs. We have not measured how many packets a main/backup switchover loses on a link that degrades before it dies, because loopback legs never do.</li>
-<li><strong>Other things worth knowing.</strong> By default one passphrase covers both the input and the downstream connection; from v3.4.0 <code>output_passphrase</code> gives the server its own, or none. The release is Linux x86_64 only.</li>
-</ul>
 <h2 id="takeaways">Takeaways</h2>
 <ul>
 <li><strong>Bonding needs both ends.</strong> The receiving server is as much a part of it as the encoder, and the open source ones mostly do not accept groups yet.</li>
 <li><strong>A relay is a small, replaceable piece.</strong> Goryu is about 2,800 lines of C and a config of six fields (a seventh is optional), so you can read all of it before trusting it with a live stream.</li>
 <li><strong>Check the sender first.</strong> The hard part today is finding something that sends a libsrt group, not receiving it. Of the hardware we know of, the AJA BRIDGE LIVE is the one we have seen do it.</li>
 </ul>
-<p>Goryu and its <a href="https://live-miracles.github.io/projects/goryu/docs/">documentation</a> are open source (MIT), and we would like to hear from anyone who tries it on real links.</p>
+<p>Goryu and its <a href="https://live-miracles.github.io/projects/goryu/docs/">documentation</a> are open source (MIT).</p>
 </article>
           <a class="more caption mt-10 inline-block" href="https://github.com/live-miracles/live-miracles.github.io/blob/master/blog/2026-10-22-srs-mediamtx-restreamer-reject-bonded-srt.md">Edit this post on GitHub</a></div></div></main>
     <footer class="caption waves text-muted border-line border-t pb-28">
