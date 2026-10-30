@@ -1,8 +1,9 @@
 <!doctype html>
-<html lang="en" data-theme="dim">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
     <title>Development — Goryu</title>
     <meta name="description" content="The local build compiles libsrt 1.5.6 with bonding in Docker and produces ./objs/goryu and its libraries in ./objs/lib." />
     <link rel="canonical" href="https://live-miracles.github.io/projects/goryu/docs/reference/development/" />
@@ -17,83 +18,64 @@
     <link rel="alternate" type="application/rss+xml" title="Live Miracles blog" href="/blog/feed.xml" />
     <link rel="stylesheet" href="/assets/styles.css" />
   </head>
-  <body>
-    <div class="group/drawer drawer lg:drawer-open">
-      <script>
-        window.setSidebarRail = function (rail) {
-          document.querySelector('.drawer').toggleAttribute('data-rail', rail);
-          var toggle = document.getElementById('sidebar-toggle');
-          if (toggle) {
-            toggle.setAttribute('aria-label', rail ? 'Expand projects' : 'Collapse projects to icons');
-          }
-        };
-        window.sidebarRail = function () {
-          try {
-            var saved = localStorage.getItem('sidebar-rail');
-            if (saved) return saved === '1';
-          } catch (e) {}
-          return true;
-        };
-        window.setSidebarRail(window.sidebarRail());
-      </script>
-      <input id="project-drawer" type="checkbox" class="drawer-toggle" />
-      <div class="drawer-content min-h-screen min-w-0">
-        <header class="navbar border-base-content/10 bg-base-300/92 sticky top-0 z-20 border-b px-4 backdrop-blur lg:hidden">
-          <div class="flex-none">
-            <label for="project-drawer" class="btn btn-square btn-ghost" aria-label="Open projects"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /></svg></label>
+  <body class="flex min-h-screen flex-col">
+    <header class="topbar">
+        <nav class="caption mx-auto flex h-12 w-full max-w-[1024px] items-center justify-between gap-4 px-5 sm:px-6" aria-label="Site">
+          <a href="/" class="flex items-center gap-2.5 font-semibold" aria-label="Live Miracles">
+            <img src="/assets/logo.png" alt="" class="logo size-6" />
+            <span>Live Miracles</span>
+          </a>
+          <div class="flex items-center gap-5 sm:gap-7">
+            <a href="/#projects" class="text-muted hover:text-ink transition-colors">Projects</a>
+            <a href="/blog/" class="text-muted hover:text-ink transition-colors">Blog</a>
+            <a href="https://github.com/live-miracles" class="text-muted hover:text-ink transition-colors">GitHub</a>
           </div>
-          <div class="flex-1">
-            <a href="/" class="btn btn-ghost text-lg font-bold">Live Miracles</a>
-          </div>
-        </header>
-        <main class="mx-auto flex min-h-screen w-full max-w-6xl flex-col gap-8 px-4 py-6 sm:px-6 lg:px-8">
-          <section class="rounded-box border-base-content/10 bg-base-200/68 border p-5 shadow-xl backdrop-blur sm:p-7">
-            <nav class="text-base-content/60 flex flex-wrap items-center gap-2 text-sm" aria-label="Breadcrumb">
-              <a href="/projects/goryu/" class="hover:text-primary flex items-center gap-2"><img src="/assets/goryu-logo.png" alt="" class="rounded-box size-5  shrink-0 object-contain" /><span>Goryu</span></a>
-              <span aria-hidden="true">›</span><a class="hover:text-primary" href="/projects/goryu/docs/">Documentation</a><span aria-hidden="true">›</span><span>Reference</span>
+        </nav>
+      </header>
+    <main class="flex-1"><div class="mx-auto w-full max-w-[980px] px-5 py-10 sm:px-6 sm:py-14"><nav class="text-muted caption flex flex-wrap items-center gap-2" aria-label="Breadcrumb">
+              <a href="/projects/goryu/" class="link-quiet hover:text-ink flex items-center gap-2"><img src="/assets/goryu-logo.png" alt="" class="logo size-5 " /><span>Goryu</span></a>
+              <span aria-hidden="true">›</span><a class="link-quiet hover:text-ink" href="/projects/goryu/docs/">Documentation</a><span aria-hidden="true">›</span><span>Reference</span>
             </nav>
-            <h1 class="mt-3 text-3xl font-bold sm:text-4xl">Development</h1>
-            <div role="tablist" class="tabs tabs-border mt-6" aria-label="Goryu sections">
-              <a role="tab" href="/projects/goryu/" class="tab ">Overview</a><a role="tab" href="/projects/goryu/docs/" class="tab tab-active font-semibold" aria-current="page">Documentation</a>
-            </div>
-            <details class="rounded-box border-base-content/10 bg-base-300/46 mt-6 border p-4 lg:hidden">
-              <summary class="text-base-content/80 cursor-pointer text-sm font-semibold">Documentation menu</summary>
-              <div class="mt-3"><nav class="lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto" aria-label="Goryu documentation">
+            <h1 class="display display-lg mt-4">Development</h1><nav class="border-line mt-8 flex gap-6 border-b" aria-label="Goryu sections">
+              <a href="/projects/goryu/" class="tab">Overview</a><a href="/projects/goryu/docs/" class="tab" aria-current="page">Documentation</a>
+            </nav><details class="bg-parchment caption mt-6 rounded-xl p-4 lg:hidden">
+              <summary class="cursor-pointer font-semibold">Documentation menu</summary>
+              <div class="mt-3"><nav class="lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto" aria-label="Goryu documentation">
               <div class="">
-                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Getting started</div>
-                <ul class="text-sm"><li><a href="/projects/goryu/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Introduction</a></li><li><a href="/projects/goryu/docs/getting-started/install/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Install</a></li><li><a href="/projects/goryu/docs/getting-started/alternatives/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Alternatives</a></li></ul>
-              </div><div class="mt-4">
-                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Usage</div>
-                <ul class="text-sm"><li><a href="/projects/goryu/docs/usage/configuration/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Configuration</a></li><li><a href="/projects/goryu/docs/usage/sending-bonded-srt/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Sending bonded SRT</a></li><li><a href="/projects/goryu/docs/usage/downstream-servers/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Downstream servers</a></li></ul>
-              </div><div class="mt-4">
-                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Operations</div>
-                <ul class="text-sm"><li><a href="/projects/goryu/docs/operations/reliability/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Reliability</a></li></ul>
-              </div><div class="mt-4">
-                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Reference</div>
-                <ul class="text-sm"><li><a href="/projects/goryu/docs/reference/status-api/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Status API</a></li><li><a href="/projects/goryu/docs/reference/architecture/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Architecture</a></li><li><a href="/projects/goryu/docs/reference/development/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 bg-base-100 text-primary font-semibold" aria-current="page">Development</a></li></ul>
+                <div class="eyebrow mb-1">Getting started</div>
+                <ul class="caption"><li><a href="/projects/goryu/docs/getting-started/introduction/" class="link-quiet hover:text-ink block py-1 text-muted">Introduction</a></li><li><a href="/projects/goryu/docs/getting-started/install/" class="link-quiet hover:text-ink block py-1 text-muted">Install</a></li><li><a href="/projects/goryu/docs/getting-started/alternatives/" class="link-quiet hover:text-ink block py-1 text-muted">Alternatives</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Usage</div>
+                <ul class="caption"><li><a href="/projects/goryu/docs/usage/configuration/" class="link-quiet hover:text-ink block py-1 text-muted">Configuration</a></li><li><a href="/projects/goryu/docs/usage/sending-bonded-srt/" class="link-quiet hover:text-ink block py-1 text-muted">Sending bonded SRT</a></li><li><a href="/projects/goryu/docs/usage/downstream-servers/" class="link-quiet hover:text-ink block py-1 text-muted">Downstream servers</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Operations</div>
+                <ul class="caption"><li><a href="/projects/goryu/docs/operations/reliability/" class="link-quiet hover:text-ink block py-1 text-muted">Reliability</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Reference</div>
+                <ul class="caption"><li><a href="/projects/goryu/docs/reference/status-api/" class="link-quiet hover:text-ink block py-1 text-muted">Status API</a></li><li><a href="/projects/goryu/docs/reference/architecture/" class="link-quiet hover:text-ink block py-1 text-muted">Architecture</a></li><li><a href="/projects/goryu/docs/reference/development/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">Development</a></li></ul>
               </div>
             </nav></div>
             </details>
-            <div class="mt-7 grid gap-8 lg:grid-cols-[15rem_minmax(0,1fr)]">
-              <div class="border-base-content/10 hidden lg:block lg:border-r lg:pr-4"><nav class="lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto" aria-label="Goryu documentation">
+            <div class="mt-10 grid gap-12 lg:grid-cols-[13rem_minmax(0,1fr)]">
+              <div class="hidden lg:block"><nav class="lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto" aria-label="Goryu documentation">
               <div class="">
-                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Getting started</div>
-                <ul class="text-sm"><li><a href="/projects/goryu/docs/getting-started/introduction/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Introduction</a></li><li><a href="/projects/goryu/docs/getting-started/install/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Install</a></li><li><a href="/projects/goryu/docs/getting-started/alternatives/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Alternatives</a></li></ul>
-              </div><div class="mt-4">
-                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Usage</div>
-                <ul class="text-sm"><li><a href="/projects/goryu/docs/usage/configuration/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Configuration</a></li><li><a href="/projects/goryu/docs/usage/sending-bonded-srt/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Sending bonded SRT</a></li><li><a href="/projects/goryu/docs/usage/downstream-servers/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Downstream servers</a></li></ul>
-              </div><div class="mt-4">
-                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Operations</div>
-                <ul class="text-sm"><li><a href="/projects/goryu/docs/operations/reliability/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Reliability</a></li></ul>
-              </div><div class="mt-4">
-                <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">Reference</div>
-                <ul class="text-sm"><li><a href="/projects/goryu/docs/reference/status-api/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Status API</a></li><li><a href="/projects/goryu/docs/reference/architecture/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 text-base-content/75">Architecture</a></li><li><a href="/projects/goryu/docs/reference/development/" class="rounded-field hover:bg-base-100 block px-3 py-1.5 bg-base-100 text-primary font-semibold" aria-current="page">Development</a></li></ul>
+                <div class="eyebrow mb-1">Getting started</div>
+                <ul class="caption"><li><a href="/projects/goryu/docs/getting-started/introduction/" class="link-quiet hover:text-ink block py-1 text-muted">Introduction</a></li><li><a href="/projects/goryu/docs/getting-started/install/" class="link-quiet hover:text-ink block py-1 text-muted">Install</a></li><li><a href="/projects/goryu/docs/getting-started/alternatives/" class="link-quiet hover:text-ink block py-1 text-muted">Alternatives</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Usage</div>
+                <ul class="caption"><li><a href="/projects/goryu/docs/usage/configuration/" class="link-quiet hover:text-ink block py-1 text-muted">Configuration</a></li><li><a href="/projects/goryu/docs/usage/sending-bonded-srt/" class="link-quiet hover:text-ink block py-1 text-muted">Sending bonded SRT</a></li><li><a href="/projects/goryu/docs/usage/downstream-servers/" class="link-quiet hover:text-ink block py-1 text-muted">Downstream servers</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Operations</div>
+                <ul class="caption"><li><a href="/projects/goryu/docs/operations/reliability/" class="link-quiet hover:text-ink block py-1 text-muted">Reliability</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Reference</div>
+                <ul class="caption"><li><a href="/projects/goryu/docs/reference/status-api/" class="link-quiet hover:text-ink block py-1 text-muted">Status API</a></li><li><a href="/projects/goryu/docs/reference/architecture/" class="link-quiet hover:text-ink block py-1 text-muted">Architecture</a></li><li><a href="/projects/goryu/docs/reference/development/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">Development</a></li></ul>
               </div>
             </nav></div>
-              <div class="min-w-0"><details class="rounded-box border-base-content/10 bg-base-300/46 text-base-content/68 mb-7 border p-4 text-sm backdrop-blur">
-              <summary class="text-base-content/80 cursor-pointer font-semibold">On this page</summary>
+              <div class="min-w-0"><details class="bg-parchment text-muted caption mb-8 rounded-xl p-4">
+              <summary class="text-ink cursor-pointer font-semibold">On this page</summary>
               <ol class="mt-3 space-y-2">
-                <li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#build">Build</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#run-and-test">Run and test</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#tests">Tests</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#ci">CI</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#versioning">Versioning</a></li><li class=""><a class="hover:text-primary block leading-5 text-base-content/80 font-semibold" href="#releases">Releases</a></li><li class="pl-4"><a class="hover:text-primary block leading-5 " href="#pinned-build-inputs">Pinned build inputs</a></li>
+                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#build">Build</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#run-and-test">Run and test</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#tests">Tests</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#ci">CI</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#versioning">Versioning</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#releases">Releases</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#pinned-build-inputs">Pinned build inputs</a></li>
               </ol>
             </details><article class="readme min-w-0"><h2 id="build">Build</h2>
 <pre><code class="language-bash">bash scripts/build-local.sh
@@ -213,96 +195,23 @@ is built on, because the archive links against that glibc), so change both toget
 <p>Projects that pin a Goryu release (such as Bunryu&#39;s installer and Docker image)
 download <code>goryu-linux-x86_64.tar.gz</code> from the release, so the asset name is part
 of the interface; keep it stable.</p>
-</article><a class="link text-base-content/50 mt-6 inline-block text-sm" href="https://github.com/live-miracles/goryu/blob/master/docs/4-reference/3-development.md">Edit this page on GitHub</a><div class="border-base-content/10 mt-10 grid gap-3 border-t pt-6 sm:grid-cols-2">
-              <a class="rounded-box border-base-content/10 hover:border-primary/50 border p-4" href="/projects/goryu/docs/reference/architecture/"><div class="text-base-content/50 text-xs">Previous</div><div class="font-semibold">Architecture</div></a>
+</article><a class="more caption mt-8 inline-block" href="https://github.com/live-miracles/goryu/blob/master/docs/4-reference/3-development.md">Edit this page on GitHub</a><div class="mt-12 grid gap-4 sm:grid-cols-2">
+              <a class="panel link-quiet hover:bg-parchment p-5 transition-colors" href="/projects/goryu/docs/reference/architecture/"><div class="text-muted caption">Previous</div><div class="font-semibold">Architecture</div></a>
               
             </div></div>
-            </div>
-          </section>
-          <footer class="text-base-content/50 border-base-content/10 mt-auto border-t pt-6 pb-2 text-sm">
-            Live Miracles · <a class="link" href="https://github.com/live-miracles">github.com/live-miracles</a>
-          </footer>
-        </main>
+            </div></div></main>
+    <footer class="caption bg-parchment text-muted border-line border-t">
+      <div class="mx-auto flex w-full max-w-[980px] flex-wrap items-center justify-between gap-x-6 gap-y-2 px-5 py-8 sm:px-6">
+        <span>Live Miracles · Open tools for live teams</span>
+        <span class="flex gap-5">
+          <a class="link-quiet" href="/blog/">Blog</a>
+          <a class="link-quiet" href="/blog/feed.xml">RSS</a>
+          <a class="link-quiet" href="https://github.com/live-miracles">GitHub</a>
+        </span>
       </div>
-      <aside class="drawer-side z-30">
-        <label for="project-drawer" aria-label="Close projects" class="drawer-overlay"></label>
-        <nav class="border-base-content/10 bg-base-200 min-h-full w-80 border-r p-4 lg:group-data-[rail]/drawer:w-16 lg:group-data-[rail]/drawer:p-2" aria-label="Projects">
-          <div class="mb-6 flex items-center justify-between gap-2 lg:group-data-[rail]/drawer:flex-col lg:group-data-[rail]/drawer:gap-3">
-            <a href="/" title="Live Miracles" aria-label="Live Miracles" class="rounded-box flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:p-0">
-              <img src="/assets/logo.png" alt="" class="rounded-box size-11" />
-              <span class="lg:group-data-[rail]/drawer:hidden">
-                <span class="block text-xl font-bold">Live Miracles</span>
-                <span class="text-base-content/58 text-sm">Open tools for live teams</span>
-              </span>
-            </a>
-            <button type="button" id="sidebar-toggle" class="btn btn-ghost btn-sm btn-square hidden lg:inline-flex lg:group-data-[rail]/drawer:rotate-180" aria-label="Collapse projects to icons"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M11 17l-5-5 5-5M18 17l-5-5 5-5" /></svg></button>
-          </div>
-          <a href="/blog/" title="Blog" aria-label="Blog" class="rounded-box hover:bg-base-100 mb-5 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:mb-3 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
-            <svg xmlns="http://www.w3.org/2000/svg" class="size-6 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 5h13a2 2 0 0 1 2 2v12H6a2 2 0 0 1-2-2V5Z"/><path d="M8 9h7M8 13h7M8 17h4"/></svg>
-            <span class="lg:group-data-[rail]/drawer:hidden">Blog</span>
-          </a>
-          <div class="mb-5 lg:group-data-[rail]/drawer:mb-3">
-              
-              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase lg:group-data-[rail]/drawer:hidden">Streaming &amp; transport</div>
-              <a href="/projects/bunryu/" title="Bunryu" aria-label="Bunryu" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
-                <img src="/assets/bunryu-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
-                <span class="lg:group-data-[rail]/drawer:hidden">Bunryu</span>
-              </a><a href="/projects/goryu/" title="Goryu" aria-label="Goryu" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 bg-base-100 text-primary font-semibold" aria-current="page">
-                <img src="/assets/goryu-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
-                <span class="lg:group-data-[rail]/drawer:hidden">Goryu</span>
-              </a><a href="/projects/delayed-yt/" title="Delayed YouTube" aria-label="Delayed YouTube" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
-                <img src="https://live-miracles.github.io/delayed-yt/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
-                <span class="lg:group-data-[rail]/drawer:hidden">Delayed YouTube</span>
-              </a>
-            </div><div class="mb-5 lg:group-data-[rail]/drawer:mb-3">
-              <hr class="border-base-content/10 mb-3 hidden lg:group-data-[rail]/drawer:block" />
-              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase lg:group-data-[rail]/drawer:hidden">vMix production</div>
-              <a href="/projects/vmix-master/" title="vMix Master" aria-label="vMix Master" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
-                <img src="https://live-miracles.github.io/vmix-master/logo.svg" alt="" class="rounded-box size-6  shrink-0 object-contain" />
-                <span class="lg:group-data-[rail]/drawer:hidden">vMix Master</span>
-              </a><a href="/projects/folder-player/" title="vMix Folder Player" aria-label="vMix Folder Player" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
-                <img src="/assets/folder-player-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
-                <span class="lg:group-data-[rail]/drawer:hidden">vMix Folder Player</span>
-              </a>
-            </div><div class="mb-5 lg:group-data-[rail]/drawer:mb-3">
-              <hr class="border-base-content/10 mb-3 hidden lg:group-data-[rail]/drawer:block" />
-              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase lg:group-data-[rail]/drawer:hidden">Monitoring &amp; operations</div>
-              <a href="/projects/live-gallery/" title="Live Gallery" aria-label="Live Gallery" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
-                <img src="/assets/live-gallery-logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
-                <span class="lg:group-data-[rail]/drawer:hidden">Live Gallery</span>
-              </a><a href="/projects/wake-up-support/" title="Wake Up Support" aria-label="Wake Up Support" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
-                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">W</span>
-                <span class="lg:group-data-[rail]/drawer:hidden">Wake Up Support</span>
-              </a>
-            </div><div class="mb-5 lg:group-data-[rail]/drawer:mb-3">
-              <hr class="border-base-content/10 mb-3 hidden lg:group-data-[rail]/drawer:block" />
-              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase lg:group-data-[rail]/drawer:hidden">Event workflows</div>
-              <a href="/projects/key-vault/" title="Key Vault" aria-label="Key Vault" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
-                <img src="https://live-miracles.github.io/key-vault/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
-                <span class="lg:group-data-[rail]/drawer:hidden">Key Vault</span>
-              </a><a href="/projects/live-generator/" title="Live Generator" aria-label="Live Generator" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
-                <span class="rounded-box bg-primary/15 text-primary size-6 grid shrink-0 place-items-center font-bold" aria-hidden="true">L</span>
-                <span class="lg:group-data-[rail]/drawer:hidden">Live Generator</span>
-              </a><a href="/projects/multi-lang-qa/" title="Multi Lang QA" aria-label="Multi Lang QA" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ">
-                <img src="https://live-miracles.github.io/multi-lang-qa/logo.png" alt="" class="rounded-box size-6  shrink-0 object-contain" />
-                <span class="lg:group-data-[rail]/drawer:hidden">Multi Lang QA</span>
-              </a>
-            </div>
-        </nav>
-      </aside>
-      <script>
-        window.setSidebarRail(window.sidebarRail());
-        document.getElementById('sidebar-toggle').addEventListener('click', function () {
-          var rail = !window.sidebarRail();
-          try {
-            localStorage.setItem('sidebar-rail', rail ? '1' : '0');
-          } catch (e) {}
-          window.setSidebarRail(rail);
-        });
-      </script>
-    </div>
+    </footer>
     <dialog id="lightbox" class="lightbox" aria-label="Enlarged image">
-      <button type="button" class="btn btn-circle btn-sm lightbox-close" aria-label="Close image"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg></button>
+      <button type="button" class="lightbox-close" aria-label="Close image"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg></button>
       <div class="lightbox-frame"><img alt="" /></div>
     </dialog>
     <script>
