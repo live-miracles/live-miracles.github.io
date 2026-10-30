@@ -51,6 +51,9 @@ const iconClass = 'size-4 shrink-0';
 const icons = {
     star: `<svg xmlns="http://www.w3.org/2000/svg" class="${iconClass}" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 2.5 2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.31l-5.8 3.05 1.11-6.46-4.7-4.58 6.49-.94L12 2.5Z"/></svg>`,
     fork: `<svg xmlns="http://www.w3.org/2000/svg" class="${iconClass}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="6" cy="4" r="2"/><circle cx="18" cy="4" r="2"/><circle cx="12" cy="20" r="2"/><path d="M6 6v3a3 3 0 0 0 3 3h3m6-6v3a3 3 0 0 1-3 3h-3m0 0v6"/></svg>`,
+    github: `<svg xmlns="http://www.w3.org/2000/svg" class="size-[18px]" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.79 23.39c.6.11.82-.26.82-.58v-2.02c-3.34.73-4.04-1.42-4.04-1.42-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.57A12 12 0 0 0 12 .5Z"/></svg>`,
+    sun: `<svg xmlns="http://www.w3.org/2000/svg" class="icon-sun size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32 1.41-1.41"/></svg>`,
+    moon: `<svg xmlns="http://www.w3.org/2000/svg" class="icon-moon size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>`,
     close: `<svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg>`,
 };
 
@@ -135,7 +138,10 @@ function topbar(activeId) {
           <div class="flex items-center gap-5 sm:gap-7">
             ${link('/#projects', 'Projects', false)}
             ${link('/blog/', 'Blog', activeId === 'blog')}
-            ${link(`https://github.com/${organization}`, 'GitHub', false)}
+            <div class="-mr-2 flex items-center gap-1">
+              <a href="https://github.com/${organization}" class="icon-btn" aria-label="${siteName} on GitHub" title="GitHub">${icons.github}</a>
+              <button type="button" id="theme-toggle" class="icon-btn theme-toggle" hidden>${icons.sun}${icons.moon}</button>
+            </div>
           </div>
         </nav>
       </header>`;
@@ -226,6 +232,12 @@ function layout({
     <meta name="twitter:card" content="${ogImage ? 'summary_large_image' : 'summary'}" />
     <link rel="icon" href="/assets/logo.png" type="image/png" />
     <link rel="alternate" type="application/rss+xml" title="${siteName} blog" href="/blog/feed.xml" />
+    <script>
+      try {
+        var theme = localStorage.getItem('theme');
+        if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
+      } catch (e) {}
+    </script>
     <link rel="stylesheet" href="/assets/styles.css" />
   </head>
   <body class="flex min-h-screen flex-col">
@@ -242,6 +254,33 @@ function layout({
       </div>
     </footer>
     ${lightbox()}
+    <script>
+      (function () {
+        var button = document.getElementById('theme-toggle');
+        if (!button) return;
+        var root = document.documentElement;
+        var dark = window.matchMedia('(prefers-color-scheme: dark)');
+        function current() {
+          return root.dataset.theme || (dark.matches ? 'dark' : 'light');
+        }
+        function sync() {
+          var theme = current();
+          button.dataset.mode = theme;
+          button.setAttribute('aria-label', 'Switch to ' + (theme === 'dark' ? 'light' : 'dark') + ' theme');
+        }
+        button.hidden = false;
+        sync();
+        if (dark.addEventListener) dark.addEventListener('change', sync);
+        button.addEventListener('click', function () {
+          var next = current() === 'dark' ? 'light' : 'dark';
+          root.dataset.theme = next;
+          try {
+            localStorage.setItem('theme', next);
+          } catch (e) {}
+          sync();
+        });
+      })();
+    </script>
   </body>
 </html>
 `;
@@ -304,35 +343,27 @@ function homePage(data, posts) {
         })
         .join('');
 
-    // Centred on small screens; on wide ones the text sits left and the print right, so
-    // the hero stays one screen tall.
+    // The backdrop is only atmosphere (see .hero-art), so it carries no alt text.
     const hero = band(
-        `<section class="grid items-center gap-10 py-14 text-center sm:py-20 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:gap-16 lg:py-16 lg:text-left">
-            <div class="flex flex-col items-center lg:items-start">
-              <p class="eyebrow">${siteName}</p>
-              <h1 class="display display-hero mt-3 max-w-3xl">Open tools for <span class="grad-text">live teams.</span></h1>
-              <p class="lead mt-6 max-w-xl">${escapeHtml(siteDescription)}</p>
-              <div class="mt-8 flex flex-wrap justify-center gap-3 lg:justify-start">
-                <a class="pill pill-primary pill-lg" href="#projects">Browse projects</a>
-                <a class="pill pill-lg" href="https://github.com/${organization}">View on GitHub</a>
-              </div>
-              <p class="text-muted mt-10 max-w-md text-[0.9375rem]">
-                Built and used by a live-streaming team that runs large multilingual events.
-              </p>
-              <div class="mt-6 flex gap-12 sm:gap-16">
-                ${stat(projects.length, 'Projects')}
-                ${stat(compact.format(totals.stars), 'GitHub stars')}
-                ${stat(compact.format(totals.forks), 'Forks')}
-              </div>
+        `<section class="flex flex-col items-center py-16 text-center sm:py-24 lg:items-start lg:py-28 lg:text-left">
+            <div class="hero-art" aria-hidden="true"></div>
+            <p class="eyebrow relative">${siteName}</p>
+            <h1 class="display display-hero relative mt-3 max-w-3xl">Open tools for <span class="grad-text">live teams.</span></h1>
+            <p class="lead relative mt-6 max-w-xl">${escapeHtml(siteDescription)}</p>
+            <div class="relative mt-8 flex flex-wrap justify-center gap-3 lg:justify-start">
+              <a class="pill pill-primary pill-lg" href="#projects">Browse projects</a>
+              <a class="pill pill-lg" href="https://github.com/${organization}">View on GitHub</a>
             </div>
-            <figure class="mx-auto w-full max-w-md lg:max-w-none">
-              <div class="art aspect-[16/10] lg:aspect-square">
-                <img src="/assets/hokusai-great-wave.webp" width="720" height="720" fetchpriority="high"
-                  alt="The Great Wave off Kanagawa by Katsushika Hokusai: a towering wave about to break over fishing boats, with Mount Fuji in the distance" />
-              </div>
-            </figure>
+            <p class="text-muted relative mt-10 max-w-md text-[0.9375rem]">
+              Built and used by a live-streaming team that runs large multilingual events.
+            </p>
+            <div class="relative mt-6 flex gap-12 sm:gap-16">
+              ${stat(projects.length, 'Projects')}
+              ${stat(compact.format(totals.stars), 'GitHub stars')}
+              ${stat(compact.format(totals.forks), 'Forks')}
+            </div>
           </section>`,
-        'wash-hero',
+        'wash-hero relative overflow-hidden',
     );
 
     const body = `${hero}

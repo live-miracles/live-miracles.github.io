@@ -65,11 +65,14 @@ for it).
 
 ## Look and artwork
 
-The palette comes from Hokusai's _The Great Wave off Kanagawa_ (c. 1831, public domain), shown
-on the home page as `ui/assets/hokusai-great-wave.webp` (a 720 px square crop, about 80 KB). The
-`seigaiha-*.svg` tiles are the wave pattern behind the footer. Colours switch with the
-visitor's light or dark setting (see the tokens at the top of `ui/styles.css`), and each
-category in `scripts/projects.js` has a `tint` that colours its cards and its project pages.
+The palette and the wave motifs come from Hokusai's sea. The hero backdrop is
+`ui/assets/waves.avif`, the dark ukiyo-e wave nightscape that
+[Live Gallery](https://github.com/live-miracles/live-gallery) shows in its empty boxes (about
+40 KB); by day it is inverted into pale paper. The `seigaiha-*.svg` tiles are the wave pattern
+behind the footer. Colours follow the visitor's light or dark setting until they press the sun or
+moon button in the top bar, which remembers their choice (see the tokens at the top of
+`ui/styles.css`, kept twice: for the system setting and for a chosen dark theme), and each category in `scripts/projects.js` has a `tint` that
+colours its band, cards and project pages.
 
 ## Development
 

@@ -6,7 +6,7 @@
 
 /* Design tokens. The palette comes from Hokusai's "Great Wave": indigo ink on warm paper,
    with pale sky, cream and the coral of the boats as the glows. Dark mode is the same
-   print at night. Utilities such as bg-canvas, text-muted or border-line come from these. */
+   sea at night. Utilities such as bg-canvas, text-muted or border-line come from these. */
 :root {
     color-scheme: light;
     --canvas: #fdfbf7;
@@ -26,11 +26,15 @@
     --grad-from: #1b5fb0;
     --grad-to: #d9694f;
     --seigaiha: url('/assets/seigaiha-light.svg');
-    --art-filter: none;
+    --art-filter: invert(1) hue-rotate(180deg) sepia(0.25);
+    --art-blend: multiply;
+    --art-opacity: 0.55;
 }
 
+/* Dark follows the system unless the visitor picked light, and applies when they picked dark
+   (the toggle in the top bar sets data-theme on <html>). The two blocks must stay identical. */
 @media (prefers-color-scheme: dark) {
-    :root {
+    :root:not([data-theme='light']) {
         color-scheme: dark;
         --canvas: #060b18;
         --parchment: #0c1428;
@@ -49,8 +53,34 @@
         --grad-from: #7db8ff;
         --grad-to: #ffa982;
         --seigaiha: url('/assets/seigaiha-dark.svg');
-        --art-filter: brightness(0.92) saturate(1.05);
+        --art-filter: none;
+        --art-blend: screen;
+        --art-opacity: 1;
     }
+}
+
+:root[data-theme='dark'] {
+    color-scheme: dark;
+    --canvas: #060b18;
+    --parchment: #0c1428;
+    --ink: #eef2fa;
+    --muted: #9aa7bf;
+    --line: rgb(255 255 255 / 0.12);
+    --chip: rgb(255 255 255 / 0.08);
+    --accent: #6db3ff;
+    --accent-hover: #8cc4ff;
+    --on-accent: #06142b;
+    --nav: rgb(6 11 24 / 0.72);
+    --shadow: rgb(0 0 0 / 0.7) 0 18px 50px;
+    --glow-a: rgb(60 130 220 / 0.48);
+    --glow-b: rgb(240 120 90 / 0.3);
+    --glow-c: rgb(240 190 100 / 0.12);
+    --grad-from: #7db8ff;
+    --grad-to: #ffa982;
+    --seigaiha: url('/assets/seigaiha-dark.svg');
+    --art-filter: none;
+    --art-blend: screen;
+    --art-opacity: 1;
 }
 
 @theme inline {
@@ -151,19 +181,22 @@
         color: transparent;
     }
 
-    /* The print under the hero, like a product shot on apple.com. */
-    .art {
-        overflow: hidden;
-        border-radius: 28px;
-        box-shadow: var(--shadow);
+    /* The wave nightscape from Live Gallery's empty boxes as a backdrop for the hero. By
+       night it blends over the colour glows; by day it is inverted into pale paper with
+       indigo waves. On phones the waves at its left edge show, as the middle is empty. */
+    .hero-art {
+        position: absolute;
+        inset: 0;
+        background: url('/assets/waves.avif') left bottom / cover no-repeat;
+        mix-blend-mode: var(--art-blend);
+        filter: var(--art-filter);
+        opacity: var(--art-opacity);
     }
 
-    .art img {
-        display: block;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        filter: var(--art-filter);
+    @media (min-width: 1024px) {
+        .hero-art {
+            background-position: center;
+        }
     }
 
     /* Seigaiha waves fading in from the top, behind the footer. */
@@ -395,6 +428,38 @@
 
     .tab:hover {
         color: var(--ink);
+    }
+
+    /* Round icon buttons in the top bar: GitHub and the theme toggle. */
+    .icon-btn {
+        display: grid;
+        place-items: center;
+        width: 2rem;
+        height: 2rem;
+        border-radius: 9999px;
+        color: var(--muted);
+        transition:
+            color 0.15s ease,
+            background-color 0.15s ease;
+    }
+
+    .icon-btn:hover {
+        background: var(--chip);
+        color: var(--ink);
+    }
+
+    .theme-toggle[hidden] {
+        display: none;
+    }
+
+    /* Show the icon of the theme a click switches to: the sun while dark, the moon while light. */
+    .theme-toggle .icon-sun,
+    .theme-toggle[data-mode='dark'] .icon-moon {
+        display: none;
+    }
+
+    .theme-toggle[data-mode='dark'] .icon-sun {
+        display: block;
     }
 
     .notice {
