@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Output FFmpeg management favours robustness over performance — Bunryu</title>
+    <meta name="description" content="Status: accepted, 2026-10-30" />
+    <link rel="canonical" href="https://live-miracles.github.io/projects/bunryu/docs/adr/robustness-before-performance-in-output-management/" />
+    <meta property="og:site_name" content="Live Miracles" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Output FFmpeg management favours robustness over performance — Bunryu" />
+    <meta property="og:description" content="Status: accepted, 2026-10-30" />
+    <meta property="og:url" content="https://live-miracles.github.io/projects/bunryu/docs/adr/robustness-before-performance-in-output-management/" />
+    <meta property="og:image" content="https://live-miracles.github.io/assets/social/bunryu.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/assets/logo.png" type="image/png" />
+    <link rel="alternate" type="application/rss+xml" title="Live Miracles blog" href="/blog/feed.xml" />
+    <link rel="stylesheet" href="/assets/styles.css" />
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <header class="topbar">
+        <nav class="caption mx-auto flex h-12 w-full max-w-[1024px] items-center justify-between gap-4 px-5 sm:px-6" aria-label="Site">
+          <a href="/" class="flex items-center gap-2.5 font-semibold" aria-label="Live Miracles">
+            <img src="/assets/logo.png" alt="" class="logo size-6" />
+            <span>Live Miracles</span>
+          </a>
+          <div class="flex items-center gap-5 sm:gap-7">
+            <a href="/#projects" class="text-muted hover:text-ink transition-colors">Projects</a>
+            <a href="/blog/" class="text-muted hover:text-ink transition-colors">Blog</a>
+            <a href="https://github.com/live-miracles" class="text-muted hover:text-ink transition-colors">GitHub</a>
+          </div>
+        </nav>
+      </header>
+    <main class="flex-1"><div class="wash" style="--glow-a: color-mix(in srgb, #2f6fb3 30%, transparent)"><div class="mx-auto w-full max-w-[980px] px-5 py-10 sm:px-6 sm:py-14"><nav class="text-muted caption flex flex-wrap items-center gap-2" aria-label="Breadcrumb">
+              <a href="/projects/bunryu/" class="link-quiet hover:text-ink flex items-center gap-2"><img src="/assets/bunryu-logo.png" alt="" class="logo size-5 " /><span>Bunryu</span></a>
+              <span aria-hidden="true">›</span><a class="link-quiet hover:text-ink" href="/projects/bunryu/docs/">Documentation</a><span aria-hidden="true">›</span><span>Adr</span>
+            </nav>
+            <h1 class="display display-lg mt-4">Output FFmpeg management favours robustness over performance</h1><nav class="border-line mt-8 flex gap-6 border-b" aria-label="Bunryu sections">
+              <a href="/projects/bunryu/" class="tab">Overview</a><a href="/projects/bunryu/docs/" class="tab" aria-current="page">Documentation</a>
+            </nav><details class="bg-parchment caption mt-6 rounded-xl p-4 lg:hidden">
+              <summary class="cursor-pointer font-semibold">Documentation menu</summary>
+              <div class="mt-3"><nav class="lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto" aria-label="Bunryu documentation">
+              <div class="">
+                <div class="eyebrow mb-1">Getting started</div>
+                <ul class="caption"><li><a href="/projects/bunryu/docs/getting-started/introduction/" class="link-quiet hover:text-ink block py-1 text-muted">Introduction</a></li><li><a href="/projects/bunryu/docs/getting-started/docker/" class="link-quiet hover:text-ink block py-1 text-muted">Docker</a></li><li><a href="/projects/bunryu/docs/getting-started/install/" class="link-quiet hover:text-ink block py-1 text-muted">Native install</a></li><li><a href="/projects/bunryu/docs/getting-started/sizing/" class="link-quiet hover:text-ink block py-1 text-muted">Sizing a server</a></li><li><a href="/projects/bunryu/docs/getting-started/comparison/" class="link-quiet hover:text-ink block py-1 text-muted">Comparison with alternatives</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Usage</div>
+                <ul class="caption"><li><a href="/projects/bunryu/docs/usage/publishing/" class="link-quiet hover:text-ink block py-1 text-muted">Publishing to a pipeline</a></li><li><a href="/projects/bunryu/docs/usage/outputs/" class="link-quiet hover:text-ink block py-1 text-muted">Outputs</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Operations</div>
+                <ul class="caption"><li><a href="/projects/bunryu/docs/operations/security/" class="link-quiet hover:text-ink block py-1 text-muted">Security</a></li><li><a href="/projects/bunryu/docs/operations/remote-access/" class="link-quiet hover:text-ink block py-1 text-muted">Remote access (Cloudflare Tunnel)</a></li><li><a href="/projects/bunryu/docs/operations/configuration/" class="link-quiet hover:text-ink block py-1 text-muted">Configuration</a></li><li><a href="/projects/bunryu/docs/operations/reliability/" class="link-quiet hover:text-ink block py-1 text-muted">Reliability</a></li><li><a href="/projects/bunryu/docs/operations/known-issues/" class="link-quiet hover:text-ink block py-1 text-muted">Known issues</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Reference</div>
+                <ul class="caption"><li><a href="/projects/bunryu/docs/reference/api/" class="link-quiet hover:text-ink block py-1 text-muted">REST API</a></li><li><a href="/projects/bunryu/docs/reference/development/" class="link-quiet hover:text-ink block py-1 text-muted">Development</a></li><li><a href="/projects/bunryu/docs/reference/design-decisions/" class="link-quiet hover:text-ink block py-1 text-muted">Design decisions</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Adr</div>
+                <ul class="caption"><li><a href="/projects/bunryu/docs/adr/robustness-before-performance-in-output-management/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">Output FFmpeg management favours robustness over performance</a></li><li><a href="/projects/bunryu/docs/adr/retire-an-output-in-one-call/" class="link-quiet hover:text-ink block py-1 text-muted">An output is retired in one call before its row is deleted</a></li><li><a href="/projects/bunryu/docs/adr/no-migrations-and-no-legacy-tolerance/" class="link-quiet hover:text-ink block py-1 text-muted">No database migrations and no legacy-format tolerance</a></li><li><a href="/projects/bunryu/docs/adr/warning-monitor-stays-in-outputs/" class="link-quiet hover:text-ink block py-1 text-muted">The FFmpeg warning and progress monitor stays inside outputs.ts</a></li><li><a href="/projects/bunryu/docs/adr/input-state-stays-separate-from-the-health-poll/" class="link-quiet hover:text-ink block py-1 text-muted">inputState stays separate from the health poll</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Agents</div>
+                <ul class="caption"><li><a href="/projects/bunryu/docs/agents/domain/" class="link-quiet hover:text-ink block py-1 text-muted">Domain Docs</a></li><li><a href="/projects/bunryu/docs/agents/issue-tracker/" class="link-quiet hover:text-ink block py-1 text-muted">Issue tracker: GitHub</a></li><li><a href="/projects/bunryu/docs/agents/triage-labels/" class="link-quiet hover:text-ink block py-1 text-muted">Triage Labels</a></li></ul>
+              </div>
+            </nav></div>
+            </details>
+            <div class="mt-10 grid gap-12 lg:grid-cols-[13rem_minmax(0,1fr)]">
+              <div class="hidden lg:block"><nav class="lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto" aria-label="Bunryu documentation">
+              <div class="">
+                <div class="eyebrow mb-1">Getting started</div>
+                <ul class="caption"><li><a href="/projects/bunryu/docs/getting-started/introduction/" class="link-quiet hover:text-ink block py-1 text-muted">Introduction</a></li><li><a href="/projects/bunryu/docs/getting-started/docker/" class="link-quiet hover:text-ink block py-1 text-muted">Docker</a></li><li><a href="/projects/bunryu/docs/getting-started/install/" class="link-quiet hover:text-ink block py-1 text-muted">Native install</a></li><li><a href="/projects/bunryu/docs/getting-started/sizing/" class="link-quiet hover:text-ink block py-1 text-muted">Sizing a server</a></li><li><a href="/projects/bunryu/docs/getting-started/comparison/" class="link-quiet hover:text-ink block py-1 text-muted">Comparison with alternatives</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Usage</div>
+                <ul class="caption"><li><a href="/projects/bunryu/docs/usage/publishing/" class="link-quiet hover:text-ink block py-1 text-muted">Publishing to a pipeline</a></li><li><a href="/projects/bunryu/docs/usage/outputs/" class="link-quiet hover:text-ink block py-1 text-muted">Outputs</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Operations</div>
+                <ul class="caption"><li><a href="/projects/bunryu/docs/operations/security/" class="link-quiet hover:text-ink block py-1 text-muted">Security</a></li><li><a href="/projects/bunryu/docs/operations/remote-access/" class="link-quiet hover:text-ink block py-1 text-muted">Remote access (Cloudflare Tunnel)</a></li><li><a href="/projects/bunryu/docs/operations/configuration/" class="link-quiet hover:text-ink block py-1 text-muted">Configuration</a></li><li><a href="/projects/bunryu/docs/operations/reliability/" class="link-quiet hover:text-ink block py-1 text-muted">Reliability</a></li><li><a href="/projects/bunryu/docs/operations/known-issues/" class="link-quiet hover:text-ink block py-1 text-muted">Known issues</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Reference</div>
+                <ul class="caption"><li><a href="/projects/bunryu/docs/reference/api/" class="link-quiet hover:text-ink block py-1 text-muted">REST API</a></li><li><a href="/projects/bunryu/docs/reference/development/" class="link-quiet hover:text-ink block py-1 text-muted">Development</a></li><li><a href="/projects/bunryu/docs/reference/design-decisions/" class="link-quiet hover:text-ink block py-1 text-muted">Design decisions</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Adr</div>
+                <ul class="caption"><li><a href="/projects/bunryu/docs/adr/robustness-before-performance-in-output-management/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">Output FFmpeg management favours robustness over performance</a></li><li><a href="/projects/bunryu/docs/adr/retire-an-output-in-one-call/" class="link-quiet hover:text-ink block py-1 text-muted">An output is retired in one call before its row is deleted</a></li><li><a href="/projects/bunryu/docs/adr/no-migrations-and-no-legacy-tolerance/" class="link-quiet hover:text-ink block py-1 text-muted">No database migrations and no legacy-format tolerance</a></li><li><a href="/projects/bunryu/docs/adr/warning-monitor-stays-in-outputs/" class="link-quiet hover:text-ink block py-1 text-muted">The FFmpeg warning and progress monitor stays inside outputs.ts</a></li><li><a href="/projects/bunryu/docs/adr/input-state-stays-separate-from-the-health-poll/" class="link-quiet hover:text-ink block py-1 text-muted">inputState stays separate from the health poll</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Agents</div>
+                <ul class="caption"><li><a href="/projects/bunryu/docs/agents/domain/" class="link-quiet hover:text-ink block py-1 text-muted">Domain Docs</a></li><li><a href="/projects/bunryu/docs/agents/issue-tracker/" class="link-quiet hover:text-ink block py-1 text-muted">Issue tracker: GitHub</a></li><li><a href="/projects/bunryu/docs/agents/triage-labels/" class="link-quiet hover:text-ink block py-1 text-muted">Triage Labels</a></li></ul>
+              </div>
+            </nav></div>
+              <div class="min-w-0"><article class="readme min-w-0"><p>Status: accepted, 2026-10-30</p>
+<p>The code that starts, stops and restarts output FFmpeg processes (<code>src/services/outputs.ts</code>) is the part where a bug is an outage in front of a live audience: an output started twice, never started, or shown as stopped while its process still runs. So it is kept simple and plain, and speed, duplication and extra checks are accepted before cleverness. A faster or more elegant design needs a very good reason, written down in <a href="/projects/bunryu/docs/reference/design-decisions/">Design decisions</a>.</p>
+<p>Consequences: a refactor of that file is judged on whether the start, stop, restart and <code>retire()</code> paths come out simpler and still ordered the same way (see <a href="/projects/bunryu/docs/adr/retire-an-output-in-one-call/">ADR 0002</a>), not on how much code it moves (<a href="/projects/bunryu/docs/adr/warning-monitor-stays-in-outputs/">ADR 0004</a> is an example). The dashboard is held to ordinary refactoring judgment, since a UI bug costs less than a wrong output state.</p>
+</article><a class="more caption mt-8 inline-block" href="https://github.com/live-miracles/bunryu/blob/master/docs/adr/0001-robustness-before-performance-in-output-management.md">Edit this page on GitHub</a><div class="mt-12 grid gap-4 sm:grid-cols-2">
+              <a class="panel link-quiet hover:bg-parchment p-5 transition-colors" href="/projects/bunryu/docs/reference/design-decisions/"><div class="text-muted caption">Previous</div><div class="font-semibold">Design decisions</div></a>
+              <a class="panel link-quiet hover:bg-parchment p-5 transition-colors sm:text-right" href="/projects/bunryu/docs/adr/retire-an-output-in-one-call/"><div class="text-muted caption">Next</div><div class="font-semibold">An output is retired in one call before its row is deleted</div></a>
+            </div></div>
+            </div></div></div></main>
+    <footer class="caption waves text-muted border-line border-t pb-28">
+      <div class="mx-auto flex w-full max-w-[980px] flex-wrap items-center justify-between gap-x-6 gap-y-2 px-5 py-8 sm:px-6">
+        <span>Live Miracles · Open tools for live teams</span>
+        <span class="flex gap-5">
+          <a class="link-quiet" href="/blog/">Blog</a>
+          <a class="link-quiet" href="/blog/feed.xml">RSS</a>
+          <a class="link-quiet" href="https://github.com/live-miracles">GitHub</a>
+        </span>
+      </div>
+    </footer>
+    <dialog id="lightbox" class="lightbox" aria-label="Enlarged image">
+      <button type="button" class="lightbox-close" aria-label="Close image"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg></button>
+      <div class="lightbox-frame"><img alt="" /></div>
+    </dialog>
+    <script>
+      (function () {
+        var dialog = document.getElementById('lightbox');
+        if (!dialog || !dialog.showModal) return;
+        var shown = dialog.querySelector('img');
+        function zoomable(img) {
+          return !img.closest('a') && img.naturalWidth >= 300 && img.naturalHeight >= 100;
+        }
+        function mark(img) {
+          if (img.dataset.zoom || !zoomable(img)) return;
+          img.dataset.zoom = '1';
+          img.classList.add('zoomable');
+          img.tabIndex = 0;
+          img.setAttribute('role', 'button');
+          img.setAttribute('aria-label', 'Enlarge image: ' + (img.alt || 'screenshot'));
+        }
+        function open(img) {
+          shown.src = img.currentSrc || img.src;
+          shown.alt = img.alt;
+          shown.classList.remove('actual');
+          dialog.showModal();
+          dialog.scrollTo(0, 0);
+        }
+        document.querySelectorAll('.readme img').forEach(function (img) {
+          if (img.complete) mark(img);
+          else img.addEventListener('load', function () { mark(img); }, { once: true });
+        });
+        document.addEventListener('click', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom) open(img);
+        });
+        document.addEventListener('keydown', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom && (event.key === 'Enter' || event.key === ' ')) {
+            event.preventDefault();
+            open(img);
+          }
+        });
+        shown.addEventListener('click', function () {
+          shown.classList.toggle('actual');
+        });
+        dialog.addEventListener('click', function (event) {
+          if (event.target !== shown) dialog.close();
+        });
+      })();
+    </script>
+  </body>
+</html>

@@ -32,7 +32,7 @@
           </div>
         </nav>
       </header>
-    <main class="flex-1"><div class="mx-auto w-full max-w-[980px] px-5 py-10 sm:px-6 sm:py-14"><nav class="text-muted caption flex flex-wrap items-center gap-2" aria-label="Breadcrumb">
+    <main class="flex-1"><div class="wash" style="--glow-a: color-mix(in srgb, #2f6fb3 30%, transparent)"><div class="mx-auto w-full max-w-[980px] px-5 py-10 sm:px-6 sm:py-14"><nav class="text-muted caption flex flex-wrap items-center gap-2" aria-label="Breadcrumb">
               <a href="/projects/bunryu/" class="link-quiet hover:text-ink flex items-center gap-2"><img src="/assets/bunryu-logo.png" alt="" class="logo size-5 " /><span>Bunryu</span></a>
               <span aria-hidden="true">›</span><a class="link-quiet hover:text-ink" href="/projects/bunryu/docs/">Documentation</a><span aria-hidden="true">›</span><span>Getting started</span>
             </nav>
@@ -53,6 +53,12 @@
               </div><div class="mt-5">
                 <div class="eyebrow mb-1">Reference</div>
                 <ul class="caption"><li><a href="/projects/bunryu/docs/reference/api/" class="link-quiet hover:text-ink block py-1 text-muted">REST API</a></li><li><a href="/projects/bunryu/docs/reference/development/" class="link-quiet hover:text-ink block py-1 text-muted">Development</a></li><li><a href="/projects/bunryu/docs/reference/design-decisions/" class="link-quiet hover:text-ink block py-1 text-muted">Design decisions</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Adr</div>
+                <ul class="caption"><li><a href="/projects/bunryu/docs/adr/robustness-before-performance-in-output-management/" class="link-quiet hover:text-ink block py-1 text-muted">Output FFmpeg management favours robustness over performance</a></li><li><a href="/projects/bunryu/docs/adr/retire-an-output-in-one-call/" class="link-quiet hover:text-ink block py-1 text-muted">An output is retired in one call before its row is deleted</a></li><li><a href="/projects/bunryu/docs/adr/no-migrations-and-no-legacy-tolerance/" class="link-quiet hover:text-ink block py-1 text-muted">No database migrations and no legacy-format tolerance</a></li><li><a href="/projects/bunryu/docs/adr/warning-monitor-stays-in-outputs/" class="link-quiet hover:text-ink block py-1 text-muted">The FFmpeg warning and progress monitor stays inside outputs.ts</a></li><li><a href="/projects/bunryu/docs/adr/input-state-stays-separate-from-the-health-poll/" class="link-quiet hover:text-ink block py-1 text-muted">inputState stays separate from the health poll</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Agents</div>
+                <ul class="caption"><li><a href="/projects/bunryu/docs/agents/domain/" class="link-quiet hover:text-ink block py-1 text-muted">Domain Docs</a></li><li><a href="/projects/bunryu/docs/agents/issue-tracker/" class="link-quiet hover:text-ink block py-1 text-muted">Issue tracker: GitHub</a></li><li><a href="/projects/bunryu/docs/agents/triage-labels/" class="link-quiet hover:text-ink block py-1 text-muted">Triage Labels</a></li></ul>
               </div>
             </nav></div>
             </details>
@@ -70,6 +76,12 @@
               </div><div class="mt-5">
                 <div class="eyebrow mb-1">Reference</div>
                 <ul class="caption"><li><a href="/projects/bunryu/docs/reference/api/" class="link-quiet hover:text-ink block py-1 text-muted">REST API</a></li><li><a href="/projects/bunryu/docs/reference/development/" class="link-quiet hover:text-ink block py-1 text-muted">Development</a></li><li><a href="/projects/bunryu/docs/reference/design-decisions/" class="link-quiet hover:text-ink block py-1 text-muted">Design decisions</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Adr</div>
+                <ul class="caption"><li><a href="/projects/bunryu/docs/adr/robustness-before-performance-in-output-management/" class="link-quiet hover:text-ink block py-1 text-muted">Output FFmpeg management favours robustness over performance</a></li><li><a href="/projects/bunryu/docs/adr/retire-an-output-in-one-call/" class="link-quiet hover:text-ink block py-1 text-muted">An output is retired in one call before its row is deleted</a></li><li><a href="/projects/bunryu/docs/adr/no-migrations-and-no-legacy-tolerance/" class="link-quiet hover:text-ink block py-1 text-muted">No database migrations and no legacy-format tolerance</a></li><li><a href="/projects/bunryu/docs/adr/warning-monitor-stays-in-outputs/" class="link-quiet hover:text-ink block py-1 text-muted">The FFmpeg warning and progress monitor stays inside outputs.ts</a></li><li><a href="/projects/bunryu/docs/adr/input-state-stays-separate-from-the-health-poll/" class="link-quiet hover:text-ink block py-1 text-muted">inputState stays separate from the health poll</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Agents</div>
+                <ul class="caption"><li><a href="/projects/bunryu/docs/agents/domain/" class="link-quiet hover:text-ink block py-1 text-muted">Domain Docs</a></li><li><a href="/projects/bunryu/docs/agents/issue-tracker/" class="link-quiet hover:text-ink block py-1 text-muted">Issue tracker: GitHub</a></li><li><a href="/projects/bunryu/docs/agents/triage-labels/" class="link-quiet hover:text-ink block py-1 text-muted">Triage Labels</a></li></ul>
               </div>
             </nav></div>
               <div class="min-w-0"><details class="bg-parchment text-muted caption mb-8 rounded-xl p-4">
@@ -215,8 +227,8 @@ but not converted into firewall bans.</p>
               <a class="panel link-quiet hover:bg-parchment p-5 transition-colors" href="/projects/bunryu/docs/getting-started/docker/"><div class="text-muted caption">Previous</div><div class="font-semibold">Docker</div></a>
               <a class="panel link-quiet hover:bg-parchment p-5 transition-colors sm:text-right" href="/projects/bunryu/docs/getting-started/sizing/"><div class="text-muted caption">Next</div><div class="font-semibold">Sizing a server</div></a>
             </div></div>
-            </div></div></main>
-    <footer class="caption bg-parchment text-muted border-line border-t">
+            </div></div></div></main>
+    <footer class="caption waves text-muted border-line border-t pb-28">
       <div class="mx-auto flex w-full max-w-[980px] flex-wrap items-center justify-between gap-x-6 gap-y-2 px-5 py-8 sm:px-6">
         <span>Live Miracles · Open tools for live teams</span>
         <span class="flex gap-5">
