@@ -10,24 +10,28 @@ const categories = [
     {
         id: 'streaming',
         tint: '#2f6fb3',
+        pattern: 'seigaiha',
         name: 'Streaming & transport',
         summary: 'Ingest, forward and watch live streams reliably.',
     },
     {
         id: 'vmix',
         tint: '#d9694f',
+        pattern: 'asanoha',
         name: 'vMix production',
         summary: 'Control and automate vMix systems during live shows.',
     },
     {
         id: 'monitoring',
         tint: '#2a9d8f',
+        pattern: 'shippo',
         name: 'Monitoring & operations',
         summary: 'Keep an eye on many feeds and machines at once.',
     },
     {
         id: 'events',
         tint: '#d4a24c',
+        pattern: 'kikko',
         name: 'Event workflows',
         summary: 'Google Workspace tools for scheduling, stream keys and audience Q&A.',
     },

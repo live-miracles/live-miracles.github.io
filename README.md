@@ -65,14 +65,23 @@ for it).
 
 ## Look and artwork
 
-The palette and the wave motifs come from Hokusai's sea. The hero backdrop is
-`ui/assets/waves.avif`, the dark ukiyo-e wave nightscape that
+The palette and the motifs come from Hokusai's sea and from Japanese textile patterns. The
+hero backdrop is `ui/assets/waves.avif`, the dark ukiyo-e wave nightscape that
 [Live Gallery](https://github.com/live-miracles/live-gallery) shows in its empty boxes (about
-40 KB); by day it is inverted into pale paper. The `seigaiha-*.svg` tiles are the wave pattern
-behind the footer. Colours follow the visitor's light or dark setting until they press the sun or
-moon button in the top bar, which remembers their choice (see the tokens at the top of
-`ui/styles.css`, kept twice: for the system setting and for a chosen dark theme), and each category in `scripts/projects.js` has a `tint` that
-colours its band, cards and project pages.
+40 KB); by day it is inverted into pale paper.
+
+Each category in `scripts/projects.js` has a `tint` and a `pattern` (`seigaiha` waves,
+`asanoha` hemp leaf, `shippo` interlocking circles, `kikko` tortoiseshell). The patterns are
+small SVG masks in `ui/assets/patterns/` (white lines on black, read by luminance), filled with
+the tint in CSS, so one file serves every category and both colour schemes. A category's band
+on the home page and its project pages show its pattern; the footer uses seigaiha.
+
+Glows are placed per page: `glowVars()` in `scripts/build.js` derives their positions from the
+page's name, so each page glows from its own spot, the same one on every visit and build.
+
+Colours follow the visitor's light or dark setting until they press the sun or moon button in
+the top bar, which remembers their choice (see the tokens at the top of `ui/styles.css`, kept
+twice: for the system setting and for a chosen dark theme).
 
 ## Development
 

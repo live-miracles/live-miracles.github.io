@@ -109,20 +109,66 @@ function linkButtons(project, style = 'pill') {
         .join('');
 }
 
+// The CSS variable that points a band or page at its category's pattern (see ui/styles.css).
+function patternVar(category) {
+    return `--pattern: url('/assets/patterns/${category.pattern}.svg')`;
+}
+
+// Pseudo-randomness seeded by a name, so every page glows from its own spot but always the
+// same one: no JavaScript, and builds and screenshots stay reproducible.
+function seeded(seed) {
+    let h = 2166136261;
+    for (const char of seed) h = Math.imul(h ^ char.charCodeAt(0), 16777619);
+    return () => {
+        h = Math.imul(h ^ (h >>> 15), 2246822507);
+        h = Math.imul(h ^ (h >>> 13), 3266489909);
+        return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
+    };
+}
+
+// The CSS variables that place a page's glows (see .wash and .wash-hero in ui/styles.css):
+// left and right glow positions, whether their colours swap sides, and where the pattern sits.
+function glowVars(seed) {
+    const random = seeded(seed);
+    const between = (min, max) => Math.round(min + random() * (max - min));
+    const flip = random() < 0.5;
+    return [
+        `--gx1: ${between(0, 40)}%`,
+        `--gx2: ${between(60, 100)}%`,
+        `--gx3: ${between(25, 75)}%`,
+        `--gy1: ${between(-140, 0)}px`,
+        `--gy2: ${between(-140, 0)}px`,
+        `--gy1p: ${between(0, 30)}%`,
+        `--gy2p: ${between(0, 30)}%`,
+        `--px: ${between(70, 100)}%`,
+        ...(flip ? ['--glow-1: var(--glow-b)', '--glow-2: var(--glow-a)'] : []),
+    ].join('; ');
+}
+
 // One narrow column of content, centred on the page, under a colour wash. A project's
-// pages take the wash from its category's tint.
-function page(inner, width = 'max-w-[980px]', tint) {
-    const style = tint ? ` style="--glow-a: color-mix(in srgb, ${tint} 30%, transparent)"` : '';
-    return `<div class="wash"${style}><div class="mx-auto w-full ${width} px-5 py-10 sm:px-6 sm:py-14">${inner}</div></div>`;
+// pages take the wash from its category's tint; `seed` places the glows.
+function page(inner, width = 'max-w-[980px]', category, seed = 'page') {
+    const vars = [glowVars(seed)];
+    if (category) {
+        vars.push(
+            `--tint: ${category.tint}`,
+            `--glow-a: color-mix(in srgb, ${category.tint} 30%, transparent)`,
+            patternVar(category),
+        );
+    }
+    return `<div class="wash" style="${vars.join('; ')}"><div class="mx-auto w-full ${width} px-5 py-10 sm:px-6 sm:py-14">${inner}</div></div>`;
 }
 
 // A full-width band; neighbouring bands alternate between parchment and canvas so the
-// colour change itself divides the sections. A band with a tint also glows in that
-// colour; any shade other than parchment or canvas is used as a class.
-function band(inner, shade, extra = '', tint) {
+// colour change itself divides the sections. A band with a category also shows that
+// category's pattern in its colour; any shade other than parchment or canvas is used as a class.
+function band(inner, shade, extra = '', category, seed) {
     const background =
         { parchment: 'band band-parchment', canvas: 'band band-canvas' }[shade] ?? shade;
-    const style = tint ? ` style="--tint: ${tint}"` : '';
+    const vars = [];
+    if (category) vars.push(`--tint: ${category.tint}`, patternVar(category));
+    if (seed) vars.push(glowVars(seed));
+    const style = vars.length ? ` style="${vars.join('; ')}"` : '';
     return `<div class="${background} ${extra}"${style}><div class="mx-auto w-full max-w-[980px] px-5 sm:px-6">${inner}</div></div>`;
 }
 
@@ -338,7 +384,7 @@ function homePage(data, posts) {
           </section>`,
                 shade,
                 'py-16 sm:py-20',
-                category.tint,
+                category,
             );
         })
         .join('');
@@ -364,6 +410,9 @@ function homePage(data, posts) {
             </div>
           </section>`,
         'wash-hero relative overflow-hidden',
+        '',
+        undefined,
+        'home',
     );
 
     const body = `${hero}
@@ -469,8 +518,8 @@ function projectFrame({ project, repo, docs, activeUrl, header, content }) {
               <div class="min-w-0">${content}</div>
             </div>`
         : `<div class="mt-10">${content}</div>`;
-    const tint = categories.find((category) => category.id === project.category)?.tint;
-    return page(`${header}${tabs}${main}`, undefined, tint);
+    const category = categories.find((category) => category.id === project.category);
+    return page(`${header}${tabs}${main}`, undefined, category, project.id);
 }
 
 function projectHeader(project, repo) {
@@ -619,11 +668,16 @@ function blogIndexPage(posts) {
         description: blogDescription,
         canonicalPath: '/blog/',
         activeId: 'blog',
-        body: page(`<header class="mb-8">
+        body: page(
+            `<header class="mb-8">
             <h1 class="display display-hero">Blog</h1>
             <p class="lead mt-4 max-w-2xl">${escapeHtml(blogDescription)} <a class="more" href="/blog/feed.xml">RSS feed</a></p>
           </header>
-          <div>${list}</div>`),
+          <div>${list}</div>`,
+            undefined,
+            undefined,
+            'blog',
+        ),
     });
 }
 
@@ -653,6 +707,8 @@ function blogPostPage(post) {
           <article class="readme min-w-0">${post.html}</article>
           <a class="more caption mt-10 inline-block" href="https://github.com/${organization}/${organization}.github.io/blob/${branch}/${post.sourcePath}">Edit this post on GitHub</a>`,
             'max-w-[720px]',
+            undefined,
+            post.url,
         ),
     });
 }
@@ -679,7 +735,6 @@ function latestPosts(posts, shade) {
           </section>`,
         shade,
         'py-16 sm:py-20',
-        '#c8553d',
     );
 }
 
@@ -689,10 +744,15 @@ function notFoundPage() {
         description: siteDescription,
         canonicalPath: '/404.html',
         activeId: null,
-        body: page(`<section class="flex min-h-[50vh] flex-col items-center justify-center text-center">
+        body: page(
+            `<section class="flex min-h-[50vh] flex-col items-center justify-center text-center">
             <h1 class="display display-hero">Page not found</h1>
             <p class="lead mt-5">Pick a project from the <a class="more" href="/#projects">list</a>, or go back to the <a class="more" href="/">home page</a>.</p>
-          </section>`),
+          </section>`,
+            undefined,
+            undefined,
+            'not-found',
+        ),
     });
 }
 
