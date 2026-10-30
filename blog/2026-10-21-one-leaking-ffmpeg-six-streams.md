@@ -46,7 +46,7 @@ The root cause was a loop: flaky input, a decoder leak on resync, an OOM kill, a
 
 ## What we did not fix
 
-The shared cgroup is still there. The watchdog keeps the kernel from ever triggering the cascade, but if a process grew faster than the watchdog checks, or something else ran the host out of memory, the same chain could start again. We would rather say that than claim the cascade is gone.
+The shared cgroup is still there. The watchdog keeps the kernel from ever triggering the cascade, but if a process grew faster than the watchdog checks, or something else ran the host out of memory, the same chain could start again. We would rather say that than claim the cascade is gone. The observed speed of RAM growth in those cases were slow, so for now we still want to rely on kernel if any unexpected issue / leak happens and it can restart the whole group. 
 
 We also test these paths on purpose: a destination that freezes, one that accepts a connection and never reads, one that refuses connections, a CPU-saturated host, and a soak run with 50 healthy outputs. No test makes a server perfect. The goal is that when something fails it stays small, fixes itself where that is safe, and leaves enough evidence to explain it afterwards.
 
