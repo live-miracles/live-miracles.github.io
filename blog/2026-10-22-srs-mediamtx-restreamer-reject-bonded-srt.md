@@ -10,23 +10,13 @@ draft: false
 
 SRT bonding sends one live stream over several network links at once, for example two uplinks or two SIM cards. If one link degrades or dies, the receiver still has the data from the other, so the stream does not drop. libsrt implements it as a _socket group_.
 
-The catch is the receiving end. A server has to accept the group, and most open source media servers cannot. We run [SRS](https://github.com/ossrs/srs) in [Bunryu](https://github.com/live-miracles/bunryu), so we wrote a small relay, [Goryu](https://github.com/live-miracles/goryu), that accepts the bonded group and forwards ordinary SRT to the server behind it. This post shows how to put it in front of SRS, MediaMTX or Restreamer, and what we actually checked.
-
-## The problem
-
-We sent a bonded broadcast group, two legs, straight at each server's SRT port. All three refused it. The sender's libsrt logs the reason:
-
-```text
-HS EXT: agent is a group member, but the listener did not respond with group ID. Rejecting.
-```
-
-That means the server's listener does not accept groups. The versions we tried were SRS 7.0.189, MediaMTX v1.21.2 and datarhei Core 16.16.0, which is the engine inside Restreamer. SRS has an open request for it ([ossrs/srs#4771](https://github.com/ossrs/srs/issues/4771)), so that one may change.
+The catch is the receiving end. A server has to accept the group, and most open source media servers cannot. We run [SRS](https://github.com/ossrs/srs) in [Bunryu](https://github.com/live-miracles/bunryu), so we wrote a small relay, [Goryu](https://github.com/live-miracles/goryu), that accepts the bonded group and forwards ordinary SRT to the server behind it. This post shows how to put it in front of SRS, MediaMTX or any SRT server, and what we actually checked.
 
 ## The fix: terminate the group before the server
 
 ![Sent directly, the bonded group is rejected by the server. Through Goryu, the legs are merged and the server receives one plain SRT stream](images/bonded-before-after.webp)
 
-Goryu listens on one port with group connections enabled. libsrt merges the legs and drops the duplicate packets before Goryu reads anything, so Goryu sees one clean MPEG-TS stream. It then publishes that stream to your server as a normal single-link SRT caller, with the same `streamid`. The server never knows the input was bonded. An ordinary single-link SRT sender works on the same port.
+Goryu listens on one port (i.e. `10081`) with group connections enabled. libsrt merges the legs and drops the duplicate packets before Goryu reads anything, so Goryu sees one clean MPEG-TS stream. It automatically forwards that stream to your server's port (i.e. `10080`) as a normal single-link SRT caller, with the same `streamid`. The server never knows the input was bonded. An ordinary single-link SRT sender works on the same port.
 
 ## Try it with MediaMTX
 
@@ -71,9 +61,7 @@ SRS needs its SRT server enabled, and Core needs `CORE_SRT_ENABLE=true`. The [do
 
 ## Passphrases
 
-SRT encrypts each hop on its own. By default Goryu uses one passphrase on both: set `passphrase` and the encoder must use it, and so must the server. That is awkward when Goryu runs next to the server, because the hop that crosses the internet is the encoder's.
-
-From v3.4.0 you can give the server side its own with `output_passphrase`: an empty string for a server without a passphrase, or a different one. Left out, it falls back to `passphrase`, so existing configs do not change.
+SRT encrypts each hop on its own. By default Goryu uses one passphrase on both: set `passphrase`. So similiarly to `streamid` the encoder will use the same `passphrase` as when directly connecting to the server. You can optionally give the server side its own `passphrase` with `output_passphrase`: an empty string for a server without a passphrase, or a different one.
 
 ```json
 {
@@ -87,7 +75,7 @@ From v3.4.0 you can give the server side its own with `output_passphrase`: an em
 }
 ```
 
-Each passphrase must be empty or 10 to 79 characters, the range libsrt accepts, and Goryu refuses to start otherwise. We checked this against a server that enforces its passphrase: encrypted input with a plain server, a different passphrase on each side, a plain input with an encrypted server, and the default. We also checked the two cases that must fail. An empty `output_passphrase` does not fall back to the input's, so a server that still requires one is refused. A server given the input's passphrase instead of its own is refused too. Neither passphrase appears in the relay's log.
+Each passphrase must be empty or 10 to 79 characters, the range libsrt accepts, and Goryu refuses to start otherwise.
 
 ## Sending a bonded stream
 
@@ -158,16 +146,10 @@ With the stream running, we unplugged one of the encoder's two LAN cables for ab
 - **One oddity.** The rejoined leg reports 7,977 lost packets from the moment it appears. That is roughly the first 3.7 seconds of the stream at this bitrate, so it is probably the gap before the leg joined being counted as loss. We have not confirmed that, and the merged stream did not slow down.
 - **Nothing in the log, in v3.3.0.** The journal has no line for the leg dropping or for it coming back. The status API shows it live, but afterwards only the counters remain. The next release, v3.4.0, logs both: one line per change with the leg's address and how many legs remain, such as `Bonded leg left streamid=... leg=<ip>:<port> legs=1`, and `Bonded leg joined ...` when it returns. A leg that flaps is limited to 12 lines per 30 seconds and then summarised, so a bad link cannot flood the journal. Bunryu writes the same changes to the pipeline's log.
 
-## What we did not test
-
-- **Different providers and degraded links.** The cable pull is a clean failure: the link went away and came back. The relay cannot tell whether the two paths use different providers, and we have not tested a link that degrades with heavy loss or congestion instead of disconnecting. The loopback test above is the only run that exercised a leg closing from the sender's side.
-- **Switchover on a real link.** We tested both group types on loopback legs. We have not measured how many packets a main/backup switchover loses on a link that degrades before it dies, because loopback legs never do.
-- **Other things worth knowing.** By default one passphrase covers both the input and the downstream connection; from v3.4.0 `output_passphrase` gives the server its own, or none. The release is Linux x86_64 only.
-
 ## Takeaways
 
 - **Bonding needs both ends.** The receiving server is as much a part of it as the encoder, and the open source ones mostly do not accept groups yet.
 - **A relay is a small, replaceable piece.** Goryu is about 2,800 lines of C and a config of six fields (a seventh is optional), so you can read all of it before trusting it with a live stream.
 - **Check the sender first.** The hard part today is finding something that sends a libsrt group, not receiving it. Of the hardware we know of, the AJA BRIDGE LIVE is the one we have seen do it.
 
-Goryu and its [documentation](https://live-miracles.github.io/projects/goryu/docs/) are open source (MIT), and we would like to hear from anyone who tries it on real links.
+Goryu and its [documentation](https://live-miracles.github.io/projects/goryu/docs/) are open source (MIT).
