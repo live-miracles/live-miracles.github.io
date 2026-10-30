@@ -274,8 +274,8 @@ short.</li>
 own about 20 s after nobody is watching (see
 <a href="/projects/bunryu/docs/operations/security/">Security</a>).</li>
 </ul>
-<p>Publishes with an unknown stream key are rejected by SRS before any output
-starts. Recent rejected attempts are listed under the pipeline list (&quot;Rejected
+<p>Publishes with an unknown stream key, or to any app other than <code>live</code>, are
+rejected by SRS before any output starts. Recent rejected attempts are listed under the pipeline list (&quot;Rejected
 publish attempts&quot;), which helps when an encoder is configured with a stale key;
 see <a href="/projects/bunryu/docs/operations/security/">Security</a> for details.</p>
 </article><a class="more caption mt-8 inline-block" href="https://github.com/live-miracles/bunryu/blob/master/docs/2-usage/1-publishing.md">Edit this page on GitHub</a><div class="mt-12 grid gap-4 sm:grid-cols-2">

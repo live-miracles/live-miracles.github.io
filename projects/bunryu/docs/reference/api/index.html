@@ -158,7 +158,7 @@ JSON, <code>{ &quot;error&quot;: &quot;…&quot; }</code>; an unexpected failure
 <tr>
 <td>POST</td>
 <td><code>/api/pipelines</code></td>
-<td>Create pipeline (auto-names and assigns stream key)</td>
+<td>Create pipeline (auto-names and assigns stream key) — 409 when every stream key is already assigned</td>
 </tr>
 <tr>
 <td>GET</td>
@@ -168,7 +168,7 @@ JSON, <code>{ &quot;error&quot;: &quot;…&quot; }</code>; an unexpected failure
 <tr>
 <td>POST</td>
 <td><code>/api/pipelines/:id</code></td>
-<td>Rename pipeline <code>{ name }</code>, optionally reassign key <code>{ name, streamKeyId }</code> — a key change returns 409 while any of your outputs is running; a shared encode still running is stopped first, so the next one pulls the new key</td>
+<td>Rename pipeline <code>{ name }</code>, optionally reassign key <code>{ name, streamKeyId }</code> (<code>400</code> for an unknown <code>streamKeyId</code>) — a key change returns 409 while any of your outputs is running; a shared encode still running is stopped first, so the next one pulls the new key</td>
 </tr>
 <tr>
 <td>DELETE</td>

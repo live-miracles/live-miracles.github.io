@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Clear the downstream retry count only after the output has stayed up for 10 s — Goryu</title>
+    <meta name="description" content="A downstream can accept the SRT handshake and then reject the stream, for example a publish hook refusing a stream key. Goryu retries on a 1, 2, 4, 8, 16 s schedule, and the count that drives it is cl" />
+    <link rel="canonical" href="https://live-miracles.github.io/projects/goryu/docs/adr/clear-the-retry-count-only-after-the-output-stays-up/" />
+    <meta property="og:site_name" content="Live Miracles" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Clear the downstream retry count only after the output has stayed up for 10 s — Goryu" />
+    <meta property="og:description" content="A downstream can accept the SRT handshake and then reject the stream, for example a publish hook refusing a stream key. Goryu retries on a 1, 2, 4, 8, 16 s schedule, and the count that drives it is cl" />
+    <meta property="og:url" content="https://live-miracles.github.io/projects/goryu/docs/adr/clear-the-retry-count-only-after-the-output-stays-up/" />
+    <meta property="og:image" content="https://live-miracles.github.io/assets/social/goryu.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/assets/logo.png" type="image/png" />
+    <link rel="alternate" type="application/rss+xml" title="Live Miracles blog" href="/blog/feed.xml" />
+    <script>
+      try {
+        var theme = localStorage.getItem('theme');
+        if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
+      } catch (e) {}
+    </script>
+    <link rel="stylesheet" href="/assets/styles.css" />
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <header class="topbar">
+        <nav class="caption mx-auto flex h-12 w-full max-w-[1024px] items-center justify-between gap-4 px-5 sm:px-6" aria-label="Site">
+          <a href="/" class="flex items-center gap-2.5 font-semibold" aria-label="Live Miracles">
+            <img src="/assets/logo.png" alt="" class="logo size-6" />
+            <span>Live Miracles</span>
+          </a>
+          <div class="flex items-center gap-5 sm:gap-7">
+            <a href="/#projects" class="text-muted hover:text-ink transition-colors">Projects</a>
+            <a href="/blog/" class="text-muted hover:text-ink transition-colors">Blog</a>
+            <div class="-mr-2 flex items-center gap-1">
+              <a href="https://github.com/live-miracles" class="icon-btn" aria-label="Live Miracles on GitHub" title="GitHub"><svg xmlns="http://www.w3.org/2000/svg" class="size-[18px]" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.79 23.39c.6.11.82-.26.82-.58v-2.02c-3.34.73-4.04-1.42-4.04-1.42-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.57A12 12 0 0 0 12 .5Z"/></svg></a>
+              <button type="button" id="theme-toggle" class="icon-btn theme-toggle" hidden><svg xmlns="http://www.w3.org/2000/svg" class="icon-sun size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32 1.41-1.41"/></svg><svg xmlns="http://www.w3.org/2000/svg" class="icon-moon size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg></button>
+            </div>
+          </div>
+        </nav>
+      </header>
+    <main class="flex-1"><div class="wash" style="--gx1: 21%; --gx2: 84%; --gx3: 57%; --gy1: -120px; --gy2: -105px; --gy1p: 16%; --gy2p: 12%; --px: 94%; --tint: #2f6fb3; --glow-a: color-mix(in srgb, #2f6fb3 30%, transparent); --pattern: url('/assets/patterns/seigaiha.svg')"><div class="mx-auto w-full max-w-[980px] px-5 py-10 sm:px-6 sm:py-14"><nav class="text-muted caption flex flex-wrap items-center gap-2" aria-label="Breadcrumb">
+              <a href="/projects/goryu/" class="link-quiet hover:text-ink flex items-center gap-2"><img src="/assets/goryu-logo.png" alt="" class="logo size-5 " /><span>Goryu</span></a>
+              <span aria-hidden="true">›</span><a class="link-quiet hover:text-ink" href="/projects/goryu/docs/">Documentation</a><span aria-hidden="true">›</span><span>Adr</span>
+            </nav>
+            <h1 class="display display-lg mt-4">Clear the downstream retry count only after the output has stayed up for 10 s</h1><nav class="border-line mt-8 flex gap-6 border-b" aria-label="Goryu sections">
+              <a href="/projects/goryu/" class="tab">Overview</a><a href="/projects/goryu/docs/" class="tab" aria-current="page">Documentation</a>
+            </nav><details class="bg-parchment caption mt-6 rounded-xl p-4 lg:hidden">
+              <summary class="cursor-pointer font-semibold">Documentation menu</summary>
+              <div class="mt-3"><nav class="lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto" aria-label="Goryu documentation">
+              <div class="">
+                <div class="eyebrow mb-1">Getting started</div>
+                <ul class="caption"><li><a href="/projects/goryu/docs/getting-started/introduction/" class="link-quiet hover:text-ink block py-1 text-muted">Introduction</a></li><li><a href="/projects/goryu/docs/getting-started/install/" class="link-quiet hover:text-ink block py-1 text-muted">Install</a></li><li><a href="/projects/goryu/docs/getting-started/alternatives/" class="link-quiet hover:text-ink block py-1 text-muted">Alternatives</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Usage</div>
+                <ul class="caption"><li><a href="/projects/goryu/docs/usage/configuration/" class="link-quiet hover:text-ink block py-1 text-muted">Configuration</a></li><li><a href="/projects/goryu/docs/usage/sending-bonded-srt/" class="link-quiet hover:text-ink block py-1 text-muted">Sending bonded SRT</a></li><li><a href="/projects/goryu/docs/usage/downstream-servers/" class="link-quiet hover:text-ink block py-1 text-muted">Downstream servers</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Operations</div>
+                <ul class="caption"><li><a href="/projects/goryu/docs/operations/reliability/" class="link-quiet hover:text-ink block py-1 text-muted">Reliability</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Reference</div>
+                <ul class="caption"><li><a href="/projects/goryu/docs/reference/status-api/" class="link-quiet hover:text-ink block py-1 text-muted">Status API</a></li><li><a href="/projects/goryu/docs/reference/architecture/" class="link-quiet hover:text-ink block py-1 text-muted">Architecture</a></li><li><a href="/projects/goryu/docs/reference/development/" class="link-quiet hover:text-ink block py-1 text-muted">Development</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Adr</div>
+                <ul class="caption"><li><a href="/projects/goryu/docs/adr/terminate-the-bonded-group-in-goryu/" class="link-quiet hover:text-ink block py-1 text-muted">Terminate the bonded group in Goryu and forward plain SRT</a></li><li><a href="/projects/goryu/docs/adr/status-thread-never-calls-libsrt/" class="link-quiet hover:text-ink block py-1 text-muted">The status thread never calls libsrt</a></li><li><a href="/projects/goryu/docs/adr/bunryu-compatibility-contract/" class="link-quiet hover:text-ink block py-1 text-muted">The status API, config keys and release asset are a contract with Bunryu</a></li><li><a href="/projects/goryu/docs/adr/clear-the-retry-count-only-after-the-output-stays-up/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">Clear the downstream retry count only after the output has stayed up for 10 s</a></li><li><a href="/projects/goryu/docs/adr/duplicate-publisher-waits-then-takes-over-a-stale-session/" class="link-quiet hover:text-ink block py-1 text-muted">A duplicate publisher waits 5 s, then takes over a stale session or is rejected</a></li><li><a href="/projects/goryu/docs/adr/a-refused-srt-option-stops-the-relay/" class="link-quiet hover:text-ink block py-1 text-muted">A refused SRT option stops the relay at startup</a></li><li><a href="/projects/goryu/docs/adr/cap-libsrt-log-output-process-wide/" class="link-quiet hover:text-ink block py-1 text-muted">Cap libsrt&#39;s log output at 20 lines per second for the whole process</a></li><li><a href="/projects/goryu/docs/adr/destination-has-its-own-optional-passphrase/" class="link-quiet hover:text-ink block py-1 text-muted">The destination has its own optional passphrase, and an empty one means unencrypted</a></li><li><a href="/projects/goryu/docs/adr/reproducible-releases-that-are-never-overwritten/" class="link-quiet hover:text-ink block py-1 text-muted">Releases are reproducible and a published release is never overwritten</a></li><li><a href="/projects/goryu/docs/adr/docker-image-installs-the-published-release/" class="link-quiet hover:text-ink block py-1 text-muted">The Docker image installs the published release instead of building from source</a></li><li><a href="/projects/goryu/docs/adr/a-socket-is-untracked-before-it-is-closed/" class="link-quiet hover:text-ink block py-1 text-muted">A socket is untracked before it is closed, and only the thread that untracked it closes it</a></li><li><a href="/projects/goryu/docs/adr/goryu-json-is-read-by-a-strict-scanner/" class="link-quiet hover:text-ink block py-1 text-muted">goryu.json is read by a small strict scanner, and an unknown key is a warning</a></li><li><a href="/projects/goryu/docs/adr/status-api-is-loopback-only-and-unauthenticated/" class="link-quiet hover:text-ink block py-1 text-muted">The status API is loopback-only and unauthenticated, and each client gets 2 s</a></li><li><a href="/projects/goryu/docs/adr/telemetry-rules-are-pure-and-libsrt-is-read-in-one-place/" class="link-quiet hover:text-ink block py-1 text-muted">Telemetry rules are a pure module, and libsrt is read in one place</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Agents</div>
+                <ul class="caption"><li><a href="/projects/goryu/docs/agents/domain/" class="link-quiet hover:text-ink block py-1 text-muted">Domain Docs</a></li><li><a href="/projects/goryu/docs/agents/issue-tracker/" class="link-quiet hover:text-ink block py-1 text-muted">Issue tracker: GitHub</a></li><li><a href="/projects/goryu/docs/agents/triage-labels/" class="link-quiet hover:text-ink block py-1 text-muted">Triage Labels</a></li></ul>
+              </div>
+            </nav></div>
+            </details>
+            <div class="mt-10 grid gap-12 lg:grid-cols-[13rem_minmax(0,1fr)]">
+              <div class="hidden lg:block"><nav class="lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto" aria-label="Goryu documentation">
+              <div class="">
+                <div class="eyebrow mb-1">Getting started</div>
+                <ul class="caption"><li><a href="/projects/goryu/docs/getting-started/introduction/" class="link-quiet hover:text-ink block py-1 text-muted">Introduction</a></li><li><a href="/projects/goryu/docs/getting-started/install/" class="link-quiet hover:text-ink block py-1 text-muted">Install</a></li><li><a href="/projects/goryu/docs/getting-started/alternatives/" class="link-quiet hover:text-ink block py-1 text-muted">Alternatives</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Usage</div>
+                <ul class="caption"><li><a href="/projects/goryu/docs/usage/configuration/" class="link-quiet hover:text-ink block py-1 text-muted">Configuration</a></li><li><a href="/projects/goryu/docs/usage/sending-bonded-srt/" class="link-quiet hover:text-ink block py-1 text-muted">Sending bonded SRT</a></li><li><a href="/projects/goryu/docs/usage/downstream-servers/" class="link-quiet hover:text-ink block py-1 text-muted">Downstream servers</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Operations</div>
+                <ul class="caption"><li><a href="/projects/goryu/docs/operations/reliability/" class="link-quiet hover:text-ink block py-1 text-muted">Reliability</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Reference</div>
+                <ul class="caption"><li><a href="/projects/goryu/docs/reference/status-api/" class="link-quiet hover:text-ink block py-1 text-muted">Status API</a></li><li><a href="/projects/goryu/docs/reference/architecture/" class="link-quiet hover:text-ink block py-1 text-muted">Architecture</a></li><li><a href="/projects/goryu/docs/reference/development/" class="link-quiet hover:text-ink block py-1 text-muted">Development</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Adr</div>
+                <ul class="caption"><li><a href="/projects/goryu/docs/adr/terminate-the-bonded-group-in-goryu/" class="link-quiet hover:text-ink block py-1 text-muted">Terminate the bonded group in Goryu and forward plain SRT</a></li><li><a href="/projects/goryu/docs/adr/status-thread-never-calls-libsrt/" class="link-quiet hover:text-ink block py-1 text-muted">The status thread never calls libsrt</a></li><li><a href="/projects/goryu/docs/adr/bunryu-compatibility-contract/" class="link-quiet hover:text-ink block py-1 text-muted">The status API, config keys and release asset are a contract with Bunryu</a></li><li><a href="/projects/goryu/docs/adr/clear-the-retry-count-only-after-the-output-stays-up/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">Clear the downstream retry count only after the output has stayed up for 10 s</a></li><li><a href="/projects/goryu/docs/adr/duplicate-publisher-waits-then-takes-over-a-stale-session/" class="link-quiet hover:text-ink block py-1 text-muted">A duplicate publisher waits 5 s, then takes over a stale session or is rejected</a></li><li><a href="/projects/goryu/docs/adr/a-refused-srt-option-stops-the-relay/" class="link-quiet hover:text-ink block py-1 text-muted">A refused SRT option stops the relay at startup</a></li><li><a href="/projects/goryu/docs/adr/cap-libsrt-log-output-process-wide/" class="link-quiet hover:text-ink block py-1 text-muted">Cap libsrt&#39;s log output at 20 lines per second for the whole process</a></li><li><a href="/projects/goryu/docs/adr/destination-has-its-own-optional-passphrase/" class="link-quiet hover:text-ink block py-1 text-muted">The destination has its own optional passphrase, and an empty one means unencrypted</a></li><li><a href="/projects/goryu/docs/adr/reproducible-releases-that-are-never-overwritten/" class="link-quiet hover:text-ink block py-1 text-muted">Releases are reproducible and a published release is never overwritten</a></li><li><a href="/projects/goryu/docs/adr/docker-image-installs-the-published-release/" class="link-quiet hover:text-ink block py-1 text-muted">The Docker image installs the published release instead of building from source</a></li><li><a href="/projects/goryu/docs/adr/a-socket-is-untracked-before-it-is-closed/" class="link-quiet hover:text-ink block py-1 text-muted">A socket is untracked before it is closed, and only the thread that untracked it closes it</a></li><li><a href="/projects/goryu/docs/adr/goryu-json-is-read-by-a-strict-scanner/" class="link-quiet hover:text-ink block py-1 text-muted">goryu.json is read by a small strict scanner, and an unknown key is a warning</a></li><li><a href="/projects/goryu/docs/adr/status-api-is-loopback-only-and-unauthenticated/" class="link-quiet hover:text-ink block py-1 text-muted">The status API is loopback-only and unauthenticated, and each client gets 2 s</a></li><li><a href="/projects/goryu/docs/adr/telemetry-rules-are-pure-and-libsrt-is-read-in-one-place/" class="link-quiet hover:text-ink block py-1 text-muted">Telemetry rules are a pure module, and libsrt is read in one place</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Agents</div>
+                <ul class="caption"><li><a href="/projects/goryu/docs/agents/domain/" class="link-quiet hover:text-ink block py-1 text-muted">Domain Docs</a></li><li><a href="/projects/goryu/docs/agents/issue-tracker/" class="link-quiet hover:text-ink block py-1 text-muted">Issue tracker: GitHub</a></li><li><a href="/projects/goryu/docs/agents/triage-labels/" class="link-quiet hover:text-ink block py-1 text-muted">Triage Labels</a></li></ul>
+              </div>
+            </nav></div>
+              <div class="min-w-0"><details class="bg-parchment text-muted caption mb-8 rounded-xl p-4">
+              <summary class="text-ink cursor-pointer font-semibold">On this page</summary>
+              <ol class="mt-3 space-y-2">
+                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#considered-options">Considered options</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#consequences">Consequences</a></li>
+              </ol>
+            </details><article class="readme min-w-0"><p>A downstream can accept the SRT handshake and then reject the stream, for example a publish hook refusing a stream key. Goryu retries on a 1, 2, 4, 8, 16 s schedule, and the count that drives it is cleared only after the output connection has stayed up for 10 s (<code>OUTPUT_HEALTHY_MS</code>).</p>
+<h2 id="considered-options">Considered options</h2>
+<ul>
+<li><strong>Clear on a successful connect.</strong> The failed send that follows always counted as the first failure, so the retry was 1 s forever. Before backoff applied to that path at all, it reconnected every 10 to 40 ms and drove steady memory growth in production.</li>
+<li><strong>Clear on the first successful send.</strong> libsrt takes packets into its send buffer before the drop arrives, and at 4 Mbps a send succeeds in every cycle, so this behaved the same as the first option.</li>
+</ul>
+<h2 id="consequences">Consequences</h2>
+<p><code>retryFailures</code> in the status API can stay above 0 for up to 10 s after a downstream recovers. The <code>downstream_drops</code> scenario uses a downstream that closes 50 ms after accepting (<code>tests/e2e/closing_sink.c</code>) and a 4 Mbps publisher, because a quiet publisher would let a wrong fix pass.</p>
+</article><a class="more caption mt-8 inline-block" href="https://github.com/live-miracles/goryu/blob/master/docs/adr/0004-clear-the-retry-count-only-after-the-output-stays-up.md">Edit this page on GitHub</a><div class="mt-12 grid gap-4 sm:grid-cols-2">
+              <a class="panel link-quiet hover:bg-parchment p-5 transition-colors" href="/projects/goryu/docs/adr/bunryu-compatibility-contract/"><div class="text-muted caption">Previous</div><div class="font-semibold">The status API, config keys and release asset are a contract with Bunryu</div></a>
+              <a class="panel link-quiet hover:bg-parchment p-5 transition-colors sm:text-right" href="/projects/goryu/docs/adr/duplicate-publisher-waits-then-takes-over-a-stale-session/"><div class="text-muted caption">Next</div><div class="font-semibold">A duplicate publisher waits 5 s, then takes over a stale session or is rejected</div></a>
+            </div></div>
+            </div></div></div></main>
+    <footer class="caption waves text-muted border-line border-t pb-28">
+      <div class="mx-auto flex w-full max-w-[980px] flex-wrap items-center justify-between gap-x-6 gap-y-2 px-5 py-8 sm:px-6">
+        <span>Live Miracles · Open tools for live teams</span>
+        <span class="flex gap-5">
+          <a class="link-quiet" href="/blog/">Blog</a>
+          <a class="link-quiet" href="/blog/feed.xml">RSS</a>
+          <a class="link-quiet" href="https://github.com/live-miracles">GitHub</a>
+        </span>
+      </div>
+    </footer>
+    <dialog id="lightbox" class="lightbox" aria-label="Enlarged image">
+      <button type="button" class="lightbox-close" aria-label="Close image"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg></button>
+      <div class="lightbox-frame"><img alt="" /></div>
+    </dialog>
+    <script>
+      (function () {
+        var dialog = document.getElementById('lightbox');
+        if (!dialog || !dialog.showModal) return;
+        var shown = dialog.querySelector('img');
+        function zoomable(img) {
+          return !img.closest('a') && img.naturalWidth >= 300 && img.naturalHeight >= 100;
+        }
+        function mark(img) {
+          if (img.dataset.zoom || !zoomable(img)) return;
+          img.dataset.zoom = '1';
+          img.classList.add('zoomable');
+          img.tabIndex = 0;
+          img.setAttribute('role', 'button');
+          img.setAttribute('aria-label', 'Enlarge image: ' + (img.alt || 'screenshot'));
+        }
+        function open(img) {
+          shown.src = img.currentSrc || img.src;
+          shown.alt = img.alt;
+          shown.classList.remove('actual');
+          dialog.showModal();
+          dialog.scrollTo(0, 0);
+        }
+        document.querySelectorAll('.readme img').forEach(function (img) {
+          if (img.complete) mark(img);
+          else img.addEventListener('load', function () { mark(img); }, { once: true });
+        });
+        document.addEventListener('click', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom) open(img);
+        });
+        document.addEventListener('keydown', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom && (event.key === 'Enter' || event.key === ' ')) {
+            event.preventDefault();
+            open(img);
+          }
+        });
+        shown.addEventListener('click', function () {
+          shown.classList.toggle('actual');
+        });
+        dialog.addEventListener('click', function (event) {
+          if (event.target !== shown) dialog.close();
+        });
+      })();
+    </script>
+    <script>
+      (function () {
+        var button = document.getElementById('theme-toggle');
+        if (!button) return;
+        var root = document.documentElement;
+        var dark = window.matchMedia('(prefers-color-scheme: dark)');
+        function current() {
+          return root.dataset.theme || (dark.matches ? 'dark' : 'light');
+        }
+        function sync() {
+          var theme = current();
+          button.dataset.mode = theme;
+          button.setAttribute('aria-label', 'Switch to ' + (theme === 'dark' ? 'light' : 'dark') + ' theme');
+        }
+        button.hidden = false;
+        sync();
+        if (dark.addEventListener) dark.addEventListener('change', sync);
+        button.addEventListener('click', function () {
+          var next = current() === 'dark' ? 'light' : 'dark';
+          root.dataset.theme = next;
+          try {
+            localStorage.setItem('theme', next);
+          } catch (e) {}
+          sync();
+        });
+      })();
+    </script>
+  </body>
+</html>
