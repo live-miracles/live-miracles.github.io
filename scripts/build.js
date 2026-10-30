@@ -49,16 +49,9 @@ const source = createProjectSource({
 
 const iconClass = 'size-4 shrink-0';
 const icons = {
-    github: `<svg xmlns="http://www.w3.org/2000/svg" class="${iconClass}" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.79 23.39c.6.11.82-.26.82-.58v-2.02c-3.34.73-4.04-1.42-4.04-1.42-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.57A12 12 0 0 0 12 .5Z"/></svg>`,
-    website: `<svg xmlns="http://www.w3.org/2000/svg" class="${iconClass}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 0 20M12 2a15.3 15.3 0 0 0 0 20"/></svg>`,
-    demo: `<svg xmlns="http://www.w3.org/2000/svg" class="${iconClass}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m10 8 6 4-6 4V8Z"/><rect x="3" y="5" width="18" height="14" rx="2"/></svg>`,
-    download: `<svg xmlns="http://www.w3.org/2000/svg" class="${iconClass}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>`,
     star: `<svg xmlns="http://www.w3.org/2000/svg" class="${iconClass}" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 2.5 2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.31l-5.8 3.05 1.11-6.46-4.7-4.58 6.49-.94L12 2.5Z"/></svg>`,
     fork: `<svg xmlns="http://www.w3.org/2000/svg" class="${iconClass}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="6" cy="4" r="2"/><circle cx="18" cy="4" r="2"/><circle cx="12" cy="20" r="2"/><path d="M6 6v3a3 3 0 0 0 3 3h3m6-6v3a3 3 0 0 1-3 3h-3m0 0v6"/></svg>`,
-    collapse: `<svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M11 17l-5-5 5-5M18 17l-5-5 5-5" /></svg>`,
     close: `<svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg>`,
-    menu: `<svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /></svg>`,
-    blog: `<svg xmlns="http://www.w3.org/2000/svg" class="size-6 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 5h13a2 2 0 0 1 2 2v12H6a2 2 0 0 1-2-2V5Z"/><path d="M8 9h7M8 13h7M8 17h4"/></svg>`,
 };
 
 const compact = new Intl.NumberFormat('en', { notation: 'compact', maximumFractionDigits: 1 });
@@ -87,73 +80,59 @@ function projectUrl(project) {
 
 function projectIcon(project, size) {
     if (!project.icon) {
-        return `<span class="rounded-box bg-primary/15 text-primary ${size} grid shrink-0 place-items-center font-bold" aria-hidden="true">${escapeHtml(project.name[0])}</span>`;
+        return `<span class="logo-letter ${size}" aria-hidden="true">${escapeHtml(project.name[0])}</span>`;
     }
-    // Dark logos (iconOnLight) get a light tile so they stay visible on the dim theme.
-    const tile = project.iconOnLight ? 'bg-base-content p-0.5' : '';
-    return `<img src="${escapeHtml(project.icon)}" alt="" class="rounded-box ${size} ${tile} shrink-0 object-contain" />`;
+    // Dark logos (iconOnLight) get a light tile so they stay visible in dark mode.
+    const tile = project.iconOnLight ? 'logo-light' : '';
+    return `<img src="${escapeHtml(project.icon)}" alt="" class="logo ${size} ${tile}" />`;
 }
 
-function linkButtons(project) {
+// Links to the project's other places. Pills in a project's header, plain text links in
+// a home page card.
+function linkButtons(project, style = 'pill') {
     const links = [
-        ['GitHub', `https://github.com/${organization}/${project.id}`, 'btn-primary', icons.github],
-        ['Website', project.website, 'btn-accent', icons.website],
-        ['Demo', project.demo, 'btn-accent', icons.demo],
-        ['Download', project.download, 'btn-accent', icons.download],
+        ['GitHub', `https://github.com/${organization}/${project.id}`],
+        ['Website', project.website],
+        ['Demo', project.demo],
+        ['Download', project.download],
     ];
     return links
         .filter(([, href]) => href)
-        .map(
-            ([label, href, tone, icon]) =>
-                `<a class="btn btn-sm ${tone} gap-2" href="${escapeHtml(href)}">${icon}<span>${label}</span></a>`,
+        .map(([label, href], index) =>
+            style === 'pill'
+                ? `<a class="pill ${index ? '' : 'pill-primary'}" href="${escapeHtml(href)}">${label}</a>`
+                : `<a class="text-accent hover:underline" href="${escapeHtml(href)}">${label}</a>`,
         )
         .join('');
 }
 
-// Wide screens show the sidebar in full or as a slim rail of project icons (the
-// `data-rail` attribute on the drawer, see layout()); small screens always get
-// the full drawer. Names stay in `title` and `aria-label` for the rail.
-function sidebar(activeId) {
-    const groups = categories
-        .map((category, index) => {
-            const items = projects
-                .filter((project) => project.category === category.id)
-                .map((project) => {
-                    const active = project.id === activeId;
-                    return `<a href="${projectUrl(project)}" title="${escapeHtml(project.name)}" aria-label="${escapeHtml(project.name)}" class="rounded-box hover:bg-base-100 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ${active ? 'bg-base-100 text-primary font-semibold' : ''}"${active ? ' aria-current="page"' : ''}>
-                ${projectIcon(project, 'size-6')}
-                <span class="lg:group-data-[rail]/drawer:hidden">${escapeHtml(project.name)}</span>
-              </a>`;
-                })
-                .join('');
-            return `<div class="mb-5 lg:group-data-[rail]/drawer:mb-3">
-              ${index ? '<hr class="border-base-content/10 mb-3 hidden lg:group-data-[rail]/drawer:block" />' : ''}
-              <div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase lg:group-data-[rail]/drawer:hidden">${escapeHtml(category.name)}</div>
-              ${items}
-            </div>`;
-        })
-        .join('');
+// One narrow column of content, centred on the page.
+function page(inner, width = 'max-w-[980px]') {
+    return `<div class="mx-auto w-full ${width} px-5 py-10 sm:px-6 sm:py-14">${inner}</div>`;
+}
 
-    return `<aside class="drawer-side z-30">
-        <label for="project-drawer" aria-label="Close projects" class="drawer-overlay"></label>
-        <nav class="border-base-content/10 bg-base-200 min-h-full w-80 border-r p-4 lg:group-data-[rail]/drawer:w-16 lg:group-data-[rail]/drawer:p-2" aria-label="Projects">
-          <div class="mb-6 flex items-center justify-between gap-2 lg:group-data-[rail]/drawer:flex-col lg:group-data-[rail]/drawer:gap-3">
-            <a href="/" title="${siteName}" aria-label="${siteName}" class="rounded-box flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:p-0">
-              <img src="/assets/logo.png" alt="" class="rounded-box size-11" />
-              <span class="lg:group-data-[rail]/drawer:hidden">
-                <span class="block text-xl font-bold">${siteName}</span>
-                <span class="text-base-content/58 text-sm">Open tools for live teams</span>
-              </span>
-            </a>
-            <button type="button" id="sidebar-toggle" class="btn btn-ghost btn-sm btn-square hidden lg:inline-flex lg:group-data-[rail]/drawer:rotate-180" aria-label="Collapse projects to icons">${icons.collapse}</button>
-          </div>
-          <a href="/blog/" title="Blog" aria-label="Blog" class="rounded-box hover:bg-base-100 mb-5 flex items-center gap-3 px-3 py-2 lg:group-data-[rail]/drawer:mb-3 lg:group-data-[rail]/drawer:justify-center lg:group-data-[rail]/drawer:px-0 ${activeId === 'blog' ? 'bg-base-100 text-primary font-semibold' : ''}"${activeId === 'blog' ? ' aria-current="page"' : ''}>
-            ${icons.blog}
-            <span class="lg:group-data-[rail]/drawer:hidden">Blog</span>
+// A full-width band; neighbouring bands alternate between parchment and canvas so the
+// colour change itself divides the sections.
+function band(inner, shade, extra = '') {
+    return `<div class="${shade === 'parchment' ? 'bg-parchment' : 'bg-canvas'} ${extra}"><div class="mx-auto w-full max-w-[980px] px-5 sm:px-6">${inner}</div></div>`;
+}
+
+function topbar(activeId) {
+    const link = (href, label, active) =>
+        `<a href="${href}" class="${active ? 'text-ink' : 'text-muted'} hover:text-ink transition-colors"${active ? ' aria-current="page"' : ''}>${label}</a>`;
+    return `<header class="topbar">
+        <nav class="caption mx-auto flex h-12 w-full max-w-[1024px] items-center justify-between gap-4 px-5 sm:px-6" aria-label="Site">
+          <a href="/" class="flex items-center gap-2.5 font-semibold" aria-label="${siteName}">
+            <img src="/assets/logo.png" alt="" class="logo size-6" />
+            <span>${siteName}</span>
           </a>
-          ${groups}
+          <div class="flex items-center gap-5 sm:gap-7">
+            ${link('/#projects', 'Projects', false)}
+            ${link('/blog/', 'Blog', activeId === 'blog')}
+            ${link(`https://github.com/${organization}`, 'GitHub', false)}
+          </div>
         </nav>
-      </aside>`;
+      </header>`;
 }
 
 // Click-to-enlarge for screenshots in README and docs content. Images inside
@@ -161,7 +140,7 @@ function sidebar(activeId) {
 // images stay plain.
 function lightbox() {
     return `<dialog id="lightbox" class="lightbox" aria-label="Enlarged image">
-      <button type="button" class="btn btn-circle btn-sm lightbox-close" aria-label="Close image">${icons.close}</button>
+      <button type="button" class="lightbox-close" aria-label="Close image">${icons.close}</button>
       <div class="lightbox-frame"><img alt="" /></div>
     </dialog>
     <script>
@@ -212,9 +191,6 @@ function lightbox() {
     </script>`;
 }
 
-// The projects sidebar's full/rail state is remembered per browser; `railByDefault`
-// applies until the visitor has chosen. An inline script right after the drawer
-// opens sets the state before the sidebar renders, so the page does not jump.
 function layout({
     title,
     description,
@@ -222,16 +198,16 @@ function layout({
     ogImage,
     activeId,
     body,
-    railByDefault = false,
     ogType = 'website',
 }) {
     const canonical = `${siteUrl}${canonicalPath}`;
     const image = ogImage || `${siteUrl}/assets/logo.png`;
     return `<!doctype html>
-<html lang="en" data-theme="dim">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
     <title>${escapeHtml(title)}</title>
     <meta name="description" content="${escapeHtml(description)}" />
     <link rel="canonical" href="${canonical}" />
@@ -246,54 +222,19 @@ function layout({
     <link rel="alternate" type="application/rss+xml" title="${siteName} blog" href="/blog/feed.xml" />
     <link rel="stylesheet" href="/assets/styles.css" />
   </head>
-  <body>
-    <div class="group/drawer drawer lg:drawer-open">
-      <script>
-        window.setSidebarRail = function (rail) {
-          document.querySelector('.drawer').toggleAttribute('data-rail', rail);
-          var toggle = document.getElementById('sidebar-toggle');
-          if (toggle) {
-            toggle.setAttribute('aria-label', rail ? 'Expand projects' : 'Collapse projects to icons');
-          }
-        };
-        window.sidebarRail = function () {
-          try {
-            var saved = localStorage.getItem('sidebar-rail');
-            if (saved) return saved === '1';
-          } catch (e) {}
-          return ${railByDefault};
-        };
-        window.setSidebarRail(window.sidebarRail());
-      </script>
-      <input id="project-drawer" type="checkbox" class="drawer-toggle" />
-      <div class="drawer-content min-h-screen min-w-0">
-        <header class="navbar border-base-content/10 bg-base-300/92 sticky top-0 z-20 border-b px-4 backdrop-blur lg:hidden">
-          <div class="flex-none">
-            <label for="project-drawer" class="btn btn-square btn-ghost" aria-label="Open projects">${icons.menu}</label>
-          </div>
-          <div class="flex-1">
-            <a href="/" class="btn btn-ghost text-lg font-bold">${siteName}</a>
-          </div>
-        </header>
-        <main class="mx-auto flex min-h-screen w-full max-w-6xl flex-col gap-8 px-4 py-6 sm:px-6 lg:px-8">
-          ${body}
-          <footer class="text-base-content/50 border-base-content/10 mt-auto border-t pt-6 pb-2 text-sm">
-            ${siteName} · <a class="link" href="https://github.com/${organization}">github.com/${organization}</a>
-          </footer>
-        </main>
+  <body class="flex min-h-screen flex-col">
+    ${topbar(activeId)}
+    <main class="flex-1">${body}</main>
+    <footer class="caption bg-parchment text-muted border-line border-t">
+      <div class="mx-auto flex w-full max-w-[980px] flex-wrap items-center justify-between gap-x-6 gap-y-2 px-5 py-8 sm:px-6">
+        <span>${siteName} · Open tools for live teams</span>
+        <span class="flex gap-5">
+          <a class="link-quiet" href="/blog/">Blog</a>
+          <a class="link-quiet" href="/blog/feed.xml">RSS</a>
+          <a class="link-quiet" href="https://github.com/${organization}">GitHub</a>
+        </span>
       </div>
-      ${sidebar(activeId)}
-      <script>
-        window.setSidebarRail(window.sidebarRail());
-        document.getElementById('sidebar-toggle').addEventListener('click', function () {
-          var rail = !window.sidebarRail();
-          try {
-            localStorage.setItem('sidebar-rail', rail ? '1' : '0');
-          } catch (e) {}
-          window.setSidebarRail(rail);
-        });
-      </script>
-    </div>
+    </footer>
     ${lightbox()}
   </body>
 </html>
@@ -302,7 +243,7 @@ function layout({
 
 function starCount(repo) {
     return repo
-        ? `<span class="text-base-content/58 inline-flex items-center gap-1 text-sm">${icons.star}${compact.format(repo.stargazers_count)}</span>`
+        ? `<span class="text-muted caption inline-flex items-center gap-1">${icons.star}${compact.format(repo.stargazers_count)}</span>`
         : '';
 }
 
@@ -314,58 +255,72 @@ function homePage(data, posts) {
         }),
         { stars: 0, forks: 0 },
     );
+    const stat = (value, label) =>
+        `<div><div class="display text-4xl sm:text-5xl">${value}</div><div class="caption text-muted mt-1">${label}</div></div>`;
+
+    // The bands after the hero alternate shade; a card takes the opposite one so it
+    // stands out from its band.
+    const shadeAt = (index) => (index % 2 === 0 ? 'parchment' : 'canvas');
 
     const sections = categories
-        .map((category) => {
+        .map((category, index) => {
+            const shade = shadeAt(index);
+            const cardShade = shade === 'parchment' ? '' : 'bg-parchment';
             const cards = data
                 .filter(({ project }) => project.category === category.id)
                 .map(
-                    ({
-                        project,
-                        repo,
-                    }) => `<article class="card border-base-content/10 bg-base-200/68 border shadow-xl backdrop-blur">
-              <div class="card-body gap-3">
+                    ({ project, repo }) => `<article class="card ${cardShade}">
                 <div class="flex items-center justify-between gap-3">
                   <a href="${projectUrl(project)}" class="flex items-center gap-3">
-                    ${projectIcon(project, 'size-10')}
-                    <h3 class="card-title hover:text-primary">${escapeHtml(project.name)}</h3>
+                    ${projectIcon(project, 'size-11')}
+                    <h3 class="display text-xl">${escapeHtml(project.name)}</h3>
                   </a>
                   ${starCount(repo)}
                 </div>
-                <p class="text-base-content/70 text-sm leading-6">${escapeHtml(project.summary)}</p>
-                <div class="card-actions mt-auto pt-2">
-                  <a class="btn btn-sm btn-outline" href="${projectUrl(project)}">Details</a>
-                  ${linkButtons(project)}
+                <p class="text-muted text-[0.9375rem] leading-6">${escapeHtml(project.summary)}</p>
+                <div class="caption mt-auto flex flex-wrap items-center gap-x-5 gap-y-1 pt-3">
+                  <a class="more" href="${projectUrl(project)}">Learn more</a>
+                  ${linkButtons(project, 'text')}
                 </div>
-              </div>
-            </article>`,
+              </article>`,
                 )
                 .join('');
-            return `<section id="${category.id}" class="scroll-mt-20">
-            <h2 class="text-2xl font-bold">${escapeHtml(category.name)}</h2>
-            <p class="text-base-content/64 mt-1 mb-4">${escapeHtml(category.summary)}</p>
-            <div class="grid gap-4 md:grid-cols-2">${cards}</div>
-          </section>`;
+            return band(
+                `<section id="${category.id}" class="scroll-mt-12">
+            <h2 class="display display-lg">${escapeHtml(category.name)}</h2>
+            <p class="lead mt-2 mb-8">${escapeHtml(category.summary)}</p>
+            <div class="grid gap-5 md:grid-cols-2">${cards}</div>
+          </section>`,
+                shade,
+                'py-16 sm:py-20',
+            );
         })
         .join('');
 
-    const body = `<section class="flex items-center justify-center pt-10 pb-4 text-center sm:pt-16">
-            <div class="flex max-w-3xl flex-col items-center">
-              <div class="badge badge-primary badge-outline mb-5">Open tools for live teams</div>
-              <h1 class="text-4xl leading-tight font-bold sm:text-5xl lg:text-6xl">${siteName}</h1>
-              <p class="text-base-content/78 mt-5 text-lg leading-8">${escapeHtml(siteDescription)}</p>
-              <p class="text-base-content/64 mt-4 leading-7">
-                Built and used by a live-streaming team that runs large multilingual events.
-              </p>
-              <div class="stats stats-vertical border-base-content/10 bg-base-200/58 sm:stats-horizontal mt-8 w-full border text-left shadow-xl backdrop-blur">
-                <div class="stat"><div class="stat-title">Projects</div><div class="stat-value text-2xl">${projects.length}</div></div>
-                <div class="stat"><div class="stat-title">Stars</div><div class="stat-value text-2xl"><span class="inline-flex items-center gap-2">${icons.star}${compact.format(totals.stars)}</span></div></div>
-                <div class="stat"><div class="stat-title">Forks</div><div class="stat-value text-2xl"><span class="inline-flex items-center gap-2">${icons.fork}${compact.format(totals.forks)}</span></div></div>
-              </div>
+    const hero = band(
+        `<section class="flex flex-col items-center py-20 text-center sm:py-28">
+            <p class="eyebrow">${siteName}</p>
+            <h1 class="display display-hero mt-3 max-w-3xl">Open tools for live teams.</h1>
+            <p class="lead mt-6 max-w-2xl">${escapeHtml(siteDescription)}</p>
+            <div class="mt-9 flex flex-wrap justify-center gap-3">
+              <a class="pill pill-primary pill-lg" href="#projects">Browse projects</a>
+              <a class="pill pill-lg" href="https://github.com/${organization}">View on GitHub</a>
             </div>
-          </section>
-          ${latestPosts(posts)}
-          ${sections}`;
+            <p class="text-muted mt-14 max-w-xl text-[0.9375rem]">
+              Built and used by a live-streaming team that runs large multilingual events.
+            </p>
+            <div class="mt-8 flex gap-12 sm:gap-20">
+              ${stat(projects.length, 'Projects')}
+              ${stat(compact.format(totals.stars), 'GitHub stars')}
+              ${stat(compact.format(totals.forks), 'Forks')}
+            </div>
+          </section>`,
+        'canvas',
+    );
+
+    const body = `${hero}
+          <div id="projects" class="scroll-mt-12">${sections}</div>
+          ${latestPosts(posts, shadeAt(categories.length))}`;
 
     return layout({
         title: `${siteName} — open tools for live production and streaming`,
@@ -379,13 +334,13 @@ function homePage(data, posts) {
 
 function contentsBox(toc) {
     if (toc.length <= 1) return '';
-    return `<details class="rounded-box border-base-content/10 bg-base-300/46 text-base-content/68 mb-7 border p-4 text-sm backdrop-blur">
-              <summary class="text-base-content/80 cursor-pointer font-semibold">On this page</summary>
+    return `<details class="bg-parchment text-muted caption mb-8 rounded-xl p-4">
+              <summary class="text-ink cursor-pointer font-semibold">On this page</summary>
               <ol class="mt-3 space-y-2">
                 ${toc
                     .map(
                         (item) =>
-                            `<li class="${item.level > 2 ? 'pl-4' : ''}"><a class="hover:text-primary block leading-5 ${item.level === 2 ? 'text-base-content/80 font-semibold' : ''}" href="#${item.slug}">${escapeHtml(item.label)}</a></li>`,
+                            `<li class="${item.level > 2 ? 'pl-4' : ''}"><a class="link-quiet hover:text-accent block leading-5 ${item.level === 2 ? 'text-ink' : ''}" href="#${item.slug}">${escapeHtml(item.label)}</a></li>`,
                     )
                     .join('')}
               </ol>
@@ -398,7 +353,7 @@ function docsNav(project, docs, activeUrl) {
     if (!docs.length) return '';
     const item = (url, label) => {
         const active = url === activeUrl;
-        return `<li><a href="${url}" class="rounded-field hover:bg-base-100 block px-3 py-1.5 ${active ? 'bg-base-100 text-primary font-semibold' : 'text-base-content/75'}"${active ? ' aria-current="page"' : ''}>${escapeHtml(label)}</a></li>`;
+        return `<li><a href="${url}" class="link-quiet hover:text-ink block py-1 ${active ? 'text-ink font-semibold' : 'text-muted'}"${active ? ' aria-current="page"' : ''}>${escapeHtml(label)}</a></li>`;
     };
     const groups = [];
     for (const doc of docs) {
@@ -406,12 +361,12 @@ function docsNav(project, docs, activeUrl) {
         if (last && last.section === doc.section) last.docs.push(doc);
         else groups.push({ section: doc.section, docs: [doc] });
     }
-    return `<nav class="lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto" aria-label="${escapeHtml(project.name)} documentation">
+    return `<nav class="lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto" aria-label="${escapeHtml(project.name)} documentation">
               ${groups
                   .map(
-                      (group, i) => `<div class="${i ? 'mt-4' : ''}">
-                ${group.section ? `<div class="text-base-content/50 mb-1 px-3 text-xs font-semibold tracking-wider uppercase">${escapeHtml(group.section)}</div>` : ''}
-                <ul class="text-sm">${group.docs.map((doc) => item(doc.url, doc.title)).join('')}</ul>
+                      (group, i) => `<div class="${i ? 'mt-5' : ''}">
+                ${group.section ? `<div class="eyebrow mb-1">${escapeHtml(group.section)}</div>` : ''}
+                <ul class="caption">${group.docs.map((doc) => item(doc.url, doc.title)).join('')}</ul>
               </div>`,
                   )
                   .join('')}
@@ -441,10 +396,10 @@ function projectFacts(repo) {
 function projectTabs(project, docs, activeTab) {
     if (!docs.length) return '';
     const tab = (id, url, label) =>
-        `<a role="tab" href="${url}" class="tab ${activeTab === id ? 'tab-active font-semibold' : ''}"${activeTab === id ? ' aria-current="page"' : ''}>${label}</a>`;
-    return `<div role="tablist" class="tabs tabs-border mt-6" aria-label="${escapeHtml(project.name)} sections">
+        `<a href="${url}" class="tab"${activeTab === id ? ' aria-current="page"' : ''}>${label}</a>`;
+    return `<nav class="border-line mt-8 flex gap-6 border-b" aria-label="${escapeHtml(project.name)} sections">
               ${tab('overview', projectUrl(project), 'Overview')}${tab('docs', docsUrl(project), 'Documentation')}
-            </div>`;
+            </nav>`;
 }
 
 // Shared frame for a project's overview, docs index and docs pages: header,
@@ -457,52 +412,44 @@ function projectFrame({ project, repo, docs, activeUrl, header, content }) {
     // Wide screens show the navigation beside the content; small screens get it
     // collapsed above the content so the page starts with the text.
     const main = nav
-        ? `<details class="rounded-box border-base-content/10 bg-base-300/46 mt-6 border p-4 lg:hidden">
-              <summary class="text-base-content/80 cursor-pointer text-sm font-semibold">Documentation menu</summary>
+        ? `<details class="bg-parchment caption mt-6 rounded-xl p-4 lg:hidden">
+              <summary class="cursor-pointer font-semibold">Documentation menu</summary>
               <div class="mt-3">${nav}</div>
             </details>
-            <div class="mt-7 grid gap-8 lg:grid-cols-[15rem_minmax(0,1fr)]">
-              <div class="border-base-content/10 hidden lg:block lg:border-r lg:pr-4">${nav}</div>
+            <div class="mt-10 grid gap-12 lg:grid-cols-[13rem_minmax(0,1fr)]">
+              <div class="hidden lg:block">${nav}</div>
               <div class="min-w-0">${content}</div>
             </div>`
-        : `<div class="mt-7">${content}</div>`;
-    return `<section class="rounded-box border-base-content/10 bg-base-200/68 border p-5 shadow-xl backdrop-blur sm:p-7">
-            ${header}
-            ${tabs}
-            ${main}
-          </section>`;
+        : `<div class="mt-10">${content}</div>`;
+    return page(`${header}${tabs}${main}`);
 }
 
 function projectHeader(project, repo) {
     const topics = (repo?.topics ?? [])
-        .map((topic) => `<span class="badge badge-outline badge-sm">${escapeHtml(topic)}</span>`)
+        .map((topic) => `<span class="chip">${escapeHtml(topic)}</span>`)
         .join('');
-    return `<div class="flex items-start gap-4">
-              ${projectIcon(project, 'size-14')}
-              <div class="min-w-0">
-                <h1 class="text-3xl font-bold sm:text-4xl">${escapeHtml(project.name)}</h1>
-                <p class="text-base-content/78 mt-2 text-lg leading-7">${escapeHtml(project.summary)}</p>
-              </div>
+    return `<div class="flex items-center gap-5">
+              ${projectIcon(project, 'size-16')}
+              <h1 class="display display-lg">${escapeHtml(project.name)}</h1>
             </div>
-            <div class="mt-5 flex flex-wrap items-center justify-between gap-4">
-              <div class="flex flex-wrap gap-2">${linkButtons(project)}</div>
-              <div class="text-base-content/58 flex flex-wrap gap-4 text-sm">${projectFacts(repo)}</div>
-            </div>
+            <p class="lead mt-5 max-w-3xl">${escapeHtml(project.summary)}</p>
+            <div class="mt-7 flex flex-wrap gap-3">${linkButtons(project)}</div>
+            <div class="text-muted caption mt-6 flex flex-wrap gap-x-5 gap-y-1">${projectFacts(repo)}</div>
             ${topics ? `<div class="mt-4 flex flex-wrap gap-2">${topics}</div>` : ''}`;
 }
 
 function docHeader(project, crumbs, title) {
-    return `<nav class="text-base-content/60 flex flex-wrap items-center gap-2 text-sm" aria-label="Breadcrumb">
-              <a href="${projectUrl(project)}" class="hover:text-primary flex items-center gap-2">${projectIcon(project, 'size-5')}<span>${escapeHtml(project.name)}</span></a>
-              ${crumbs.map((crumb) => `<span aria-hidden="true">›</span>${crumb.url ? `<a class="hover:text-primary" href="${crumb.url}">${escapeHtml(crumb.label)}</a>` : `<span>${escapeHtml(crumb.label)}</span>`}`).join('')}
+    return `<nav class="text-muted caption flex flex-wrap items-center gap-2" aria-label="Breadcrumb">
+              <a href="${projectUrl(project)}" class="link-quiet hover:text-ink flex items-center gap-2">${projectIcon(project, 'size-5')}<span>${escapeHtml(project.name)}</span></a>
+              ${crumbs.map((crumb) => `<span aria-hidden="true">›</span>${crumb.url ? `<a class="link-quiet hover:text-ink" href="${crumb.url}">${escapeHtml(crumb.label)}</a>` : `<span>${escapeHtml(crumb.label)}</span>`}`).join('')}
             </nav>
-            <h1 class="mt-3 text-3xl font-bold sm:text-4xl">${escapeHtml(title)}</h1>`;
+            <h1 class="display display-lg mt-4">${escapeHtml(title)}</h1>`;
 }
 
 function projectPage({ project, repo, readme, docs }) {
     const content = readme
         ? `${contentsBox(readme.toc)}<article class="readme min-w-0">${readme.html}</article>`
-        : `<div class="alert alert-warning">The README could not be loaded when this page was built. Open the project on GitHub for its documentation.</div>`;
+        : `<div class="notice">The README could not be loaded when this page was built. Open the project on GitHub for its documentation.</div>`;
     return layout({
         title: `${project.name} — ${siteName}`,
         description: project.summary,
@@ -543,7 +490,6 @@ function docsIndexPage({ project, repo, readme, docs, docsIndex }) {
         description: `Documentation for ${project.name}: ${project.summary}`,
         canonicalPath: docsUrl(project),
         ogImage: socialImage(project.id) || readme?.ogImage,
-        railByDefault: true,
         activeId: project.id,
         body: projectFrame({
             project,
@@ -559,11 +505,11 @@ function docsIndexPage({ project, repo, readme, docs, docsIndex }) {
 function docPage({ project, repo, readme, docs }, doc, index) {
     const previous = docs[index - 1];
     const next = docs[index + 1];
-    const pager = `<div class="border-base-content/10 mt-10 grid gap-3 border-t pt-6 sm:grid-cols-2">
-              ${previous ? `<a class="rounded-box border-base-content/10 hover:border-primary/50 border p-4" href="${previous.url}"><div class="text-base-content/50 text-xs">Previous</div><div class="font-semibold">${escapeHtml(previous.title)}</div></a>` : '<span></span>'}
-              ${next ? `<a class="rounded-box border-base-content/10 hover:border-primary/50 border p-4 sm:text-right" href="${next.url}"><div class="text-base-content/50 text-xs">Next</div><div class="font-semibold">${escapeHtml(next.title)}</div></a>` : ''}
+    const pager = `<div class="mt-12 grid gap-4 sm:grid-cols-2">
+              ${previous ? `<a class="panel link-quiet hover:bg-parchment p-5 transition-colors" href="${previous.url}"><div class="text-muted caption">Previous</div><div class="font-semibold">${escapeHtml(previous.title)}</div></a>` : '<span></span>'}
+              ${next ? `<a class="panel link-quiet hover:bg-parchment p-5 transition-colors sm:text-right" href="${next.url}"><div class="text-muted caption">Next</div><div class="font-semibold">${escapeHtml(next.title)}</div></a>` : ''}
             </div>`;
-    const edit = `<a class="link text-base-content/50 mt-6 inline-block text-sm" href="https://github.com/${organization}/${project.id}/blob/${branch}/${doc.repoPath}">Edit this page on GitHub</a>`;
+    const edit = `<a class="more caption mt-8 inline-block" href="https://github.com/${organization}/${project.id}/blob/${branch}/${doc.repoPath}">Edit this page on GitHub</a>`;
     const crumbs = [{ label: 'Documentation', url: docsUrl(project) }];
     if (doc.section) crumbs.push({ label: doc.section });
     return layout({
@@ -571,7 +517,6 @@ function docPage({ project, repo, readme, docs }, doc, index) {
         description: doc.description || `${doc.title}: ${project.name} documentation.`,
         canonicalPath: doc.url,
         ogImage: doc.rendered.ogImage || socialImage(project.id) || readme?.ogImage,
-        railByDefault: true,
         activeId: project.id,
         body: projectFrame({
             project,
@@ -594,9 +539,7 @@ function formatDate(date) {
 }
 
 function tagBadges(tags) {
-    return tags
-        .map((tag) => `<span class="badge badge-outline badge-sm">${escapeHtml(tag)}</span>`)
-        .join('');
+    return tags.map((tag) => `<span class="chip">${escapeHtml(tag)}</span>`).join('');
 }
 
 // The header image of a post, written in front matter relative to blog/.
@@ -610,30 +553,28 @@ function blogIndexPage(posts) {
               .map(
                   (
                       post,
-                  ) => `<article class="card border-base-content/10 bg-base-200/68 border shadow-xl backdrop-blur">
-              <div class="card-body gap-4 sm:flex-row sm:items-center sm:justify-between">
-                <div class="flex min-w-0 flex-col gap-2">
-                  <div class="text-base-content/60 text-sm"><time datetime="${post.date}">${formatDate(post.date)}</time></div>
-                  <h2 class="card-title"><a class="hover:text-primary" href="${post.url}">${escapeHtml(post.title)}</a></h2>
-                  <p class="text-base-content/70 text-sm leading-6">${escapeHtml(post.summary)}</p>
-                  <div class="flex flex-wrap gap-2 pt-1">${tagBadges(post.tags)}</div>
-                </div>
-                ${post.image ? `<a href="${post.url}" tabindex="-1" aria-hidden="true" class="order-first shrink-0 sm:order-last sm:w-56 lg:w-64">${postImage(post, 'border-base-content/10 rounded-box w-full border')}</a>` : ''}
+                  ) => `<article class="border-line grid gap-6 border-t py-8 sm:grid-cols-[minmax(0,1fr)_16rem] sm:items-center">
+              <div class="flex min-w-0 flex-col gap-2">
+                <div class="text-muted caption"><time datetime="${post.date}">${formatDate(post.date)}</time></div>
+                <h2 class="display text-2xl"><a class="link-quiet hover:text-accent" href="${post.url}">${escapeHtml(post.title)}</a></h2>
+                <p class="text-muted text-[0.9375rem] leading-6">${escapeHtml(post.summary)}</p>
+                <div class="flex flex-wrap gap-2 pt-1">${tagBadges(post.tags)}</div>
               </div>
+              ${post.image ? `<a href="${post.url}" tabindex="-1" aria-hidden="true" class="order-first sm:order-last">${postImage(post, 'w-full rounded-xl')}</a>` : ''}
             </article>`,
               )
               .join('')
-        : '<p class="text-base-content/70">No posts yet.</p>';
+        : '<p class="text-muted">No posts yet.</p>';
     return layout({
         title: `Blog — ${siteName}`,
         description: blogDescription,
         canonicalPath: '/blog/',
         activeId: 'blog',
-        body: `<header>
-            <h1 class="text-3xl font-bold sm:text-4xl">Blog</h1>
-            <p class="text-base-content/64 mt-2">${escapeHtml(blogDescription)} <a class="link" href="/blog/feed.xml">RSS feed</a></p>
+        body: page(`<header class="mb-8">
+            <h1 class="display display-hero">Blog</h1>
+            <p class="lead mt-4 max-w-2xl">${escapeHtml(blogDescription)} <a class="more" href="/blog/feed.xml">RSS feed</a></p>
           </header>
-          <div class="grid gap-4">${list}</div>`,
+          <div>${list}</div>`),
     });
 }
 
@@ -643,45 +584,53 @@ function blogPostPage(post) {
         description: post.summary,
         canonicalPath: post.url,
         activeId: 'blog',
-        railByDefault: true,
         ogType: 'article',
         ogImage: post.image
             ? /^https?:\/\//.test(post.image)
                 ? post.image
                 : `${siteUrl}${post.image}`
             : undefined,
-        body: `<nav class="text-base-content/60 flex flex-wrap items-center gap-2 text-sm" aria-label="Breadcrumb">
-            <a href="/blog/" class="hover:text-primary">Blog</a>
+        body: page(
+            `<nav class="text-muted caption" aria-label="Breadcrumb">
+            <a href="/blog/" class="link-quiet hover:text-ink">Blog</a>
           </nav>
-          <header>
-            <h1 class="text-3xl font-bold sm:text-4xl">${escapeHtml(post.title)}</h1>
-            <div class="text-base-content/60 mt-3 flex flex-wrap items-center gap-3 text-sm">
+          <header class="mt-4 mb-8">
+            <h1 class="display display-lg">${escapeHtml(post.title)}</h1>
+            <div class="text-muted caption mt-4 flex flex-wrap items-center gap-3">
               <time datetime="${post.date}">${formatDate(post.date)}</time>${tagBadges(post.tags)}
             </div>
           </header>
-          ${post.image ? postImage(post, 'border-base-content/10 w-full rounded-box border') : ''}
+          ${post.image ? postImage(post, 'mb-10 w-full rounded-2xl') : ''}
           <article class="readme min-w-0">${post.html}</article>
-          <a class="link text-base-content/50 text-sm" href="https://github.com/${organization}/${organization}.github.io/blob/${branch}/${post.sourcePath}">Edit this post on GitHub</a>`,
+          <a class="more caption mt-10 inline-block" href="https://github.com/${organization}/${organization}.github.io/blob/${branch}/${post.sourcePath}">Edit this post on GitHub</a>`,
+            'max-w-[720px]',
+        ),
     });
 }
 
 // The newest posts on the home page; nothing when there are none.
-function latestPosts(posts) {
+function latestPosts(posts, shade) {
     if (!posts.length) return '';
     const items = posts
         .slice(0, 3)
         .map(
-            (post) => `<li class="flex flex-wrap items-baseline justify-between gap-x-4">
-              <a class="link link-hover font-semibold" href="${post.url}">${escapeHtml(post.title)}</a>
-              <time class="text-base-content/60 text-sm" datetime="${post.date}">${formatDate(post.date)}</time>
+            (
+                post,
+            ) => `<li class="border-line flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 border-t py-4">
+              <a class="link-quiet hover:text-accent text-lg font-semibold" href="${post.url}">${escapeHtml(post.title)}</a>
+              <time class="text-muted caption" datetime="${post.date}">${formatDate(post.date)}</time>
             </li>`,
         )
         .join('');
-    return `<section id="blog" class="scroll-mt-20">
-            <h2 class="text-2xl font-bold">From the blog</h2>
-            <ul class="mt-3 flex flex-col gap-2">${items}</ul>
-            <a class="link mt-3 inline-block text-sm" href="/blog/">All posts</a>
-          </section>`;
+    return band(
+        `<section id="blog" class="scroll-mt-12">
+            <h2 class="display display-lg mb-6">From the blog</h2>
+            <ul class="border-line border-b">${items}</ul>
+            <a class="more mt-6 inline-block" href="/blog/">All posts</a>
+          </section>`,
+        shade,
+        'py-16 sm:py-20',
+    );
 }
 
 function notFoundPage() {
@@ -690,10 +639,10 @@ function notFoundPage() {
         description: siteDescription,
         canonicalPath: '/404.html',
         activeId: null,
-        body: `<section class="flex min-h-[50vh] flex-col items-center justify-center text-center">
-            <h1 class="text-4xl font-bold">Page not found</h1>
-            <p class="text-base-content/70 mt-4">Pick a project from the list, or go back to the <a class="link link-primary" href="/">home page</a>.</p>
-          </section>`,
+        body: page(`<section class="flex min-h-[50vh] flex-col items-center justify-center text-center">
+            <h1 class="display display-hero">Page not found</h1>
+            <p class="lead mt-5">Pick a project from the <a class="more" href="/#projects">list</a>, or go back to the <a class="more" href="/">home page</a>.</p>
+          </section>`),
     });
 }
 
