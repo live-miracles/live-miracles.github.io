@@ -16,7 +16,7 @@
       <link>https://live-miracles.github.io/blog/srs-mediamtx-restreamer-reject-bonded-srt/</link>
       <guid>https://live-miracles.github.io/blog/srs-mediamtx-restreamer-reject-bonded-srt/</guid>
       <pubDate>Thu, 22 Oct 2026 00:00:00 GMT</pubDate>
-      <description>SRS, MediaMTX and Restreamer reject a bonded SRT group. We sent one to each, saw it refused, and put Goryu in front. How to do it yourself, and what we did not test.</description>
+      <description>SRS, MediaMTX and Restreamer reject a bonded SRT group. So we added a small de-bonding relay Goryu in front and, and it worked.</description>
     </item>
     <item>
       <title>One leaking FFmpeg process took down six live streams</title>
