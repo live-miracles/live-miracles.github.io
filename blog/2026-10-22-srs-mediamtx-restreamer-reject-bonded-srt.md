@@ -51,14 +51,6 @@ ffplay 'srt://127.0.0.1:8890?streamid=read:stream'
 
 The `streamid` is the one thing to get right, because Goryu copies it unchanged to the server. These are the publish ids we used:
 
-| Server                     | Publish streamid              | Goryu `output_port` |
-| -------------------------- | ----------------------------- | ------------------- |
-| SRS                        | `#!::r=live/stream,m=publish` | `10080`             |
-| MediaMTX                   | `publish:stream`              | `8890`              |
-| datarhei Core / Restreamer | `stream,mode:publish`         | `6000`              |
-
-SRS needs its SRT server enabled, and Core needs `CORE_SRT_ENABLE=true`. The [downstream servers page](https://live-miracles.github.io/projects/goryu/docs/usage/downstream-servers/) has the details and the playback ids.
-
 ## Passphrases
 
 SRT encrypts each hop on its own. By default Goryu uses one passphrase on both: set `passphrase`. So similiarly to `streamid` the encoder will use the same `passphrase` as when directly connecting to the server. You can optionally give the server side its own `passphrase` with `output_passphrase`: an empty string for a server without a passphrase, or a different one.
@@ -75,14 +67,6 @@ SRT encrypts each hop on its own. By default Goryu uses one passphrase on both: 
 }
 ```
 
-Each passphrase must be empty or 10 to 79 characters, the range libsrt accepts, and Goryu refuses to start otherwise.
-
-## Sending a bonded stream
-
-This is the awkward part, and we would rather say so. FFmpeg cannot open a socket group, and libsrt's own `srt-live-transmit` takes one input and one output. `srt-test-live` from libsrt 1.5.6 failed to create a sending group when we tried it. Many encoders that advertise bonding use a vendor protocol with their own receiver instead of libsrt groups. The one hardware encoder we have confirmed sends a libsrt group to Goryu is the AJA BRIDGE LIVE, described below.
-
-For testing without hardware, there is a 196-line test caller in the Goryu repository, `bonded_caller.c`, that sends a broadcast group with one leg per local address, and can drop, add or flap a leg, or send a main/backup group. It is what every bonded test in the project uses, and the [sending page](https://live-miracles.github.io/projects/goryu/docs/usage/sending-bonded-srt/) shows how to build and run it. If your encoder sends a libsrt broadcast group, point it at Goryu and it will work; if it speaks SRTLA or a vendor protocol, it will not, and the [alternatives page](https://live-miracles.github.io/projects/goryu/docs/getting-started/alternatives/) says what to look at instead.
-
 ## Broadcast or main/backup
 
 libsrt 1.5 offers two group types, and the sender picks one. The receiver, Goryu, treats them the same: it merges what arrives and forwards one stream.
@@ -95,6 +79,8 @@ In Goryu's status API every leg of a broadcast group is `running`. In a main/bac
 We sent a main/backup group over loopback at 4 Mbps, with weights 10 and 5. The main leg was `running` at 4.4 Mbps and the backup `idle` at 0.000 Mbps. When we closed the main leg the backup became `running`, about 2 MB arrived in the next four seconds (roughly 4 Mbps), and the downstream never reconnected.
 
 One catch: at a trickle (0.12 Mbps) libsrt kept both legs active, so a main/backup group needs real traffic before it settles on a main leg.
+
+Our hardwere encoder AJA Bridge Live supports only the **Broadcast** mode, so we are using it with goryu. We have not tested **Main/backup** mode with real hardware encoders yet.
 
 ## What we saw when a leg dropped
 
