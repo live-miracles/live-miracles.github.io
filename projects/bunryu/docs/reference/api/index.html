@@ -62,12 +62,6 @@
               </div><div class="mt-5">
                 <div class="eyebrow mb-1">Reference</div>
                 <ul class="caption"><li><a href="/projects/bunryu/docs/reference/api/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">REST API</a></li><li><a href="/projects/bunryu/docs/reference/development/" class="link-quiet hover:text-ink block py-1 text-muted">Development</a></li><li><a href="/projects/bunryu/docs/reference/design-decisions/" class="link-quiet hover:text-ink block py-1 text-muted">Design decisions</a></li></ul>
-              </div><div class="mt-5">
-                <div class="eyebrow mb-1">Adr</div>
-                <ul class="caption"><li><a href="/projects/bunryu/docs/adr/robustness-before-performance-in-output-management/" class="link-quiet hover:text-ink block py-1 text-muted">Output FFmpeg management favours robustness over performance</a></li><li><a href="/projects/bunryu/docs/adr/retire-an-output-in-one-call/" class="link-quiet hover:text-ink block py-1 text-muted">An output is retired in one call before its row is deleted</a></li><li><a href="/projects/bunryu/docs/adr/no-migrations-and-no-legacy-tolerance/" class="link-quiet hover:text-ink block py-1 text-muted">No database migrations and no legacy-format tolerance</a></li><li><a href="/projects/bunryu/docs/adr/warning-monitor-stays-in-outputs/" class="link-quiet hover:text-ink block py-1 text-muted">The FFmpeg warning and progress monitor stays inside outputs.ts</a></li><li><a href="/projects/bunryu/docs/adr/input-state-stays-separate-from-the-health-poll/" class="link-quiet hover:text-ink block py-1 text-muted">inputState stays separate from the health poll</a></li></ul>
-              </div><div class="mt-5">
-                <div class="eyebrow mb-1">Agents</div>
-                <ul class="caption"><li><a href="/projects/bunryu/docs/agents/domain/" class="link-quiet hover:text-ink block py-1 text-muted">Domain Docs</a></li><li><a href="/projects/bunryu/docs/agents/issue-tracker/" class="link-quiet hover:text-ink block py-1 text-muted">Issue tracker: GitHub</a></li><li><a href="/projects/bunryu/docs/agents/triage-labels/" class="link-quiet hover:text-ink block py-1 text-muted">Triage Labels</a></li></ul>
               </div>
             </nav></div>
             </details>
@@ -85,12 +79,6 @@
               </div><div class="mt-5">
                 <div class="eyebrow mb-1">Reference</div>
                 <ul class="caption"><li><a href="/projects/bunryu/docs/reference/api/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">REST API</a></li><li><a href="/projects/bunryu/docs/reference/development/" class="link-quiet hover:text-ink block py-1 text-muted">Development</a></li><li><a href="/projects/bunryu/docs/reference/design-decisions/" class="link-quiet hover:text-ink block py-1 text-muted">Design decisions</a></li></ul>
-              </div><div class="mt-5">
-                <div class="eyebrow mb-1">Adr</div>
-                <ul class="caption"><li><a href="/projects/bunryu/docs/adr/robustness-before-performance-in-output-management/" class="link-quiet hover:text-ink block py-1 text-muted">Output FFmpeg management favours robustness over performance</a></li><li><a href="/projects/bunryu/docs/adr/retire-an-output-in-one-call/" class="link-quiet hover:text-ink block py-1 text-muted">An output is retired in one call before its row is deleted</a></li><li><a href="/projects/bunryu/docs/adr/no-migrations-and-no-legacy-tolerance/" class="link-quiet hover:text-ink block py-1 text-muted">No database migrations and no legacy-format tolerance</a></li><li><a href="/projects/bunryu/docs/adr/warning-monitor-stays-in-outputs/" class="link-quiet hover:text-ink block py-1 text-muted">The FFmpeg warning and progress monitor stays inside outputs.ts</a></li><li><a href="/projects/bunryu/docs/adr/input-state-stays-separate-from-the-health-poll/" class="link-quiet hover:text-ink block py-1 text-muted">inputState stays separate from the health poll</a></li></ul>
-              </div><div class="mt-5">
-                <div class="eyebrow mb-1">Agents</div>
-                <ul class="caption"><li><a href="/projects/bunryu/docs/agents/domain/" class="link-quiet hover:text-ink block py-1 text-muted">Domain Docs</a></li><li><a href="/projects/bunryu/docs/agents/issue-tracker/" class="link-quiet hover:text-ink block py-1 text-muted">Issue tracker: GitHub</a></li><li><a href="/projects/bunryu/docs/agents/triage-labels/" class="link-quiet hover:text-ink block py-1 text-muted">Triage Labels</a></li></ul>
               </div>
             </nav></div>
               <div class="min-w-0"><details class="bg-parchment text-muted caption mb-8 rounded-xl p-4">
@@ -133,7 +121,7 @@ JSON, <code>{ &quot;error&quot;: &quot;…&quot; }</code>; an unexpected failure
 <tr>
 <td>GET</td>
 <td><code>/api/version</code></td>
-<td>App, SRS, relay, FFmpeg and Node versions, git commit, OS, kernel and CPU model (cached after the first request), and the kernel&#39;s UDP buffer caps <code>rmemMaxBytes</code> / <code>wmemMaxBytes</code> (read on every request, <code>null</code> if unreadable)</td>
+<td>App, SRS, relay, FFmpeg and Node versions, git commit, OS, kernel and CPU model (cached once SRS has answered, so an early request does not pin SRS as <code>unknown</code>), and the kernel&#39;s UDP buffer caps <code>rmemMaxBytes</code> / <code>wmemMaxBytes</code> (read on every request, <code>null</code> if unreadable)</td>
 </tr>
 <tr>
 <td>GET</td>
@@ -149,6 +137,11 @@ JSON, <code>{ &quot;error&quot;: &quot;…&quot; }</code>; an unexpected failure
 <td>GET</td>
 <td><code>/api/srs-logs</code></td>
 <td>Recent Server events (SRS and Goryu becoming unreachable or recovering, host CPU, memory and disk alerts: <code>{ ts, source: srs|relay|host, type: problem|recovered, message }</code>) and log tails for SRS, the dashboard, and the relay</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/events</code></td>
+<td>What happened across every pipeline, newest first, merged from the pipeline log lines, each output&#39;s History and the Server events: <code>{ ts, source: input|output|server, severity: error|warning|ok|info, pipelineId, pipelineName, outputName, label, message }</code> (<code>pipelineId</code>, <code>pipelineName</code> and <code>outputName</code> are <code>null</code> where they don&#39;t apply). <code>?limit=</code> is 1 to 200, 50 by default; a value that is not a whole number gives the default</td>
 </tr>
 <tr>
 <td>GET</td>
@@ -417,9 +410,8 @@ affect a pipeline&#39;s own <code>input</code> (liveness, readers).</li>
         var button = document.getElementById('theme-toggle');
         if (!button) return;
         var root = document.documentElement;
-        var dark = window.matchMedia('(prefers-color-scheme: dark)');
         function current() {
-          return root.dataset.theme || (dark.matches ? 'dark' : 'light');
+          return root.dataset.theme === 'light' ? 'light' : 'dark';
         }
         function sync() {
           var theme = current();
@@ -428,7 +420,6 @@ affect a pipeline&#39;s own <code>input</code> (liveness, readers).</li>
         }
         button.hidden = false;
         sync();
-        if (dark.addEventListener) dark.addEventListener('change', sync);
         button.addEventListener('click', function () {
           var next = current() === 'dark' ? 'light' : 'dark';
           root.dataset.theme = next;

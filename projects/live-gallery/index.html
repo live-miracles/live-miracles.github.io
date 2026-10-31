@@ -246,9 +246,8 @@ Linux x64 <code>.AppImage</code>) plus the metadata files the auto-updater needs
         var button = document.getElementById('theme-toggle');
         if (!button) return;
         var root = document.documentElement;
-        var dark = window.matchMedia('(prefers-color-scheme: dark)');
         function current() {
-          return root.dataset.theme || (dark.matches ? 'dark' : 'light');
+          return root.dataset.theme === 'light' ? 'light' : 'dark';
         }
         function sync() {
           var theme = current();
@@ -257,7 +256,6 @@ Linux x64 <code>.AppImage</code>) plus the metadata files the auto-updater needs
         }
         button.hidden = false;
         sync();
-        if (dark.addEventListener) dark.addEventListener('change', sync);
         button.addEventListener('click', function () {
           var next = current() === 'dark' ? 'light' : 'dark';
           root.dataset.theme = next;

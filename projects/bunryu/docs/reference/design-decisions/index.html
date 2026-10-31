@@ -62,12 +62,6 @@
               </div><div class="mt-5">
                 <div class="eyebrow mb-1">Reference</div>
                 <ul class="caption"><li><a href="/projects/bunryu/docs/reference/api/" class="link-quiet hover:text-ink block py-1 text-muted">REST API</a></li><li><a href="/projects/bunryu/docs/reference/development/" class="link-quiet hover:text-ink block py-1 text-muted">Development</a></li><li><a href="/projects/bunryu/docs/reference/design-decisions/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">Design decisions</a></li></ul>
-              </div><div class="mt-5">
-                <div class="eyebrow mb-1">Adr</div>
-                <ul class="caption"><li><a href="/projects/bunryu/docs/adr/robustness-before-performance-in-output-management/" class="link-quiet hover:text-ink block py-1 text-muted">Output FFmpeg management favours robustness over performance</a></li><li><a href="/projects/bunryu/docs/adr/retire-an-output-in-one-call/" class="link-quiet hover:text-ink block py-1 text-muted">An output is retired in one call before its row is deleted</a></li><li><a href="/projects/bunryu/docs/adr/no-migrations-and-no-legacy-tolerance/" class="link-quiet hover:text-ink block py-1 text-muted">No database migrations and no legacy-format tolerance</a></li><li><a href="/projects/bunryu/docs/adr/warning-monitor-stays-in-outputs/" class="link-quiet hover:text-ink block py-1 text-muted">The FFmpeg warning and progress monitor stays inside outputs.ts</a></li><li><a href="/projects/bunryu/docs/adr/input-state-stays-separate-from-the-health-poll/" class="link-quiet hover:text-ink block py-1 text-muted">inputState stays separate from the health poll</a></li></ul>
-              </div><div class="mt-5">
-                <div class="eyebrow mb-1">Agents</div>
-                <ul class="caption"><li><a href="/projects/bunryu/docs/agents/domain/" class="link-quiet hover:text-ink block py-1 text-muted">Domain Docs</a></li><li><a href="/projects/bunryu/docs/agents/issue-tracker/" class="link-quiet hover:text-ink block py-1 text-muted">Issue tracker: GitHub</a></li><li><a href="/projects/bunryu/docs/agents/triage-labels/" class="link-quiet hover:text-ink block py-1 text-muted">Triage Labels</a></li></ul>
               </div>
             </nav></div>
             </details>
@@ -85,18 +79,12 @@
               </div><div class="mt-5">
                 <div class="eyebrow mb-1">Reference</div>
                 <ul class="caption"><li><a href="/projects/bunryu/docs/reference/api/" class="link-quiet hover:text-ink block py-1 text-muted">REST API</a></li><li><a href="/projects/bunryu/docs/reference/development/" class="link-quiet hover:text-ink block py-1 text-muted">Development</a></li><li><a href="/projects/bunryu/docs/reference/design-decisions/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">Design decisions</a></li></ul>
-              </div><div class="mt-5">
-                <div class="eyebrow mb-1">Adr</div>
-                <ul class="caption"><li><a href="/projects/bunryu/docs/adr/robustness-before-performance-in-output-management/" class="link-quiet hover:text-ink block py-1 text-muted">Output FFmpeg management favours robustness over performance</a></li><li><a href="/projects/bunryu/docs/adr/retire-an-output-in-one-call/" class="link-quiet hover:text-ink block py-1 text-muted">An output is retired in one call before its row is deleted</a></li><li><a href="/projects/bunryu/docs/adr/no-migrations-and-no-legacy-tolerance/" class="link-quiet hover:text-ink block py-1 text-muted">No database migrations and no legacy-format tolerance</a></li><li><a href="/projects/bunryu/docs/adr/warning-monitor-stays-in-outputs/" class="link-quiet hover:text-ink block py-1 text-muted">The FFmpeg warning and progress monitor stays inside outputs.ts</a></li><li><a href="/projects/bunryu/docs/adr/input-state-stays-separate-from-the-health-poll/" class="link-quiet hover:text-ink block py-1 text-muted">inputState stays separate from the health poll</a></li></ul>
-              </div><div class="mt-5">
-                <div class="eyebrow mb-1">Agents</div>
-                <ul class="caption"><li><a href="/projects/bunryu/docs/agents/domain/" class="link-quiet hover:text-ink block py-1 text-muted">Domain Docs</a></li><li><a href="/projects/bunryu/docs/agents/issue-tracker/" class="link-quiet hover:text-ink block py-1 text-muted">Issue tracker: GitHub</a></li><li><a href="/projects/bunryu/docs/agents/triage-labels/" class="link-quiet hover:text-ink block py-1 text-muted">Triage Labels</a></li></ul>
               </div>
             </nav></div>
               <div class="min-w-0"><details class="bg-parchment text-muted caption mb-8 rounded-xl p-4">
               <summary class="text-ink cursor-pointer font-semibold">On this page</summary>
               <ol class="mt-3 space-y-2">
-                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#current-architecture-in-one-paragraph">Current architecture in one paragraph</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#media-server">Media server</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#use-srs-for-ingest-from-the-official-release">Use SRS for ingest, from the official release</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#keep-srss-srt_to_rtmp-off-ffmpeg-converts-srt-inputs">Keep SRS&#39;s srt_to_rtmp off; FFmpeg converts SRT inputs</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#dont-use-srss-built-in-forwarding-for-outputs">Don&#39;t use SRS&#39;s built-in forwarding for outputs</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#dont-use-mediamtx-for-srt-ingest-or-srtrtmp-conversion">Don&#39;t use MediaMTX for SRT ingest or SRT→RTMP conversion</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#dont-build-on-datarhei-restreamer">Don&#39;t build on datarhei Restreamer</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#dont-build-our-own-media-server">Don&#39;t build our own media server</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#srt-ingest">SRT ingest</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#a-separate-relay-accepts-bonded-srt-because-neither-ffmpeg-nor-srs-can">A separate relay accepts bonded SRT, because neither FFmpeg nor SRS can</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#plain-srt-goes-directly-to-srs-by-default-the-relay-also-accepts-it">Plain SRT goes directly to SRS by default; the relay also accepts it</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#link-stats-for-a-direct-srt-input-are-not-read-from-srss-log">Link stats for a direct SRT input are not read from SRS&#39;s log</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#a-lost-bonded-leg-is-found-by-counting-legs-because-the-relay-drops-it-instead-of-reporting-broken">A lost bonded leg is found by counting legs, because the relay drops it instead of reporting broken</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#srt-loss-retransmit-and-drop-figures-cover-the-last-10-minutes-not-the-session">SRT loss, retransmit and drop figures cover the last 10 minutes, not the session</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#relay-stream-errors-go-to-the-pipeline-log-merged-while-they-repeat">Relay stream errors go to the pipeline log, merged while they repeat</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#outputs-pull-from-srs-not-from-the-relay">Outputs pull from SRS, not from the relay</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#keep-goryu-in-its-own-repository">Keep goryu in its own repository</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#raise-the-kernel-udp-buffer-ceiling-but-dont-alert-on-it">Raise the kernel UDP buffer ceiling, but don&#39;t alert on it</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#outputs-and-preview">Outputs and preview</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#one-ffmpeg-process-per-output">One FFmpeg process per output</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#outputs-with-the-same-encode-share-one-ffmpeg-shared-encodes">Outputs with the same encode share one FFmpeg (shared encodes)</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#preview-copies-the-video-only-audio-is-encoded">Preview copies the video; only audio is encoded</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#give-up-on-a-blocked-rtmprtmps-destination-with-an-output--rw_timeout">Give up on a blocked RTMP/RTMPS destination with an output -rw_timeout</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#an-output-that-never-connected-is-reported-as-waiting-for-input-and-restarts-record-the-input-source">An output that never connected is reported as waiting for input, and restarts record the input source</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#a-repeated-crash-is-one-history-record-and-recovery-is-a-field-on-it">A repeated crash is one History record, and recovery is a field on it</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#dont-add-an-ss--ti-ack-progress-check--rw_timeout-is-the-knob">Don&#39;t add an ss -ti ack-progress check; -rw_timeout is the knob</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#srt-destinations-need-no-output-timeout">SRT destinations need no output timeout</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#translation-outputs-were-removed">Translation outputs were removed</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#sizing">Sizing</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#sizing-guidance-is-a-measured-table-not-a-calculator">Sizing guidance is a measured table, not a calculator</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#no-hard-cap-on-inputs-or-outputs-the-stream-key-count-is-a-setting">No hard cap on inputs or outputs; the stream key count is a setting</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#dashboard">Dashboard</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#installable-as-an-app-with-a-manifest-only-no-service-worker">Installable as an app with a manifest only, no service worker</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#every-two-half-status-dot-has-the-same-hover">Every two-half status dot has the same hover</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#the-overview-filters-in-the-browser-and-searches-names-keys-and-urls">The Overview filters in the browser, and searches names, keys and URLs</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#the-outputs-list-has-a-filter-bar-and-a-pipelines-problems-filter-means-what-the-card-shows">The Outputs list has a filter bar, and a pipeline&#39;s Problems filter means what the card shows</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#an-outputs-bitrate-is-shown-only-when-it-is-off-the-inputs">An output&#39;s bitrate is shown only when it is off the input&#39;s</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#alert-sound-beeps-for-new-problems-only-in-the-browser">Alert sound beeps for new problems only, in the browser</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#dont-probe-platform-hosts-from-the-server">Don&#39;t probe platform hosts from the server</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#the-dashboard-keeps-its-own-copy-of-the-shared-encode-recipe-rule">The dashboard keeps its own copy of the shared-encode recipe rule</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#the-dashboard-has-its-own-small-design-system-instead-of-daisyui">The dashboard has its own small design system instead of daisyUI</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#tooling">Tooling</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#eslint-checks-promise-handling-prettier-stays-the-formatter">ESLint checks promise handling; Prettier stays the formatter</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#logging-and-diagnostics">Logging and diagnostics</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#keep-the-process-running-after-an-uncaught-error">Keep the process running after an uncaught error</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#diagnostics-ideas-taken-from-srs-mediamtx-and-restream-krsna">Diagnostics ideas taken from SRS, MediaMTX and restream-krsna</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#warn-when-an-output-falls-behind-realtime-measured-from-its-media-clock">Warn when an output falls behind realtime, measured from its media clock</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#host-resource-alerts-cpu-pressure-memory-and-disk">Host resource alerts: CPU pressure, memory and disk</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#failures-that-need-an-operator-exit-with-status-78-which-systemd-does-not-restart">Failures that need an operator exit with status 78, which systemd does not restart</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#keep-a-fixed-2-s-systemd-restart-delay-with-no-back-off">Keep a fixed 2 s systemd restart delay, with no back-off</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#hints-are-a-dashboard-lookup-not-an-api-field">Hints are a dashboard lookup, not an API field</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#restart-outputs-when-a-reconnecting-encoder-changes-format-not-when-it-merely-reconnects">Restart outputs when a reconnecting encoder changes format, not when it merely reconnects</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#measure-the-keyframe-interval-once-per-publisher-in-a-second-ffprobe-and-only-report-it">Measure the keyframe interval once per publisher, in a second ffprobe, and only report it</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#ingest-protection">Ingest protection</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#dont-ban-abusive-ingest-clients-with-fail2ban">Don&#39;t ban abusive ingest clients with fail2ban</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#install-and-secrets">Install and secrets</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#the-initial-dashboard-password-is-supplied-never-generated-or-printed-the-app-config-lives-in-etcbunryu">The initial dashboard password is supplied, never generated or printed; the app config lives in /etc/bunryu</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#the-srt-passphrase-is-reset-from-settings-by-rewriting-both-files-the-app-does-not-restart-srs-or-goryu">The SRT passphrase is reset from Settings by rewriting both files; the app does not restart SRS or Goryu</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#the-docker-image-is-x86_64-only-arm-hosts-run-it-emulated-for-development">The Docker image is x86_64 only; ARM hosts run it emulated, for development</a></li>
+                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#current-architecture-in-one-paragraph">Current architecture in one paragraph</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#media-server">Media server</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#use-srs-for-ingest-from-the-official-release">Use SRS for ingest, from the official release</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#keep-srss-srt_to_rtmp-off-ffmpeg-converts-srt-inputs">Keep SRS&#39;s srt_to_rtmp off; FFmpeg converts SRT inputs</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#dont-use-srss-built-in-forwarding-for-outputs">Don&#39;t use SRS&#39;s built-in forwarding for outputs</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#dont-use-mediamtx-for-srt-ingest-or-srtrtmp-conversion">Don&#39;t use MediaMTX for SRT ingest or SRT→RTMP conversion</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#dont-build-on-datarhei-restreamer">Don&#39;t build on datarhei Restreamer</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#dont-build-our-own-media-server">Don&#39;t build our own media server</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#srt-ingest">SRT ingest</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#a-separate-relay-accepts-bonded-srt-because-neither-ffmpeg-nor-srs-can">A separate relay accepts bonded SRT, because neither FFmpeg nor SRS can</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#plain-srt-goes-directly-to-srs-by-default-the-relay-also-accepts-it">Plain SRT goes directly to SRS by default; the relay also accepts it</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#link-stats-for-a-direct-srt-input-are-not-read-from-srss-log">Link stats for a direct SRT input are not read from SRS&#39;s log</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#a-lost-bonded-leg-is-found-by-counting-legs-because-the-relay-drops-it-instead-of-reporting-broken">A lost bonded leg is found by counting legs, because the relay drops it instead of reporting broken</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#srt-loss-retransmit-and-drop-figures-cover-the-last-10-minutes-not-the-session">SRT loss, retransmit and drop figures cover the last 10 minutes, not the session</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#relay-stream-errors-go-to-the-pipeline-log-merged-while-they-repeat">Relay stream errors go to the pipeline log, merged while they repeat</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#outputs-pull-from-srs-not-from-the-relay">Outputs pull from SRS, not from the relay</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#keep-goryu-in-its-own-repository">Keep goryu in its own repository</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#raise-the-kernel-udp-buffer-ceiling-but-dont-alert-on-it">Raise the kernel UDP buffer ceiling, but don&#39;t alert on it</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#outputs-and-preview">Outputs and preview</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#one-ffmpeg-process-per-output">One FFmpeg process per output</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#outputs-with-the-same-encode-share-one-ffmpeg-shared-encodes">Outputs with the same encode share one FFmpeg (shared encodes)</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#preview-copies-the-video-only-audio-is-encoded">Preview copies the video; only audio is encoded</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#give-up-on-a-blocked-rtmprtmps-destination-with-an-output--rw_timeout">Give up on a blocked RTMP/RTMPS destination with an output -rw_timeout</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#an-output-that-never-connected-is-reported-as-waiting-for-input-and-restarts-record-the-input-source">An output that never connected is reported as waiting for input, and restarts record the input source</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#a-repeated-crash-is-one-history-record-and-recovery-is-a-field-on-it">A repeated crash is one History record, and recovery is a field on it</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#dont-add-an-ss--ti-ack-progress-check--rw_timeout-is-the-knob">Don&#39;t add an ss -ti ack-progress check; -rw_timeout is the knob</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#srt-destinations-need-no-output-timeout">SRT destinations need no output timeout</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#translation-outputs-were-removed">Translation outputs were removed</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#sizing">Sizing</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#sizing-guidance-is-a-measured-table-not-a-calculator">Sizing guidance is a measured table, not a calculator</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#no-hard-cap-on-inputs-or-outputs-the-stream-key-count-is-a-setting">No hard cap on inputs or outputs; the stream key count is a setting</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#dashboard">Dashboard</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#installable-as-an-app-with-a-manifest-only-no-service-worker">Installable as an app with a manifest only, no service worker</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#every-two-half-status-dot-has-the-same-hover">Every two-half status dot has the same hover</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#the-overview-filters-in-the-browser-and-searches-names-keys-and-urls">The Overview filters in the browser, and searches names, keys and URLs</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#the-outputs-list-has-a-filter-bar-and-a-pipelines-problems-filter-means-what-the-card-shows">The Outputs list has a filter bar, and a pipeline&#39;s Problems filter means what the card shows</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#an-outputs-figures-are-shown-only-when-they-are-off">An output&#39;s figures are shown only when they are off</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#alert-sound-beeps-for-new-problems-only-in-the-browser">Alert sound beeps for new problems only, in the browser</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#the-status-view-is-one-page-without-the-sidebar-drawn-in-parts">The Status view is one page without the sidebar, drawn in parts</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#the-events-table-is-built-on-request-from-what-is-already-stored">The Events table is built on request from what is already stored</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#dont-probe-platform-hosts-from-the-server">Don&#39;t probe platform hosts from the server</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#the-dashboard-keeps-its-own-copy-of-the-shared-encode-recipe-rule">The dashboard keeps its own copy of the shared-encode recipe rule</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#the-dashboard-has-its-own-small-design-system-instead-of-daisyui">The dashboard has its own small design system instead of daisyUI</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#tooling">Tooling</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#eslint-checks-promise-handling-prettier-stays-the-formatter">ESLint checks promise handling; Prettier stays the formatter</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#logging-and-diagnostics">Logging and diagnostics</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#keep-the-process-running-after-an-uncaught-error">Keep the process running after an uncaught error</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#diagnostics-ideas-taken-from-srs-mediamtx-and-restream-krsna">Diagnostics ideas taken from SRS, MediaMTX and restream-krsna</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#warn-when-an-output-falls-behind-realtime-measured-from-its-media-clock">Warn when an output falls behind realtime, measured from its media clock</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#host-resource-alerts-cpu-pressure-memory-and-disk">Host resource alerts: CPU pressure, memory and disk</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#failures-that-need-an-operator-exit-with-status-78-which-systemd-does-not-restart">Failures that need an operator exit with status 78, which systemd does not restart</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#keep-a-fixed-2-s-systemd-restart-delay-with-no-back-off">Keep a fixed 2 s systemd restart delay, with no back-off</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#hints-are-a-dashboard-lookup-not-an-api-field">Hints are a dashboard lookup, not an API field</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#restart-outputs-when-a-reconnecting-encoder-changes-format-not-when-it-merely-reconnects">Restart outputs when a reconnecting encoder changes format, not when it merely reconnects</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#measure-the-keyframe-interval-once-per-publisher-in-a-second-ffprobe-and-only-report-it">Measure the keyframe interval once per publisher, in a second ffprobe, and only report it</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#ingest-protection">Ingest protection</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#dont-ban-abusive-ingest-clients-with-fail2ban">Don&#39;t ban abusive ingest clients with fail2ban</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#install-and-secrets">Install and secrets</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#the-initial-dashboard-password-is-supplied-never-generated-or-printed-the-app-config-lives-in-etcbunryu">The initial dashboard password is supplied, never generated or printed; the app config lives in /etc/bunryu</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#the-srt-passphrase-is-reset-from-settings-by-rewriting-both-files-the-app-does-not-restart-srs-or-goryu">The SRT passphrase is reset from Settings by rewriting both files; the app does not restart SRS or Goryu</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#the-docker-image-is-x86_64-only-arm-hosts-run-it-emulated-for-development">The Docker image is x86_64 only; ARM hosts run it emulated, for development</a></li>
               </ol>
             </details><article class="readme min-w-0"><p>Why Bunryu is built the way it is, and why some obvious alternatives are not
 used. Each entry gives the decision, the reasons, the evidence behind them, and
@@ -1147,16 +1135,21 @@ width; the height is in warning lines), and a sort that puts problems first (the
 manual order stays).</p>
 <p><strong>Revisit when:</strong> repeated warnings across many outputs keep filling the list (grouping
 identical warning lines was left out), or the sidebar counts confuse operators.</p>
-<h3 id="an-outputs-bitrate-is-shown-only-when-it-is-off-the-inputs">An output&#39;s bitrate is shown only when it is off the input&#39;s</h3>
-<p><strong>Decision (October 2026):</strong> the output badge (and a shared encode&#39;s) leaves out the
-bitrate while it is between 60% and 140% of the pipeline input&#39;s, when the output copies
-the video and the input&#39;s rate is known. Below 200 kbps it always shows, and an output
-with a video encode or without an input rate always shows it. The speed is shown only
-outside 0.95x to 1.05x, with no mention in the tooltip.</p>
+<h3 id="an-outputs-figures-are-shown-only-when-they-are-off">An output&#39;s figures are shown only when they are off</h3>
+<p><strong>Decision (October 2026):</strong> the output card shows a figure only when it is abnormal,
+as its own badge with its own tooltip and colour (a red memory badge next to a yellow
+speed one), and nothing for a healthy output: the bitrate outside 60% to 140% of the
+pipeline input&#39;s (when the output copies the video and the input&#39;s rate is known) or below
+200 kbps; the CPU from 50% of a core on an output that copies the video; the memory from
+70% of its limit; the speed outside 0.95x to 1.05x, with no mention in the tooltip. A shared
+encode&#39;s badge keeps its CPU and memory always, since its cost is the point, and leaves out
+only an expected bitrate. The full per-output figures stay in the Overview&#39;s Outputs table.</p>
 <p><strong>Why:</strong></p>
 <ul>
-<li><strong>Every healthy copy output printed the same &quot;8.0 Mbps&quot;</strong>, which carried no
-information until it differed, and it was clutter on 100 rows.</li>
+<li><strong>Every healthy copy output printed the same &quot;8.0 Mbps / 0.4% / 35 MB&quot;</strong>, which carried
+no information until it differed, and it was clutter on 100 rows. A copy output costs 1
+to 4% of a core and about 35 MB (<a href="/projects/bunryu/docs/getting-started/sizing/">sizing</a>), so 50% of a
+core is far outside normal; an output with a video encode runs at 100% or more by design.</li>
 <li><strong>The band is wide because the numbers differ for normal reasons.</strong> On an SRT input
 SRS reported 8.9 Mbps and the goryu legs 9.2 (libsrt counts 44 header bytes in each
 1316-byte packet, +3.3%), while copy outputs read 8.2 and 8.0: FLV carries less
@@ -1214,6 +1207,73 @@ is on top during events); push notifications.</p>
 <p><strong>Revisit when:</strong> operators mute it because it beeps too often, a problem worth a
 beep reaches the dashboard only as a warning, or the CPU alert has fired only on real
 trouble in production (then add <code>cpu</code> to the beeping host alerts).</p>
+<h3 id="the-status-view-is-one-page-without-the-sidebar-drawn-in-parts">The Status view is one page without the sidebar, drawn in parts</h3>
+<p><strong>Decision (October 2026):</strong> a <strong>Status</strong> view (<code>?view=status</code>) shows every pipeline as a
+card with a dot per output, the host graphs and the recent warnings and errors, in the full
+width with the pipeline list hidden. A plain click on a card opens the pipeline, and
+Ctrl-click opens it in a new tab. The page is built once and each part (counts, cards,
+problems list) is replaced only when its HTML changed; the graphs are drawn again on every
+poll.</p>
+<p><strong>Why:</strong></p>
+<ul>
+<li><strong>The Overview is about 32 screens at 500 outputs</strong>
+(<a href="/projects/bunryu/docs/getting-started/sizing/#the-dashboard-at-the-supported-ceiling">Sizing</a>), and the
+sidebar shows counts per pipeline but not where in a pipeline the failing output is. Our
+pipelines are a fan (100, 80 and 50 outputs, then 4 to 5), where a block of dots shows a
+run of failures that a count hides.</li>
+<li><strong>The sidebar is hidden there</strong> because the view lists every pipeline itself. With it,
+the cards had three columns and scrolled; without it, four columns hold all 50 pipelines
+and 501 outputs on 1920×1080.</li>
+<li><strong>Parts are replaced only when changed</strong> because rebuilding all 500 dots every 5 s reset
+a hovered dot&#39;s tooltip and dropped a text selection. It also cut a poll from a median of
+57 ms to 16 ms (worst of 20: 205 ms before, 27 ms after).</li>
+<li><strong>The problems list is fetched on its own every 15 s while the view is open</strong>, not on
+every poll: it is one small query (<a href="#the-events-table-is-built-on-request-from-what-is-already-stored">the Events table</a>),
+and the warnings it shows change slowly.</li>
+<li><strong>Cards are real links</strong> so the browser&#39;s own Ctrl-click and middle-click work and a
+second screen can stay on Status while changes are made on the first.</li>
+</ul>
+<p><strong>Not adopted:</strong></p>
+<ul>
+<li><strong>A separate wall mode</strong> (larger type, no navbar, automatic login, a sound button, a
+periodic self-reload). The screen is a TV on a PC&#39;s HDMI output that a person sits at, so
+none of it is needed. The navbar stays so Settings, Logs and the pipelines are one click away.</li>
+<li><strong>Cards that re-order by severity</strong>: a layout that moves between glances is harder to read.
+The Issues tab is the filter.</li>
+<li><strong>A tooltip per dot as page elements</strong>: 500 hidden nodes for something the browser&#39;s own
+<code>title</code> does. A failed poll shows the existing connection banner.</li>
+</ul>
+<p><strong>Revisit when:</strong> a screen has to run unattended (needs a login that outlives the 7-day
+session, a way to enable sound, and a periodic reload so a page left open for days cannot
+grow), or the supported size grows past what fits a screen.</p>
+<h3 id="the-events-table-is-built-on-request-from-what-is-already-stored">The Events table is built on request from what is already stored</h3>
+<p><strong>Decision (October 2026):</strong> the Logs page&#39;s Events table (<code>GET /api/events</code>) merges the
+pipeline log lines, each output&#39;s History and the Server events when it is asked for.
+Nothing new is stored. The page loads it when it opens and on Refresh, and does not
+refresh itself.</p>
+<p><strong>Why:</strong></p>
+<ul>
+<li><strong>&quot;What just happened&quot; meant opening each pipeline&#39;s History and each output&#39;s.</strong> At 50
+pipelines and 500 outputs that is hundreds of places during an incident.</li>
+<li><strong>No new table or write path.</strong> Writing events as they happen would add a write to the
+start, stop, restart and retire paths, which are kept plain on purpose
+(<a href="https://github.com/live-miracles/bunryu/blob/master/docs/adr/0001-robustness-before-performance-in-output-management.md">ADR 0001</a>). Reading
+what is already stored cannot leave a state wrong.</li>
+<li><strong>It is cheap, so it needs no cache or timer.</strong> At the ceiling (50 pipelines with 100
+log lines each, 500 outputs each with a full History, 100 Server events) the merge took
+about 5 ms (median 5.3, worst 6.3 of 20 runs, measured in process): one indexed query
+and parsing the History the health poll already parses.</li>
+<li><strong><code>/api/srs-logs</code> is not reused</strong> because it runs <code>journalctl</code> three times per request.</li>
+</ul>
+<p><strong>Limits:</strong> it shows what the server still holds: an output keeps its last 10 History
+records (at most 5 of them warnings), a pipeline its last 100 lines, and the Server
+events are the last 200 in memory. The complete record is in the diagnostics files under
+<code>/var/lib/bunryu/diagnostics/</code>, which the API does not serve.</p>
+<p><strong>Not adopted:</strong> a refresh timer (the page rewrites the log tails below the table on
+each load, which would reset their scroll position), and a table of events kept just for
+this feed.</p>
+<p><strong>Revisit when:</strong> operators need events older than those caps, or a wall display needs a
+live feed; either points to storing events or serving the diagnostics.</p>
 <h3 id="dont-probe-platform-hosts-from-the-server">Don&#39;t probe platform hosts from the server</h3>
 <p><strong>Decision (October 2026):</strong> the host connectivity probes were removed: a dashboard
 tab that opened a TCP connection every 5 s from the server to up to 10 configured
@@ -1265,28 +1325,27 @@ carries each output&#39;s shared encode.</p>
 <h3 id="the-dashboard-has-its-own-small-design-system-instead-of-daisyui">The dashboard has its own small design system instead of daisyUI</h3>
 <p><strong>Decision (October 2026):</strong> <code>public/input.css</code> defines the dashboard&#39;s tokens and the few
 components it uses (buttons, badges, fields, dialogs, tabs, tables, the pipeline list,
-banners) on top of Tailwind&#39;s utilities. daisyUI is removed. The tokens match the org
-site (<code>live-miracles.github.io/ui/styles.css</code>): the palette of Hokusai&#39;s Great Wave (indigo
-ink on warm paper by day, the same sea at night), one blue accent, hairline dividers and
-no shadows, with Apple&#39;s restraint in type, spacing and radii. The Japanese motifs stay,
-quietly: glows in the print&#39;s blue, coral and cream behind the page and in each panel
-(every panel places and colours them differently, so neighbouring panels do not repeat
-each other), seigaiha waves rising from the bottom of the sidebar only, an asanoha corner on
-the page, the blue-to-coral gradient on the wordmark and under the navbar, and the wave
-crest on the login page. The dense views keep to glows, so no pattern runs behind a table.
-All of it is
-static (no animation cost on a dashboard open for hours) and is background layers or SVG
-masks filled with the accent, so one file serves both themes. Green, amber and red mean
-status and nothing else, and warnings and destructive buttons are tinted, not solid. Each
-token is a <code>light-dark()</code> pair, so the dashboard follows the system theme with no second
-copy of the palette; the navbar&#39;s sun/moon toggle pins the opposite theme per browser (<code>features/theme.ts</code>).
+banners) on top of Tailwind&#39;s utilities. daisyUI is removed. The look follows Linear: a
+near-black canvas with charcoal panels (white on white by day), hairline borders instead
+of shadows, 8px controls and 12px panels, one lavender accent, dense 14px type. Colour is
+for status: green, amber and red mean status and nothing else, and warnings and
+destructive buttons are tinted, not solid. The Japanese motifs stay, quietly and only where
+no data is read: seigaiha waves along the navbar and the wave crest on the login page,
+both SVG masks filled with the accent, static (no animation cost on a dashboard open for
+hours), so one file serves both themes. The panels and tables are flat. Each token is a
+<code>light-dark()</code> pair, so there is no second copy of the palette. The dashboard opens dark the
+first time, whatever the system prefers; the
+navbar&#39;s sun/moon toggle pins the other theme per browser (<code>features/theme.ts</code>).
 Status dots, split dots and card tints use brighter <code>--dot-*</code> tokens than the status text
 colours (an amber that reads as text on white is brown as a dot), and the charts resolve
 <code>--chart-*</code> through the browser because a canvas cannot read <code>var()</code> or <code>light-dark()</code>.</p>
 <p><strong>Why:</strong> daisyUI&#39;s <code>dim</code> theme was one dark look with its own radii and colours, and the
 dashboard overrode it in about 190 lines (menu wrapping, table header and tab contrast, the
 wave background). The markup uses only a dozen of its components, so owning them is less
-CSS than overriding the rest, and the page matches the website. The class names the markup
+CSS than overriding the rest. Linear&#39;s restraint suits a console read for hours: nothing
+but a status dot or badge has colour, so a problem stands out. Earlier versions (Apple&#39;s
+type and radii, then Hokusai glows and patterns behind every panel) were tried and dropped:
+the glows and waves behind the data competed with it. The class names the markup
 already uses (<code>btn</code>, <code>badge</code>, <code>modal</code>, <code>select</code>, <code>fieldset</code>, and the <code>base-*</code>, <code>success</code>,
 <code>warning</code>, <code>error</code> colours) are kept and mapped onto the tokens, so the redesign did not
 have to touch the rendering code.</p>
@@ -1745,7 +1804,7 @@ the SRT passphrase survived reinstalls. The app config now sits beside them.</li
 <code>admin</code> when it had no password to seed an empty database with, so a wiped
 database or a hand-made config could silently create that login. It now exits
 with status 78 instead, and the installer, the entrypoint and the reset script
-check first and say how to fix it. The repo&#39;s own <code>bunryu.json</code> ships <code>change-me</code> for
+check first and say how to fix it. The repo&#39;s own <code>bunryu.json</code> ships <code>admin</code> for
 development, which the installer, the unit and the image never read.</li>
 <li><strong>Hand edits must survive an update.</strong> The installer used to write the whole
 file from a template, so a value an operator added, such as <code>trust_proxy</code> behind
@@ -1767,7 +1826,7 @@ ports and SRT settings. Only the SRT passphrase is kept.</li>
 root-only file to log in, and the installer could not tell a deliberate empty
 value from a missing one.</li>
 <li><strong>A real password in the tracked <code>bunryu.json</code></strong>: it invites editing a tracked
-file in a public repository, so the repo ships only the <code>change-me</code> dev
+file in a public repository, so the repo ships only the <code>admin</code> dev
 placeholder.</li>
 </ul>
 <p><strong>Tradeoffs:</strong> <code>compose.yaml</code> passes the variable through, so <code>docker compose up</code>
@@ -1852,7 +1911,7 @@ an arm64 goryu release, the arm64 SRS from <code>ossrs/srs</code>, and a multi-p
 build.</p>
 </article><a class="more caption mt-8 inline-block" href="https://github.com/live-miracles/bunryu/blob/master/docs/4-reference/3-design-decisions.md">Edit this page on GitHub</a><div class="mt-12 grid gap-4 sm:grid-cols-2">
               <a class="panel link-quiet hover:bg-parchment p-5 transition-colors" href="/projects/bunryu/docs/reference/development/"><div class="text-muted caption">Previous</div><div class="font-semibold">Development</div></a>
-              <a class="panel link-quiet hover:bg-parchment p-5 transition-colors sm:text-right" href="/projects/bunryu/docs/adr/robustness-before-performance-in-output-management/"><div class="text-muted caption">Next</div><div class="font-semibold">Output FFmpeg management favours robustness over performance</div></a>
+              
             </div></div>
             </div></div></div></main>
     <footer class="caption waves text-muted border-line border-t pb-28">
@@ -1920,9 +1979,8 @@ build.</p>
         var button = document.getElementById('theme-toggle');
         if (!button) return;
         var root = document.documentElement;
-        var dark = window.matchMedia('(prefers-color-scheme: dark)');
         function current() {
-          return root.dataset.theme || (dark.matches ? 'dark' : 'light');
+          return root.dataset.theme === 'light' ? 'light' : 'dark';
         }
         function sync() {
           var theme = current();
@@ -1931,7 +1989,6 @@ build.</p>
         }
         button.hidden = false;
         sync();
-        if (dark.addEventListener) dark.addEventListener('change', sync);
         button.addEventListener('click', function () {
           var next = current() === 'dark' ? 'light' : 'dark';
           root.dataset.theme = next;

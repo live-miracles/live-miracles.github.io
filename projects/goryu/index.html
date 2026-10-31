@@ -47,7 +47,7 @@
             </div>
             <p class="lead mt-5 max-w-3xl">Goryu (合流, &quot;confluence&quot;): standalone SRT relay that accepts bonded or redundant SRT groups, or a plain SRT link, and forwards one deduplicated stream downstream.</p>
             <div class="mt-7 flex flex-wrap gap-3"><a class="pill pill-primary" href="https://github.com/live-miracles/goryu">GitHub</a></div>
-            <div class="text-muted caption mt-6 flex flex-wrap gap-x-5 gap-y-1"><span class="inline-flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 2.5 2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.31l-5.8 3.05 1.11-6.46-4.7-4.58 6.49-.94L12 2.5Z"/></svg>3</span><span class="inline-flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="6" cy="4" r="2"/><circle cx="18" cy="4" r="2"/><circle cx="12" cy="20" r="2"/><path d="M6 6v3a3 3 0 0 0 3 3h3m6-6v3a3 3 0 0 1-3 3h-3m0 0v6"/></svg>0</span><span>C</span><span>MIT license</span><span>Updated 2026-10-30</span></div>
+            <div class="text-muted caption mt-6 flex flex-wrap gap-x-5 gap-y-1"><span class="inline-flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 2.5 2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.31l-5.8 3.05 1.11-6.46-4.7-4.58 6.49-.94L12 2.5Z"/></svg>3</span><span class="inline-flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="6" cy="4" r="2"/><circle cx="18" cy="4" r="2"/><circle cx="12" cy="20" r="2"/><path d="M6 6v3a3 3 0 0 0 3 3h3m6-6v3a3 3 0 0 1-3 3h-3m0 0v6"/></svg>0</span><span>C</span><span>MIT license</span><span>Updated 2026-10-31</span></div>
             <div class="mt-4 flex flex-wrap gap-2"><span class="chip">bonded-srt</span><span class="chip">bonding</span><span class="chip">c</span><span class="chip">docker</span><span class="chip">failover</span><span class="chip">libsrt</span><span class="chip">link-bonding</span><span class="chip">live-streaming</span><span class="chip">mediamtx</span><span class="chip">mpegts</span><span class="chip">relay</span><span class="chip">restreamer</span><span class="chip">srs</span><span class="chip">srt</span><span class="chip">srt-bonding</span><span class="chip">video-streaming</span></div><nav class="border-line mt-8 flex gap-6 border-b" aria-label="Goryu sections">
               <a href="/projects/goryu/" class="tab" aria-current="page">Overview</a><a href="/projects/goryu/docs/" class="tab">Documentation</a>
             </nav><div class="mt-10"><details class="bg-parchment text-muted caption mb-8 rounded-xl p-4">
@@ -222,9 +222,8 @@ curl http://127.0.0.1:8081/status
         var button = document.getElementById('theme-toggle');
         if (!button) return;
         var root = document.documentElement;
-        var dark = window.matchMedia('(prefers-color-scheme: dark)');
         function current() {
-          return root.dataset.theme || (dark.matches ? 'dark' : 'light');
+          return root.dataset.theme === 'light' ? 'light' : 'dark';
         }
         function sync() {
           var theme = current();
@@ -233,7 +232,6 @@ curl http://127.0.0.1:8081/status
         }
         button.hidden = false;
         sync();
-        if (dark.addEventListener) dark.addEventListener('change', sync);
         button.addEventListener('click', function () {
           var next = current() === 'dark' ? 'light' : 'dark';
           root.dataset.theme = next;

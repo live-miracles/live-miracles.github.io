@@ -62,12 +62,6 @@
               </div><div class="mt-5">
                 <div class="eyebrow mb-1">Reference</div>
                 <ul class="caption"><li><a href="/projects/bunryu/docs/reference/api/" class="link-quiet hover:text-ink block py-1 text-muted">REST API</a></li><li><a href="/projects/bunryu/docs/reference/development/" class="link-quiet hover:text-ink block py-1 text-muted">Development</a></li><li><a href="/projects/bunryu/docs/reference/design-decisions/" class="link-quiet hover:text-ink block py-1 text-muted">Design decisions</a></li></ul>
-              </div><div class="mt-5">
-                <div class="eyebrow mb-1">Adr</div>
-                <ul class="caption"><li><a href="/projects/bunryu/docs/adr/robustness-before-performance-in-output-management/" class="link-quiet hover:text-ink block py-1 text-muted">Output FFmpeg management favours robustness over performance</a></li><li><a href="/projects/bunryu/docs/adr/retire-an-output-in-one-call/" class="link-quiet hover:text-ink block py-1 text-muted">An output is retired in one call before its row is deleted</a></li><li><a href="/projects/bunryu/docs/adr/no-migrations-and-no-legacy-tolerance/" class="link-quiet hover:text-ink block py-1 text-muted">No database migrations and no legacy-format tolerance</a></li><li><a href="/projects/bunryu/docs/adr/warning-monitor-stays-in-outputs/" class="link-quiet hover:text-ink block py-1 text-muted">The FFmpeg warning and progress monitor stays inside outputs.ts</a></li><li><a href="/projects/bunryu/docs/adr/input-state-stays-separate-from-the-health-poll/" class="link-quiet hover:text-ink block py-1 text-muted">inputState stays separate from the health poll</a></li></ul>
-              </div><div class="mt-5">
-                <div class="eyebrow mb-1">Agents</div>
-                <ul class="caption"><li><a href="/projects/bunryu/docs/agents/domain/" class="link-quiet hover:text-ink block py-1 text-muted">Domain Docs</a></li><li><a href="/projects/bunryu/docs/agents/issue-tracker/" class="link-quiet hover:text-ink block py-1 text-muted">Issue tracker: GitHub</a></li><li><a href="/projects/bunryu/docs/agents/triage-labels/" class="link-quiet hover:text-ink block py-1 text-muted">Triage Labels</a></li></ul>
               </div>
             </nav></div>
             </details>
@@ -85,12 +79,6 @@
               </div><div class="mt-5">
                 <div class="eyebrow mb-1">Reference</div>
                 <ul class="caption"><li><a href="/projects/bunryu/docs/reference/api/" class="link-quiet hover:text-ink block py-1 text-muted">REST API</a></li><li><a href="/projects/bunryu/docs/reference/development/" class="link-quiet hover:text-ink block py-1 text-muted">Development</a></li><li><a href="/projects/bunryu/docs/reference/design-decisions/" class="link-quiet hover:text-ink block py-1 text-muted">Design decisions</a></li></ul>
-              </div><div class="mt-5">
-                <div class="eyebrow mb-1">Adr</div>
-                <ul class="caption"><li><a href="/projects/bunryu/docs/adr/robustness-before-performance-in-output-management/" class="link-quiet hover:text-ink block py-1 text-muted">Output FFmpeg management favours robustness over performance</a></li><li><a href="/projects/bunryu/docs/adr/retire-an-output-in-one-call/" class="link-quiet hover:text-ink block py-1 text-muted">An output is retired in one call before its row is deleted</a></li><li><a href="/projects/bunryu/docs/adr/no-migrations-and-no-legacy-tolerance/" class="link-quiet hover:text-ink block py-1 text-muted">No database migrations and no legacy-format tolerance</a></li><li><a href="/projects/bunryu/docs/adr/warning-monitor-stays-in-outputs/" class="link-quiet hover:text-ink block py-1 text-muted">The FFmpeg warning and progress monitor stays inside outputs.ts</a></li><li><a href="/projects/bunryu/docs/adr/input-state-stays-separate-from-the-health-poll/" class="link-quiet hover:text-ink block py-1 text-muted">inputState stays separate from the health poll</a></li></ul>
-              </div><div class="mt-5">
-                <div class="eyebrow mb-1">Agents</div>
-                <ul class="caption"><li><a href="/projects/bunryu/docs/agents/domain/" class="link-quiet hover:text-ink block py-1 text-muted">Domain Docs</a></li><li><a href="/projects/bunryu/docs/agents/issue-tracker/" class="link-quiet hover:text-ink block py-1 text-muted">Issue tracker: GitHub</a></li><li><a href="/projects/bunryu/docs/agents/triage-labels/" class="link-quiet hover:text-ink block py-1 text-muted">Triage Labels</a></li></ul>
               </div>
             </nav></div>
               <div class="min-w-0"><details class="bg-parchment text-muted caption mb-8 rounded-xl p-4">
@@ -282,9 +270,9 @@ would show up only as each affected output failing with its own error.</p>
 degrades every pipeline at once and no single output&#39;s error explains it. Each alert
 has a start and an end threshold that differ, so a reading hovering near the line is
 one episode, and each start and end is written three ways: a journal line
-(<code>[host] ...</code>), a diagnostics event with the numbers, and a row in the <strong>Server events</strong>
-table of the dashboard&#39;s Server Logs view (the last 200 rows, kept in memory, so the
-diagnostics are the record that survives a restart).</p>
+(<code>[host] ...</code>), a diagnostics event with the numbers, and a row in the <strong>Events</strong>
+table of the dashboard&#39;s Server Logs view (the last 200 host and service rows, kept in
+memory, so the diagnostics are the record that survives a restart).</p>
 <table>
 <thead>
 <tr>
@@ -717,9 +705,8 @@ involved, so the cascading restart doesn&#39;t happen.</p>
         var button = document.getElementById('theme-toggle');
         if (!button) return;
         var root = document.documentElement;
-        var dark = window.matchMedia('(prefers-color-scheme: dark)');
         function current() {
-          return root.dataset.theme || (dark.matches ? 'dark' : 'light');
+          return root.dataset.theme === 'light' ? 'light' : 'dark';
         }
         function sync() {
           var theme = current();
@@ -728,7 +715,6 @@ involved, so the cascading restart doesn&#39;t happen.</p>
         }
         button.hidden = false;
         sync();
-        if (dark.addEventListener) dark.addEventListener('change', sync);
         button.addEventListener('click', function () {
           var next = current() === 'dark' ? 'light' : 'dark';
           root.dataset.theme = next;

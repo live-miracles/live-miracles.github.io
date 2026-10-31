@@ -62,12 +62,6 @@
               </div><div class="mt-5">
                 <div class="eyebrow mb-1">Reference</div>
                 <ul class="caption"><li><a href="/projects/bunryu/docs/reference/api/" class="link-quiet hover:text-ink block py-1 text-muted">REST API</a></li><li><a href="/projects/bunryu/docs/reference/development/" class="link-quiet hover:text-ink block py-1 text-muted">Development</a></li><li><a href="/projects/bunryu/docs/reference/design-decisions/" class="link-quiet hover:text-ink block py-1 text-muted">Design decisions</a></li></ul>
-              </div><div class="mt-5">
-                <div class="eyebrow mb-1">Adr</div>
-                <ul class="caption"><li><a href="/projects/bunryu/docs/adr/robustness-before-performance-in-output-management/" class="link-quiet hover:text-ink block py-1 text-muted">Output FFmpeg management favours robustness over performance</a></li><li><a href="/projects/bunryu/docs/adr/retire-an-output-in-one-call/" class="link-quiet hover:text-ink block py-1 text-muted">An output is retired in one call before its row is deleted</a></li><li><a href="/projects/bunryu/docs/adr/no-migrations-and-no-legacy-tolerance/" class="link-quiet hover:text-ink block py-1 text-muted">No database migrations and no legacy-format tolerance</a></li><li><a href="/projects/bunryu/docs/adr/warning-monitor-stays-in-outputs/" class="link-quiet hover:text-ink block py-1 text-muted">The FFmpeg warning and progress monitor stays inside outputs.ts</a></li><li><a href="/projects/bunryu/docs/adr/input-state-stays-separate-from-the-health-poll/" class="link-quiet hover:text-ink block py-1 text-muted">inputState stays separate from the health poll</a></li></ul>
-              </div><div class="mt-5">
-                <div class="eyebrow mb-1">Agents</div>
-                <ul class="caption"><li><a href="/projects/bunryu/docs/agents/domain/" class="link-quiet hover:text-ink block py-1 text-muted">Domain Docs</a></li><li><a href="/projects/bunryu/docs/agents/issue-tracker/" class="link-quiet hover:text-ink block py-1 text-muted">Issue tracker: GitHub</a></li><li><a href="/projects/bunryu/docs/agents/triage-labels/" class="link-quiet hover:text-ink block py-1 text-muted">Triage Labels</a></li></ul>
               </div>
             </nav></div>
             </details>
@@ -85,12 +79,6 @@
               </div><div class="mt-5">
                 <div class="eyebrow mb-1">Reference</div>
                 <ul class="caption"><li><a href="/projects/bunryu/docs/reference/api/" class="link-quiet hover:text-ink block py-1 text-muted">REST API</a></li><li><a href="/projects/bunryu/docs/reference/development/" class="link-quiet hover:text-ink block py-1 text-muted">Development</a></li><li><a href="/projects/bunryu/docs/reference/design-decisions/" class="link-quiet hover:text-ink block py-1 text-muted">Design decisions</a></li></ul>
-              </div><div class="mt-5">
-                <div class="eyebrow mb-1">Adr</div>
-                <ul class="caption"><li><a href="/projects/bunryu/docs/adr/robustness-before-performance-in-output-management/" class="link-quiet hover:text-ink block py-1 text-muted">Output FFmpeg management favours robustness over performance</a></li><li><a href="/projects/bunryu/docs/adr/retire-an-output-in-one-call/" class="link-quiet hover:text-ink block py-1 text-muted">An output is retired in one call before its row is deleted</a></li><li><a href="/projects/bunryu/docs/adr/no-migrations-and-no-legacy-tolerance/" class="link-quiet hover:text-ink block py-1 text-muted">No database migrations and no legacy-format tolerance</a></li><li><a href="/projects/bunryu/docs/adr/warning-monitor-stays-in-outputs/" class="link-quiet hover:text-ink block py-1 text-muted">The FFmpeg warning and progress monitor stays inside outputs.ts</a></li><li><a href="/projects/bunryu/docs/adr/input-state-stays-separate-from-the-health-poll/" class="link-quiet hover:text-ink block py-1 text-muted">inputState stays separate from the health poll</a></li></ul>
-              </div><div class="mt-5">
-                <div class="eyebrow mb-1">Agents</div>
-                <ul class="caption"><li><a href="/projects/bunryu/docs/agents/domain/" class="link-quiet hover:text-ink block py-1 text-muted">Domain Docs</a></li><li><a href="/projects/bunryu/docs/agents/issue-tracker/" class="link-quiet hover:text-ink block py-1 text-muted">Issue tracker: GitHub</a></li><li><a href="/projects/bunryu/docs/agents/triage-labels/" class="link-quiet hover:text-ink block py-1 text-muted">Triage Labels</a></li></ul>
               </div>
             </nav></div>
               <div class="min-w-0"><details class="bg-parchment text-muted caption mb-8 rounded-xl p-4">
@@ -101,8 +89,9 @@
             </details><article class="readme min-w-0"><h2 id="the-overview-is-one-long-page">The Overview is one long page</h2>
 <p>The Overview lists every input and then every output in one scrolling page (about 32
 screens at 500 outputs). Search matches names only, not destinations or statuses.</p>
-<p><strong>Workaround:</strong> search by name, use the <strong>Issues</strong> tab, or open the pipeline from the
-sidebar: its view shows only its own outputs. Sidebar groups keep the pipeline list short.</p>
+<p><strong>Workaround:</strong> open <strong>Status</strong>, which shows every pipeline and output as dots on about one
+screen; or search by name, use the <strong>Issues</strong> tab, or open the pipeline from the sidebar: its
+view shows only its own outputs. Sidebar groups keep the pipeline list short.</p>
 <h2 id="short-cpu-spikes-from-host-package-inventory-checks-every-10-min">Short CPU spikes from host package inventory checks every 10 min</h2>
 <p>On GCP Ubuntu hosts, <code>google-osconfig-agent.service</code> may periodically run
 <code>apt-get update</code> / package inventory checks and briefly consume a large fraction
@@ -256,9 +245,8 @@ monitoring/alerting rather than treating them as incidents.</p>
         var button = document.getElementById('theme-toggle');
         if (!button) return;
         var root = document.documentElement;
-        var dark = window.matchMedia('(prefers-color-scheme: dark)');
         function current() {
-          return root.dataset.theme || (dark.matches ? 'dark' : 'light');
+          return root.dataset.theme === 'light' ? 'light' : 'dark';
         }
         function sync() {
           var theme = current();
@@ -267,7 +255,6 @@ monitoring/alerting rather than treating them as incidents.</p>
         }
         button.hidden = false;
         sync();
-        if (dark.addEventListener) dark.addEventListener('change', sync);
         button.addEventListener('click', function () {
           var next = current() === 'dark' ? 'light' : 'dark';
           root.dataset.theme = next;
