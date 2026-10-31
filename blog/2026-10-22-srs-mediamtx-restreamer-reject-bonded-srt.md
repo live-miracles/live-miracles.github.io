@@ -4,7 +4,7 @@ date: 2026-10-22
 tags: [srt, bonding, goryu, mediamtx]
 image: images/bonded-cover.jpg
 imageAlt: Two network links merging into one stream, labelled 2 links, 1 stream
-summary: SRS, MediaMTX and Restreamer reject a bonded SRT group. We sent one to each, saw it refused, and put Goryu in front. How to do it yourself, and what we did not test.
+summary: SRS, MediaMTX and Restreamer reject a bonded SRT group. So we added a small de-bonding relay Goryu in front and, and it worked.
 draft: false
 ---
 
