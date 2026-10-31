@@ -1,5 +1,5 @@
 ---
-title: One faulty audio embedder disrupted 20 live streams
+title: One faulty audio embedder disrupted a Mega event
 date: 2026-10-22
 tags: [audio, streaming, reliability, livegallery]
 image: images/audio-cancellation-cover.jpg
@@ -8,7 +8,7 @@ summary: Two fiber paths carried the same bad audio, while our monitoring missed
 draft: false
 ---
 
-Both audio meters were moving. The dry run had gone well. We had two fiber paths from the event to the streaming server. Yet when the event went live, viewers across more than 20 streams started reporting bad, breaking audio.
+Both audio meters were moving. The dry run had gone well. We had two fiber paths from the event to the streaming server. Yet when the event went live, viewers across more than 100 streams started reporting bad, breaking audio.
 
 Switching to the backup feed did not help. Switching to a third feed finally did, about an hour into the live event. By then, many viewers had left.
 
