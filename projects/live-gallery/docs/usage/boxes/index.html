@@ -78,7 +78,7 @@
               <div class="min-w-0"><details class="bg-parchment text-muted caption mb-8 rounded-xl p-4">
               <summary class="text-ink cursor-pointer font-semibold">On this page</summary>
               <ol class="mt-3 space-y-2">
-                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#sources">Sources</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#worth-knowing">Worth knowing</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#sizing">Sizing</a></li>
+                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#sources">Sources</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#box-status">Box status</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#worth-knowing">Worth knowing</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#sizing">Sizing</a></li>
               </ol>
             </details><article class="readme min-w-0"><p>A box is one source with its own player, audio meter and alerts. Drag a box by its grip to reorder it.</p>
 <h2 id="sources">Sources</h2>
@@ -89,11 +89,22 @@
 <li>Local audio or video files</li>
 <li>Screen shares with a chosen audio input, which also covers <a href="/projects/live-gallery/docs/usage/monitor-zoom/">Zoom and other desktop apps</a></li>
 </ul>
+<h2 id="box-status">Box status</h2>
+<p>The dot beside each box&#39;s name is green only while its playback time is moving. Otherwise the name says why:</p>
+<ul>
+<li><strong>Starting…</strong>: the player has had less than 20 s to start.</li>
+<li><strong>Not playing</strong>: the page has a player, but it is paused, stuck or showing an error such as YouTube&#39;s &quot;Video unavailable&quot;.</li>
+<li><strong>No video</strong>: no player appeared within 20 s.</li>
+<li><strong>Load failed</strong>: the page itself could not load.</li>
+</ul>
+<p>A red box has an active <a href="/projects/live-gallery/docs/reference/alerts/">alert</a>. The box you are hearing has a cyan outline and a speaker beside its name.</p>
+<p>The toolbar counts the wall by these states. Click a count other than <strong>live</strong> to jump to the next box it counts.</p>
 <h2 id="worth-knowing">Worth knowing</h2>
 <ul>
 <li>The eye button hides alerts for one box, for example a feed you know is down.</li>
 <li>The copy button copies the box&#39;s URL.</li>
-<li>Expand enlarges a box; press <strong>Esc</strong> to go back.</li>
+<li>Expand fills the window below the toolbar, so the status counts stay in view; press <strong>Esc</strong> to go back.</li>
+<li>A removed box can be restored with <strong>Undo</strong> for 8 s.</li>
 </ul>
 <h2 id="sizing">Sizing</h2>
 <ul>
