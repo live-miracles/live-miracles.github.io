@@ -188,7 +188,7 @@ JSON, <code>{ &quot;error&quot;: &quot;…&quot; }</code>; an unexpected failure
 <tr>
 <td>POST</td>
 <td><code>/api/pipelines/:id/preview/start</code></td>
-<td>Start an HLS preview <code>{ audioTrackCount? }</code> (1–50, default 1); returns <code>{ hlsUrl }</code>. Video is copied, audio is AAC, one rendition per track</td>
+<td>Start an HLS preview <code>{ audioTrackCount? }</code> (1–50, default 1); returns <code>{ hlsUrl }</code>. Video is copied, audio is AAC, one rendition per track; <code>404</code> for an unknown pipeline</td>
 </tr>
 <tr>
 <td>POST</td>

@@ -124,6 +124,10 @@ the repo ships as <code>change-me</code> for development only (the installer and
 never use that file). The app has no built-in default: if you empty or delete that
 line it refuses to start on a fresh database, unless <code>BUNRYU_DASHBOARD_PASSWORD</code> is
 set. Later starts use the hash stored in the database.</p>
+<p>There are no migrations. When a change bumps the schema version, <code>npm run dev</code> finds
+the old <code>db.sqlite</code> before it starts the watchers and asks whether to wipe it. Answer
+<code>y</code> and the file is deleted and the app creates a fresh database; anything else leaves
+it untouched and does not start. Without a terminal it only prints the error and stops.</p>
 <h2 id="tests">Tests</h2>
 <pre><code class="language-bash">npm test              # unit and integration tests
 npm run typecheck

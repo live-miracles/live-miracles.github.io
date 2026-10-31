@@ -77,31 +77,6 @@ LD_LIBRARY_PATH=goryu/lib goryu/bin/goryu goryu.json
 <pre><code class="language-bash">ffplay &#39;srt://127.0.0.1:8890?streamid=read:stream&#39;
 </code></pre>
 <p>The <code>streamid</code> is the one thing to get right, because Goryu copies it unchanged to the server. These are the publish ids we used:</p>
-<table>
-<thead>
-<tr>
-<th>Server</th>
-<th>Publish streamid</th>
-<th>Goryu <code>output_port</code></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>SRS</td>
-<td><code>#!::r=live/stream,m=publish</code></td>
-<td><code>10080</code></td>
-</tr>
-<tr>
-<td>MediaMTX</td>
-<td><code>publish:stream</code></td>
-<td><code>8890</code></td>
-</tr>
-<tr>
-<td>datarhei Core / Restreamer</td>
-<td><code>stream,mode:publish</code></td>
-<td><code>6000</code></td>
-</tr>
-</tbody></table>
-<p>SRS needs its SRT server enabled, and Core needs <code>CORE_SRT_ENABLE=true</code>. The <a href="https://live-miracles.github.io/projects/goryu/docs/usage/downstream-servers/">downstream servers page</a> has the details and the playback ids.</p>
 <h2 id="passphrases">Passphrases</h2>
 <p>SRT encrypts each hop on its own. By default Goryu uses one passphrase on both: set <code>passphrase</code>. So similiarly to <code>streamid</code> the encoder will use the same <code>passphrase</code> as when directly connecting to the server. You can optionally give the server side its own <code>passphrase</code> with <code>output_passphrase</code>: an empty string for a server without a passphrase, or a different one.</p>
 <pre><code class="language-json">{
@@ -114,10 +89,6 @@ LD_LIBRARY_PATH=goryu/lib goryu/bin/goryu goryu.json
     &quot;output_passphrase&quot;: &quot;&quot;
 }
 </code></pre>
-<p>Each passphrase must be empty or 10 to 79 characters, the range libsrt accepts, and Goryu refuses to start otherwise.</p>
-<h2 id="sending-a-bonded-stream">Sending a bonded stream</h2>
-<p>This is the awkward part, and we would rather say so. FFmpeg cannot open a socket group, and libsrt&#39;s own <code>srt-live-transmit</code> takes one input and one output. <code>srt-test-live</code> from libsrt 1.5.6 failed to create a sending group when we tried it. Many encoders that advertise bonding use a vendor protocol with their own receiver instead of libsrt groups. The one hardware encoder we have confirmed sends a libsrt group to Goryu is the AJA BRIDGE LIVE, described below.</p>
-<p>For testing without hardware, there is a 196-line test caller in the Goryu repository, <code>bonded_caller.c</code>, that sends a broadcast group with one leg per local address, and can drop, add or flap a leg, or send a main/backup group. It is what every bonded test in the project uses, and the <a href="https://live-miracles.github.io/projects/goryu/docs/usage/sending-bonded-srt/">sending page</a> shows how to build and run it. If your encoder sends a libsrt broadcast group, point it at Goryu and it will work; if it speaks SRTLA or a vendor protocol, it will not, and the <a href="https://live-miracles.github.io/projects/goryu/docs/getting-started/alternatives/">alternatives page</a> says what to look at instead.</p>
 <h2 id="broadcast-or-mainbackup">Broadcast or main/backup</h2>
 <p>libsrt 1.5 offers two group types, and the sender picks one. The receiver, Goryu, treats them the same: it merges what arrives and forwards one stream.</p>
 <ul>
@@ -127,6 +98,7 @@ LD_LIBRARY_PATH=goryu/lib goryu/bin/goryu goryu.json
 <p>In Goryu&#39;s status API every leg of a broadcast group is <code>running</code>. In a main/backup group the standby is <code>idle</code>, with a receive rate of about zero.</p>
 <p>We sent a main/backup group over loopback at 4 Mbps, with weights 10 and 5. The main leg was <code>running</code> at 4.4 Mbps and the backup <code>idle</code> at 0.000 Mbps. When we closed the main leg the backup became <code>running</code>, about 2 MB arrived in the next four seconds (roughly 4 Mbps), and the downstream never reconnected.</p>
 <p>One catch: at a trickle (0.12 Mbps) libsrt kept both legs active, so a main/backup group needs real traffic before it settles on a main leg.</p>
+<p>Our hardwere encoder AJA Bridge Live supports only the <strong>Broadcast</strong> mode, so we are using it with goryu. We have not tested <strong>Main/backup</strong> mode with real hardware encoders yet.</p>
 <h2 id="what-we-saw-when-a-leg-dropped">What we saw when a leg dropped</h2>
 <p>We sent a stream through Goryu with two legs and closed the second leg nine seconds in, watching the status API:</p>
 <table>

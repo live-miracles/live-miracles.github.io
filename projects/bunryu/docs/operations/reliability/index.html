@@ -324,7 +324,8 @@ there is no CPU alert.</li>
 five largest processes by RSS.</li>
 <li><strong>Disk</strong> checks the filesystem holding the database (which also holds the
 diagnostics and HLS previews) and the root filesystem (journald, SRS logs), once
-each when they are the same one. The event carries the path, so it says which filled.</li>
+each when they are the same one. The event carries the path, so it says which filled.
+The navbar&#39;s Disk figure is the fuller of the same two filesystems.</li>
 </ul>
 <p>The open alerts are listed in <code>/api/health</code> as <code>hostAlerts</code>, and the dashboard beeps
 once when the memory or disk alert opens (not CPU, whose thresholds are not yet proven
