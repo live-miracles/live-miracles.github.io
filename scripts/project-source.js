@@ -12,6 +12,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { execFileSync } = require('node:child_process');
 const { stripTags } = require('./markdown-text');
+const { isPublishedDoc } = require('./markdown-page');
 
 // `id=path,id=path` into a Map. Splits at the first `=`, so a path may contain one.
 function parseLocalProjects(value = '') {
@@ -100,7 +101,7 @@ function createProjectSource({
         return response.json();
     }
 
-    // Markdown files under docs/, as repository paths, in reading order. Local
+    // Published Markdown files under docs/, as repository paths, in reading order. Local
     // checkouts list only files git would track, so gitignored notes are never
     // published.
     async function listDocs(id) {
@@ -120,7 +121,12 @@ function createProjectSource({
             paths = (await response.json()).tree.map((entry) => entry.path);
         }
         return paths
-            .filter((repoPath) => /^docs\/.+\.md$/.test(repoPath) && repoPath !== 'docs/README.md')
+            .filter(
+                (repoPath) =>
+                    /^docs\/.+\.md$/.test(repoPath) &&
+                    repoPath !== 'docs/README.md' &&
+                    isPublishedDoc(repoPath),
+            )
             .sort((a, b) => a.localeCompare(b, 'en', { numeric: true }));
     }
 

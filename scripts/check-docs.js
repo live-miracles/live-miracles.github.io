@@ -10,14 +10,20 @@
 //     gitignored note is a broken link),
 //   - a #anchor, on the same page or on another Markdown page, that matches no
 //     heading (GitHub's anchor rule, shared with the build),
-//   - a docs page that docs/README.md does not link to.
+//   - a published docs page that docs/README.md does not link to (docs/adr/ and
+//     docs/agents/ are not published, so they need no link).
 // External links are not fetched. Projects call this from their own CI, so a
 // broken link is caught before it reaches the published site.
 
 const fs = require('node:fs');
 const path = require('node:path');
 const { execFileSync } = require('node:child_process');
-const { parseMarkdownPage, resolveRepoLink, isRelativeLink } = require('./markdown-page');
+const {
+    parseMarkdownPage,
+    resolveRepoLink,
+    isRelativeLink,
+    isPublishedDoc,
+} = require('./markdown-page');
 
 const projectDir = path.resolve(process.argv[2] ?? '.');
 
@@ -83,7 +89,9 @@ for (const [page, { links }] of parsed) {
     }
 }
 
-const docPages = pages.filter((page) => page.startsWith('docs/') && page !== 'docs/README.md');
+const docPages = pages.filter(
+    (page) => page.startsWith('docs/') && page !== 'docs/README.md' && isPublishedDoc(page),
+);
 if (docPages.length > 0 && !files.has('docs/README.md')) {
     problems.push('docs/README.md is missing, so no docs page is indexed');
 } else {

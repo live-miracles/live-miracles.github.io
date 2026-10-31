@@ -29,7 +29,9 @@ docs/
 
 Each page's first `# Heading` is its title. Link between pages with normal
 relative links (`../2-usage/1-publishing.md#section`); they work on GitHub and
-are rewritten to site URLs here. See
+are rewritten to site URLs here. `docs/adr/` and `docs/agents/` (decision records
+and coding-agent notes) are not published; links to them from other pages point
+at GitHub instead. See
 [bunryu](https://github.com/live-miracles/bunryu/tree/master/docs)
 for an example.
 

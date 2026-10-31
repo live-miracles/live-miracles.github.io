@@ -34,6 +34,16 @@ function resolveRepoLink(fromPage, href) {
     };
 }
 
+// Folders under docs/ that hold working notes for maintainers and coding agents
+// (decision records, agent setup). They are not rendered on the site, so a link
+// to them from a published page goes to GitHub instead.
+const UNPUBLISHED_DOCS = ['docs/adr/', 'docs/agents/'];
+
+// Whether a docs page (a repository path) gets a page on the site.
+function isPublishedDoc(repoPath) {
+    return !UNPUBLISHED_DOCS.some((prefix) => repoPath.startsWith(prefix));
+}
+
 // Rewrites links found in <repoPath>: README and docs pages go to their pages
 // on this site (`siteUrls` maps repository paths to site URLs), other repository
 // files to GitHub under `blobBase`, anchors stay as they are.
@@ -112,4 +122,11 @@ function parseMarkdownPage(
     return { html, toc, slugs, links, ogImage };
 }
 
-module.exports = { parseMarkdownPage, linkResolver, resolveRepoLink, isRelativeLink, absoluteUrl };
+module.exports = {
+    parseMarkdownPage,
+    linkResolver,
+    resolveRepoLink,
+    isRelativeLink,
+    absoluteUrl,
+    isPublishedDoc,
+};

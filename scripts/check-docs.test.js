@@ -37,6 +37,20 @@ test('accepts a project whose links, anchors and index are all valid', () => {
     assert.equal(result.code, 0, result.out);
 });
 
+test('docs/adr and docs/agents pages need no link from the docs index', () => {
+    const dir = project({
+        'README.md': '# P\n',
+        'docs/README.md': '# Docs\n[a](a.md) [adr](adr/0001-x.md)\n',
+        'docs/a.md': '# A\n',
+        'docs/adr/0001-x.md': '# X\n[gone](nope.md)\n',
+        'docs/agents/domain.md': '# Domain\n',
+    });
+    const result = check(dir);
+    assert.equal(result.code, 1, result.out);
+    assert.match(result.out, /docs\/adr\/0001-x.md: \[gone\]/);
+    assert.doesNotMatch(result.out, /not linked from docs\/README.md/);
+});
+
 test('reports a missing file, a bad anchor, a gitignored target, a missing image and an unindexed page', () => {
     const dir = project({
         'README.md':

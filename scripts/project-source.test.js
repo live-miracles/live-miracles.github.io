@@ -75,6 +75,24 @@ test('load returns the repo, README, ordered docs and the docs index', async () 
     );
 });
 
+test('docs/adr and docs/agents are not published', async () => {
+    const { source } = sourceFor({
+        [`${api}/git/trees/master?recursive=1`]: tree(
+            'docs/a.md',
+            'docs/adr/0001-x.md',
+            'docs/agents/domain.md',
+            'docs/adrift.md',
+        ),
+        [`${raw}docs/a.md`]: '# A',
+        [`${raw}docs/adrift.md`]: '# Adrift',
+    });
+    const { docs } = await source.load('p');
+    assert.deepEqual(
+        docs.map((doc) => doc.repoPath),
+        ['docs/a.md', 'docs/adrift.md'],
+    );
+});
+
 test('a missing docs/README.md is not a problem and is not retried', async () => {
     const { source, calls } = sourceFor({
         [api]: {},
