@@ -5,9 +5,9 @@
     <link>https://live-miracles.github.io/blog/</link>
     <description>Notes from running live events and building the tools behind them.</description>
     <item>
-      <title>One faulty audio embedder disrupted 20 live streams</title>
-      <link>https://live-miracles.github.io/blog/one-faulty-embedder-20-streams/</link>
-      <guid>https://live-miracles.github.io/blog/one-faulty-embedder-20-streams/</guid>
+      <title>One faulty audio embedder disrupted a Mega event</title>
+      <link>https://live-miracles.github.io/blog/one-faulty-embedder-mega-event/</link>
+      <guid>https://live-miracles.github.io/blog/one-faulty-embedder-mega-event/</guid>
       <pubDate>Thu, 22 Oct 2026 00:00:00 GMT</pubDate>
       <description>Two fiber paths carried the same bad audio, while our monitoring missed the cancellation between left and right channels.</description>
     </item>

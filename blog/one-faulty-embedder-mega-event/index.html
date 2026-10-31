@@ -4,14 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="light dark" />
-    <title>One faulty audio embedder disrupted 20 live streams — Live Miracles</title>
+    <title>One faulty audio embedder disrupted a Mega event — Live Miracles</title>
     <meta name="description" content="Two fiber paths carried the same bad audio, while our monitoring missed the cancellation between left and right channels." />
-    <link rel="canonical" href="https://live-miracles.github.io/blog/one-faulty-embedder-20-streams/" />
+    <link rel="canonical" href="https://live-miracles.github.io/blog/one-faulty-embedder-mega-event/" />
     <meta property="og:site_name" content="Live Miracles" />
     <meta property="og:type" content="article" />
-    <meta property="og:title" content="One faulty audio embedder disrupted 20 live streams — Live Miracles" />
+    <meta property="og:title" content="One faulty audio embedder disrupted a Mega event — Live Miracles" />
     <meta property="og:description" content="Two fiber paths carried the same bad audio, while our monitoring missed the cancellation between left and right channels." />
-    <meta property="og:url" content="https://live-miracles.github.io/blog/one-faulty-embedder-20-streams/" />
+    <meta property="og:url" content="https://live-miracles.github.io/blog/one-faulty-embedder-mega-event/" />
     <meta property="og:image" content="https://live-miracles.github.io/blog/images/audio-cancellation-cover.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="/assets/logo.png" type="image/png" />
@@ -41,17 +41,17 @@
           </div>
         </nav>
       </header>
-    <main class="flex-1"><div class="wash" style="--gx1: 38%; --gx2: 68%; --gx3: 43%; --gy1: -30px; --gy2: -120px; --gy1p: 19%; --gy2p: 18%; --px: 83%; --glow-1: var(--glow-b); --glow-2: var(--glow-a)"><div class="mx-auto w-full max-w-[720px] px-5 py-10 sm:px-6 sm:py-14"><nav class="text-muted caption" aria-label="Breadcrumb">
+    <main class="flex-1"><div class="wash" style="--gx1: 24%; --gx2: 72%; --gx3: 73%; --gy1: -90px; --gy2: -48px; --gy1p: 15%; --gy2p: 2%; --px: 85%; --glow-1: var(--glow-b); --glow-2: var(--glow-a)"><div class="mx-auto w-full max-w-[720px] px-5 py-10 sm:px-6 sm:py-14"><nav class="text-muted caption" aria-label="Breadcrumb">
             <a href="/blog/" class="link-quiet hover:text-ink">Blog</a>
           </nav>
           <header class="mt-4 mb-8">
-            <h1 class="display display-lg">One faulty audio embedder disrupted 20 live streams</h1>
+            <h1 class="display display-lg">One faulty audio embedder disrupted a Mega event</h1>
             <div class="text-muted caption mt-4 flex flex-wrap items-center gap-3">
               <time datetime="2026-10-22">October 22, 2026</time><span class="chip">audio</span><span class="chip">streaming</span><span class="chip">reliability</span><span class="chip">livegallery</span>
             </div>
           </header>
           <img src="/blog/images/audio-cancellation-cover.jpg" alt="Illustration of opposite-polarity audio channels combining into a flat line, with the words Mono Cancelled" class="mb-10 w-full rounded-2xl" loading="lazy" />
-          <article class="readme min-w-0"><p>Both audio meters were moving. The dry run had gone well. We had two fiber paths from the event to the streaming server. Yet when the event went live, viewers across more than 20 streams started reporting bad, breaking audio.</p>
+          <article class="readme min-w-0"><p>Both audio meters were moving. The dry run had gone well. We had two fiber paths from the event to the streaming server. Yet when the event went live, viewers across more than 100 streams started reporting bad, breaking audio.</p>
 <p>Switching to the backup feed did not help. Switching to a third feed finally did, about an hour into the live event. By then, many viewers had left.</p>
 <p>This is how one suspected faulty audio embedder affected all those streams, why our monitoring missed it, and what we changed in <a href="https://github.com/live-miracles/live-gallery">Live Gallery</a> afterwards.</p>
 <h2 id="the-warning-we-did-not-understand">The warning we did not understand</h2>
@@ -94,7 +94,7 @@
 </ul>
 <p>The clean feed saved this event&#39;s remaining broadcast. The more lasting change was learning to test what our viewers might actually hear, including what happens when two apparently healthy channels become one.</p>
 </article>
-          <a class="more caption mt-10 inline-block" href="https://github.com/live-miracles/live-miracles.github.io/blob/master/blog/2026-10-22-one-faulty-embedder-20-streams.md">Edit this post on GitHub</a></div></div></main>
+          <a class="more caption mt-10 inline-block" href="https://github.com/live-miracles/live-miracles.github.io/blob/master/blog/2026-10-22-one-faulty-embedder-mega-event.md">Edit this post on GitHub</a></div></div></main>
     <footer class="caption waves text-muted border-line border-t pb-28">
       <div class="mx-auto flex w-full max-w-[980px] flex-wrap items-center justify-between gap-x-6 gap-y-2 px-5 py-8 sm:px-6">
         <span>Live Miracles · Open tools for live teams</span>
