@@ -31,35 +31,9 @@
     --pattern-strength: 30%;
 }
 
-/* Dark follows the system unless the visitor picked light, and applies when they picked dark
-   (the toggle in the top bar sets data-theme on <html>). The two blocks must stay identical. */
-@media (prefers-color-scheme: dark) {
-    :root:not([data-theme='light']) {
-        color-scheme: dark;
-        --canvas: #060b18;
-        --parchment: #0c1428;
-        --ink: #eef2fa;
-        --muted: #9aa7bf;
-        --line: rgb(255 255 255 / 0.12);
-        --chip: rgb(255 255 255 / 0.08);
-        --accent: #6db3ff;
-        --accent-hover: #8cc4ff;
-        --on-accent: #06142b;
-        --nav: rgb(6 11 24 / 0.72);
-        --shadow: rgb(0 0 0 / 0.7) 0 18px 50px;
-        --glow-a: rgb(60 130 220 / 0.48);
-        --glow-b: rgb(240 120 90 / 0.3);
-        --glow-c: rgb(240 190 100 / 0.12);
-        --grad-from: #7db8ff;
-        --grad-to: #ffa982;
-        --art-filter: none;
-        --art-blend: screen;
-        --art-opacity: 1;
-        --pattern-strength: 38%;
-    }
-}
-
-:root[data-theme='dark'] {
+/* Dark is the default: it applies unless the visitor picked light with the toggle in the top
+   bar, which sets data-theme on <html> and is remembered in localStorage. */
+:root:not([data-theme='light']) {
     color-scheme: dark;
     --canvas: #060b18;
     --parchment: #0c1428;
