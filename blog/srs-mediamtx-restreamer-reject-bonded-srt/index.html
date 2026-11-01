@@ -229,7 +229,144 @@ LD_LIBRARY_PATH=goryu/lib goryu/bin/goryu goryu.json
 </ul>
 <p>Goryu and its <a href="https://live-miracles.github.io/projects/goryu/docs/">documentation</a> are open source (MIT).</p>
 </article>
-          <a class="more caption mt-10 inline-block" href="https://github.com/live-miracles/live-miracles.github.io/blob/master/blog/2026-10-22-srs-mediamtx-restreamer-reject-bonded-srt.md">Edit this post on GitHub</a></div></div></main>
+          <div class="caption mt-10 flex flex-wrap items-center gap-x-6 gap-y-3">
+            <a class="more" href="https://github.com/live-miracles/live-miracles.github.io/blob/master/blog/2026-10-22-srs-mediamtx-restreamer-reject-bonded-srt.md">Edit this post on GitHub</a>
+            <button id="copy-markdown" class="pill cursor-pointer" type="button" title="Copy article Markdown with full image and link URLs" hidden>Copy Markdown</button>
+            <span id="copy-markdown-status" class="text-muted" role="status"></span>
+          </div>
+          <textarea id="post-markdown" class="border-line mt-4 w-full rounded-lg border p-3 text-sm" aria-label="Article Markdown" rows="12" readonly hidden>SRT bonding sends one live stream over several network links at once, for example two uplinks or two SIM cards. If one link degrades or dies, the receiver still has the data from the other, so the stream does not drop. libsrt implements it as a _socket group_.
+
+The catch is the receiving end. A server has to accept the group, and most open source media servers cannot. We run [SRS](https://github.com/ossrs/srs) in [Bunryu](https://github.com/live-miracles/bunryu), so we wrote a small relay, [Goryu](https://github.com/live-miracles/goryu), that accepts the bonded group and forwards ordinary SRT to the server behind it. This post shows how to put it in front of SRS, MediaMTX or any SRT server, and what we actually checked.
+
+## The fix: terminate the group before the server
+
+![Sent directly, the bonded group is rejected by the server. Through Goryu, the legs are merged and the server receives one plain SRT stream](&lt;https://live-miracles.github.io/blog/images/bonded-before-after.webp&gt;)
+
+Goryu listens on one port (i.e. `10081`) with group connections enabled. libsrt merges the legs and drops the duplicate packets before Goryu reads anything, so Goryu sees one clean MPEG-TS stream. It automatically forwards that stream to your server&#39;s port (i.e. `10080`) as a normal single-link SRT caller, with the same `streamid`. The server never knows the input was bonded. An ordinary single-link SRT sender works on the same port.
+
+## Try it with MediaMTX
+
+Start MediaMTX, then Goryu with a config that points at MediaMTX&#39;s SRT port (`8890`):
+
+```bash
+docker run -d --network host bluenviron/mediamtx
+```
+
+```json
+{
+    &quot;input_host&quot;: &quot;0.0.0.0&quot;,
+    &quot;input_port&quot;: 10081,
+    &quot;output_host&quot;: &quot;127.0.0.1&quot;,
+    &quot;output_port&quot;: 8890,
+    &quot;status_port&quot;: 8081,
+    &quot;passphrase&quot;: &quot;&quot;
+}
+```
+
+```bash
+curl -fsSL -o goryu.tar.gz https://github.com/live-miracles/goryu/releases/latest/download/goryu-linux-x86_64.tar.gz
+mkdir goryu &amp;&amp; tar -xzf goryu.tar.gz -C goryu
+LD_LIBRARY_PATH=goryu/lib goryu/bin/goryu goryu.json
+```
+
+Now send a bonded stream to `srt://&lt;host&gt;:10081` with `streamid=publish:stream`, and play it back from MediaMTX:
+
+```bash
+ffplay &#39;srt://127.0.0.1:8890?streamid=read:stream&#39;
+```
+
+The `streamid` is the one thing to get right, because Goryu copies it unchanged to the server. These are the publish ids we used:
+
+## Passphrases
+
+SRT encrypts each hop on its own. By default Goryu uses one passphrase on both: set `passphrase`. So similiarly to `streamid` the encoder will use the same `passphrase` as when directly connecting to the server. You can optionally give the server side its own `passphrase` with `output_passphrase`: an empty string for a server without a passphrase, or a different one.
+
+```json
+{
+    &quot;input_host&quot;: &quot;0.0.0.0&quot;,
+    &quot;input_port&quot;: 10081,
+    &quot;output_host&quot;: &quot;127.0.0.1&quot;,
+    &quot;output_port&quot;: 8890,
+    &quot;status_port&quot;: 8081,
+    &quot;passphrase&quot;: &quot;a-long-secret-for-encoders&quot;,
+    &quot;output_passphrase&quot;: &quot;&quot;
+}
+```
+
+## Broadcast or main/backup
+
+libsrt 1.5 offers two group types, and the sender picks one. The receiver, Goryu, treats them the same: it merges what arrives and forwards one stream.
+
+- **Broadcast** puts the whole stream on every link. If a link fails the others already have every packet, so nothing has to switch. The price is bandwidth: two links cost twice the data.
+- **Main/backup** gives each link a weight. The heaviest link carries the stream and the others sit idle, sending only keepalives. If the main link becomes unstable the sender activates a standby. It costs one link&#39;s worth of data, which matters on metered cellular, but the switchover is its weak spot: packets sent while the main link was failing, before it was judged unstable, can be late or lost.
+
+In Goryu&#39;s status API every leg of a broadcast group is `running`. In a main/backup group the standby is `idle`, with a receive rate of about zero.
+
+We sent a main/backup group over loopback at 4 Mbps, with weights 10 and 5. The main leg was `running` at 4.4 Mbps and the backup `idle` at 0.000 Mbps. When we closed the main leg the backup became `running`, about 2 MB arrived in the next four seconds (roughly 4 Mbps), and the downstream never reconnected.
+
+One catch: at a trickle (0.12 Mbps) libsrt kept both legs active, so a main/backup group needs real traffic before it settles on a main leg.
+
+Our hardwere encoder AJA Bridge Live supports only the **Broadcast** mode, so we are using it with goryu. We have not tested **Main/backup** mode with real hardware encoders yet.
+
+## What we saw when a leg dropped
+
+We sent a stream through Goryu with two legs and closed the second leg nine seconds in, watching the status API:
+
+| Time | Legs | Bytes forwarded |
+| ---- | ---- | --------------- |
+| 8 s  | 2    | 472,444         |
+| 12 s | 1    | 708,008         |
+| 16 s | 1    | 933,044         |
+
+The leg left the `legs[]` list, the byte counter kept growing, and `outputConnected` stayed `true`. The server behind Goryu saw an unbroken stream. Each leg reports its own round-trip time, loss, retransmissions and buffer, which is what you want when you are deciding which uplink is the weak one.
+
+## With a real encoder, over the internet
+
+This is how we run it: Goryu in front of SRS (known as srt-bonding-relay until this month) has carried our live events for the past few months, a few days every week.
+
+We pointed an AJA BRIDGE LIVE at the Goryu relay (v3.3.0) on our Bunryu server, a Google Cloud VM in Mumbai, which forwards to the SRS on the same host. AJA lists SRT bonding over the public internet as a feature from firmware v1.16 ([release notes](https://www.aja.com/pdf/2024/AJA_BRIDGE-LIVE_ReleaseNotes_v1.16.pdf)), and it needs the Annual Maintenance Option. Four minutes after the relay started, its status API showed this for the two legs:
+
+| Per leg                   | Leg A     | Leg B     |
+| ------------------------- | --------- | --------- |
+| Round-trip time           | 44.0 ms   | 40.8 ms   |
+| Receive rate              | 22.6 Mbps | 22.6 Mbps |
+| Packets received          | 491,703   | 491,737   |
+| Packets lost on this leg  | 48        | 157       |
+| Retransmissions           | 8         | 208       |
+| Dropped for arriving late | 0         | 0         |
+| Receive buffer            | 242 ms    | 239 ms    |
+
+- **Two full copies.** In broadcast mode each leg carries the whole stream, so both show about 22.6 Mbps. The two legs came from distinct public addresses, with 240 ms of latency.
+- **Real loss, handled.** Each leg lost a small share of its packets (about 0.01% and 0.03%) and asked for retransmissions, and nothing arrived too late. Goryu reports loss per leg, not for the merged stream, so this shows how each link behaved, not what the merged stream lost.
+- **Downstream.** Zero retry failures and no error on the stream.
+
+The relay&#39;s journal covers five days. It records 18 bonded sessions and no plain ones, with no downstream retries and no failed connects. The longest session ran 21 hours 51 minutes and forwarded 215.8 GB, about 22 Mbps on average, and it ended only because the service was stopped for maintenance. These sessions are our regular use of the relay. The snapshot above and the cable pull were taken on a test feed, not during a live event.
+
+## Pulling one cable
+
+With the stream running, we unplugged one of the encoder&#39;s two LAN cables for about 45 seconds and plugged it back in, while recording the relay&#39;s status once a second. These are the samples around the event, on the VM&#39;s clock:
+
+| Time     | Legs | Bytes forwarded | What changed                     |
+| -------- | ---- | --------------- | -------------------------------- |
+| 14:22:37 | 2    | 2,713,522,252   | both legs running                |
+| 14:22:41 | 1    | 2,725,683,408   | one leg gone from `legs[]`       |
+| 14:23:22 | 1    | 2,837,954,000   | still one leg                    |
+| 14:23:27 | 2    | 2,852,886,652   | the leg is back, with no restart |
+
+- **The stream never paused.** Between 14:22:37 and 14:23:27 the relay forwarded 139.4 MB in 50 seconds, which is 22.3 Mbps. In steady state before the pull it was 21.9 Mbps. Over the whole event `outputConnected` stayed `true`, `retryFailures` stayed 0 and no error was recorded, so SRS saw one unbroken connection.
+- **The leg came back by itself.** Nobody touched Goryu or the encoder after the cable went back in. The status showed the leg absent for about 46 seconds, which matches the 45-second pull.
+- **One oddity.** The rejoined leg reports 7,977 lost packets from the moment it appears. That is roughly the first 3.7 seconds of the stream at this bitrate, so it is probably the gap before the leg joined being counted as loss. We have not confirmed that, and the merged stream did not slow down.
+- **Nothing in the log, in v3.3.0.** The journal has no line for the leg dropping or for it coming back. The status API shows it live, but afterwards only the counters remain. The next release, v3.4.0, logs both: one line per change with the leg&#39;s address and how many legs remain, such as `Bonded leg left streamid=... leg=&lt;ip&gt;:&lt;port&gt; legs=1`, and `Bonded leg joined ...` when it returns. A leg that flaps is limited to 12 lines per 30 seconds and then summarised, so a bad link cannot flood the journal. Bunryu writes the same changes to the pipeline&#39;s log.
+
+## Takeaways
+
+- **Bonding needs both ends.** The receiving server is as much a part of it as the encoder, and the open source ones mostly do not accept groups yet.
+- **A relay is a small, replaceable piece.** Goryu is about 2,800 lines of C and a config of six fields (a seventh is optional), so you can read all of it before trusting it with a live stream.
+- **Check the sender first.** The hard part today is finding something that sends a libsrt group, not receiving it. Of the hardware we know of, the AJA BRIDGE LIVE is the one we have seen do it.
+
+Goryu and its [documentation](https://live-miracles.github.io/projects/goryu/docs/) are open source (MIT).
+</textarea>
+          <script src="/assets/copy-markdown.js" defer></script></div></div></main>
     <footer class="caption waves text-muted border-line border-t pb-28">
       <div class="mx-auto flex w-full max-w-[980px] flex-wrap items-center justify-between gap-x-6 gap-y-2 px-5 py-8 sm:px-6">
         <span>Live Miracles · Open tools for live teams</span>
