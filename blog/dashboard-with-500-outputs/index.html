@@ -106,7 +106,16 @@
             <button id="copy-markdown" class="pill cursor-pointer" type="button" title="Copy article Markdown with full image and link URLs" hidden>Copy Markdown</button>
             <span id="copy-markdown-status" class="text-muted" role="status"></span>
           </div>
-          <textarea id="post-markdown" class="border-line mt-4 w-full rounded-lg border p-3 text-sm" aria-label="Article Markdown" rows="12" readonly hidden>A long live event can mean dozens of inputs, each sent to a handful of destinations. Past a few streams, the question stops being &quot;does it forward?&quot; and becomes &quot;can I still see what is happening without the screen turning into noise?&quot;
+          <textarea id="post-markdown" class="border-line mt-4 w-full rounded-lg border p-3 text-sm" aria-label="Article Markdown" rows="12" readonly hidden>---
+title: &quot;50 inputs and 500 outputs in one dashboard&quot;
+published: true
+canonical_url: &quot;https://live-miracles.github.io/blog/dashboard-with-500-outputs/&quot;
+description: &quot;A look at Bunryu&#39;s dashboard with 50 live inputs and 500 output destinations, including how problems appear and how many server resources the control plane uses.&quot;
+tags: &quot;bunryu, dashboard, scale&quot;
+cover_image: &quot;https://live-miracles.github.io/blog/images/dashboard-500-cover.jpg&quot;
+---
+
+A long live event can mean dozens of inputs, each sent to a handful of destinations. Past a few streams, the question stops being &quot;does it forward?&quot; and becomes &quot;can I still see what is happening without the screen turning into noise?&quot;
 
 [Bunryu](https://github.com/live-miracles/bunryu) was tested with up to 50 inputs and 500 outputs on one server. Here is what the dashboard showed and how the control plane performed.
 

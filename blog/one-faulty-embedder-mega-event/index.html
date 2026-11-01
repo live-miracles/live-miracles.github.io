@@ -99,7 +99,16 @@
             <button id="copy-markdown" class="pill cursor-pointer" type="button" title="Copy article Markdown with full image and link URLs" hidden>Copy Markdown</button>
             <span id="copy-markdown-status" class="text-muted" role="status"></span>
           </div>
-          <textarea id="post-markdown" class="border-line mt-4 w-full rounded-lg border p-3 text-sm" aria-label="Article Markdown" rows="12" readonly hidden>Both audio meters were moving. The dry run had gone well. We had two fiber paths from the event to the streaming server. Yet when the event went live, viewers across more than 100 streams started reporting poor-quality audio that kept breaking up.
+          <textarea id="post-markdown" class="border-line mt-4 w-full rounded-lg border p-3 text-sm" aria-label="Article Markdown" rows="12" readonly hidden>---
+title: &quot;One faulty audio embedder disrupted a mega event&quot;
+published: true
+canonical_url: &quot;https://live-miracles.github.io/blog/one-faulty-embedder-mega-event/&quot;
+description: &quot;Two fiber paths carried the same bad audio, while our monitoring missed the cancellation between left and right channels.&quot;
+tags: &quot;audio, streaming, reliability, livegallery&quot;
+cover_image: &quot;https://live-miracles.github.io/blog/images/audio-cancellation-cover.jpg&quot;
+---
+
+Both audio meters were moving. The dry run had gone well. We had two fiber paths from the event to the streaming server. Yet when the event went live, viewers across more than 100 streams started reporting poor-quality audio that kept breaking up.
 
 Switching to the backup feed did not help. Switching to a third feed finally did, about an hour into the live event. By then, many viewers had left.
 

@@ -91,7 +91,16 @@
             <button id="copy-markdown" class="pill cursor-pointer" type="button" title="Copy article Markdown with full image and link URLs" hidden>Copy Markdown</button>
             <span id="copy-markdown-status" class="text-muted" role="status"></span>
           </div>
-          <textarea id="post-markdown" class="border-line mt-4 w-full rounded-lg border p-3 text-sm" aria-label="Article Markdown" rows="12" readonly hidden>A live event cannot be restarted. When we built [Bunryu](https://github.com/live-miracles/bunryu), a self-hosted server that forwards one live stream to many destinations, we assumed things would go wrong and tried to keep each failure small. In July 2026 a single FFmpeg process showed us where that was not true yet.
+          <textarea id="post-markdown" class="border-line mt-4 w-full rounded-lg border p-3 text-sm" aria-label="Article Markdown" rows="12" readonly hidden>---
+title: &quot;One leaking FFmpeg process took down six live streams&quot;
+published: true
+canonical_url: &quot;https://live-miracles.github.io/blog/one-leaking-ffmpeg-six-streams/&quot;
+description: &quot;A memory leak in one FFmpeg process restarted our whole streaming stack. How it happened, and the guard rails that keep a single bad process small.&quot;
+tags: &quot;bunryu, reliability, ffmpeg, srt&quot;
+cover_image: &quot;https://live-miracles.github.io/blog/images/leak-cover.jpg&quot;
+---
+
+A live event cannot be restarted. When we built [Bunryu](https://github.com/live-miracles/bunryu), a self-hosted server that forwards one live stream to many destinations, we assumed things would go wrong and tried to keep each failure small. In July 2026 a single FFmpeg process showed us where that was not true yet.
 
 ## The question
 

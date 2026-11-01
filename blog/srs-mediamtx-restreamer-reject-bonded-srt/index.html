@@ -234,7 +234,16 @@ LD_LIBRARY_PATH=goryu/lib goryu/bin/goryu goryu.json
             <button id="copy-markdown" class="pill cursor-pointer" type="button" title="Copy article Markdown with full image and link URLs" hidden>Copy Markdown</button>
             <span id="copy-markdown-status" class="text-muted" role="status"></span>
           </div>
-          <textarea id="post-markdown" class="border-line mt-4 w-full rounded-lg border p-3 text-sm" aria-label="Article Markdown" rows="12" readonly hidden>SRT bonding sends one live stream over several network links at once, for example two uplinks or two SIM cards. If one link degrades or dies, the receiver still has the data from the other, so the stream does not drop. libsrt implements it as a _socket group_.
+          <textarea id="post-markdown" class="border-line mt-4 w-full rounded-lg border p-3 text-sm" aria-label="Article Markdown" rows="12" readonly hidden>---
+title: &quot;SRS, MediaMTX and Restreamer reject bonded SRT. Here is a relay that fixes it&quot;
+published: true
+canonical_url: &quot;https://live-miracles.github.io/blog/srs-mediamtx-restreamer-reject-bonded-srt/&quot;
+description: &quot;SRS, MediaMTX and Restreamer reject a bonded SRT group. So we added a small de-bonding relay Goryu in front and, and it worked.&quot;
+tags: &quot;srt, bonding, goryu, mediamtx&quot;
+cover_image: &quot;https://live-miracles.github.io/blog/images/bonded-cover.jpg&quot;
+---
+
+SRT bonding sends one live stream over several network links at once, for example two uplinks or two SIM cards. If one link degrades or dies, the receiver still has the data from the other, so the stream does not drop. libsrt implements it as a _socket group_.
 
 The catch is the receiving end. A server has to accept the group, and most open source media servers cannot. We run [SRS](https://github.com/ossrs/srs) in [Bunryu](https://github.com/live-miracles/bunryu), so we wrote a small relay, [Goryu](https://github.com/live-miracles/goryu), that accepts the bonded group and forwards ordinary SRT to the server behind it. This post shows how to put it in front of SRS, MediaMTX or any SRT server, and what we actually checked.
 
