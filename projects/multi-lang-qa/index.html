@@ -47,7 +47,7 @@
             </div>
             <p class="lead mt-5 max-w-3xl">Collect audience questions with translations during a live session; the host stars and completes them.</p>
             <div class="mt-7 flex flex-wrap gap-3"><a class="pill pill-primary" href="https://github.com/live-miracles/multi-lang-qa">GitHub</a><a class="pill " href="https://live-miracles.github.io/multi-lang-qa/">Demo</a></div>
-            <div class="text-muted caption mt-6 flex flex-wrap gap-x-5 gap-y-1"><span class="inline-flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 2.5 2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.31l-5.8 3.05 1.11-6.46-4.7-4.58 6.49-.94L12 2.5Z"/></svg>0</span><span class="inline-flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="6" cy="4" r="2"/><circle cx="18" cy="4" r="2"/><circle cx="12" cy="20" r="2"/><path d="M6 6v3a3 3 0 0 0 3 3h3m6-6v3a3 3 0 0 1-3 3h-3m0 0v6"/></svg>0</span><span>JavaScript</span><span>MIT license</span><span>Updated 2026-08-22</span></div>
+            <div class="text-muted caption mt-6 flex flex-wrap gap-x-5 gap-y-1"><span class="inline-flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 2.5 2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.31l-5.8 3.05 1.11-6.46-4.7-4.58 6.49-.94L12 2.5Z"/></svg>0</span><span class="inline-flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="6" cy="4" r="2"/><circle cx="18" cy="4" r="2"/><circle cx="12" cy="20" r="2"/><path d="M6 6v3a3 3 0 0 0 3 3h3m6-6v3a3 3 0 0 1-3 3h-3m0 0v6"/></svg>0</span><span>JavaScript</span><span>MIT license</span><span>Updated 2026-11-01</span></div>
             <div class="mt-10"><details class="bg-parchment text-muted caption mb-8 rounded-xl p-4">
               <summary class="text-ink cursor-pointer font-semibold">On this page</summary>
               <ol class="mt-3 space-y-2">
@@ -78,14 +78,14 @@ npm run dev
 <pre><code class="language-bash">npm run css
 </code></pre>
 <h2 id="releases">Releases</h2>
-<p>Pushing a git tag publishes a versioned snapshot of the frontend to GitHub Pages (e.g. <code>v/2.0.2/</code>), which stays accessible at that URL permanently. This lets the Apps Script deployment load a pinned version of the assets without being affected by future updates.</p>
+<p>GitHub Pages always serves the current <code>master</code> (the demo, plus the images the Apps Script app links to). Old versions are not kept there.</p>
+<p>Pushing a git tag deploys to Google Apps Script. The generated Apps Script <code>Index.html</code> keeps the full app markup from <code>frontend/index.html</code> but inlines the CSS and all JavaScript, so a deployed version is self-contained. Only the images (<code>logo.png</code>, <code>funny-cat.svg</code>) are loaded from GitHub Pages.</p>
 <pre><code class="language-bash">npm version 2.0.2
 git push origin master --tags
 </code></pre>
 <p><code>npm version 2.0.2</code> updates the version fields in <code>package.json</code> and <code>package-lock.json</code>, creates a version commit, and creates the matching git tag. <code>git push origin master --tags</code> then pushes both the commit and the tag to GitHub.</p>
 <p>The tag version must match <code>package.json</code>. GitHub Actions checks this before deploying, so tagging <code>v2.0.2</code> while <code>package.json</code> says <code>2.0.1</code> will fail the release.</p>
-<p>For tag releases, GitHub Actions also generates and deploys the Google Apps Script project with <code>clasp</code>. The generated Apps Script <code>Index.html</code> keeps the full app markup from <code>frontend/index.html</code>, but rewrites the CSS and JavaScript URLs to the tagged GitHub Pages assets.</p>
-<p>To preview that generated Apps Script project locally:</p>
+<p>To preview the generated Apps Script project locally (run <code>npm run css</code> first):</p>
 <pre><code class="language-bash">npm run apps-script:build -- v2.0.2
 </code></pre>
 <p>The output is written to <code>dist/apps-script/</code>.</p>
@@ -96,7 +96,7 @@ git push origin master --tags
 <li><code>APPS_SCRIPT_DEPLOYMENT_ID</code>: the deployment ID for the existing web app deployment that should keep the same public URL.</li>
 <li><code>CLASPRC_JSON</code>: the contents of the <code>.clasprc.json</code> file created by <code>npx clasp login</code>.</li>
 </ul>
-<p>Once these are set, a tag like <code>v2.0.2</code> will publish <code>https://live-miracles.github.io/multi-lang-qa/v/2.0.2/</code>, push <code>Code.js</code> and the generated <code>Index.html</code> to Apps Script, create a new Apps Script version, and update the existing web app deployment to that version.</p>
+<p>Once these are set, a tag like <code>v2.0.2</code> will push <code>Code.js</code> and the generated <code>Index.html</code> to Apps Script, create a new Apps Script version, and update the existing web app deployment to that version.</p>
 <h2 id="deploying-to-google-apps-script">Deploying to Google Apps Script</h2>
 <p>If you want to collaborate with others in real time you will need to create a Google Apps Script project (it is free).</p>
 <ol>
