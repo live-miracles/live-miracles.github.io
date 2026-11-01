@@ -3,7 +3,13 @@ const assert = require('node:assert/strict');
 const { exportMarkdown } = require('./blog-markdown');
 
 const site = 'https://live-miracles.github.io';
-const exportBody = (markdown) => exportMarkdown({ url: '/blog/example/', markdown }, site);
+const examplePost = {
+    url: '/blog/example/',
+    title: 'An example post',
+    summary: 'A short description.',
+    tags: ['srt', 'bonding', 'goryu', 'mediamtx'],
+};
+const exportBody = (markdown) => exportMarkdown({ ...examplePost, markdown }, site);
 
 test('Markdown export resolves images from blog/ and links from the article URL', () => {
     const copied = exportBody(
@@ -46,7 +52,7 @@ test('Markdown export handles linked images, lists, quotes and table cells', () 
 test('Markdown export preserves external links, autolinks and email addresses', () => {
     const body =
         '[external](https://example.com/a "Title")\n\n<https://example.com/b> and person@example.com';
-    assert.equal(exportBody(body), body + '\n');
+    assert.equal(exportBody(body).split('---\n\n')[1], body + '\n');
 });
 
 test('article page safely embeds Markdown alongside the copy control', () => {
@@ -125,4 +131,41 @@ test('copy control writes the Markdown and offers manual selection if denied', a
             assert.equal(button.textContent, 'Copied!');
         }
     }
+});
+
+test('Markdown export includes Dev.to front matter with safe strings and an absolute cover URL', () => {
+    const post = {
+        ...examplePost,
+        title: 'SRT: "two" paths # together',
+        summary: 'First line.\nSecond line.',
+        image: 'images/bonded-cover.jpg',
+        markdown: 'Body.',
+    };
+    const copied = exportMarkdown(post, site);
+    assert.equal(
+        copied,
+        [
+            '---',
+            'title: ' + JSON.stringify(post.title),
+            'published: true',
+            'canonical_url: "https://live-miracles.github.io/blog/example/"',
+            'description: ' + JSON.stringify(post.summary),
+            'tags: "srt, bonding, goryu, mediamtx"',
+            'cover_image: "https://live-miracles.github.io/blog/images/bonded-cover.jpg"',
+            '---',
+            '',
+            'Body.',
+            '',
+        ].join('\n'),
+    );
+});
+
+test('Markdown export marks draft previews unpublished and omits an absent cover', () => {
+    const copied = exportMarkdown(
+        { ...examplePost, draft: true, tags: [], markdown: 'Body.' },
+        site,
+    );
+    assert.ok(copied.includes('published: false\n'));
+    assert.ok(copied.includes('tags: ""\n'));
+    assert.ok(!copied.includes('cover_image:'));
 });

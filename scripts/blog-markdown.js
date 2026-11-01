@@ -72,7 +72,18 @@ function exportMarkdown(post, siteUrl) {
         return result + source.slice(cursor);
     }
     const body = rewrite(post.markdown, marked.lexer(post.markdown));
-    return body.trim() + '\n';
+    // JSON-quoted strings are valid YAML and keep colons, quotes and newlines safe.
+    const metadata = [
+        '---',
+        'title: ' + JSON.stringify(post.title),
+        'published: ' + !post.draft,
+        'canonical_url: ' + JSON.stringify(pageUrl),
+        'description: ' + JSON.stringify(post.summary),
+        'tags: ' + JSON.stringify((post.tags || []).slice(0, 4).join(', ')),
+    ];
+    if (post.image) metadata.push('cover_image: ' + JSON.stringify(resolve(post.image, true)));
+    metadata.push('---');
+    return metadata.join('\n') + '\n\n' + body.trim() + '\n';
 }
 
 module.exports = { exportMarkdown };
