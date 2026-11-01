@@ -4,14 +4,13 @@ date: 2026-10-21
 tags: [bunryu, dashboard, scale]
 image: images/dashboard-500-cover.jpg
 imageAlt: A grid of 500 outputs in 50 columns of 10, with two columns of 10 in red, under the words 20 of 500
-summary: How Bunryu's dashboard looks like with 50 live inputs and
-500 output destinations. Hhow a problem shows up, what it costs the server.
-draft: true
+summary: A look at Bunryu's dashboard with 50 live inputs and 500 output destinations, including how problems appear and how many server resources the control plane uses.
+draft: false
 ---
 
-A long live event can mean dozens of inputs, each sent to a handful of destinations. Past a few streams the question stops being "does it forward?" and becomes "can I still see what is happening without the screen turning into noise?"
+A long live event can mean dozens of inputs, each sent to a handful of destinations. Past a few streams, the question stops being "does it forward?" and becomes "can I still see what is happening without the screen turning into noise?"
 
-[Bunryu](https://github.com/live-miracles/bunryu) was tested with up to 50 inputs and 500 outputs on one server. This post is that look.
+[Bunryu](https://github.com/live-miracles/bunryu) was tested with up to 50 inputs and 500 outputs on one server. Here is what the dashboard showed and how the control plane performed.
 
 ## How we tested
 
@@ -23,7 +22,7 @@ One thing to know before looking at the pictures: **the outputs are simulated.**
 
 ![The overview with 50 inputs and 500 outputs: host charts, totals, and pipelines grouped in the sidebar](images/overview-500-outputs.webp)
 
-The left column is every pipeline, in groups (here Main Stage, Halls, Studios, Chapels and Plaza). Each row has a status dot, its output count, its name, how long it has been up and its input protocol. The totals at the top say "50 inputs, 500 outputs" with a green badge for each. To the right are the host's CPU, RAM and network charts and a table of what each process costs.
+The left column lists every pipeline, organized into groups (here Main Stage, Halls, Studios, Chapels and Plaza). Each row has a status dot, its output count, its name, how long it has been up and its input protocol. The totals at the top say "50 inputs, 500 outputs" with a green badge for each. To the right are the host's CPU, RAM and network charts and a table of what each process costs.
 
 Below that are two lists: every input, then every output.
 
@@ -41,7 +40,7 @@ Within a few seconds:
 
 ![The Issues tab lists the 20 affected outputs, each with its reason](images/issues-tab.webp)
 
-Each row says why: "Output is running but input is not live." The outputs were not failing, they were waiting for an input that had gone, and that is what the dashboard told us.
+Each row says why: "Output is running but input is not live." The outputs were not failing; they were waiting for an input that was no longer live, and that is what the dashboard told us.
 
 ## One pipeline at a time
 
@@ -55,7 +54,7 @@ Opening a pipeline shows its input, its publish URLs and its 10 outputs on one s
 | --- | --- |
 | Control plane with one dashboard open | about 17% of one core, 251 MB of RAM |
 | `/api/health`, fetched every 5 s by each dashboard | 296 KB, 18 KB gzipped, about 30 ms to produce |
-| Dashboard first render (headless Chrome, locally) | 0.7 to 0.8 s (one run of four took 1.3 s) |
+| Dashboard first render (headless Chrome, locally) | 0.7 to 0.8 s (one of four runs took 1.3 s) |
 | Overview page length | about 28,000 px, roughly 32 screens |
 
 These are the control plane's costs. A real 500-output server also runs 500 FFmpeg processes. Our sizing page puts that at about 30 vCPUs and 17 to 30 GB of RAM at 8 Mbps per output.
