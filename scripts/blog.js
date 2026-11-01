@@ -73,6 +73,7 @@ function readPost(file, name) {
         imageAlt: data.imageAlt || '',
         draft: data.draft === true,
         html: renderPost(body),
+        markdown: body,
         sourcePath: `blog/${name}`,
     };
 }

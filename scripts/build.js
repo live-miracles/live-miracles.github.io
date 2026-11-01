@@ -29,6 +29,7 @@ const { organization, categories, projects } = require('./projects');
 const { escapeHtml, stripTags } = require('./markdown-text');
 const { parseMarkdownPage, linkResolver, absoluteUrl } = require('./markdown-page');
 const { loadPosts, renderFeed, blogDescription } = require('./blog');
+const { exportMarkdown } = require('./blog-markdown');
 const { createProjectSource, parseLocalProjects } = require('./project-source');
 
 const root = path.resolve(__dirname, '..');
@@ -703,7 +704,13 @@ function blogPostPage(post) {
           </header>
           ${post.image ? postImage(post, 'mb-10 w-full rounded-2xl') : ''}
           <article class="readme min-w-0">${post.html}</article>
-          <a class="more caption mt-10 inline-block" href="https://github.com/${organization}/${organization}.github.io/blob/${branch}/${post.sourcePath}">Edit this post on GitHub</a>`,
+          <div class="caption mt-10 flex flex-wrap items-center gap-x-6 gap-y-3">
+            <a class="more" href="https://github.com/${organization}/${organization}.github.io/blob/${branch}/${post.sourcePath}">Edit this post on GitHub</a>
+            <button id="copy-markdown" class="pill cursor-pointer" type="button" title="Copy article Markdown with full image and link URLs" hidden>Copy Markdown</button>
+            <span id="copy-markdown-status" class="text-muted" role="status"></span>
+          </div>
+          <textarea id="post-markdown" class="border-line mt-4 w-full rounded-lg border p-3 text-sm" aria-label="Article Markdown" rows="12" readonly hidden>${escapeHtml(exportMarkdown(post, siteUrl))}</textarea>
+          <script src="/assets/copy-markdown.js" defer></script>`,
             'max-w-[720px]',
             undefined,
             post.url,
@@ -861,15 +868,13 @@ async function renderSite(out) {
 
 // The utility classes come from the markup in these scripts (see ui/styles.css).
 function buildStyles(out) {
-    const bin = path.join(
-        root,
-        'node_modules',
-        '.bin',
-        process.platform === 'win32' ? 'tailwindcss.cmd' : 'tailwindcss',
-    );
+    // Run the JavaScript entry point with Node on both Windows and Unix.
+    const cliPackage = require.resolve('@tailwindcss/cli/package.json');
+    const cli = path.resolve(path.dirname(cliPackage), require(cliPackage).bin.tailwindcss);
     execFileSync(
-        bin,
+        process.execPath,
         [
+            cli,
             '-i',
             path.join(root, 'ui', 'styles.css'),
             '-o',
