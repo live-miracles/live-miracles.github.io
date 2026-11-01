@@ -4,13 +4,14 @@ date: 2026-10-21
 tags: [bunryu, dashboard, scale]
 image: images/dashboard-500-cover.jpg
 imageAlt: A grid of 500 outputs in 50 columns of 10, with two columns of 10 in red, under the words 20 of 500
-summary: What Bunryu's dashboard looks like at its supported ceiling, how a problem shows up among 500 outputs, what it costs the server, and what is still awkward.
+summary: How Bunryu's dashboard looks like with 50 live inputs and
+500 output destinations. Hhow a problem shows up, what it costs the server.
 draft: true
 ---
 
 A long live event can mean dozens of inputs, each sent to a handful of destinations. Past a few streams the question stops being "does it forward?" and becomes "can I still see what is happening without the screen turning into noise?"
 
-[Bunryu](https://github.com/live-miracles/bunryu) supports up to 50 inputs and 500 outputs on one server. We had measured the server side of that, but never looked at the dashboard with the full load on it. This post is that look.
+[Bunryu](https://github.com/live-miracles/bunryu) was tested with up to 50 inputs and 500 outputs on one server. This post is that look.
 
 ## How we tested
 
@@ -58,13 +59,3 @@ Opening a pipeline shows its input, its publish URLs and its 10 outputs on one s
 | Overview page length | about 28,000 px, roughly 32 screens |
 
 These are the control plane's costs. A real 500-output server also runs 500 FFmpeg processes. Our sizing page puts that at about 30 vCPUs and 17 to 30 GB of RAM at 8 Mbps per output.
-
-## What is still awkward
-
-The overview is one long page, about 32 screens at 500 outputs, and the search box on each table matches names only, not destinations or statuses. We left destinations out on purpose, because a destination URL can contain a platform's stream key. The remaining limits are listed under [known issues](https://live-miracles.github.io/projects/bunryu/docs/operations/known-issues/).
-
-## Takeaways
-
-- **Test the interface at the capacity you claim.** We had the server numbers for 500 outputs and had never opened the dashboard at that size. Doing it showed us things the server numbers never did.
-- **Show problems in the totals and the navigation, not only in a list.** Counting at the top and a colour in the sidebar mean you notice before you scroll.
-- **Say what was simulated.** Without real FFmpeg processes this is a test of the dashboard and the control plane, and that is all it claims to be.
