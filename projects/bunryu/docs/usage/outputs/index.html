@@ -99,6 +99,11 @@ metadata endpoints, and connect to loopback only on the server&#39;s own RTMP/SR
 ports. The latter allows pipeline-to-pipeline restreams, for example feeding a
 second pipeline from an output of the first. See
 <a href="/projects/bunryu/docs/operations/security/">Security</a> for the full rules.</p>
+<p>An output cannot send a pipeline back into itself. A destination on this server&#39;s
+own ingest (<code>live/&lt;stream key&gt;</code>) is refused when that key is the pipeline&#39;s own
+input, and when the pipeline it feeds leads back to it through other restreams
+(A to B and B to A). Pipelines that share a key read the same stream, so the same
+holds for them. The same rule applies when you move a pipeline to another stream key.</p>
 <h2 id="video-encoding">Video encoding</h2>
 <table>
 <thead>

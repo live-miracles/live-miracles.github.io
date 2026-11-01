@@ -250,6 +250,9 @@ dashboard shows how long ago the episode started (&quot;since 3 min ago&quot;) n
 encoder&#39;s address (<code>rtmp from &lt;ip&gt;</code>, <code>srt from &lt;ip&gt;</code>, <code>srt via relay from &lt;ip&gt;:&lt;port&gt;</code>);
 the pipeline log gets the same line. A bonded input has none: its legs are logged
 as they join and leave.</li>
+<li><strong>Leg health:</strong> <code>bonded-leg-health</code> when a leg&#39;s (or a plain SRT input&#39;s) health goes
+between <code>ok</code>, <code>warn</code> and <code>error</code>, with the reason; the pipeline log gets a
+<code>leg_degraded</code>, <code>leg_failed</code> or <code>leg_recovered</code> line, at most 4 a minute per pipeline.</li>
 <li><strong>Publish hooks:</strong> <code>publish-allowed</code>, and <code>publish-rejected</code> for each rejection
 that is logged. Repeats are throttled to one journal line per minute per key.
 The number not logged goes on the next line, or, if the attempts stopped, on a

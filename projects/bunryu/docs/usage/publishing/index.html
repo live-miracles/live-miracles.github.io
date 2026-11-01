@@ -179,6 +179,14 @@ it can be lower than the relay&#39;s own retries.</p>
 <p>Whatever the protocol, the pipeline&#39;s log records the encoder&#39;s address each time a
 publisher connects (<code>Publisher: rtmp from &lt;ip&gt;</code>), which is how you tell afterwards
 which encoder was on a key. A bonded input logs its legs instead.</p>
+<p>The log also records when a leg&#39;s quality turns bad and when it recovers, because the
+warning on the dashboard disappears once the leg is healthy again. A line such as
+<code>Bonded leg 203.0.113.10:10081: Leg packet quality is degraded over the last minute (0.2% loss, 0.2% drop).</code>
+shows as a warning (an error when the leg is failing), and <code>back to normal</code> follows once
+the leg has stayed healthy for 30 s. A plain SRT input is logged the same way as
+<code>SRT input from &lt;ip&gt;:&lt;port&gt;</code>. Standby and connecting legs are not logged for this, and
+at most 4 such lines a minute are kept per pipeline; the number hidden is added to the
+next line, and every change is in the diagnostics.</p>
 <h2 id="pipeline-groups">Pipeline groups</h2>
 <p>Groups fold related pipelines together in the sidebar. Everything is done in the sidebar,
 and each change is saved at once:</p>
@@ -210,7 +218,8 @@ another on the same server:</p>
 <li>Create two pipelines, A and B.</li>
 <li>Add an output to A with the destination
 <code>rtmp://localhost:21935/live/&lt;stream-key-of-B&gt;</code>. An output may connect to
-loopback only on the server&#39;s own RTMP/SRT ports.</li>
+loopback only on the server&#39;s own RTMP/SRT ports. An output cannot point back at
+its own pipeline.</li>
 <li>Run the command above with A&#39;s stream key.</li>
 </ol>
 <p>A goes live and its output shows running, and B goes live with the forwarded

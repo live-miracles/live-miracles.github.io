@@ -125,6 +125,12 @@ treated as loopback. Private LAN ranges and SRT <code>mode=listener</code> outpu
 deliberately allowed. Outputs saved before the check existed are re-checked at
 startup and stopped, with the reason shown in the dashboard. DNS that changes between the check and FFmpeg&#39;s own lookup
 cannot be ruled out.</li>
+<li><strong>Restream loops are refused.</strong> An output that publishes into <code>live/&lt;key&gt;</code> on this
+server&#39;s own RTMP/SRT port (loopback or one of the machine&#39;s own addresses) is
+rejected when the key is its own pipeline&#39;s input or when the chain of such
+outputs leads back to it. Outputs saved before the check existed are stopped at
+startup with the reason shown. A public address that is NAT-ed to this machine and
+is not on one of its interfaces looks like a remote host and is not recognised.</li>
 <li><strong>The <code>internal</code> RTMP app is reserved for shared encodes.</strong> Outputs cannot
 target it (any host spelling that resolves to this machine, with a path under
 <code>/internal/</code>), and SRS&#39;s publish hook accepts that app only over RTMP from

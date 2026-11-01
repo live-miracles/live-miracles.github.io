@@ -333,6 +333,11 @@ can be read, and it can be restarted (<code>/restart</code>).</li>
 <li><strong>You cannot create outputs in the <code>internal</code> app.</strong> Create, bulk create and
 update refuse a destination that resolves to this host with a path under
 <code>/internal/</code> (<code>400</code>, &quot;the internal app is reserved for shared encodes&quot;).</li>
+<li><strong>You cannot create a restream loop.</strong> Create, bulk create and update refuse a
+destination that publishes into this server&#39;s own <code>live/&lt;key&gt;</code> when that key is the
+pipeline&#39;s own input or the chain of restreams leads back to it (<code>400</code>). Moving a
+pipeline to another stream key (<code>POST /api/pipelines/:id</code> with <code>streamKeyId</code>) is
+refused with <code>409</code> when one of its outputs would then loop back.</li>
 <li><strong>Output stats carry extra fields</strong> (<code>GET /api/health</code>, per output): <code>role</code>
 (<code>&quot;rendition&quot;</code> for a shared encode, else <code>&quot;output&quot;</code>), <code>renditionId</code> (the shared
 encode a running shared output is pulling, else <code>null</code>), and, for a shared
