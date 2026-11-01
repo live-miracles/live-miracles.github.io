@@ -5,7 +5,7 @@
     <link>https://live-miracles.github.io/blog/</link>
     <description>Notes from running live events and building the tools behind them.</description>
     <item>
-      <title>One faulty audio embedder disrupted a Mega event</title>
+      <title>One faulty audio embedder disrupted a mega event</title>
       <link>https://live-miracles.github.io/blog/one-faulty-embedder-mega-event/</link>
       <guid>https://live-miracles.github.io/blog/one-faulty-embedder-mega-event/</guid>
       <pubDate>Thu, 22 Oct 2026 00:00:00 GMT</pubDate>
@@ -17,6 +17,13 @@
       <guid>https://live-miracles.github.io/blog/srs-mediamtx-restreamer-reject-bonded-srt/</guid>
       <pubDate>Thu, 22 Oct 2026 00:00:00 GMT</pubDate>
       <description>SRS, MediaMTX and Restreamer reject a bonded SRT group. So we added a small de-bonding relay Goryu in front and, and it worked.</description>
+    </item>
+    <item>
+      <title>50 inputs and 500 outputs in one dashboard</title>
+      <link>https://live-miracles.github.io/blog/dashboard-with-500-outputs/</link>
+      <guid>https://live-miracles.github.io/blog/dashboard-with-500-outputs/</guid>
+      <pubDate>Wed, 21 Oct 2026 00:00:00 GMT</pubDate>
+      <description>A look at Bunryu&#39;s dashboard with 50 live inputs and 500 output destinations, including how problems appear and how many server resources the control plane uses.</description>
     </item>
     <item>
       <title>One leaking FFmpeg process took down six live streams</title>

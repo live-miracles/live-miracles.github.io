@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>50 inputs and 500 outputs in one dashboard — Live Miracles</title>
+    <meta name="description" content="A look at Bunryu&#39;s dashboard with 50 live inputs and 500 output destinations, including how problems appear and how many server resources the control plane uses." />
+    <link rel="canonical" href="https://live-miracles.github.io/blog/dashboard-with-500-outputs/" />
+    <meta property="og:site_name" content="Live Miracles" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="50 inputs and 500 outputs in one dashboard — Live Miracles" />
+    <meta property="og:description" content="A look at Bunryu&#39;s dashboard with 50 live inputs and 500 output destinations, including how problems appear and how many server resources the control plane uses." />
+    <meta property="og:url" content="https://live-miracles.github.io/blog/dashboard-with-500-outputs/" />
+    <meta property="og:image" content="https://live-miracles.github.io/blog/images/dashboard-500-cover.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/assets/logo.png" type="image/png" />
+    <link rel="alternate" type="application/rss+xml" title="Live Miracles blog" href="/blog/feed.xml" />
+    <script>
+      try {
+        var theme = localStorage.getItem('theme');
+        if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
+      } catch (e) {}
+    </script>
+    <link rel="stylesheet" href="/assets/styles.css" />
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <header class="topbar">
+        <nav class="caption mx-auto flex h-12 w-full max-w-[1024px] items-center justify-between gap-4 px-5 sm:px-6" aria-label="Site">
+          <a href="/" class="flex items-center gap-2.5 font-semibold" aria-label="Live Miracles">
+            <img src="/assets/logo.png" alt="" class="logo size-6" />
+            <span>Live Miracles</span>
+          </a>
+          <div class="flex items-center gap-5 sm:gap-7">
+            <a href="/#projects" class="text-muted hover:text-ink transition-colors">Projects</a>
+            <a href="/blog/" class="text-ink hover:text-ink transition-colors" aria-current="page">Blog</a>
+            <div class="-mr-2 flex items-center gap-1">
+              <a href="https://github.com/live-miracles" class="icon-btn" aria-label="Live Miracles on GitHub" title="GitHub"><svg xmlns="http://www.w3.org/2000/svg" class="size-[18px]" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.79 23.39c.6.11.82-.26.82-.58v-2.02c-3.34.73-4.04-1.42-4.04-1.42-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.57A12 12 0 0 0 12 .5Z"/></svg></a>
+              <button type="button" id="theme-toggle" class="icon-btn theme-toggle" hidden><svg xmlns="http://www.w3.org/2000/svg" class="icon-sun size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32 1.41-1.41"/></svg><svg xmlns="http://www.w3.org/2000/svg" class="icon-moon size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg></button>
+            </div>
+          </div>
+        </nav>
+      </header>
+    <main class="flex-1"><div class="wash" style="--gx1: 22%; --gx2: 94%; --gx3: 72%; --gy1: -49px; --gy2: -128px; --gy1p: 22%; --gy2p: 5%; --px: 98%; --glow-1: var(--glow-b); --glow-2: var(--glow-a)"><div class="mx-auto w-full max-w-[720px] px-5 py-10 sm:px-6 sm:py-14"><nav class="text-muted caption" aria-label="Breadcrumb">
+            <a href="/blog/" class="link-quiet hover:text-ink">Blog</a>
+          </nav>
+          <header class="mt-4 mb-8">
+            <h1 class="display display-lg">50 inputs and 500 outputs in one dashboard</h1>
+            <div class="text-muted caption mt-4 flex flex-wrap items-center gap-3">
+              <time datetime="2026-10-21">October 21, 2026</time><span class="chip">bunryu</span><span class="chip">dashboard</span><span class="chip">scale</span>
+            </div>
+          </header>
+          <img src="/blog/images/dashboard-500-cover.jpg" alt="A grid of 500 outputs in 50 columns of 10, with two columns of 10 in red, under the words 20 of 500" class="mb-10 w-full rounded-2xl" loading="lazy" />
+          <article class="readme min-w-0"><p>A long live event can mean dozens of inputs, each sent to a handful of destinations. Past a few streams, the question stops being &quot;does it forward?&quot; and becomes &quot;can I still see what is happening without the screen turning into noise?&quot;</p>
+<p><a href="https://github.com/live-miracles/bunryu">Bunryu</a> was tested with up to 50 inputs and 500 outputs on one server. Here is what the dashboard showed and how the control plane performed.</p>
+<h2 id="how-we-tested">How we tested</h2>
+<p>We started the isolated test stack that ships with the repo, created 50 pipelines, and gave each one 10 outputs: 500 in total, the supported maximum. Every pipeline had a live input: a looped 720p clip published over RTMP. All 500 outputs were running.</p>
+<p>One thing to know before looking at the pictures: <strong>the outputs are simulated.</strong> Each one is a stand-in for FFmpeg that reports progress and sends nothing over the network. The control plane, SRS, the inputs and the dashboard are real, so this shows what the dashboard looks like and what it costs the control plane. It does not show FFmpeg&#39;s own CPU and RAM, which our <a href="https://live-miracles.github.io/projects/bunryu/docs/getting-started/sizing/">sizing page</a> covers separately. The machine was an 8-core laptop shared with other work.</p>
+<h2 id="the-overview">The overview</h2>
+<p><img src="/blog/images/overview-500-outputs.webp" alt="The overview with 50 inputs and 500 outputs: host charts, totals, and pipelines grouped in the sidebar" loading="lazy" /></p>
+<p>The left column lists every pipeline, organized into groups (here Main Stage, Halls, Studios, Chapels and Plaza). Each row has a status dot, its output count, its name, how long it has been up and its input protocol. The totals at the top say &quot;50 inputs, 500 outputs&quot; with a green badge for each. To the right are the host&#39;s CPU, RAM and network charts and a table of what each process costs.</p>
+<p>Below that are two lists: every input, then every output.</p>
+<h2 id="when-something-goes-wrong">When something goes wrong</h2>
+<p>The useful test of a big dashboard is whether a problem shows up without hunting for it. We took two of the 50 inputs offline and watched.</p>
+<p><img src="/blog/images/two-inputs-down.webp" alt="Two inputs drop: the totals change, the affected pipelines turn yellow, and the Issues tab narrows the list" loading="lazy" /></p>
+<p>Within a few seconds:</p>
+<ul>
+<li>The totals changed to 48 live inputs and 480 healthy outputs, with a yellow 20 for the outputs that belong to the two dead inputs.</li>
+<li>The two pipelines turned yellow in their groups in the sidebar.</li>
+<li>The <strong>Issues</strong> tab narrowed the output list to those 20 outputs.</li>
+</ul>
+<p><img src="/blog/images/issues-tab.webp" alt="The Issues tab lists the 20 affected outputs, each with its reason" loading="lazy" /></p>
+<p>Each row says why: &quot;Output is running but input is not live.&quot; The outputs were not failing; they were waiting for an input that was no longer live, and that is what the dashboard told us.</p>
+<h2 id="one-pipeline-at-a-time">One pipeline at a time</h2>
+<p><img src="/blog/images/pipeline-view.webp" alt="A pipeline&amp;#39;s own view: its input, publish URLs and its 10 outputs" loading="lazy" /></p>
+<p>Opening a pipeline shows its input, its publish URLs and its 10 outputs on one screen, each with status, uptime, bitrate and memory. A group of ten outputs fits without scrolling, which is the level you work at when you are adjusting one destination.</p>
+<h2 id="what-it-costs">What it costs</h2>
+<table>
+<thead>
+<tr>
+<th>Measure</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Control plane with one dashboard open</td>
+<td>about 17% of one core, 251 MB of RAM</td>
+</tr>
+<tr>
+<td><code>/api/health</code>, fetched every 5 s by each dashboard</td>
+<td>296 KB, 18 KB gzipped, about 30 ms to produce</td>
+</tr>
+<tr>
+<td>Dashboard first render (headless Chrome, locally)</td>
+<td>0.7 to 0.8 s (one of four runs took 1.3 s)</td>
+</tr>
+<tr>
+<td>Overview page length</td>
+<td>about 28,000 px, roughly 32 screens</td>
+</tr>
+</tbody></table>
+<p>These are the control plane&#39;s costs. A real 500-output server also runs 500 FFmpeg processes. Our sizing page puts that at about 30 vCPUs and 17 to 30 GB of RAM at 8 Mbps per output.</p>
+</article>
+          <div class="caption mt-10 flex flex-wrap items-center gap-x-6 gap-y-3">
+            <a class="more" href="https://github.com/live-miracles/live-miracles.github.io/blob/master/blog/2026-10-21-dashboard-with-500-outputs.md">Edit this post on GitHub</a>
+            <button id="copy-markdown" class="pill cursor-pointer" type="button" title="Copy article Markdown with full image and link URLs" hidden>Copy Markdown</button>
+            <span id="copy-markdown-status" class="text-muted" role="status"></span>
+          </div>
+          <textarea id="post-markdown" class="border-line mt-4 w-full rounded-lg border p-3 text-sm" aria-label="Article Markdown" rows="12" readonly hidden>A long live event can mean dozens of inputs, each sent to a handful of destinations. Past a few streams, the question stops being &quot;does it forward?&quot; and becomes &quot;can I still see what is happening without the screen turning into noise?&quot;
+
+[Bunryu](https://github.com/live-miracles/bunryu) was tested with up to 50 inputs and 500 outputs on one server. Here is what the dashboard showed and how the control plane performed.
+
+## How we tested
+
+We started the isolated test stack that ships with the repo, created 50 pipelines, and gave each one 10 outputs: 500 in total, the supported maximum. Every pipeline had a live input: a looped 720p clip published over RTMP. All 500 outputs were running.
+
+One thing to know before looking at the pictures: **the outputs are simulated.** Each one is a stand-in for FFmpeg that reports progress and sends nothing over the network. The control plane, SRS, the inputs and the dashboard are real, so this shows what the dashboard looks like and what it costs the control plane. It does not show FFmpeg&#39;s own CPU and RAM, which our [sizing page](https://live-miracles.github.io/projects/bunryu/docs/getting-started/sizing/) covers separately. The machine was an 8-core laptop shared with other work.
+
+## The overview
+
+![The overview with 50 inputs and 500 outputs: host charts, totals, and pipelines grouped in the sidebar](&lt;https://live-miracles.github.io/blog/images/overview-500-outputs.webp&gt;)
+
+The left column lists every pipeline, organized into groups (here Main Stage, Halls, Studios, Chapels and Plaza). Each row has a status dot, its output count, its name, how long it has been up and its input protocol. The totals at the top say &quot;50 inputs, 500 outputs&quot; with a green badge for each. To the right are the host&#39;s CPU, RAM and network charts and a table of what each process costs.
+
+Below that are two lists: every input, then every output.
+
+## When something goes wrong
+
+The useful test of a big dashboard is whether a problem shows up without hunting for it. We took two of the 50 inputs offline and watched.
+
+![Two inputs drop: the totals change, the affected pipelines turn yellow, and the Issues tab narrows the list](&lt;https://live-miracles.github.io/blog/images/two-inputs-down.webp&gt;)
+
+Within a few seconds:
+
+- The totals changed to 48 live inputs and 480 healthy outputs, with a yellow 20 for the outputs that belong to the two dead inputs.
+- The two pipelines turned yellow in their groups in the sidebar.
+- The **Issues** tab narrowed the output list to those 20 outputs.
+
+![The Issues tab lists the 20 affected outputs, each with its reason](&lt;https://live-miracles.github.io/blog/images/issues-tab.webp&gt;)
+
+Each row says why: &quot;Output is running but input is not live.&quot; The outputs were not failing; they were waiting for an input that was no longer live, and that is what the dashboard told us.
+
+## One pipeline at a time
+
+![A pipeline&#39;s own view: its input, publish URLs and its 10 outputs](&lt;https://live-miracles.github.io/blog/images/pipeline-view.webp&gt;)
+
+Opening a pipeline shows its input, its publish URLs and its 10 outputs on one screen, each with status, uptime, bitrate and memory. A group of ten outputs fits without scrolling, which is the level you work at when you are adjusting one destination.
+
+## What it costs
+
+| Measure | Result |
+| --- | --- |
+| Control plane with one dashboard open | about 17% of one core, 251 MB of RAM |
+| `/api/health`, fetched every 5 s by each dashboard | 296 KB, 18 KB gzipped, about 30 ms to produce |
+| Dashboard first render (headless Chrome, locally) | 0.7 to 0.8 s (one of four runs took 1.3 s) |
+| Overview page length | about 28,000 px, roughly 32 screens |
+
+These are the control plane&#39;s costs. A real 500-output server also runs 500 FFmpeg processes. Our sizing page puts that at about 30 vCPUs and 17 to 30 GB of RAM at 8 Mbps per output.
+</textarea>
+          <script src="/assets/copy-markdown.js" defer></script></div></div></main>
+    <footer class="caption waves text-muted border-line border-t pb-28">
+      <div class="mx-auto flex w-full max-w-[980px] flex-wrap items-center justify-between gap-x-6 gap-y-2 px-5 py-8 sm:px-6">
+        <span>Live Miracles · Open tools for live teams</span>
+        <span class="flex gap-5">
+          <a class="link-quiet" href="/blog/">Blog</a>
+          <a class="link-quiet" href="/blog/feed.xml">RSS</a>
+          <a class="link-quiet" href="https://github.com/live-miracles">GitHub</a>
+        </span>
+      </div>
+    </footer>
+    <dialog id="lightbox" class="lightbox" aria-label="Enlarged image">
+      <button type="button" class="lightbox-close" aria-label="Close image"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg></button>
+      <div class="lightbox-frame"><img alt="" /></div>
+    </dialog>
+    <script>
+      (function () {
+        var dialog = document.getElementById('lightbox');
+        if (!dialog || !dialog.showModal) return;
+        var shown = dialog.querySelector('img');
+        function zoomable(img) {
+          return !img.closest('a') && img.naturalWidth >= 300 && img.naturalHeight >= 100;
+        }
+        function mark(img) {
+          if (img.dataset.zoom || !zoomable(img)) return;
+          img.dataset.zoom = '1';
+          img.classList.add('zoomable');
+          img.tabIndex = 0;
+          img.setAttribute('role', 'button');
+          img.setAttribute('aria-label', 'Enlarge image: ' + (img.alt || 'screenshot'));
+        }
+        function open(img) {
+          shown.src = img.currentSrc || img.src;
+          shown.alt = img.alt;
+          shown.classList.remove('actual');
+          dialog.showModal();
+          dialog.scrollTo(0, 0);
+        }
+        document.querySelectorAll('.readme img').forEach(function (img) {
+          if (img.complete) mark(img);
+          else img.addEventListener('load', function () { mark(img); }, { once: true });
+        });
+        document.addEventListener('click', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom) open(img);
+        });
+        document.addEventListener('keydown', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom && (event.key === 'Enter' || event.key === ' ')) {
+            event.preventDefault();
+            open(img);
+          }
+        });
+        shown.addEventListener('click', function () {
+          shown.classList.toggle('actual');
+        });
+        dialog.addEventListener('click', function (event) {
+          if (event.target !== shown) dialog.close();
+        });
+      })();
+    </script>
+    <script>
+      (function () {
+        var button = document.getElementById('theme-toggle');
+        if (!button) return;
+        var root = document.documentElement;
+        function current() {
+          return root.dataset.theme === 'light' ? 'light' : 'dark';
+        }
+        function sync() {
+          var theme = current();
+          button.dataset.mode = theme;
+          button.setAttribute('aria-label', 'Switch to ' + (theme === 'dark' ? 'light' : 'dark') + ' theme');
+        }
+        button.hidden = false;
+        sync();
+        button.addEventListener('click', function () {
+          var next = current() === 'dark' ? 'light' : 'dark';
+          root.dataset.theme = next;
+          try {
+            localStorage.setItem('theme', next);
+          } catch (e) {}
+          sync();
+        });
+      })();
+    </script>
+  </body>
+</html>

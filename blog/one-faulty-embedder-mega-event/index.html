@@ -4,12 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="light dark" />
-    <title>One faulty audio embedder disrupted a Mega event — Live Miracles</title>
+    <title>One faulty audio embedder disrupted a mega event — Live Miracles</title>
     <meta name="description" content="Two fiber paths carried the same bad audio, while our monitoring missed the cancellation between left and right channels." />
     <link rel="canonical" href="https://live-miracles.github.io/blog/one-faulty-embedder-mega-event/" />
     <meta property="og:site_name" content="Live Miracles" />
     <meta property="og:type" content="article" />
-    <meta property="og:title" content="One faulty audio embedder disrupted a Mega event — Live Miracles" />
+    <meta property="og:title" content="One faulty audio embedder disrupted a mega event — Live Miracles" />
     <meta property="og:description" content="Two fiber paths carried the same bad audio, while our monitoring missed the cancellation between left and right channels." />
     <meta property="og:url" content="https://live-miracles.github.io/blog/one-faulty-embedder-mega-event/" />
     <meta property="og:image" content="https://live-miracles.github.io/blog/images/audio-cancellation-cover.jpg" />
@@ -45,38 +45,35 @@
             <a href="/blog/" class="link-quiet hover:text-ink">Blog</a>
           </nav>
           <header class="mt-4 mb-8">
-            <h1 class="display display-lg">One faulty audio embedder disrupted a Mega event</h1>
+            <h1 class="display display-lg">One faulty audio embedder disrupted a mega event</h1>
             <div class="text-muted caption mt-4 flex flex-wrap items-center gap-3">
               <time datetime="2026-10-22">October 22, 2026</time><span class="chip">audio</span><span class="chip">streaming</span><span class="chip">reliability</span><span class="chip">livegallery</span>
             </div>
           </header>
           <img src="/blog/images/audio-cancellation-cover.jpg" alt="Illustration of opposite-polarity audio channels combining into a flat line, with the words Mono Cancelled" class="mb-10 w-full rounded-2xl" loading="lazy" />
-          <article class="readme min-w-0"><p>Both audio meters were moving. The dry run had gone well. We had two fiber paths from the event to the streaming server. Yet when the event went live, viewers across more than 100 streams started reporting bad, breaking audio.</p>
+          <article class="readme min-w-0"><p>Both audio meters were moving. The dry run had gone well. We had two fiber paths from the event to the streaming server. Yet when the event went live, viewers across more than 100 streams started reporting poor-quality audio that kept breaking up.</p>
 <p>Switching to the backup feed did not help. Switching to a third feed finally did, about an hour into the live event. By then, many viewers had left.</p>
 <p>This is how one suspected faulty audio embedder affected all those streams, why our monitoring missed it, and what we changed in <a href="https://github.com/live-miracles/live-gallery">Live Gallery</a> afterwards.</p>
-<h2 id="the-warning-we-did-not-understand">The warning we did not understand</h2>
-<p>At the venue, vendors were using hardware to embed the audio and video into the outgoing feed. That device had shown signs of trouble from the beginning. We suspected a loose connection, but the vendors appeared to resolve the problem, and we did not investigate further. The dry run then went well.</p>
-<p>We do not have a confirmed diagnosis of the hardware fault. A loose connection is one possibility, not an established cause. What became clear later was that the affected feeds shared that embedding stage, and their left and right audio channels were cancelling when combined.</p>
 <h2 id="our-monitoring-heard-only-one-channel">Our monitoring heard only one channel</h2>
-<p>We were monitoring the streams in Live Gallery with a mono speaker setup that, in our arrangement, let us hear only the left channel. We could also see separate volume bars for left and right. Both showed audio, and what we heard sounded acceptable, so we thought the feeds were healthy.</p>
+<p>We were monitoring the streams in <a href="https://github.com/live-miracles/live-gallery">Live Gallery</a> with a mono speaker setup that, in our arrangement, let us hear only the left channel. We could also see separate volume bars for left and right. Both showed audio, and what we heard sounded acceptable, so we thought the feeds were healthy.</p>
 <p>But listening to the left channel alone is different from listening to a mono mix of left and right. We had checked that audio was present in each channel. We had not checked whether the channels worked together.</p>
 <p>That distinction became painful during the event. Some phones played the audio acceptably; others sounded bad or lost much of it. Headphones could sound fine too. At the time, that inconsistency made the reports harder to explain. In retrospect, it was a useful clue: the result depended on how the playback device handled the two channels.</p>
 <h2 id="why-two-active-meters-can-hide-bad-audio">Why two active meters can hide bad audio</h2>
 <p>When two channels carry similar sound with opposite polarity, each channel can sound fine on its own. Their volume meters can look normal too. Trouble appears when a playback system adds them together.</p>
 <p>A mono mix commonly combines the channels as <code>(L + R) / 2</code>. If the right channel is an inverted copy of the left, the positive parts of one meet the negative parts of the other, and the sound cancels. With partial cancellation, voices can become thin, quiet, or unstable rather than disappearing completely.</p>
-<p>Stereo playback can keep the channels separate, so headphones may conceal the problem. Devices that combine the channels can expose it. The behavior we observed was consistent with this, although we did not verify the internal routing of every phone that viewers used.</p>
+<p>Stereo playback can keep the channels separate, so headphones may conceal the problem. Devices that combine the channels can expose it.</p>
 <p>Analysis of the recording later showed negative correlation between the channels and a loss of level when they were combined. The strength varied through the affected portion. That points to a stereo compatibility problem; it does not, by itself, tell us which physical channel or connection was at fault.</p>
 <p><img src="/blog/images/phase-mismatch-recording.webp" alt="A zoom from the affected recording shows blue left-channel and red right-channel waveforms moving in opposite directions, with correlation rounded to -1.000." loading="lazy" /></p>
-<p>This 33.3 millisecond sample from just before the feed switch shows the problem clearly: when one channel rises, the other falls. Cancellation was not equally strong throughout the incident.</p>
-<p><img src="/blog/images/phase-in-sync-recording.webp" alt="A 33.3 millisecond zoom around 01:20:00 in the recording shows the blue left-channel and red right-channel waveforms closely following each other, with correlation rounded to +0.999." loading="lazy" /></p>
-<p>For comparison, this sample around 01:20:00, after the switch to the clean feed, shows the channels rising and falling together. Their correlation is close to +1. The key difference is their shared direction, not the height of the waveform: the two images show different moments of audio. Healthy stereo does not need to match this closely, but these channels reinforce rather than cancel each other when combined.</p>
+<p>This 33.3-millisecond sample from just before the feed switch shows the problem clearly: when one channel rises, the other falls. Cancellation was not equally strong throughout the incident.</p>
+<p><img src="/blog/images/phase-in-sync-recording.webp" alt="A 33.3-millisecond zoom around 01:20:00 in the recording shows the blue left-channel and red right-channel waveforms closely following each other, with correlation rounded to +0.999." loading="lazy" /></p>
+<p>For comparison, this sample after the switch to the clean feed shows the channels rising and falling together. Their correlation is close to +1. The key difference is their shared direction, not the height of the waveform: the two images show different moments of audio. Healthy stereo does not need to match this closely, but these channels reinforce rather than cancel each other when combined.</p>
 <h2 id="the-backup-had-the-same-upstream-fault">The backup had the same upstream fault</h2>
 <p><img src="/blog/images/shared-embedder-paths.webp" alt="The video and audio mixers feed a shared suspected faulty embedder supplying both fiber paths to the streaming server. A separate embedding path supplies the clean feed that restored audio." loading="lazy" /></p>
 <p>Our first response was to switch fiber paths. We had two paths from the venue to the streaming server, but both carried audio from the same suspected faulty embedder. Changing the transport path could not remove a problem already present in the source.</p>
 <p>The third feed was different. It took video from the video mixer and audio from the audio mixer through a separate embedding path. We normally used this clean feed to make social media shorts because it did not include the event overlays and lower thirds.</p>
-<p>When we switched to that feed, the audio problem cleared. This was the recovery, about an hour after the live started. It also exposed the gap in our backup plan: the two fiber paths were separate, but a critical part of their source chain was shared.</p>
+<p>Switching to that feed cleared the audio problem about an hour after the live broadcast started. It also exposed the gap in our backup plan: the two fiber paths were separate, but a critical part of their source chain was shared.</p>
 <h2 id="what-we-added-to-live-gallery">What we added to Live Gallery</h2>
-<p><a href="https://github.com/live-miracles/live-gallery">Live Gallery</a> is our open source, MIT-licensed Electron application for monitoring many live streams simultaneously. After this incident, we added an audio phase mismatch alert and a choice of mono or stereo listening mode.</p>
+<p><a href="https://github.com/live-miracles/live-gallery">Live Gallery</a> is our open-source application for monitoring many live streams simultaneously. After this incident, we added an audio phase mismatch alert and a choice of mono or stereo listening mode.</p>
 <p>The phase check looks at the relationship between left and right, including their correlation and how much level is lost when they are combined. It evaluates sustained evidence across multiple samples rather than treating one negative reading as a fault. We want to avoid nuisance warnings: normal stereo material can contain differences between channels, and negative correlation alone is not proof of broken equipment.</p>
 <p>The mono listening option combines left and right so we can hear cancellation during a check. It closes the specific gap in our earlier setup, where hearing only the left channel gave us confidence that the full stereo feed was safe.</p>
 <p><img src="/blog/images/live-gallery-phase-warning-video.webp" alt="Live Gallery 1.6.1 showing event footage in a local-file tile, with an Audio phase mismatch warning over the video, active audio meters, and one alert in the toolbar." loading="lazy" /></p>
@@ -84,13 +81,16 @@
 <h2 id="what-these-changes-cannot-guarantee">What these changes cannot guarantee</h2>
 <p>The alert is a warning about possible cancellation, not a diagnosis of an embedder. It cannot identify a loose cable, determine which channel was inverted, or promise that every viewer&#39;s device will sound good. Quiet passages, intermittent faults, and less pronounced cancellation may also escape detection. We prefer some missed detections to constant false alarms that operators learn to ignore.</p>
 <p>Mono listening and phase warnings give us additional ways to notice this failure. They do not replace listening, investigating early hardware trouble, or checking which components our backup feeds share.</p>
-<h2 id="what-we-would-carry-into-the-next-event">What we would carry into the next event</h2>
+<h2 id="why-it-took-so-long-to-fix">Why it took so long to fix</h2>
+<p>The first reports of bad audio were confusing because the feed sounded fine on our monitoring setup. We only confirmed that something was wrong after checking the streams on our own phones.</p>
+<p>Even after confirming the issue, we did not understand its cause. In all our years of regularly running live events, this was the first time we had encountered this particular phase mismatch problem. We initially suspected a fault in our encoder or other hardware, especially because switching to the backup feed had not helped.</p>
+<p>Only later did we consider trying the clean feed. Switching to it would mean the editors would lose their feed, and viewers would experience a few seconds of buffering. We were not even sure it would fix the issue. Ultimately, though, it was the right choice.</p>
+<p>Using only the left channel in the streaming encoder would also have fixed the cancellation problem. At the time, however, we did not yet understand the root cause, so we tried the clean feed first.</p>
+<h2 id="takeaways-for-the-next-event">Takeaways for the next event</h2>
 <ul>
 <li>Check the feed in stereo and in a combined mono mix during the dry run. Left-only listening is a separate check.</li>
-<li>Treat moving left and right meters as evidence of signal, not evidence that the signals combine correctly.</li>
 <li>Trace backup feeds all the way upstream. Two transport paths can still share one faulty source device.</li>
-<li>Investigate an early hardware problem even when it appears to have gone away.</li>
-<li>Keep an independently sourced feed available, and know how to switch to it before the event starts.</li>
+<li>Have a mature monitoring system that can detect various issues.</li>
 </ul>
 <p>The clean feed saved this event&#39;s remaining broadcast. The more lasting change was learning to test what our viewers might actually hear, including what happens when two apparently healthy channels become one.</p>
 </article>
@@ -99,21 +99,15 @@
             <button id="copy-markdown" class="pill cursor-pointer" type="button" title="Copy article Markdown with full image and link URLs" hidden>Copy Markdown</button>
             <span id="copy-markdown-status" class="text-muted" role="status"></span>
           </div>
-          <textarea id="post-markdown" class="border-line mt-4 w-full rounded-lg border p-3 text-sm" aria-label="Article Markdown" rows="12" readonly hidden>Both audio meters were moving. The dry run had gone well. We had two fiber paths from the event to the streaming server. Yet when the event went live, viewers across more than 100 streams started reporting bad, breaking audio.
+          <textarea id="post-markdown" class="border-line mt-4 w-full rounded-lg border p-3 text-sm" aria-label="Article Markdown" rows="12" readonly hidden>Both audio meters were moving. The dry run had gone well. We had two fiber paths from the event to the streaming server. Yet when the event went live, viewers across more than 100 streams started reporting poor-quality audio that kept breaking up.
 
 Switching to the backup feed did not help. Switching to a third feed finally did, about an hour into the live event. By then, many viewers had left.
 
 This is how one suspected faulty audio embedder affected all those streams, why our monitoring missed it, and what we changed in [Live Gallery](https://github.com/live-miracles/live-gallery) afterwards.
 
-## The warning we did not understand
-
-At the venue, vendors were using hardware to embed the audio and video into the outgoing feed. That device had shown signs of trouble from the beginning. We suspected a loose connection, but the vendors appeared to resolve the problem, and we did not investigate further. The dry run then went well.
-
-We do not have a confirmed diagnosis of the hardware fault. A loose connection is one possibility, not an established cause. What became clear later was that the affected feeds shared that embedding stage, and their left and right audio channels were cancelling when combined.
-
 ## Our monitoring heard only one channel
 
-We were monitoring the streams in Live Gallery with a mono speaker setup that, in our arrangement, let us hear only the left channel. We could also see separate volume bars for left and right. Both showed audio, and what we heard sounded acceptable, so we thought the feeds were healthy.
+We were monitoring the streams in [Live Gallery](https://github.com/live-miracles/live-gallery) with a mono speaker setup that, in our arrangement, let us hear only the left channel. We could also see separate volume bars for left and right. Both showed audio, and what we heard sounded acceptable, so we thought the feeds were healthy.
 
 But listening to the left channel alone is different from listening to a mono mix of left and right. We had checked that audio was present in each channel. We had not checked whether the channels worked together.
 
@@ -125,17 +119,17 @@ When two channels carry similar sound with opposite polarity, each channel can s
 
 A mono mix commonly combines the channels as `(L + R) / 2`. If the right channel is an inverted copy of the left, the positive parts of one meet the negative parts of the other, and the sound cancels. With partial cancellation, voices can become thin, quiet, or unstable rather than disappearing completely.
 
-Stereo playback can keep the channels separate, so headphones may conceal the problem. Devices that combine the channels can expose it. The behavior we observed was consistent with this, although we did not verify the internal routing of every phone that viewers used.
+Stereo playback can keep the channels separate, so headphones may conceal the problem. Devices that combine the channels can expose it.
 
 Analysis of the recording later showed negative correlation between the channels and a loss of level when they were combined. The strength varied through the affected portion. That points to a stereo compatibility problem; it does not, by itself, tell us which physical channel or connection was at fault.
 
 ![A zoom from the affected recording shows blue left-channel and red right-channel waveforms moving in opposite directions, with correlation rounded to -1.000.](&lt;https://live-miracles.github.io/blog/images/phase-mismatch-recording.webp&gt;)
 
-This 33.3 millisecond sample from just before the feed switch shows the problem clearly: when one channel rises, the other falls. Cancellation was not equally strong throughout the incident.
+This 33.3-millisecond sample from just before the feed switch shows the problem clearly: when one channel rises, the other falls. Cancellation was not equally strong throughout the incident.
 
-![A 33.3 millisecond zoom around 01:20:00 in the recording shows the blue left-channel and red right-channel waveforms closely following each other, with correlation rounded to +0.999.](&lt;https://live-miracles.github.io/blog/images/phase-in-sync-recording.webp&gt;)
+![A 33.3-millisecond zoom around 01:20:00 in the recording shows the blue left-channel and red right-channel waveforms closely following each other, with correlation rounded to +0.999.](&lt;https://live-miracles.github.io/blog/images/phase-in-sync-recording.webp&gt;)
 
-For comparison, this sample around 01:20:00, after the switch to the clean feed, shows the channels rising and falling together. Their correlation is close to +1. The key difference is their shared direction, not the height of the waveform: the two images show different moments of audio. Healthy stereo does not need to match this closely, but these channels reinforce rather than cancel each other when combined.
+For comparison, this sample after the switch to the clean feed shows the channels rising and falling together. Their correlation is close to +1. The key difference is their shared direction, not the height of the waveform: the two images show different moments of audio. Healthy stereo does not need to match this closely, but these channels reinforce rather than cancel each other when combined.
 
 ## The backup had the same upstream fault
 
@@ -145,11 +139,11 @@ Our first response was to switch fiber paths. We had two paths from the venue to
 
 The third feed was different. It took video from the video mixer and audio from the audio mixer through a separate embedding path. We normally used this clean feed to make social media shorts because it did not include the event overlays and lower thirds.
 
-When we switched to that feed, the audio problem cleared. This was the recovery, about an hour after the live started. It also exposed the gap in our backup plan: the two fiber paths were separate, but a critical part of their source chain was shared.
+Switching to that feed cleared the audio problem about an hour after the live broadcast started. It also exposed the gap in our backup plan: the two fiber paths were separate, but a critical part of their source chain was shared.
 
 ## What we added to Live Gallery
 
-[Live Gallery](https://github.com/live-miracles/live-gallery) is our open source, MIT-licensed Electron application for monitoring many live streams simultaneously. After this incident, we added an audio phase mismatch alert and a choice of mono or stereo listening mode.
+[Live Gallery](https://github.com/live-miracles/live-gallery) is our open-source application for monitoring many live streams simultaneously. After this incident, we added an audio phase mismatch alert and a choice of mono or stereo listening mode.
 
 The phase check looks at the relationship between left and right, including their correlation and how much level is lost when they are combined. It evaluates sustained evidence across multiple samples rather than treating one negative reading as a fault. We want to avoid nuisance warnings: normal stereo material can contain differences between channels, and negative correlation alone is not proof of broken equipment.
 
@@ -165,13 +159,21 @@ The alert is a warning about possible cancellation, not a diagnosis of an embedd
 
 Mono listening and phase warnings give us additional ways to notice this failure. They do not replace listening, investigating early hardware trouble, or checking which components our backup feeds share.
 
-## What we would carry into the next event
+## Why it took so long to fix
+
+The first reports of bad audio were confusing because the feed sounded fine on our monitoring setup. We only confirmed that something was wrong after checking the streams on our own phones.
+
+Even after confirming the issue, we did not understand its cause. In all our years of regularly running live events, this was the first time we had encountered this particular phase mismatch problem. We initially suspected a fault in our encoder or other hardware, especially because switching to the backup feed had not helped.
+
+Only later did we consider trying the clean feed. Switching to it would mean the editors would lose their feed, and viewers would experience a few seconds of buffering. We were not even sure it would fix the issue. Ultimately, though, it was the right choice.
+
+Using only the left channel in the streaming encoder would also have fixed the cancellation problem. At the time, however, we did not yet understand the root cause, so we tried the clean feed first.
+
+## Takeaways for the next event
 
 - Check the feed in stereo and in a combined mono mix during the dry run. Left-only listening is a separate check.
-- Treat moving left and right meters as evidence of signal, not evidence that the signals combine correctly.
 - Trace backup feeds all the way upstream. Two transport paths can still share one faulty source device.
-- Investigate an early hardware problem even when it appears to have gone away.
-- Keep an independently sourced feed available, and know how to switch to it before the event starts.
+- Have a mature monitoring system that can detect various issues.
 
 The clean feed saved this event&#39;s remaining broadcast. The more lasting change was learning to test what our viewers might actually hear, including what happens when two apparently healthy channels become one.
 </textarea>
