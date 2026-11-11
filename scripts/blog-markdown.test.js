@@ -6,6 +6,7 @@ const site = 'https://live-miracles.github.io';
 const examplePost = {
     url: '/blog/example/',
     title: 'An example post',
+    date: '2026-11-11',
     summary: 'A short description.',
     tags: ['srt', 'bonding', 'goryu', 'mediamtx'],
 };
@@ -148,6 +149,7 @@ test('Markdown export includes Dev.to front matter with safe strings and an abso
             '---',
             'title: ' + JSON.stringify(post.title),
             'published: true',
+            'published_at: 2026-11-11 00:00 +0000',
             'canonical_url: "https://live-miracles.github.io/blog/example/"',
             'description: ' + JSON.stringify(post.summary),
             'tags: "srt, bonding, goryu, mediamtx"',

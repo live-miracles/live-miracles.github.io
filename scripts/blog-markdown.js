@@ -77,6 +77,8 @@ function exportMarkdown(post, siteUrl) {
         '---',
         'title: ' + JSON.stringify(post.title),
         'published: ' + !post.draft,
+        // Posts have a date but no time, so they are dated midnight UTC.
+        'published_at: ' + post.date + ' 00:00 +0000',
         'canonical_url: ' + JSON.stringify(pageUrl),
         'description: ' + JSON.stringify(post.summary),
         'tags: ' + JSON.stringify((post.tags || []).slice(0, 4).join(', ')),
