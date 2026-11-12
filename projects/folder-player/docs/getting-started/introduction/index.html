@@ -12,7 +12,7 @@
     <meta property="og:title" content="Introduction — vMix Folder Player" />
     <meta property="og:description" content="vMix Folder Player turns a folder of numbered media files into a vMix playlist. You put the videos, audio, images, photo folders and PowerPoint decks for a session in one folder, number them in the or" />
     <meta property="og:url" content="https://live-miracles.github.io/projects/folder-player/docs/getting-started/introduction/" />
-    <meta property="og:image" content="https://github.com/user-attachments/assets/afef7944-2613-40db-9f27-616060984ef6" />
+    <meta property="og:image" content="https://raw.githubusercontent.com/live-miracles/folder-player/master/assets/folder-player-explorer.png" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="/assets/logo.png" type="image/png" />
     <link rel="alternate" type="application/rss+xml" title="Live Miracles blog" href="/blog/feed.xml" />
@@ -86,21 +86,26 @@ number them in the order they should play, and the app generates a vMix preset f
 <h2 id="from-a-folder-to-vmix">From a folder to vMix</h2>
 <ol>
 <li><p>Create a folder and give every file a leading number to set its place in the playlist
-(see <a href="/projects/folder-player/docs/content-folder/numbering/">Numbering files</a>).</p>
-<p> <img src="https://github.com/user-attachments/assets/afef7944-2613-40db-9f27-616060984ef6" alt="A content folder with numbered files" loading="lazy" /></p>
+(see <a href="/projects/folder-player/docs/content-folder/numbering/">Numbering files</a>). Put a <code>base.vmix</code> with your
+cameras, mics and outputs in the folder or its parent (see <a href="/projects/folder-player/docs/getting-started/base-preset/">Base vMix preset</a>).</p>
+<p> <img src="https://raw.githubusercontent.com/live-miracles/folder-player/master/assets/folder-player-explorer.png" alt="The Film Night content folder in File Explorer: numbered images, videos, music and a photo folder, plus base.vmix, the generated Film Night.vmix, the folder-player.txt config and an unnumbered Notes.txt" loading="lazy" /></p>
 </li>
-<li><p>Open the folder in the app and click <strong>Open Config</strong>.</p>
-<p> <img src="https://github.com/user-attachments/assets/3ebd12c7-bfa5-4463-85c6-ea1f9b1a13b6" alt="The app with a content folder selected" loading="lazy" /></p>
+<li><p>Open the folder in the app and click <strong>Open Config</strong>. The config page lists every
+playlist item with its type and options, with a report of any problems above the list.</p>
 </li>
-<li><p>Review the playlist config. If needed, turn the microphone on or off, adjust the volume,
-or change the slideshow rotation time (see <a href="/projects/folder-player/docs/content-folder/options/">Item options</a>).</p>
-<p> <img src="https://github.com/user-attachments/assets/98aa6354-f919-4bc2-bf57-812133bef00c" alt="The playlist config" loading="lazy" /></p>
+<li><p>Review the playlist. For each item you can turn the camera and microphone on or off (for
+example, to put the host on camera over a lower-third image), and set loop, volume or
+slideshow time (see <a href="/projects/folder-player/docs/content-folder/options/">Item options</a>). Switch to the
+preview view to see each item&#39;s media at a glance.</p>
+<p> <img src="https://raw.githubusercontent.com/live-miracles/folder-player/master/assets/folder-player-config-preview.png" alt="The config page in preview view: a card with a thumbnail for every playlist item" loading="lazy" /></p>
 </li>
-<li><p>Save the config, go back and click <strong>Create vMix Preset</strong>. The app writes a
-<code>&lt;folder name&gt;.vmix</code> preset into the content folder, built from your
-<a href="/projects/folder-player/docs/getting-started/base-preset/">base preset</a>, and shows a report of any errors or warnings. Open
-that preset in vMix.</p>
-<p> <img src="https://github.com/user-attachments/assets/388d5a8e-7926-4ed0-9c16-cb1ba75a84a1" alt="The generated playlist open in vMix" loading="lazy" /></p>
+<li><p>Click <strong>Save</strong> (it&#39;s enabled once you change something), go back and click
+<strong>Create vMix Preset</strong>. The app writes a <code>&lt;folder name&gt;.vmix</code> preset into the content
+folder, built from your base preset, and shows a report of any errors or warnings.</p>
+<p> <img src="https://raw.githubusercontent.com/live-miracles/folder-player/master/assets/folder-player-report.png" alt="The report after creating the preset: one folder, no issues" loading="lazy" /></p>
+</li>
+<li><p>Open that preset in vMix.</p>
+<p> <img src="https://raw.githubusercontent.com/live-miracles/folder-player/master/assets/folder-player-vmix.png" alt="The generated Film Night preset open in vMix, with the playlist inputs after the Cam and Mic inputs from the base preset" loading="lazy" /></p>
 </li>
 </ol>
 <h2 id="supported-inputs">Supported inputs</h2>
