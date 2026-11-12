@@ -5,6 +5,13 @@
     <link>https://live-miracles.github.io/blog/</link>
     <description>Notes from running live events and building the tools behind them.</description>
     <item>
+      <title>Live Q&amp;A in many languages: one list instead of a chat per language</title>
+      <link>https://live-miracles.github.io/blog/live-qa-in-many-languages-one-list/</link>
+      <guid>https://live-miracles.github.io/blog/live-qa-in-many-languages-one-list/</guid>
+      <pubDate>Thu, 12 Nov 2026 00:00:00 GMT</pubDate>
+      <description>Running a live Q&amp;A when every language has its own Zoom or YouTube chat? Multi Lang QA is a free Google Apps Script app that puts all the questions, translated, into one list for the teacher.</description>
+    </item>
+    <item>
       <title>One faulty audio embedder disrupted a mega event</title>
       <link>https://live-miracles.github.io/blog/one-faulty-embedder-mega-event/</link>
       <guid>https://live-miracles.github.io/blog/one-faulty-embedder-mega-event/</guid>
