@@ -5,7 +5,7 @@ tags: [googleappsscript, opensource, translation, livestreaming]
 summary: Running a live Q&A when every language has its own Zoom or YouTube chat? Multi Lang QA is a free Google Apps Script app that puts all the questions, translated, into one list for the teacher.
 image: images/multi-lang-qa-cover.jpg
 imageAlt: Chat bubbles labelled EN, DE, FR and RU with arrows pointing to one live Q&A list, with one question starred
-draft: true
+draft: false
 ---
 
 Picture a live session. The teacher speaks English, and interpreters stream it in other languages, for example German, French and Russian. Each language has its own Zoom or YouTube stream, and each stream has its own chat.
