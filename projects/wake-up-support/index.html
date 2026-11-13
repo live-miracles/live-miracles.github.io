@@ -42,18 +42,23 @@
         </nav>
       </header>
     <main class="flex-1"><div class="wash" style="--gx1: 13%; --gx2: 85%; --gx3: 65%; --gy1: -131px; --gy2: -42px; --gy1p: 24%; --gy2p: 2%; --px: 95%; --tint: #2a9d8f; --glow-a: color-mix(in srgb, #2a9d8f 30%, transparent); --pattern: url('/assets/patterns/shippo.svg')"><div class="mx-auto w-full max-w-[980px] px-5 py-10 sm:px-6 sm:py-14"><div class="flex items-center gap-5">
-              <span class="logo-letter size-16" aria-hidden="true">W</span>
+              <img src="/assets/wake-up-support-logo.png" alt="" class="logo size-16 " />
               <h1 class="display display-lg">Wake Up Support</h1>
             </div>
             <p class="lead mt-5 max-w-3xl">Small Windows app that wakes machines on the local network with Wake-on-LAN.</p>
             <div class="mt-7 flex flex-wrap gap-3"><a class="pill pill-primary" href="https://github.com/live-miracles/wake-up-support">GitHub</a><a class="pill " href="https://github.com/live-miracles/wake-up-support/releases">Download</a></div>
-            <div class="text-muted caption mt-6 flex flex-wrap gap-x-5 gap-y-1"><span class="inline-flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 2.5 2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.31l-5.8 3.05 1.11-6.46-4.7-4.58 6.49-.94L12 2.5Z"/></svg>0</span><span class="inline-flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="6" cy="4" r="2"/><circle cx="18" cy="4" r="2"/><circle cx="12" cy="20" r="2"/><path d="M6 6v3a3 3 0 0 0 3 3h3m6-6v3a3 3 0 0 1-3 3h-3m0 0v6"/></svg>1</span><span>TypeScript</span><span>MIT license</span><span>Updated 2026-09-14</span></div>
-            <div class="mt-4 flex flex-wrap gap-2"><span class="chip">electron</span><span class="chip">typescript</span><span class="chip">wake-on-lan</span></div><div class="mt-10"><details class="bg-parchment text-muted caption mb-8 rounded-xl p-4">
+            <div class="text-muted caption mt-6 flex flex-wrap gap-x-5 gap-y-1"><span class="inline-flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 2.5 2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.31l-5.8 3.05 1.11-6.46-4.7-4.58 6.49-.94L12 2.5Z"/></svg>0</span><span class="inline-flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="6" cy="4" r="2"/><circle cx="18" cy="4" r="2"/><circle cx="12" cy="20" r="2"/><path d="M6 6v3a3 3 0 0 0 3 3h3m6-6v3a3 3 0 0 1-3 3h-3m0 0v6"/></svg>1</span><span>TypeScript</span><span>MIT license</span><span>Updated 2026-11-13</span></div>
+            <div class="mt-4 flex flex-wrap gap-2"><span class="chip">electron</span><span class="chip">typescript</span><span class="chip">wake-on-lan</span></div><nav class="border-line mt-8 flex gap-6 border-b" aria-label="Wake Up Support sections">
+              <a href="/projects/wake-up-support/" class="tab" aria-current="page">Overview</a><a href="/projects/wake-up-support/docs/" class="tab">Documentation</a>
+            </nav><div class="mt-10"><details class="bg-parchment text-muted caption mb-8 rounded-xl p-4">
               <summary class="text-ink cursor-pointer font-semibold">On this page</summary>
               <ol class="mt-3 space-y-2">
-                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#development">Development</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#build">Build</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#publish">Publish</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#format">Format</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#test">Test</a></li>
+                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#documentation">Documentation</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#development">Development</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#build">Build</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#publish">Publish</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#format">Format</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#test">Test</a></li>
               </ol>
             </details><article class="readme min-w-0"><p>A small Windows-focused Electron app for sending Wake-on-LAN magic packets to systems on a local network.</p>
+<h2 id="documentation">Documentation</h2>
+<p>Setup guides for Wake-on-LAN and AJA Bridge Live IPMI are in <a href="/projects/wake-up-support/docs/">docs/</a> and
+are published on the <a href="https://live-miracles.github.io/projects/wake-up-support/docs/">Live Miracles site</a>.</p>
 <h2 id="development">Development</h2>
 <pre><code class="language-powershell">npm install
 npm run dev
