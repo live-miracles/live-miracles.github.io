@@ -78,7 +78,7 @@
               <div class="min-w-0"><details class="bg-parchment text-muted caption mb-8 rounded-xl p-4">
               <summary class="text-ink cursor-pointer font-semibold">On this page</summary>
               <ol class="mt-3 space-y-2">
-                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#enable-the-web-controller">Enable the Web Controller</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#add-a-system">Add a system</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#chrome-and-your-local-network">Chrome and your local network</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#when-a-box-says-unavailable">When a box says Unavailable</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#known-issues">Known issues</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#try-it-without-vmix">Try it without vMix</a></li>
+                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#enable-the-web-controller">Enable the Web Controller</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#add-a-system">Add a system</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#web-controller-password">Web Controller password</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#chrome-and-your-local-network">Chrome and your local network</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#when-a-box-says-unavailable">When a box says Unavailable</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#known-issues">Known issues</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#try-it-without-vmix">Try it without vMix</a></li>
               </ol>
             </details><article class="readme min-w-0"><h2 id="enable-the-web-controller">Enable the Web Controller</h2>
 <p>vMix Master talks to vMix through its Web Controller, so that has to be on for every system
@@ -90,8 +90,8 @@ you want to control.</p>
 </ol>
 <p>The computer that opens vMix Master must be able to reach the vMix machine on that port, so
 it needs to be on the same network, and the vMix machine&#39;s firewall must allow it.</p>
-<p>If you set a password for the Web Controller, vMix Master does not send one. Check that
-the system still shows as connected after you add it.</p>
+<p>vMix Master cannot use a Web Controller that has a password, see
+<a href="#web-controller-password">Web Controller password</a>.</p>
 <h2 id="add-a-system">Add a system</h2>
 <ol>
 <li>Open <a href="https://live-miracles.github.io/vmix-master/">vMix Master</a> in Chrome.</li>
@@ -129,6 +129,21 @@ the port it is added even for an <code>https://</code> address, so write the por
 button adds the box to the group, and a click on the box makes it the master. The trash
 button removes a box after asking you to confirm, and an <strong>Undo</strong> button appears afterwards
 for a few seconds.</p>
+<h2 id="web-controller-password">Web Controller password</h2>
+<p>vMix Master cannot talk to a Web Controller that asks for a password. vMix protects it with
+HTTP Basic authentication, and a browser has to send the password in an <code>Authorization</code>
+header. For that, the browser first asks vMix for permission, and vMix does not answer that
+request. Chrome then blocks the call, and there is no way around it from a web page.</p>
+<p>A box for such a system shows <strong>Unavailable</strong> with <code>Web Controller needs a password (401)</code>.</p>
+<p>Use one of these instead:</p>
+<ul>
+<li>In vMix, open <strong>Settings → vMix Web Controller</strong> and tick <strong>Allow software on this computer
+access without login</strong>. It only covers requests to <code>127.0.0.1</code> from the computer vMix
+runs on. The computer&#39;s own network address, and any other computer, still need the
+password.</li>
+<li>Leave the password off and limit who can reach the port, for example with the firewall of
+the vMix machine or by keeping it on a private network.</li>
+</ul>
 <p>You can keep a list of addresses under <strong>Settings → Host / API URL Suggestions</strong>. They are
 offered while you type an address.</p>
 <h2 id="chrome-and-your-local-network">Chrome and your local network</h2>
@@ -170,6 +185,8 @@ it, and open <code>index.html</code> in Chrome.</p>
 <li>The Web Controller is enabled in vMix and the port matches the address.</li>
 <li>You can open <code>http://&lt;ip&gt;:8088/api/</code> in the same browser and see XML. If you do not, it is
 a network or firewall problem, not a vMix Master problem.</li>
+<li>&quot;Web Controller needs a password (401)&quot; means the Web Controller has a password, see
+<a href="#web-controller-password">Web Controller password</a>.</li>
 <li>&quot;Not a vMix API response&quot; means something answered at that address, but it is not vMix,
 for example another web server on the same port.</li>
 <li>You allowed the local network prompt in Chrome. You can change it under the site
