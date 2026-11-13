@@ -12,7 +12,7 @@
     <meta property="og:title" content="Multi Lang QA — Live Miracles" />
     <meta property="og:description" content="Collect audience questions with translations during a live session; the host stars and completes them." />
     <meta property="og:url" content="https://live-miracles.github.io/projects/multi-lang-qa/" />
-    <meta property="og:image" content="https://github.com/user-attachments/assets/0d3efd90-c10d-4ae8-b584-40371833049d" />
+    <meta property="og:image" content="https://raw.githubusercontent.com/live-miracles/multi-lang-qa/master/assets/multi-lang-qa-demo.gif" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="/assets/logo.png" type="image/png" />
     <link rel="alternate" type="application/rss+xml" title="Live Miracles blog" href="/blog/feed.xml" />
@@ -46,39 +46,122 @@
               <h1 class="display display-lg">Multi Lang QA</h1>
             </div>
             <p class="lead mt-5 max-w-3xl">Collect audience questions with translations during a live session; the host stars and completes them.</p>
-            <div class="mt-7 flex flex-wrap gap-3"><a class="pill pill-primary" href="https://github.com/live-miracles/multi-lang-qa">GitHub</a><a class="pill " href="https://live-miracles.github.io/multi-lang-qa/">Demo</a></div>
+            <div class="mt-7 flex flex-wrap gap-3"><a class="pill pill-primary" href="https://github.com/live-miracles/multi-lang-qa">GitHub</a></div>
             <div class="text-muted caption mt-6 flex flex-wrap gap-x-5 gap-y-1"><span class="inline-flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 2.5 2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.31l-5.8 3.05 1.11-6.46-4.7-4.58 6.49-.94L12 2.5Z"/></svg>0</span><span class="inline-flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="6" cy="4" r="2"/><circle cx="18" cy="4" r="2"/><circle cx="12" cy="20" r="2"/><path d="M6 6v3a3 3 0 0 0 3 3h3m6-6v3a3 3 0 0 1-3 3h-3m0 0v6"/></svg>0</span><span>JavaScript</span><span>MIT license</span><span>Updated 2026-11-13</span></div>
             <div class="mt-10"><details class="bg-parchment text-muted caption mb-8 rounded-xl p-4">
               <summary class="text-ink cursor-pointer font-semibold">On this page</summary>
               <ol class="mt-3 space-y-2">
-                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#demo">Demo</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#project-structure">Project structure</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#local-development">Local development</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#releases">Releases</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#one-time-apps-script-deployment-setup">One-time Apps Script deployment setup</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#deploying-to-google-apps-script">Deploying to Google Apps Script</a></li>
+                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#set-up-your-own-copy">Set up your own copy</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#quick-setup-recommended">Quick setup (recommended)</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#updating-later">Updating later</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#setting-up-by-hand-no-terminal">Setting up by hand (no terminal)</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#using-a-spreadsheet-you-already-have">Using a spreadsheet you already have</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#if-something-goes-wrong">If something goes wrong</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#for-contributors">For contributors</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#project-structure">Project structure</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#local-development">Local development</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#releases">Releases</a></li>
               </ol>
-            </details><article class="readme min-w-0"><img width="900" alt="Multi Lang QA Demo" src="https://github.com/user-attachments/assets/0d3efd90-c10d-4ae8-b584-40371833049d" />
-
+            </details><article class="readme min-w-0"><p><a href="https://github.com/live-miracles/multi-lang-qa/actions/workflows/deploy.yml"><img src="https://github.com/live-miracles/multi-lang-qa/actions/workflows/deploy.yml/badge.svg" alt="Build and deploy" loading="lazy" /></a>
+<a href="https://github.com/live-miracles/multi-lang-qa/tags"><img src="https://img.shields.io/github/v/tag/live-miracles/multi-lang-qa?label=version" alt="Version" loading="lazy" /></a>
+<a href="https://github.com/live-miracles/multi-lang-qa/commits/master"><img src="https://img.shields.io/github/last-commit/live-miracles/multi-lang-qa" alt="Last commit" loading="lazy" /></a>
+<a href="https://github.com/live-miracles/multi-lang-qa/blob/master/LICENSE"><img src="https://img.shields.io/github/license/live-miracles/multi-lang-qa" alt="License: MIT" loading="lazy" /></a>
+<a href="https://nodejs.org/"><img src="https://img.shields.io/badge/node-%E2%89%A522-339933?logo=node.js&amp;logoColor=white" alt="Node.js 22+" loading="lazy" /></a></p>
+<p><a href="https://github.com/live-miracles/multi-lang-qa/blob/master/assets/multi-lang-qa-selected.png"><img src="https://raw.githubusercontent.com/live-miracles/multi-lang-qa/master/assets/multi-lang-qa-demo.gif" alt="Demo: add a question, translate it, star it for the host, mark questions as done, and hide original text or completed questions" loading="lazy" /></a></p>
+<p><em>The demo above uses made-up questions and a simulated backend. To re-record it, see <code>.agents/skills/record-demo/SKILL.md</code>.</em></p>
 <p>A Google Apps Script web app that uses a Google Sheet as a database. People can submit questions with translations, and the host can star or mark any of the questions as completed.</p>
-<h2 id="demo">Demo</h2>
-<p>A demo is available at <a href="https://live-miracles.github.io/multi-lang-qa/">live-miracles.github.io/multi-lang-qa</a>, but all changes will be gone after a refresh.</p>
-<h2 id="project-structure">Project structure</h2>
+<h2 id="set-up-your-own-copy">Set up your own copy</h2>
+<p>About 5 minutes. You need a Google account and <a href="https://nodejs.org/">Node.js</a> (version 22 or newer, the &quot;LTS&quot; download). No coding is required.</p>
+<h3 id="quick-setup-recommended">Quick setup (recommended)</h3>
+<ol>
+<li><strong>One-time:</strong> turn on the Apps Script API for your Google account at <a href="https://script.google.com/home/usersettings">script.google.com/home/usersettings</a> (switch &quot;Google Apps Script API&quot; <strong>On</strong>).</li>
+<li>Open a terminal in the project folder and run:</li>
+</ol>
+<pre><code class="language-bash">npm install
+npm run setup
+</code></pre>
+<p>A browser window opens so you can sign in with the Google account that should own the app. The command then creates the Apps Script project, uploads the app, publishes it, and prints your <strong>app link</strong>.</p>
+<ol start="3">
+<li><strong>Open the app link yourself first.</strong> Google asks you to allow access. It says the app is &quot;not verified&quot; because you made it: click <strong>Advanced</strong> → <strong>Go to Multi Lang QA (unsafe)</strong> → <strong>Allow</strong>. This also creates the <strong>Multi Lang QA</strong> spreadsheet in your Google Drive, which is where the questions are stored. Then share the link with your audience.</li>
+</ol>
+<p>Anyone signed in to Google (including regular Gmail accounts) can open the app.</p>
+<blockquote>
+<p><strong>Using a work or school (Google Workspace) account?</strong> If the link looks like <code>script.google.com/a/macros/yourdomain.org/s/.../exec</code>, only people from your organization can sign in. Delete the <code>a/macros/yourdomain.org/</code> part so it reads <code>script.google.com/macros/s/.../exec</code> before sharing. If outside people are still blocked, your Workspace admin has disabled sharing outside the organization.</p>
+</blockquote>
+<h3 id="updating-later">Updating later</h3>
+<p>After pulling new changes, run <code>npm run setup</code> again. It uploads the new version and updates the same published app, so the link doesn&#39;t change.</p>
+<h3 id="setting-up-by-hand-no-terminal">Setting up by hand (no terminal)</h3>
+<p>If you can&#39;t run the command above, you can copy and paste instead. You still need Node.js once, to build two files.</p>
+<ol>
+<li>Run <code>npm install</code>, <code>npm run css</code> and <code>npm run apps-script:build</code>. This creates <strong><code>Code.js</code></strong> and <strong><code>Index.html</code></strong> in <code>dist/apps-script/</code>.</li>
+<li>Go to <a href="https://script.google.com/home">script.google.com/home</a> and click <strong>New project</strong>.</li>
+<li>Open the file <code>Code.gs</code>, delete its text, and paste the contents of <code>dist/apps-script/Code.js</code>.</li>
+<li>Next to <strong>Files</strong>, click <strong>+</strong> → <strong>HTML</strong>, name it exactly <strong><code>Index</code></strong>, and paste the contents of <code>dist/apps-script/Index.html</code>.</li>
+<li>Click <strong>Deploy</strong> → <strong>New deployment</strong> → gear icon → <strong>Web app</strong>. Set <strong>Execute as</strong> to <strong>Me</strong> and <strong>Who has access</strong> to <strong>Anyone with Google account</strong>, then click <strong>Deploy</strong>.</li>
+<li>Click <strong>Authorize access</strong>, pick your account, then <strong>Advanced</strong> → <strong>Go to (project name) (unsafe)</strong> → <strong>Allow</strong>.</li>
+<li>Open the <strong>Web app URL</strong> yourself once (this creates the spreadsheet), then share it.</li>
+</ol>
+<p>To update, paste the new files over the old ones, then <strong>Deploy</strong> → <strong>Manage deployments</strong> → pencil icon → <strong>Version: New version</strong> → <strong>Deploy</strong>.</p>
+<h3 id="using-a-spreadsheet-you-already-have">Using a spreadsheet you already have</h3>
+<p>By default the app creates its own spreadsheet. To use an existing one instead, open the Apps Script project → <strong>Project Settings</strong> (gear icon) → <strong>Script properties</strong> → add <code>SPREADSHEET_ID</code> with the ID from the spreadsheet&#39;s address bar (the text between <code>/d/</code> and <code>/edit</code>). Do this before opening the app for the first time. The spreadsheet needs a tab named exactly <code>QuestionsDB</code>, with these column names in row 1 (A to G): <code>timestamp</code>, <code>status</code>, <code>language</code>, <code>name</code>, <code>nameTranslation</code>, <code>text</code>, <code>translation</code>. In row 2, set <strong>B2</strong> = <code>data</code>, <strong>D2</strong> = <code>selected</code> and <strong>F2</strong> = <code>-1</code>. The app uses row 2 to remember which question is highlighted, so don&#39;t delete it.</p>
+<h3 id="if-something-goes-wrong">If something goes wrong</h3>
+<table>
+<thead>
+<tr>
+<th>What you see</th>
+<th>Likely cause</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>npm run setup</code> says to turn on the Apps Script API</td>
+<td>Do step 1 of the quick setup, then run it again.</td>
+</tr>
+<tr>
+<td>Others can&#39;t open the link</td>
+<td>See the Workspace note above, and check <strong>Who has access</strong> under Deploy → Manage deployments.</td>
+</tr>
+<tr>
+<td>An error about the sheet, or &quot;Cannot read properties of null&quot;</td>
+<td>Only when using your own spreadsheet: the tab isn&#39;t named exactly <code>QuestionsDB</code>, or <code>SPREADSHEET_ID</code> is wrong.</td>
+</tr>
+<tr>
+<td>Questions load but highlighting a question doesn&#39;t work</td>
+<td>Only when using your own spreadsheet: row 2 is missing or edited. Re-enter <strong>B2</strong>, <strong>D2</strong> and <strong>F2</strong> as shown above.</td>
+</tr>
+<tr>
+<td>Translation doesn&#39;t work</td>
+<td>You didn&#39;t click <strong>Allow</strong> when authorizing. Open the app link again and allow access.</td>
+</tr>
+<tr>
+<td>Your changes don&#39;t show up (manual setup)</td>
+<td>You saved the code but didn&#39;t create a <strong>New version</strong> in Manage deployments.</td>
+</tr>
+</tbody></table>
+<h2 id="for-contributors">For contributors</h2>
+<h3 id="project-structure">Project structure</h3>
 <pre><code>├── Code.js          # Google Apps Script backend (server-side)
 ├── frontend/
 │   ├── index.html   # Main HTML page
 │   ├── script.js    # UI logic
 │   ├── google-api.js  # Calls to the Apps Script backend
-│   ├── test-utils.js  # Test/demo data
 │   └── input.css    # Tailwind CSS source
-└── build-tools/
-    └── dev.mjs      # Local dev server
+├── build-tools/
+│   ├── build-apps-script.mjs  # Builds the Apps Script project into dist/apps-script/
+│   ├── check-version.mjs      # Checks a release tag matches package.json
+│   ├── setup.mjs              # One-command setup/update of an Apps Script deployment
+│   └── dev.mjs                # Local dev loop: build + push to an Apps Script project
+└── test/            # Unit tests (npm test)
 </code></pre>
-<h2 id="local-development">Local development</h2>
+<h3 id="local-development">Local development</h3>
+<p>There is no standalone or mock version of the frontend. Development runs the same generated Apps Script project that production ships, so translation and everything else behaves as it does in production.</p>
+<p>One-time setup:</p>
+<ol>
+<li>Pick the Apps Script project to develop against. Reusing the production project is fine: <code>clasp push</code> only updates the project&#39;s HEAD code, which is served by the <code>/dev</code> test deployment, while the public <code>/exec</code> deployment stays on the last tagged version. The spreadsheet is shared, so don&#39;t test while a live session is running (a dev &quot;delete all&quot; would wipe real questions). For full isolation, use a separate project with its own <code>SPREADSHEET_ID</code> instead.</li>
+<li>Log in to clasp: <code>npx clasp login</code></li>
+<li>Copy <code>.env.example</code> to <code>.env</code> (git-ignored) and set <code>APPS_SCRIPT_DEV_ID</code> to the project&#39;s <strong>script ID</strong> (Project Settings in the Apps Script editor, not the deployment ID). A real environment variable of the same name overrides <code>.env</code>.</li>
+<li>Start the loop:</li>
+</ol>
 <pre><code class="language-bash">npm install
 npm run dev
 </code></pre>
-<p>This does an initial CSS compile, then watches for changes and auto-reloads the browser at <code>http://localhost:3000</code>.</p>
+<p><code>npm run dev</code> compiles the CSS, builds <code>dist/apps-script/</code>, and runs <code>clasp push</code> to the dev project. It repeats whenever <code>Code.js</code> or a file in <code>frontend/</code> changes. Open the dev project&#39;s test deployment URL (Apps Script editor → Deploy → Test deployments, ends in <code>/dev</code>) and refresh after each &quot;Deployed&quot; line. Only the project owner can open the <code>/dev</code> URL.</p>
 <p>To only compile CSS:</p>
 <pre><code class="language-bash">npm run css
 </code></pre>
-<h2 id="releases">Releases</h2>
-<p>GitHub Pages always serves the current <code>master</code> (the demo, plus the images the Apps Script app links to). Old versions are not kept there.</p>
+<p>Before committing, <code>npm run format:check</code> and <code>npm test</code> must pass (CI runs the same checks).</p>
+<h3 id="releases">Releases</h3>
+<p>GitHub Pages serves only the images the Apps Script app links to (<code>logo.png</code>, <code>funny-cat.svg</code>), from the current <code>master</code>. Old versions are not kept there.</p>
 <p>Pushing a git tag deploys to Google Apps Script. The generated Apps Script <code>Index.html</code> keeps the full app markup from <code>frontend/index.html</code> but inlines the CSS and all JavaScript, so a deployed version is self-contained. Only the images (<code>logo.png</code>, <code>funny-cat.svg</code>) are loaded from GitHub Pages.</p>
 <pre><code class="language-bash">npm version 2.0.2
 git push origin master --tags
@@ -89,7 +172,7 @@ git push origin master --tags
 <pre><code class="language-bash">npm run apps-script:build -- v2.0.2
 </code></pre>
 <p>The output is written to <code>dist/apps-script/</code>.</p>
-<h3 id="one-time-apps-script-deployment-setup">One-time Apps Script deployment setup</h3>
+<h4 id="one-time-deployment-setup-for-automated-releases">One-time deployment setup for automated releases</h4>
 <p>Create these GitHub repository secrets before expecting tag releases to update the Apps Script web app:</p>
 <ul>
 <li><code>APPS_SCRIPT_ID</code>: the script ID from the Apps Script project settings.</li>
@@ -97,17 +180,6 @@ git push origin master --tags
 <li><code>CLASPRC_JSON</code>: the contents of the <code>.clasprc.json</code> file created by <code>npx clasp login</code>.</li>
 </ul>
 <p>Once these are set, a tag like <code>v2.0.2</code> will push <code>Code.js</code> and the generated <code>Index.html</code> to Apps Script, create a new Apps Script version, and update the existing web app deployment to that version.</p>
-<h2 id="deploying-to-google-apps-script">Deploying to Google Apps Script</h2>
-<p>If you want to collaborate with others in real time you will need to create a Google Apps Script project (it is free).</p>
-<ol>
-<li>Go to <a href="https://script.google.com/home">script.google.com/home</a>.</li>
-<li>Create a new project.</li>
-<li>Copy the contents of <code>Code.js</code> into the default <code>Code.gs</code> file, or use the generated <code>dist/apps-script/Code.js</code> after running <code>npm run apps-script:build -- v2.0.2</code>.</li>
-<li>Create a new HTML file named <code>Index</code> and paste the generated <code>dist/apps-script/Index.html</code>.</li>
-<li>Go to <strong>Project Settings</strong> and add a script property named <code>SPREADSHEET_ID</code> with the ID of your Google Spreadsheet (found in its URL).</li>
-<li>Click <strong>Deploy</strong> → New deployment → Web app → Execute as: Me; Who has access: Anyone with a Google account.</li>
-<li>A link to your new web app will appear — share it with your audience!</li>
-</ol>
 </article></div></div></div></main>
     <footer class="caption waves text-muted border-line border-t pb-28">
       <div class="mx-auto flex w-full max-w-[980px] flex-wrap items-center justify-between gap-x-6 gap-y-2 px-5 py-8 sm:px-6">

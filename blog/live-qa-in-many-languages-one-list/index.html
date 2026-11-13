@@ -79,9 +79,16 @@
 <li><strong>Zoom and fullscreen</strong> to put the list on a screen that the teacher can read from a distance.</li>
 </ul>
 <p><img src="/blog/images/multi-lang-qa-focus.webp" alt="The same list with completed questions and original text hidden: only the open questions, in English" loading="lazy" /></p>
-<h2 id="try-it-and-use-it">Try it and use it</h2>
-<p>There is a <a href="https://live-miracles.github.io/multi-lang-qa/">demo</a> with sample data that you can click through. Changes there are not saved, and the demo&#39;s translation is only a stand-in.</p>
-<p>To run your own copy you need a Google account. Apps Script and Google Sheets are free, and there is nothing to host. The <a href="https://github.com/live-miracles/multi-lang-qa#deploying-to-google-apps-script">README</a> has the steps: create an Apps Script project, add the two files, set your spreadsheet&#39;s ID as a script property and deploy it as a web app.</p>
+<h2 id="see-it-and-use-it">See it and use it</h2>
+<p>Here is the whole flow in 40 seconds: add a question, translate it, star it, mark questions as done and hide the original text and the completed ones. The questions are made up.</p>
+<p><img src="https://raw.githubusercontent.com/live-miracles/multi-lang-qa/master/assets/multi-lang-qa-demo.gif" alt="A short screen recording: an operator adds a Spanish question and translates it, the teacher stars it, three questions are marked done, and the original text and the completed questions are hidden in turn" loading="lazy" /></p>
+<p>To run your own copy you need a Google account and <a href="https://nodejs.org/">Node.js</a>. Apps Script and Google Sheets are free, and there is nothing to host. The <a href="https://github.com/live-miracles/multi-lang-qa#set-up-your-own-copy">README</a> has the steps, and it takes about 5 minutes:</p>
+<ol>
+<li>Turn on the Apps Script API for your Google account (one switch in your Apps Script settings).</li>
+<li>Run <code>npm install</code> and <code>npm run setup</code> in the project folder. Sign in when the browser opens. The command creates the Apps Script project, uploads the app, publishes it and prints your app link.</li>
+<li>Open the link yourself once and allow access. This also creates the spreadsheet in your Google Drive, where the questions are stored. Then share the link with your audience.</li>
+</ol>
+<p>Running <code>npm run setup</code> again later updates the app and keeps the same link. If you cannot run commands, the README also has a copy-and-paste way to set it up by hand.</p>
 <p>It is not limited to our setup. If you take questions from an audience in more than one language, whether on Zoom, YouTube or in a room, it may save you the same trouble.</p>
 <p>If it is useful to you, a star on <a href="https://github.com/live-miracles/multi-lang-qa">GitHub</a> helps other people find it. Issues and ideas are welcome too.</p>
 </article>
@@ -141,11 +148,19 @@ An operator picks the question&#39;s language, types or pastes the question and 
 
 ![The same list with completed questions and original text hidden: only the open questions, in English](&lt;https://live-miracles.github.io/blog/images/multi-lang-qa-focus.webp&gt;)
 
-## Try it and use it
+## See it and use it
 
-There is a [demo](https://live-miracles.github.io/multi-lang-qa/) with sample data that you can click through. Changes there are not saved, and the demo&#39;s translation is only a stand-in.
+Here is the whole flow in 40 seconds: add a question, translate it, star it, mark questions as done and hide the original text and the completed ones. The questions are made up.
 
-To run your own copy you need a Google account. Apps Script and Google Sheets are free, and there is nothing to host. The [README](https://github.com/live-miracles/multi-lang-qa#deploying-to-google-apps-script) has the steps: create an Apps Script project, add the two files, set your spreadsheet&#39;s ID as a script property and deploy it as a web app.
+![A short screen recording: an operator adds a Spanish question and translates it, the teacher stars it, three questions are marked done, and the original text and the completed questions are hidden in turn](https://raw.githubusercontent.com/live-miracles/multi-lang-qa/master/assets/multi-lang-qa-demo.gif)
+
+To run your own copy you need a Google account and [Node.js](https://nodejs.org/). Apps Script and Google Sheets are free, and there is nothing to host. The [README](https://github.com/live-miracles/multi-lang-qa#set-up-your-own-copy) has the steps, and it takes about 5 minutes:
+
+1. Turn on the Apps Script API for your Google account (one switch in your Apps Script settings).
+2. Run `npm install` and `npm run setup` in the project folder. Sign in when the browser opens. The command creates the Apps Script project, uploads the app, publishes it and prints your app link.
+3. Open the link yourself once and allow access. This also creates the spreadsheet in your Google Drive, where the questions are stored. Then share the link with your audience.
+
+Running `npm run setup` again later updates the app and keeps the same link. If you cannot run commands, the README also has a copy-and-paste way to set it up by hand.
 
 It is not limited to our setup. If you take questions from an audience in more than one language, whether on Zoom, YouTube or in a room, it may save you the same trouble.
 
