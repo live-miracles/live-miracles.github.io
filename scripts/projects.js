@@ -95,6 +95,7 @@ const projects = [
         name: 'Wake Up Support',
         category: 'monitoring',
         summary: 'Small Windows app that wakes machines on the local network with Wake-on-LAN.',
+        icon: '/assets/wake-up-support-logo.png',
         download: `https://github.com/${organization}/wake-up-support/releases`,
     },
     {
