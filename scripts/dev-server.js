@@ -7,7 +7,7 @@
 const fs = require('node:fs');
 const net = require('node:net');
 const path = require('node:path');
-const { spawn } = require('node:child_process');
+const { spawn, spawnSync } = require('node:child_process');
 const { inputPaths } = require('./build');
 
 const firstPort = 3000;
@@ -36,11 +36,34 @@ async function findAvailablePort() {
     throw new Error(`No available development port between ${firstPort} and ${lastPort}.`);
 }
 
+// Without a token GitHub allows 60 API requests an hour, which a few restarts use up
+// (the build then warns "HTTP 403"). Use GITHUB_TOKEN when set, else the token of a
+// logged-in GitHub CLI (`gh auth login`), else go without.
+function findGithubToken() {
+    if (process.env.GITHUB_TOKEN) return process.env.GITHUB_TOKEN;
+    try {
+        const result = spawnSync('gh', ['auth', 'token'], { encoding: 'utf8', timeout: 5000 });
+        const token = result.status === 0 ? result.stdout.trim() : '';
+        if (token) console.log('Using the GitHub CLI token for GitHub API requests.');
+        return token;
+    } catch {
+        return '';
+    }
+}
+
+let githubToken = '';
+
 function build() {
     return new Promise((resolve) => {
         const child = spawn(process.execPath, [path.join(__dirname, 'build.js')], {
             stdio: 'inherit',
-            env: { ...process.env, BUILD_CACHE_DIR: cacheDir },
+            env: {
+                ...process.env,
+                BUILD_CACHE_DIR: cacheDir,
+                // The preview always includes draft blog posts; `npm run build` does not.
+                BLOG_DRAFTS: '1',
+                ...(githubToken && { GITHUB_TOKEN: githubToken }),
+            },
         });
         child.on('close', (code) => resolve(code === 0));
     });
@@ -95,20 +118,20 @@ function watchAndRebuild() {
 
 async function start() {
     fs.rmSync(cacheDir, { recursive: true, force: true });
+    githubToken = findGithubToken();
     if (!(await build())) {
         process.exitCode = 1;
         return;
     }
     const port = await findAvailablePort();
-    const serveCommand = path.join(
-        process.cwd(),
-        'node_modules',
-        '.bin',
-        process.platform === 'win32' ? 'serve.cmd' : 'serve',
+    // Run serve's JS entry with Node: spawning node_modules/.bin/serve.cmd fails with
+    // EINVAL on Windows (Node 18.20+/20.12+ refuse .cmd files without a shell).
+    const serveEntry = path.join(process.cwd(), 'node_modules', 'serve', 'build', 'main.js');
+    const serve = spawn(
+        process.execPath,
+        [serveEntry, 'dist', '-l', String(port), '--no-port-switching'],
+        { stdio: 'inherit' },
     );
-    const serve = spawn(serveCommand, ['dist', '-l', String(port), '--no-port-switching'], {
-        stdio: 'inherit',
-    });
 
     serve.on('close', (code, signal) => {
         process.exitCode = code ?? (signal ? 1 : 0);
