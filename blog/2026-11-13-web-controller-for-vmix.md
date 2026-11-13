@@ -57,7 +57,7 @@ For the translations themselves we later moved to a small script that runs insid
 
 ## What it doesn't do
 
-- It does not send a password, so a Web Controller protected by one will not work. Use it on a trusted local network.
+- It cannot use a Web Controller that has a password. vMix asks for the password in a header that a browser may only send after vMix agrees to it, and vMix does not agree, so Chrome blocks the request and the box shows `Web Controller needs a password (401)`. Leave the password off and keep the port on a trusted local network. On the vMix computer itself you can instead tick **Allow software on this computer access without login** in the Web Controller settings and use `127.0.0.1` as the address.
 - It has no hardware control surface support.
 - It is made for Chrome, which asks once whether the page may reach devices on your local network.
 - The slave scripts need vMix 4K or Pro, the editions that have scripting.
