@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>A full web controller for vMix: control everything from your browser — Live Miracles</title>
+    <meta name="description" content="vMix&#39;s built-in Web Controller is minimal. vMix Master is a free, extensive web controller laid out like vMix itself, so you can run or support a vMix from any browser, and switch several vMix systems together when you need to." />
+    <link rel="canonical" href="https://live-miracles.github.io/blog/web-controller-for-vmix/" />
+    <meta property="og:site_name" content="Live Miracles" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="A full web controller for vMix: control everything from your browser — Live Miracles" />
+    <meta property="og:description" content="vMix&#39;s built-in Web Controller is minimal. vMix Master is a free, extensive web controller laid out like vMix itself, so you can run or support a vMix from any browser, and switch several vMix systems together when you need to." />
+    <meta property="og:url" content="https://live-miracles.github.io/blog/web-controller-for-vmix/" />
+    <meta property="og:image" content="https://live-miracles.github.io/blog/images/vmix-master-cover.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/assets/logo.png" type="image/png" />
+    <link rel="alternate" type="application/rss+xml" title="Live Miracles blog" href="/blog/feed.xml" />
+    <script>
+      try {
+        var theme = localStorage.getItem('theme');
+        if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
+      } catch (e) {}
+    </script>
+    <link rel="stylesheet" href="/assets/styles.css" />
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <header class="topbar">
+        <nav class="caption mx-auto flex h-12 w-full max-w-[1024px] items-center justify-between gap-4 px-5 sm:px-6" aria-label="Site">
+          <a href="/" class="flex items-center gap-2.5 font-semibold" aria-label="Live Miracles">
+            <img src="/assets/logo.png" alt="" class="logo size-6" />
+            <span>Live Miracles</span>
+          </a>
+          <div class="flex items-center gap-5 sm:gap-7">
+            <a href="/#projects" class="text-muted hover:text-ink transition-colors">Projects</a>
+            <a href="/blog/" class="text-ink hover:text-ink transition-colors" aria-current="page">Blog</a>
+            <div class="-mr-2 flex items-center gap-1">
+              <a href="https://github.com/live-miracles" class="icon-btn" aria-label="Live Miracles on GitHub" title="GitHub"><svg xmlns="http://www.w3.org/2000/svg" class="size-[18px]" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.79 23.39c.6.11.82-.26.82-.58v-2.02c-3.34.73-4.04-1.42-4.04-1.42-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.57A12 12 0 0 0 12 .5Z"/></svg></a>
+              <button type="button" id="theme-toggle" class="icon-btn theme-toggle" hidden><svg xmlns="http://www.w3.org/2000/svg" class="icon-sun size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32 1.41-1.41"/></svg><svg xmlns="http://www.w3.org/2000/svg" class="icon-moon size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg></button>
+            </div>
+          </div>
+        </nav>
+      </header>
+    <main class="flex-1"><div class="wash" style="--gx1: 21%; --gx2: 77%; --gx3: 50%; --gy1: -114px; --gy2: -131px; --gy1p: 30%; --gy2p: 6%; --px: 75%; --glow-1: var(--glow-b); --glow-2: var(--glow-a)"><div class="mx-auto w-full max-w-[720px] px-5 py-10 sm:px-6 sm:py-14"><nav class="text-muted caption" aria-label="Breadcrumb">
+            <a href="/blog/" class="link-quiet hover:text-ink">Blog</a>
+          </nav>
+          <header class="mt-4 mb-8">
+            <h1 class="display display-lg">A full web controller for vMix: control everything from your browser</h1>
+            <div class="text-muted caption mt-4 flex flex-wrap items-center gap-3">
+              <time datetime="2026-11-13">November 13, 2026</time><span class="chip">vmix</span><span class="chip">livestreaming</span><span class="chip">opensource</span><span class="chip">webdev</span>
+            </div>
+          </header>
+          <img src="/blog/images/vmix-master-cover.jpg" alt="A browser window showing a control panel with program and preview bars, audio buses and a grid of input tiles, with a dotted network arrow to a card with the vMix logo and two more cards stacked behind it" class="mb-10 w-full rounded-2xl" loading="lazy" />
+          <article class="readme min-w-0"><p>vMix runs on one computer, usually in the studio, and the person who needs to control it is not always standing next to it. A colleague wants to see what is on air. An operator has a problem with the audio. You want to know how long the current video has left.</p>
+<p>vMix has a built-in Web Controller for this, and we tried it first. It is minimal: it shows each input as a type letter and a number, such as <code>V 5</code>, so during a live show you have to remember what <code>V 5</code> is, and it is meant for a few inputs and simple switching. We wanted the whole vMix on a web page, so we built <a href="https://github.com/live-miracles/vmix-master">vMix Master</a>.</p>
+<h2 id="what-is-on-the-page">What is on the page</h2>
+<p>vMix Master is laid out like vMix itself, so it feels familiar from the first minute.</p>
+<p><img src="https://raw.githubusercontent.com/live-miracles/vmix-master/master/docs/screenshot.png" alt="vMix Master in demo mode: program and preview with timers, audio buses with meters, and every input by name" loading="lazy" /></p>
+<ul>
+<li><strong>Program and preview</strong> with large timers, a position slider, Restart and Play/Pause, and six transition buttons: Quick Play, Cut, Stinger 1, Stinger 2, Fade and FTB.</li>
+<li><strong>Every input by name</strong>, with its number, its audio level, and what is on air and in preview. <code>05 Opening Video.mp4</code> instead of <code>V 5</code>.</li>
+<li><strong>A tile for each input</strong> with overlays 1 to 6, loop, volume, and send-to-bus buttons.</li>
+<li><strong>Audio buses</strong> with live level meters.</li>
+<li><strong>Function buttons</strong> for most of the vMix API, grouped by what they do: outputs (external, SRT, recording, streaming), transitions, audio, overlays, playback, countdowns, titles, layers and picture, PTZ, playlists and scripts. A raw request box takes any other function.</li>
+<li><strong>Works on a phone or tablet</strong>, and can be installed as an app from Chrome.</li>
+</ul>
+<p>It needs nothing installed. It is a static page that talks straight to the Web Controller your vMix already has, from your browser, over your local network. You can try everything without vMix in the <a href="https://live-miracles.github.io/vmix-master/?demo">live demo</a>, which runs simulated systems inside the page.</p>
+<h2 id="how-we-use-it-day-to-day">How we use it day to day</h2>
+<p>During a session our operators sit in the studio and the support team does not. From the same page on the local network we can open any of their systems and help without going to the room:</p>
+<ul>
+<li>If the audio is too loud, lower the volume or the gain.</li>
+<li>To see how long a video has left, and so how long until they go live, open that system and read the timer.</li>
+<li>To start or stop a stream, press the function button instead of asking someone to find it.</li>
+</ul>
+<h2 id="a-bonus-several-vmix-systems-as-one">A bonus: several vMix systems as one</h2>
+<p>Our setup is unusual, and this part grew out of it. We stream live sessions in English, translated into German, French, Russian, Arabic and more, and each language runs on its own vMix system with its own copy of the media. When English plays a video, every other language has to play the same video in its translated version at the same moment.</p>
+<p>So vMix Master can group systems. Add the English, German, French and Arabic systems, put them in one group, and mark English as the <strong>master</strong>. Whatever you do on the master, such as a transition or an audio change, is sent to every system in the group at once.</p>
+<p><img src="https://raw.githubusercontent.com/live-miracles/vmix-master/master/docs/demo.gif" alt="Quick Play on the master starts the video on all three grouped vMix systems" loading="lazy" /></p>
+<p>We used the same idea at events with vertical and horizontal screens in the hall. One vMix played the vertical version of every video and another played the horizontal one, and one click switched both.</p>
+<p><strong>Group Compare</strong> checks that the systems in a group are set up alike. It matches inputs by the number at the start of their name. A different number or order on one system is an error. A video on one system and a slide on another, for the same number, is a warning about the type. The same video more than 5 seconds longer or shorter on one system is a warning too, and it also checks audio buses, call sources and overlay layers. It is how we find a missing file or a wrong translation when we prepare new content, before the session instead of during it.</p>
+<p><img src="/blog/images/vmix-master-compare.webp" alt="The Group Compare window reporting that the opening video is 12 seconds longer on the Spanish system than on the English one" loading="lazy" /></p>
+<p>For the translations themselves we later moved to a small script that runs inside vMix on each translation system and follows the English one, so those operators never need the website. The <a href="https://live-miracles.github.io/projects/vmix-master/docs/">slave scripts</a> are free and live in the same repository. vMix Master is still what we use to monitor and compare the systems, and to step in when something goes wrong.</p>
+<h2 id="other-options">Other options</h2>
+<p><a href="https://bitfocus.io/companion">Bitfocus Companion</a> is a good choice if you want Stream Deck style buttons and hardware surfaces. It is a separate app, and you build your own pages. OBS users have web control panels such as obs-web, and we could not find an equivalent for vMix with this much of the interface, which is why we made one.</p>
+<h2 id="what-it-doesnt-do">What it doesn&#39;t do</h2>
+<ul>
+<li>It does not send a password, so a Web Controller protected by one will not work. Use it on a trusted local network.</li>
+<li>It has no hardware control surface support.</li>
+<li>It is made for Chrome, which asks once whether the page may reach devices on your local network.</li>
+<li>The slave scripts need vMix 4K or Pro, the editions that have scripting.</li>
+</ul>
+<h2 id="try-it">Try it</h2>
+<p>vMix Master is free and open source (MIT). Open the <a href="https://live-miracles.github.io/vmix-master/?demo">demo</a> to look around. To use it with your own vMix, enable the Web Controller in vMix (default port <code>8088</code>) and open the <a href="https://live-miracles.github.io/vmix-master/">hosted app</a>. The <a href="https://live-miracles.github.io/projects/vmix-master/">documentation</a> explains how to connect your systems.</p>
+<p>If something you need from a vMix control panel is missing, <a href="https://github.com/live-miracles/vmix-master/issues/new">open an issue</a> and tell us. And if it helps you, a star on the <a href="https://github.com/live-miracles/vmix-master">repository</a> helps other vMix operators find it.</p>
+</article>
+          <div class="caption mt-10 flex flex-wrap items-center gap-x-6 gap-y-3">
+            <a class="more" href="https://github.com/live-miracles/live-miracles.github.io/blob/master/blog/2026-11-13-web-controller-for-vmix.md">Edit this post on GitHub</a>
+            <button id="copy-markdown" class="pill cursor-pointer" type="button" title="Copy article Markdown with full image and link URLs" hidden>Copy Markdown</button>
+            <span id="copy-markdown-status" class="text-muted" role="status"></span>
+          </div>
+          <textarea id="post-markdown" class="border-line mt-4 w-full rounded-lg border p-3 text-sm" aria-label="Article Markdown" rows="12" readonly hidden>---
+title: &quot;A full web controller for vMix: control everything from your browser&quot;
+published: true
+canonical_url: &quot;https://live-miracles.github.io/blog/web-controller-for-vmix/&quot;
+description: &quot;vMix&#39;s built-in Web Controller is minimal. vMix Master is a free, extensive web controller laid out like vMix itself, so you can run or support a vMix from any browser, and switch several vMix systems together when you need to.&quot;
+tags: &quot;vmix, livestreaming, opensource, webdev&quot;
+cover_image: &quot;https://live-miracles.github.io/blog/images/vmix-master-cover.jpg&quot;
+---
+
+vMix runs on one computer, usually in the studio, and the person who needs to control it is not always standing next to it. A colleague wants to see what is on air. An operator has a problem with the audio. You want to know how long the current video has left.
+
+vMix has a built-in Web Controller for this, and we tried it first. It is minimal: it shows each input as a type letter and a number, such as `V 5`, so during a live show you have to remember what `V 5` is, and it is meant for a few inputs and simple switching. We wanted the whole vMix on a web page, so we built [vMix Master](https://github.com/live-miracles/vmix-master).
+
+## What is on the page
+
+vMix Master is laid out like vMix itself, so it feels familiar from the first minute.
+
+![vMix Master in demo mode: program and preview with timers, audio buses with meters, and every input by name](https://raw.githubusercontent.com/live-miracles/vmix-master/master/docs/screenshot.png)
+
+- **Program and preview** with large timers, a position slider, Restart and Play/Pause, and six transition buttons: Quick Play, Cut, Stinger 1, Stinger 2, Fade and FTB.
+- **Every input by name**, with its number, its audio level, and what is on air and in preview. `05 Opening Video.mp4` instead of `V 5`.
+- **A tile for each input** with overlays 1 to 6, loop, volume, and send-to-bus buttons.
+- **Audio buses** with live level meters.
+- **Function buttons** for most of the vMix API, grouped by what they do: outputs (external, SRT, recording, streaming), transitions, audio, overlays, playback, countdowns, titles, layers and picture, PTZ, playlists and scripts. A raw request box takes any other function.
+- **Works on a phone or tablet**, and can be installed as an app from Chrome.
+
+It needs nothing installed. It is a static page that talks straight to the Web Controller your vMix already has, from your browser, over your local network. You can try everything without vMix in the [live demo](https://live-miracles.github.io/vmix-master/?demo), which runs simulated systems inside the page.
+
+## How we use it day to day
+
+During a session our operators sit in the studio and the support team does not. From the same page on the local network we can open any of their systems and help without going to the room:
+
+- If the audio is too loud, lower the volume or the gain.
+- To see how long a video has left, and so how long until they go live, open that system and read the timer.
+- To start or stop a stream, press the function button instead of asking someone to find it.
+
+## A bonus: several vMix systems as one
+
+Our setup is unusual, and this part grew out of it. We stream live sessions in English, translated into German, French, Russian, Arabic and more, and each language runs on its own vMix system with its own copy of the media. When English plays a video, every other language has to play the same video in its translated version at the same moment.
+
+So vMix Master can group systems. Add the English, German, French and Arabic systems, put them in one group, and mark English as the **master**. Whatever you do on the master, such as a transition or an audio change, is sent to every system in the group at once.
+
+![Quick Play on the master starts the video on all three grouped vMix systems](https://raw.githubusercontent.com/live-miracles/vmix-master/master/docs/demo.gif)
+
+We used the same idea at events with vertical and horizontal screens in the hall. One vMix played the vertical version of every video and another played the horizontal one, and one click switched both.
+
+**Group Compare** checks that the systems in a group are set up alike. It matches inputs by the number at the start of their name. A different number or order on one system is an error. A video on one system and a slide on another, for the same number, is a warning about the type. The same video more than 5 seconds longer or shorter on one system is a warning too, and it also checks audio buses, call sources and overlay layers. It is how we find a missing file or a wrong translation when we prepare new content, before the session instead of during it.
+
+![The Group Compare window reporting that the opening video is 12 seconds longer on the Spanish system than on the English one](&lt;https://live-miracles.github.io/blog/images/vmix-master-compare.webp&gt;)
+
+For the translations themselves we later moved to a small script that runs inside vMix on each translation system and follows the English one, so those operators never need the website. The [slave scripts](https://live-miracles.github.io/projects/vmix-master/docs/) are free and live in the same repository. vMix Master is still what we use to monitor and compare the systems, and to step in when something goes wrong.
+
+## Other options
+
+[Bitfocus Companion](https://bitfocus.io/companion) is a good choice if you want Stream Deck style buttons and hardware surfaces. It is a separate app, and you build your own pages. OBS users have web control panels such as obs-web, and we could not find an equivalent for vMix with this much of the interface, which is why we made one.
+
+## What it doesn&#39;t do
+
+- It does not send a password, so a Web Controller protected by one will not work. Use it on a trusted local network.
+- It has no hardware control surface support.
+- It is made for Chrome, which asks once whether the page may reach devices on your local network.
+- The slave scripts need vMix 4K or Pro, the editions that have scripting.
+
+## Try it
+
+vMix Master is free and open source (MIT). Open the [demo](https://live-miracles.github.io/vmix-master/?demo) to look around. To use it with your own vMix, enable the Web Controller in vMix (default port `8088`) and open the [hosted app](https://live-miracles.github.io/vmix-master/). The [documentation](https://live-miracles.github.io/projects/vmix-master/) explains how to connect your systems.
+
+If something you need from a vMix control panel is missing, [open an issue](https://github.com/live-miracles/vmix-master/issues/new) and tell us. And if it helps you, a star on the [repository](https://github.com/live-miracles/vmix-master) helps other vMix operators find it.
+</textarea>
+          <script src="/assets/copy-markdown.js" defer></script></div></div></main>
+    <footer class="caption waves text-muted border-line border-t pb-28">
+      <div class="mx-auto flex w-full max-w-[980px] flex-wrap items-center justify-between gap-x-6 gap-y-2 px-5 py-8 sm:px-6">
+        <span>Live Miracles · Open tools for live teams</span>
+        <span class="flex gap-5">
+          <a class="link-quiet" href="/blog/">Blog</a>
+          <a class="link-quiet" href="/blog/feed.xml">RSS</a>
+          <a class="link-quiet" href="https://github.com/live-miracles">GitHub</a>
+        </span>
+      </div>
+    </footer>
+    <dialog id="lightbox" class="lightbox" aria-label="Enlarged image">
+      <button type="button" class="lightbox-close" aria-label="Close image"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg></button>
+      <div class="lightbox-frame"><img alt="" /></div>
+    </dialog>
+    <script>
+      (function () {
+        var dialog = document.getElementById('lightbox');
+        if (!dialog || !dialog.showModal) return;
+        var shown = dialog.querySelector('img');
+        function zoomable(img) {
+          return !img.closest('a') && img.naturalWidth >= 300 && img.naturalHeight >= 100;
+        }
+        function mark(img) {
+          if (img.dataset.zoom || !zoomable(img)) return;
+          img.dataset.zoom = '1';
+          img.classList.add('zoomable');
+          img.tabIndex = 0;
+          img.setAttribute('role', 'button');
+          img.setAttribute('aria-label', 'Enlarge image: ' + (img.alt || 'screenshot'));
+        }
+        function open(img) {
+          shown.src = img.currentSrc || img.src;
+          shown.alt = img.alt;
+          shown.classList.remove('actual');
+          dialog.showModal();
+          dialog.scrollTo(0, 0);
+        }
+        document.querySelectorAll('.readme img').forEach(function (img) {
+          if (img.complete) mark(img);
+          else img.addEventListener('load', function () { mark(img); }, { once: true });
+        });
+        document.addEventListener('click', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom) open(img);
+        });
+        document.addEventListener('keydown', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom && (event.key === 'Enter' || event.key === ' ')) {
+            event.preventDefault();
+            open(img);
+          }
+        });
+        shown.addEventListener('click', function () {
+          shown.classList.toggle('actual');
+        });
+        dialog.addEventListener('click', function (event) {
+          if (event.target !== shown) dialog.close();
+        });
+      })();
+    </script>
+    <script>
+      (function () {
+        var button = document.getElementById('theme-toggle');
+        if (!button) return;
+        var root = document.documentElement;
+        function current() {
+          return root.dataset.theme === 'light' ? 'light' : 'dark';
+        }
+        function sync() {
+          var theme = current();
+          button.dataset.mode = theme;
+          button.setAttribute('aria-label', 'Switch to ' + (theme === 'dark' ? 'light' : 'dark') + ' theme');
+        }
+        button.hidden = false;
+        sync();
+        button.addEventListener('click', function () {
+          var next = current() === 'dark' ? 'light' : 'dark';
+          root.dataset.theme = next;
+          try {
+            localStorage.setItem('theme', next);
+          } catch (e) {}
+          sync();
+        });
+      })();
+    </script>
+  </body>
+</html>

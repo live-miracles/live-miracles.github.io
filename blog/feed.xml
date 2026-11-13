@@ -12,6 +12,13 @@
       <description>Hand-built vMix presets break when a file is renamed and drift when someone changes an audio setting. Folder Player builds the preset from a numbered folder and a base preset instead, so every session starts clean.</description>
     </item>
     <item>
+      <title>A full web controller for vMix: control everything from your browser</title>
+      <link>https://live-miracles.github.io/blog/web-controller-for-vmix/</link>
+      <guid>https://live-miracles.github.io/blog/web-controller-for-vmix/</guid>
+      <pubDate>Fri, 13 Nov 2026 00:00:00 GMT</pubDate>
+      <description>vMix&#39;s built-in Web Controller is minimal. vMix Master is a free, extensive web controller laid out like vMix itself, so you can run or support a vMix from any browser, and switch several vMix systems together when you need to.</description>
+    </item>
+    <item>
       <title>Live Q&amp;A in many languages: one list instead of a chat per language</title>
       <link>https://live-miracles.github.io/blog/live-qa-in-many-languages-one-list/</link>
       <guid>https://live-miracles.github.io/blog/live-qa-in-many-languages-one-list/</guid>
