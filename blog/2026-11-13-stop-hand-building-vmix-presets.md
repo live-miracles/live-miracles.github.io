@@ -5,7 +5,7 @@ tags: [vmix, livestreaming, opensource, automation]
 summary: Hand-built vMix presets break when a file is renamed and drift when someone changes an audio setting. Folder Player builds the preset from a numbered folder and a base preset instead, so every session starts clean.
 image: images/folder-player-cover.jpg
 imageAlt: A folder showing a grid of numbered files 01 to 06, photos, videos and audio, with an arrow pointing to a card that reads preset.vmix with the vMix logo
-draft: true
+draft: false
 ---
 
 We stream live sessions in many languages. One program can run in 20 or more languages over time: a few languages one week, a different set the next. Every program has several sessions (five, six, seven), and every session has its own set of media files, which we call a kit. Kits are updated all the time.
