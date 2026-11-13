@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>A delayed session for late joiners: keep a YouTube live stream at a fixed delay — Live Miracles</title>
+    <meta name="description" content="Some participants join a live session late or lose it to an internet or power cut. Delayed YouTube is a free web page that holds a YouTube live stream at a fixed delay and seeks back when YouTube jumps to live, so you can run a separate delayed session for them in vMix, OBS or any app that can embed a web page." />
+    <link rel="canonical" href="https://live-miracles.github.io/blog/delayed-youtube-for-late-joiners/" />
+    <meta property="og:site_name" content="Live Miracles" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="A delayed session for late joiners: keep a YouTube live stream at a fixed delay — Live Miracles" />
+    <meta property="og:description" content="Some participants join a live session late or lose it to an internet or power cut. Delayed YouTube is a free web page that holds a YouTube live stream at a fixed delay and seeks back when YouTube jumps to live, so you can run a separate delayed session for them in vMix, OBS or any app that can embed a web page." />
+    <meta property="og:url" content="https://live-miracles.github.io/blog/delayed-youtube-for-late-joiners/" />
+    <meta property="og:image" content="https://live-miracles.github.io/blog/images/delayed-yt-cover.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/assets/logo.png" type="image/png" />
+    <link rel="alternate" type="application/rss+xml" title="Live Miracles blog" href="/blog/feed.xml" />
+    <script>
+      try {
+        var theme = localStorage.getItem('theme');
+        if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
+      } catch (e) {}
+    </script>
+    <link rel="stylesheet" href="/assets/styles.css" />
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <header class="topbar">
+        <nav class="caption mx-auto flex h-12 w-full max-w-[1024px] items-center justify-between gap-4 px-5 sm:px-6" aria-label="Site">
+          <a href="/" class="flex items-center gap-2.5 font-semibold" aria-label="Live Miracles">
+            <img src="/assets/logo.png" alt="" class="logo size-6" />
+            <span>Live Miracles</span>
+          </a>
+          <div class="flex items-center gap-5 sm:gap-7">
+            <a href="/#projects" class="text-muted hover:text-ink transition-colors">Projects</a>
+            <a href="/blog/" class="text-ink hover:text-ink transition-colors" aria-current="page">Blog</a>
+            <div class="-mr-2 flex items-center gap-1">
+              <a href="https://github.com/live-miracles" class="icon-btn" aria-label="Live Miracles on GitHub" title="GitHub"><svg xmlns="http://www.w3.org/2000/svg" class="size-[18px]" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.79 23.39c.6.11.82-.26.82-.58v-2.02c-3.34.73-4.04-1.42-4.04-1.42-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.57A12 12 0 0 0 12 .5Z"/></svg></a>
+              <button type="button" id="theme-toggle" class="icon-btn theme-toggle" hidden><svg xmlns="http://www.w3.org/2000/svg" class="icon-sun size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32 1.41-1.41"/></svg><svg xmlns="http://www.w3.org/2000/svg" class="icon-moon size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg></button>
+            </div>
+          </div>
+        </nav>
+      </header>
+    <main class="flex-1"><div class="wash" style="--gx1: 20%; --gx2: 86%; --gx3: 49%; --gy1: -86px; --gy2: -52px; --gy1p: 2%; --gy2p: 20%; --px: 90%; --glow-1: var(--glow-b); --glow-2: var(--glow-a)"><div class="mx-auto w-full max-w-[720px] px-5 py-10 sm:px-6 sm:py-14"><nav class="text-muted caption" aria-label="Breadcrumb">
+            <a href="/blog/" class="link-quiet hover:text-ink">Blog</a>
+          </nav>
+          <header class="mt-4 mb-8">
+            <h1 class="display display-lg">A delayed session for late joiners: keep a YouTube live stream at a fixed delay</h1>
+            <div class="text-muted caption mt-4 flex flex-wrap items-center gap-3">
+              <time datetime="2026-11-13">November 13, 2026</time><span class="chip">vmix</span><span class="chip">obs</span><span class="chip">youtube</span><span class="chip">livestreaming</span>
+            </div>
+          </header>
+          <img src="/blog/images/delayed-yt-cover.jpg" alt="The words Jumped to LIVE? and Seek back next to a video player whose playhead is behind the red live edge, with a dotted red arrow jumping forward to live and a solid arrow seeking back" class="mb-10 w-full rounded-2xl" loading="lazy" />
+          <article class="readme min-w-0"><p>In our programs, some participants are not in the session when it starts. They join late, or an internet or power outage drops them in the middle. For them we run a separate <strong>delayed session</strong>: the same program, a fixed number of minutes behind, so they can watch it from the beginning. This post shows how we make that delay with vMix, what went wrong at first, and the small web page that fixed it. It is only a web page, so it works the same in OBS or any app that can embed one.</p>
+<h2 id="the-setup">The setup</h2>
+<p>The main session streams live to YouTube. In vMix we add that live stream as an input, but through the Delayed YouTube page instead of a plain player, so it stays a set number of minutes behind live. From there the delayed picture goes wherever the session needs it: streamed again to a second YouTube live, or into Zoom through the vMix camera. In OBS, add the page as a <strong>Browser source</strong> and use OBS&#39;s streaming or virtual camera.</p>
+<p><img src="/blog/images/delayed-yt-setup.webp" alt="The live YouTube session goes through the Delayed YouTube page in a vMix or OBS browser input, then out to YouTube as a second stream or to Zoom through a virtual camera" loading="lazy" /></p>
+<h2 id="what-we-did-before-and-why-it-broke">What we did before, and why it broke</h2>
+<p>At first we put the YouTube live link into a vMix player input and moved the playhead back by hand. That works until YouTube jumps to live, which happens when the internet buffers. It is rare, but we saw it, and if nobody is watching the input the delayed participants silently skip the part that was supposed to be delayed. It also hit several languages at the same time, since each runs its own vMix. We think the cause is mostly the network.</p>
+<h2 id="the-fix-a-page-that-holds-the-delay">The fix: a page that holds the delay</h2>
+<p>We could not stop YouTube from jumping, so we made the delay correct itself. <a href="https://live-miracles.github.io/delayed-yt/">Delayed YouTube</a> is a web page with a YouTube player that watches how far behind live it is. If the player gets closer to live than it should be, the page seeks back to the configured delay.</p>
+<p><img src="https://raw.githubusercontent.com/live-miracles/delayed-yt/master/assets/delayed-yt-vmix-demo.gif" alt="In Chrome a YouTube live link is pasted in and Update loads the player. The page URL is added in vMix as a Web Browser input. Clicking LIVE in the vMix preview jumps the readout to live, and Delayed YouTube seeks back to the 15 minute delay within a second" loading="lazy" /></p>
+<p><sub>The stream in the demo is a third-party YouTube live stream. Its content belongs to its channel.</sub></p>
+<p>To use it:</p>
+<ol>
+<li>Open the page, paste the YouTube video ID or the full link, and set the delay.</li>
+<li>Click <strong>Update</strong>. The settings are saved in the page URL.</li>
+<li>Copy that URL into a vMix <strong>Web Browser</strong> input, an OBS <strong>Browser source</strong>, or the web page input of whatever app you use.</li>
+</ol>
+<p>The delay is kept automatically and precisely, where before we adjusted it by hand. The player always starts full size, even after a refresh, without YouTube&#39;s recommendations around the video. If YouTube jumps to live, nobody needs to be watching: the page seeks back in about a second. In our use it works very well, with almost no problems.</p>
+<h2 id="known-issues">Known issues</h2>
+<ul>
+<li><strong>It does not work in the first 30 minutes of a stream.</strong> YouTube&#39;s player API does not report the correct duration until then. The delay must also be at least 10 minutes.</li>
+<li><strong>A jump to live still shows a few seconds of buffering</strong> before the page seeks back. It is not seamless, only no longer lost.</li>
+<li><strong>If you stop sending the stream, the delay gets shorter</strong>, by about the length of the break, because YouTube leaves that time out of the timeline. Refresh the delayed page and it works out the delay again. Viewers rewatch a few minutes, but without the refresh anyone who joins later gets no real delay.</li>
+<li><strong>YouTube may ask you to sign in to confirm that you are not a bot</strong>, mostly on a new system. For us it appeared after some time of use, lasted a while and then stopped. Signing in to YouTube inside the player usually fixes it, and the vMix and OBS steps are under Known Issues on the page. The login is stored on that computer, so use an account made for streaming.</li>
+</ul>
+<h2 id="the-other-way-we-tried-record-to-a-file">The other way we tried: record to a file</h2>
+<p>Before the page, we recorded the live stream to a local <code>.ts</code> file, added it to vMix and set its position to the delay. We chose <code>.ts</code> because it can be played while it is still being recorded, which an MP4 cannot.</p>
+<p>It works, but it is harder to run. The vMix setup is more complex: you record one input while the output comes from the program output, and there are many settings to get right. The file must be deleted after every session or the disk fills up, and it uses more CPU and RAM. We stopped using it and now use only the page.</p>
+<h2 id="try-it">Try it</h2>
+<p>Delayed YouTube is free and open source (MIT). Open the <a href="https://live-miracles.github.io/delayed-yt/">page</a> and try it with any YouTube live stream that is more than 30 minutes old, or read how it works in the <a href="https://github.com/live-miracles/delayed-yt">repository</a>.</p>
+<p>If something does not work for your session type or your app, <a href="https://github.com/live-miracles/delayed-yt/issues/new">open an issue</a>. And if it helps you, a star on the repository helps other operators find it.</p>
+</article>
+          <div class="caption mt-10 flex flex-wrap items-center gap-x-6 gap-y-3">
+            <a class="more" href="https://github.com/live-miracles/live-miracles.github.io/blob/master/blog/2026-11-13-delayed-youtube-for-late-joiners.md">Edit this post on GitHub</a>
+            <button id="copy-markdown" class="pill cursor-pointer" type="button" title="Copy article Markdown with full image and link URLs" hidden>Copy Markdown</button>
+            <span id="copy-markdown-status" class="text-muted" role="status"></span>
+          </div>
+          <textarea id="post-markdown" class="border-line mt-4 w-full rounded-lg border p-3 text-sm" aria-label="Article Markdown" rows="12" readonly hidden>---
+title: &quot;A delayed session for late joiners: keep a YouTube live stream at a fixed delay&quot;
+published: true
+canonical_url: &quot;https://live-miracles.github.io/blog/delayed-youtube-for-late-joiners/&quot;
+description: &quot;Some participants join a live session late or lose it to an internet or power cut. Delayed YouTube is a free web page that holds a YouTube live stream at a fixed delay and seeks back when YouTube jumps to live, so you can run a separate delayed session for them in vMix, OBS or any app that can embed a web page.&quot;
+tags: &quot;vmix, obs, youtube, livestreaming&quot;
+cover_image: &quot;https://live-miracles.github.io/blog/images/delayed-yt-cover.jpg&quot;
+---
+
+In our programs, some participants are not in the session when it starts. They join late, or an internet or power outage drops them in the middle. For them we run a separate **delayed session**: the same program, a fixed number of minutes behind, so they can watch it from the beginning. This post shows how we make that delay with vMix, what went wrong at first, and the small web page that fixed it. It is only a web page, so it works the same in OBS or any app that can embed one.
+
+## The setup
+
+The main session streams live to YouTube. In vMix we add that live stream as an input, but through the Delayed YouTube page instead of a plain player, so it stays a set number of minutes behind live. From there the delayed picture goes wherever the session needs it: streamed again to a second YouTube live, or into Zoom through the vMix camera. In OBS, add the page as a **Browser source** and use OBS&#39;s streaming or virtual camera.
+
+![The live YouTube session goes through the Delayed YouTube page in a vMix or OBS browser input, then out to YouTube as a second stream or to Zoom through a virtual camera](&lt;https://live-miracles.github.io/blog/images/delayed-yt-setup.webp&gt;)
+
+## What we did before, and why it broke
+
+At first we put the YouTube live link into a vMix player input and moved the playhead back by hand. That works until YouTube jumps to live, which happens when the internet buffers. It is rare, but we saw it, and if nobody is watching the input the delayed participants silently skip the part that was supposed to be delayed. It also hit several languages at the same time, since each runs its own vMix. We think the cause is mostly the network.
+
+## The fix: a page that holds the delay
+
+We could not stop YouTube from jumping, so we made the delay correct itself. [Delayed YouTube](https://live-miracles.github.io/delayed-yt/) is a web page with a YouTube player that watches how far behind live it is. If the player gets closer to live than it should be, the page seeks back to the configured delay.
+
+![In Chrome a YouTube live link is pasted in and Update loads the player. The page URL is added in vMix as a Web Browser input. Clicking LIVE in the vMix preview jumps the readout to live, and Delayed YouTube seeks back to the 15 minute delay within a second](https://raw.githubusercontent.com/live-miracles/delayed-yt/master/assets/delayed-yt-vmix-demo.gif)
+
+&lt;sub&gt;The stream in the demo is a third-party YouTube live stream. Its content belongs to its channel.&lt;/sub&gt;
+
+To use it:
+
+1. Open the page, paste the YouTube video ID or the full link, and set the delay.
+2. Click **Update**. The settings are saved in the page URL.
+3. Copy that URL into a vMix **Web Browser** input, an OBS **Browser source**, or the web page input of whatever app you use.
+
+The delay is kept automatically and precisely, where before we adjusted it by hand. The player always starts full size, even after a refresh, without YouTube&#39;s recommendations around the video. If YouTube jumps to live, nobody needs to be watching: the page seeks back in about a second. In our use it works very well, with almost no problems.
+
+## Known issues
+
+- **It does not work in the first 30 minutes of a stream.** YouTube&#39;s player API does not report the correct duration until then. The delay must also be at least 10 minutes.
+- **A jump to live still shows a few seconds of buffering** before the page seeks back. It is not seamless, only no longer lost.
+- **If you stop sending the stream, the delay gets shorter**, by about the length of the break, because YouTube leaves that time out of the timeline. Refresh the delayed page and it works out the delay again. Viewers rewatch a few minutes, but without the refresh anyone who joins later gets no real delay.
+- **YouTube may ask you to sign in to confirm that you are not a bot**, mostly on a new system. For us it appeared after some time of use, lasted a while and then stopped. Signing in to YouTube inside the player usually fixes it, and the vMix and OBS steps are under Known Issues on the page. The login is stored on that computer, so use an account made for streaming.
+
+## The other way we tried: record to a file
+
+Before the page, we recorded the live stream to a local `.ts` file, added it to vMix and set its position to the delay. We chose `.ts` because it can be played while it is still being recorded, which an MP4 cannot.
+
+It works, but it is harder to run. The vMix setup is more complex: you record one input while the output comes from the program output, and there are many settings to get right. The file must be deleted after every session or the disk fills up, and it uses more CPU and RAM. We stopped using it and now use only the page.
+
+## Try it
+
+Delayed YouTube is free and open source (MIT). Open the [page](https://live-miracles.github.io/delayed-yt/) and try it with any YouTube live stream that is more than 30 minutes old, or read how it works in the [repository](https://github.com/live-miracles/delayed-yt).
+
+If something does not work for your session type or your app, [open an issue](https://github.com/live-miracles/delayed-yt/issues/new). And if it helps you, a star on the repository helps other operators find it.
+</textarea>
+          <script src="/assets/copy-markdown.js" defer></script></div></div></main>
+    <footer class="caption waves text-muted border-line border-t pb-28">
+      <div class="mx-auto flex w-full max-w-[980px] flex-wrap items-center justify-between gap-x-6 gap-y-2 px-5 py-8 sm:px-6">
+        <span>Live Miracles · Open tools for live teams</span>
+        <span class="flex gap-5">
+          <a class="link-quiet" href="/blog/">Blog</a>
+          <a class="link-quiet" href="/blog/feed.xml">RSS</a>
+          <a class="link-quiet" href="https://github.com/live-miracles">GitHub</a>
+        </span>
+      </div>
+    </footer>
+    <dialog id="lightbox" class="lightbox" aria-label="Enlarged image">
+      <button type="button" class="lightbox-close" aria-label="Close image"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg></button>
+      <div class="lightbox-frame"><img alt="" /></div>
+    </dialog>
+    <script>
+      (function () {
+        var dialog = document.getElementById('lightbox');
+        if (!dialog || !dialog.showModal) return;
+        var shown = dialog.querySelector('img');
+        function zoomable(img) {
+          return !img.closest('a') && img.naturalWidth >= 300 && img.naturalHeight >= 100;
+        }
+        function mark(img) {
+          if (img.dataset.zoom || !zoomable(img)) return;
+          img.dataset.zoom = '1';
+          img.classList.add('zoomable');
+          img.tabIndex = 0;
+          img.setAttribute('role', 'button');
+          img.setAttribute('aria-label', 'Enlarge image: ' + (img.alt || 'screenshot'));
+        }
+        function open(img) {
+          shown.src = img.currentSrc || img.src;
+          shown.alt = img.alt;
+          shown.classList.remove('actual');
+          dialog.showModal();
+          dialog.scrollTo(0, 0);
+        }
+        document.querySelectorAll('.readme img').forEach(function (img) {
+          if (img.complete) mark(img);
+          else img.addEventListener('load', function () { mark(img); }, { once: true });
+        });
+        document.addEventListener('click', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom) open(img);
+        });
+        document.addEventListener('keydown', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom && (event.key === 'Enter' || event.key === ' ')) {
+            event.preventDefault();
+            open(img);
+          }
+        });
+        shown.addEventListener('click', function () {
+          shown.classList.toggle('actual');
+        });
+        dialog.addEventListener('click', function (event) {
+          if (event.target !== shown) dialog.close();
+        });
+      })();
+    </script>
+    <script>
+      (function () {
+        var button = document.getElementById('theme-toggle');
+        if (!button) return;
+        var root = document.documentElement;
+        function current() {
+          return root.dataset.theme === 'light' ? 'light' : 'dark';
+        }
+        function sync() {
+          var theme = current();
+          button.dataset.mode = theme;
+          button.setAttribute('aria-label', 'Switch to ' + (theme === 'dark' ? 'light' : 'dark') + ' theme');
+        }
+        button.hidden = false;
+        sync();
+        button.addEventListener('click', function () {
+          var next = current() === 'dark' ? 'light' : 'dark';
+          root.dataset.theme = next;
+          try {
+            localStorage.setItem('theme', next);
+          } catch (e) {}
+          sync();
+        });
+      })();
+    </script>
+  </body>
+</html>

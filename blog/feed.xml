@@ -5,6 +5,13 @@
     <link>https://live-miracles.github.io/blog/</link>
     <description>Notes from running live events and building the tools behind them.</description>
     <item>
+      <title>A delayed session for late joiners: keep a YouTube live stream at a fixed delay</title>
+      <link>https://live-miracles.github.io/blog/delayed-youtube-for-late-joiners/</link>
+      <guid>https://live-miracles.github.io/blog/delayed-youtube-for-late-joiners/</guid>
+      <pubDate>Fri, 13 Nov 2026 00:00:00 GMT</pubDate>
+      <description>Some participants join a live session late or lose it to an internet or power cut. Delayed YouTube is a free web page that holds a YouTube live stream at a fixed delay and seeks back when YouTube jumps to live, so you can run a separate delayed session for them in vMix, OBS or any app that can embed a web page.</description>
+    </item>
+    <item>
       <title>Our vMix presets kept breaking on renamed files, so we stopped building them by hand</title>
       <link>https://live-miracles.github.io/blog/stop-hand-building-vmix-presets/</link>
       <guid>https://live-miracles.github.io/blog/stop-hand-building-vmix-presets/</guid>
