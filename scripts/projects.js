@@ -120,7 +120,6 @@ const projects = [
         summary:
             'Collect audience questions with translations during a live session; the host stars and completes them.',
         icon: `${pages}/multi-lang-qa/logo.png`,
-        demo: `${pages}/multi-lang-qa/`,
     },
 ];
 

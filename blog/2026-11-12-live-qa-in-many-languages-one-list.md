@@ -50,11 +50,19 @@ An operator picks the question's language, types or pastes the question and pres
 
 ![The same list with completed questions and original text hidden: only the open questions, in English](images/multi-lang-qa-focus.webp)
 
-## Try it and use it
+## See it and use it
 
-There is a [demo](https://live-miracles.github.io/multi-lang-qa/) with sample data that you can click through. Changes there are not saved, and the demo's translation is only a stand-in.
+Here is the whole flow in 40 seconds: add a question, translate it, star it, mark questions as done and hide the original text and the completed ones. The questions are made up.
 
-To run your own copy you need a Google account. Apps Script and Google Sheets are free, and there is nothing to host. The [README](https://github.com/live-miracles/multi-lang-qa#deploying-to-google-apps-script) has the steps: create an Apps Script project, add the two files, set your spreadsheet's ID as a script property and deploy it as a web app.
+![A short screen recording: an operator adds a Spanish question and translates it, the teacher stars it, three questions are marked done, and the original text and the completed questions are hidden in turn](https://raw.githubusercontent.com/live-miracles/multi-lang-qa/master/assets/multi-lang-qa-demo.gif)
+
+To run your own copy you need a Google account and [Node.js](https://nodejs.org/). Apps Script and Google Sheets are free, and there is nothing to host. The [README](https://github.com/live-miracles/multi-lang-qa#set-up-your-own-copy) has the steps, and it takes about 5 minutes:
+
+1. Turn on the Apps Script API for your Google account (one switch in your Apps Script settings).
+2. Run `npm install` and `npm run setup` in the project folder. Sign in when the browser opens. The command creates the Apps Script project, uploads the app, publishes it and prints your app link.
+3. Open the link yourself once and allow access. This also creates the spreadsheet in your Google Drive, where the questions are stored. Then share the link with your audience.
+
+Running `npm run setup` again later updates the app and keeps the same link. If you cannot run commands, the README also has a copy-and-paste way to set it up by hand.
 
 It is not limited to our setup. If you take questions from an audience in more than one language, whether on Zoom, YouTube or in a room, it may save you the same trouble.
 
