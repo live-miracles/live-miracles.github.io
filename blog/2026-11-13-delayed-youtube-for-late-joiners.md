@@ -5,7 +5,7 @@ tags: [vmix, obs, youtube, livestreaming]
 summary: Some participants join a live session late or lose it to an internet or power cut. Delayed YouTube is a free web page that holds a YouTube live stream at a fixed delay and seeks back when YouTube jumps to live, so you can run a separate delayed session for them in vMix, OBS or any app that can embed a web page.
 image: images/delayed-yt-cover.jpg
 imageAlt: The words Jumped to LIVE? and Seek back next to a video player whose playhead is behind the red live edge, with a dotted red arrow jumping forward to live and a solid arrow seeking back
-draft: true
+draft: false
 ---
 
 In our programs, some participants are not in the session when it starts. They join late, or an internet or power outage drops them in the middle. For them we run a separate **delayed session**: the same program, a fixed number of minutes behind, so they can watch it from the beginning. This post shows how we make that delay with vMix, what went wrong at first, and the small web page that fixed it. It is only a web page, so it works the same in OBS or any app that can embed one.
