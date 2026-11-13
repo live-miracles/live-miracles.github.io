@@ -36,6 +36,15 @@ Budget: **every image under 100 KB**, so the repository stays quick to clone (ol
 versions stay in history, so do not commit and recommit big files). Put them in
 `blog/images/`, kebab-case names, and always write real alt text.
 
+**Reuse before you compress.** A post about a project can reuse the screenshots
+and GIF already in that project's repo (its README and docs are published on this
+site). Link them with the absolute URL
+`https://raw.githubusercontent.com/live-miracles/<repo>/master/<path>`, as the
+Multi Lang QA and Folder Player posts do, instead of copying or recompressing
+them. Those files are not stored in this repo, so the 100 KB budget and the WebP
+conversion below do not apply to them. Only new images (the header image, diagrams
+made for the post) go in `blog/images/`.
+
 | Image                                                   | Format                 | Notes                                                                                                  |
 | ------------------------------------------------------- | ---------------------- | ------------------------------------------------------------------------------------------------------ |
 | Header image (`image:` and `imageAlt:` in front matter) | JPEG                   | Shown above the post, as a small thumbnail on the right of the `/blog/` card, and as the link preview. |
@@ -92,7 +101,7 @@ the GIF was 1.4 MB.
 ## 3. Preview and check
 
 ```sh
-BLOG_DRAFTS=1 npm run dev     # drafts are visible at /blog/; rebuilds on save, refresh to see it
+npm run dev                   # drafts are always visible at /blog/; rebuilds on save, refresh to see it
 npm run build                 # published posts only
 npx prettier --check .
 npm test
