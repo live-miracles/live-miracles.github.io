@@ -42,25 +42,234 @@
         </nav>
       </header>
     <main class="flex-1"><div class="wash" style="--gx1: 14%; --gx2: 100%; --gx3: 72%; --gy1: -132px; --gy2: -130px; --gy1p: 20%; --gy2p: 6%; --px: 70%; --glow-1: var(--glow-b); --glow-2: var(--glow-a); --tint: #d4a24c; --glow-a: color-mix(in srgb, #d4a24c 30%, transparent); --pattern: url('/assets/patterns/kikko.svg')"><div class="mx-auto w-full max-w-[980px] px-5 py-10 sm:px-6 sm:py-14"><div class="flex items-center gap-5">
-              <span class="logo-letter size-16" aria-hidden="true">L</span>
+              <img src="/assets/live-generator-logo.svg" alt="" class="logo size-16 " />
               <h1 class="display display-lg">Live Generator</h1>
             </div>
             <p class="lead mt-5 max-w-3xl">Google Sheets extension that schedules YouTube live events in bulk from rows of stream settings.</p>
             <div class="mt-7 flex flex-wrap gap-3"><a class="pill pill-primary" href="https://github.com/live-miracles/live-generator">GitHub</a></div>
-            <div class="text-muted caption mt-6 flex flex-wrap gap-x-5 gap-y-1"><span class="inline-flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 2.5 2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.31l-5.8 3.05 1.11-6.46-4.7-4.58 6.49-.94L12 2.5Z"/></svg>0</span><span class="inline-flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="6" cy="4" r="2"/><circle cx="18" cy="4" r="2"/><circle cx="12" cy="20" r="2"/><path d="M6 6v3a3 3 0 0 0 3 3h3m6-6v3a3 3 0 0 1-3 3h-3m0 0v6"/></svg>0</span><span>JavaScript</span><span>MIT license</span><span>Updated 2026-03-16</span></div>
-            <div class="mt-4 flex flex-wrap gap-2"><span class="chip">apps-script</span><span class="chip">google-sheets</span><span class="chip">livestream</span><span class="chip">youtube</span></div><div class="mt-10"><article class="readme min-w-0"><p>This Apps Sheet can be connected to a Google Sheet. Once added there will be a function to create
-a Sidebar. In the Sidebar you will be able to login in your YouTube account. And once you fill
-a few rows with the stream config parameters it will automatically schedule these live streams.</p>
+            <div class="text-muted caption mt-6 flex flex-wrap gap-x-5 gap-y-1"><span class="inline-flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 2.5 2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.31l-5.8 3.05 1.11-6.46-4.7-4.58 6.49-.94L12 2.5Z"/></svg>0</span><span class="inline-flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="6" cy="4" r="2"/><circle cx="18" cy="4" r="2"/><circle cx="12" cy="20" r="2"/><path d="M6 6v3a3 3 0 0 0 3 3h3m6-6v3a3 3 0 0 1-3 3h-3m0 0v6"/></svg>0</span><span>JavaScript</span><span>MIT license</span><span>Updated 2026-11-14</span></div>
+            <div class="mt-4 flex flex-wrap gap-2"><span class="chip">apps-script</span><span class="chip">automation</span><span class="chip">broadcast</span><span class="chip">google-apps-script</span><span class="chip">google-sheets</span><span class="chip">javascript</span><span class="chip">live-streaming</span><span class="chip">livestream</span><span class="chip">scheduler</span><span class="chip">spreadsheet</span><span class="chip">youtube</span><span class="chip">youtube-api</span><span class="chip">youtube-live</span></div><div class="mt-10"><details class="bg-parchment text-muted caption mb-8 rounded-xl p-4">
+              <summary class="text-ink cursor-pointer font-semibold">On this page</summary>
+              <ol class="mt-3 space-y-2">
+                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#overview">Overview</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#features">Features</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#requirements">Requirements</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#setup">Setup</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#1-prepare-the-spreadsheet">1. Prepare the spreadsheet</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#2-install-the-script">2. Install the script</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#3-authorize">3. Authorize</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#usage">Usage</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#limitations">Limitations</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#which-youtube-channel-is-used">Which YouTube channel is used</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#project-structure">Project structure</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#development">Development</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#contributing">Contributing</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#license">License</a></li>
+              </ol>
+            </details><article class="readme min-w-0"><div align="center">
+
+<img src="https://raw.githubusercontent.com/live-miracles/live-generator/master/assets/logo.svg" alt="Live Generator logo" width="120" height="120" />
+
+<p><strong>Bulk-schedule YouTube live broadcasts straight from a Google Sheet.</strong></p>
+<p>Fill in a few rows, click one button, and Live Generator creates the broadcasts on YouTube and binds each one to the stream key you picked.</p>
+<p><a href="https://github.com/live-miracles/live-generator/blob/master/LICENSE"><img src="https://img.shields.io/github/license/live-miracles/live-generator?color=blue" alt="License: MIT" loading="lazy" /></a>
+<a href="https://github.com/live-miracles/live-generator/commits/master"><img src="https://img.shields.io/github/last-commit/live-miracles/live-generator" alt="Last commit" loading="lazy" /></a>
+<a href="https://github.com/live-miracles/live-generator/stargazers"><img src="https://img.shields.io/github/stars/live-miracles/live-generator?style=flat" alt="GitHub stars" loading="lazy" /></a>
+<a href="https://github.com/live-miracles/live-generator/network/members"><img src="https://img.shields.io/github/forks/live-miracles/live-generator?style=flat" alt="GitHub forks" loading="lazy" /></a>
+<a href="https://github.com/live-miracles/live-generator/issues"><img src="https://img.shields.io/github/issues/live-miracles/live-generator" alt="GitHub issues" loading="lazy" /></a>
+<a href="https://developers.google.com/apps-script"><img src="https://img.shields.io/badge/Google%20Apps%20Script-V8-4285F4?logo=google&amp;logoColor=white" alt="Google Apps Script" loading="lazy" /></a>
+<a href="https://developers.google.com/youtube/v3/live/getting-started"><img src="https://img.shields.io/badge/YouTube%20Data%20API-v3-FF0000?logo=youtube&amp;logoColor=white" alt="YouTube Data API v3" loading="lazy" /></a>
+<a href="https://prettier.io"><img src="https://img.shields.io/badge/code%20style-prettier-ff69b4?logo=prettier&amp;logoColor=white" alt="Code style: Prettier" loading="lazy" /></a>
+<a href="https://github.com/live-miracles/live-generator/pulls"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen" alt="PRs welcome" loading="lazy" /></a></p>
+</div>
+
+<hr>
+<h2 id="overview">Overview</h2>
+<p>Live Generator is a Google Apps Script project that you attach to a Google Sheet. It adds a sidebar that signs in to your YouTube account and turns spreadsheet rows into scheduled YouTube live broadcasts. It is built for teams that run many streams on a regular basis, such as daily satsangs, recurring events and multi-camera setups. For those teams, creating each broadcast by hand in YouTube Studio is slow and error-prone.</p>
+<p><img src="https://github.com/user-attachments/assets/af74d874-18ef-46a0-ba01-bddd425425e6" alt="Live Generator sidebar next to the schedule sheet" loading="lazy" /></p>
+<h2 id="features">Features</h2>
+<ul>
+<li><strong>Bulk scheduling.</strong> Select any number of rows and schedule them all at once.</li>
+<li><strong>Stream key sync.</strong> One click pulls every stream key from your YouTube channel into the <strong>YT Keys</strong> sheet.</li>
+<li><strong>Automatic binding.</strong> Each broadcast is bound to the stream key named in the row&#39;s <code>Key ID</code> column.</li>
+<li><strong>Row validation.</strong> Dates, times, visibility and boolean options are checked before anything is sent to YouTube, and errors name the offending row.</li>
+<li><strong>Smart defaults.</strong> If you leave <code>Year</code>, <code>Month</code>, <code>Day</code> or <code>Hour</code> empty, the current date and time are used.</li>
+<li><strong>Visual feedback.</strong> A successfully scheduled row gets its <code>Broadcast ID</code> filled in and highlighted. A failed row is highlighted red.</li>
+<li><strong>Activity log.</strong> The sidebar shows a timestamped log of every action and error.</li>
+<li><strong>Full control.</strong> Set visibility, DVR, auto-start, auto-stop and latency per broadcast.</li>
+</ul>
+<h2 id="requirements">Requirements</h2>
+<ul>
+<li>A Google account whose <strong>own (main) YouTube channel</strong>, the one created automatically with that account, is enabled for live streaming. Branded channels are not supported. See <a href="#which-youtube-channel-is-used">Which YouTube channel is used</a>.</li>
+<li>A Google Sheet to hold the schedule.</li>
+</ul>
+<blockquote>
+<p>[!IMPORTANT]
+Live Generator works <strong>only with the main YouTube channel of the Google account you are signed in with</strong>, the one created with that email address. It does <strong>not</strong> work with <strong>Brand Accounts</strong> (branded channels), even if you are a manager or owner of one. See <a href="#which-youtube-channel-is-used">Which YouTube channel is used</a>.</p>
+</blockquote>
+<h2 id="setup">Setup</h2>
+<h3 id="1-prepare-the-spreadsheet">1. Prepare the spreadsheet</h3>
+<p>Open a Google Sheet and create two tabs with these exact names.</p>
+<p><strong><code>YT Schedule</code></strong> has one broadcast per row. Row 1 must contain these headers:</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th align="center">Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Title</code></td>
+<td align="center">Yes</td>
+<td>Broadcast title shown on YouTube.</td>
+</tr>
+<tr>
+<td><code>Year</code></td>
+<td align="center">No</td>
+<td>2000-2100. Defaults to the current year.</td>
+</tr>
+<tr>
+<td><code>Month</code></td>
+<td align="center">No</td>
+<td>1-12. Defaults to the current month.</td>
+</tr>
+<tr>
+<td><code>Day</code></td>
+<td align="center">No</td>
+<td>1-31. Defaults to the current day.</td>
+</tr>
+<tr>
+<td><code>Hour</code></td>
+<td align="center">No</td>
+<td>0-23. Defaults to the current hour plus 2.</td>
+</tr>
+<tr>
+<td><code>Minute</code></td>
+<td align="center">No</td>
+<td>0-59. Defaults to <code>0</code>.</td>
+</tr>
+<tr>
+<td><code>Visibility</code></td>
+<td align="center">Yes</td>
+<td><code>public</code>, <code>unlisted</code> or <code>private</code>.</td>
+</tr>
+<tr>
+<td><code>Key ID</code></td>
+<td align="center">Yes</td>
+<td>The stream <code>ID</code> from the <strong>YT Keys</strong> tab.</td>
+</tr>
+<tr>
+<td><code>DVR</code></td>
+<td align="center">No</td>
+<td><code>true</code> or <code>false</code>. Enables DVR (rewind) for viewers. Defaults to <code>false</code>.</td>
+</tr>
+<tr>
+<td><code>Auto Start</code></td>
+<td align="center">No</td>
+<td><code>true</code> or <code>false</code>. Starts the broadcast when the stream begins.</td>
+</tr>
+<tr>
+<td><code>Auto Stop</code></td>
+<td align="center">No</td>
+<td><code>true</code> or <code>false</code>. Ends the broadcast when the stream stops.</td>
+</tr>
+<tr>
+<td><code>Latency</code></td>
+<td align="center">No</td>
+<td><code>normal</code>, <code>low</code> or <code>ultraLow</code>.</td>
+</tr>
+<tr>
+<td><code>Broadcast ID</code></td>
+<td align="center">Auto</td>
+<td>Leave empty. Filled in by the script. A row that already has one is rejected with an error.</td>
+</tr>
+</tbody></table>
+<p><strong><code>YT Keys</code></strong> is filled in automatically by the sidebar. Add these headers in row 1, in this order:</p>
+<table>
+<thead>
+<tr>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+<th>D</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>ID</code></td>
+<td><code>Channel ID</code></td>
+<td><code>Title</code></td>
+<td><code>Key</code></td>
+</tr>
+</tbody></table>
+<h3 id="2-install-the-script">2. Install the script</h3>
+<ol>
+<li>In the sheet, go to <strong>Extensions → Apps Script</strong>.</li>
+<li>Copy the contents of the project files into the editor:<ul>
+<li><a href="https://github.com/live-miracles/live-generator/blob/master/Code.js"><code>Code.js</code></a></li>
+<li><a href="https://github.com/live-miracles/live-generator/blob/master/YouTube.js"><code>YouTube.js</code></a></li>
+<li><a href="https://github.com/live-miracles/live-generator/blob/master/Sidebar.html"><code>Sidebar.html</code></a> (create it with <strong>+ → HTML</strong> and name it <code>Sidebar</code>)</li>
+</ul>
+</li>
+<li>Enable the YouTube API. Either:<ul>
+<li>open <strong>Project Settings</strong>, tick <strong>Show &quot;appsscript.json&quot; manifest file in editor</strong>, and paste in the contents of <a href="https://github.com/live-miracles/live-generator/blob/master/appsscript.json"><code>appsscript.json</code></a>, <strong>or</strong></li>
+<li>click <strong>Services (+)</strong> in the editor, choose <strong>YouTube Data API v3</strong> and keep the identifier <code>YouTube</code>.</li>
+</ul>
+</li>
+<li>Save the project, then reload the spreadsheet.</li>
+</ol>
+<h3 id="3-authorize">3. Authorize</h3>
+<p>Open <strong>Extensions → Live Generator → Show Sidebar</strong>. Google will ask you to authorize the script the first time. Approve the requested permissions with the account that owns your YouTube channel.</p>
 <h2 id="usage">Usage</h2>
 <ol>
-<li>Open a Google Sheet.</li>
-<li>Create a <strong>YT Schedule</strong> and <strong>YT Keys</strong> tabs.</li>
-<li>Go to <strong>Extensions</strong> -&gt; <strong>Apps Script</strong> and copy-paste the <code>Code.js</code>, <code>YouTube.js</code>, and <code>Sidebar.html</code> files.</li>
-<li>Go back to Google Sheet and go to <strong>Extensions</strong> -&gt; <strong>Live Generator</strong>. Once you select it a sidebar will show.</li>
-<li>Click the &quot;Update Stream Keys&quot; button to fetch all the streaming keys from YouTube.</li>
+<li>Open the sidebar and check that your <strong>email</strong> and <strong>channel</strong> are shown at the top.</li>
+<li>Click <strong>Update Stream Keys</strong> to load your stream keys into <strong>YT Keys</strong>. Run this again whenever you create or change a key on YouTube.</li>
+<li>In <strong>YT Schedule</strong>, fill in your rows. Use the <code>ID</code> column from <strong>YT Keys</strong> for <code>Key ID</code>.</li>
+<li>Select the rows you want to schedule, then click <strong>Schedule Selected Rows</strong>.</li>
+<li>Check the <code>Broadcast ID</code> column and the sidebar log. Broadcasts also appear in <a href="https://studio.youtube.com">YouTube Studio</a> under <strong>Content → Live</strong>.</li>
 </ol>
-<img width="1851" height="809" alt="Screenshot 2026-01-08 191505" src="https://github.com/user-attachments/assets/af74d874-18ef-46a0-ba01-bddd425425e6" />
-
+<blockquote>
+<p>[!TIP]
+Select several rows at once to schedule a whole week of streams in one click.</p>
+</blockquote>
+<h2 id="limitations">Limitations</h2>
+<ul>
+<li><strong>Main channel only.</strong> Only the YouTube channel tied to the signed-in Google account is supported. Brand Accounts are not, even if you have access to them (see <a href="#which-youtube-channel-is-used">below</a>).</li>
+<li><strong>Time zone is fixed to IST.</strong> Start times are sent with a <code>+05:30</code> offset and <code>appsscript.json</code> sets the project time zone to <code>Asia/Kolkata</code>. To use another zone, change the offset in <code>insertBroadcast()</code> in <a href="https://github.com/live-miracles/live-generator/blob/master/YouTube.js"><code>YouTube.js</code></a> and the <code>timeZone</code> in <a href="https://github.com/live-miracles/live-generator/blob/master/appsscript.json"><code>appsscript.json</code></a>.</li>
+<li><strong>Up to 50 stream keys</strong> are fetched per refresh.</li>
+<li><strong>API quota.</strong> Scheduling is subject to your YouTube Data API daily quota.</li>
+</ul>
+<h3 id="which-youtube-channel-is-used">Which YouTube channel is used</h3>
+<p>The script calls the YouTube API as the Google account that authorizes it, and Apps Script&#39;s YouTube advanced service always acts on that account&#39;s <strong>own main channel</strong>. It cannot switch to a branded channel, and it does not offer a channel picker.</p>
+<ul>
+<li>Works: the channel that was created automatically with your Google account (the sidebar shows its name as <strong>Channel</strong>).</li>
+<li>Does not work: a branded channel that you can switch to in YouTube, such as a channel created for an organization or event and shared with you as a manager or owner.</li>
+</ul>
+<p>If your streams live on a branded channel, this tool cannot schedule them. Check the <strong>Channel</strong> name in the sidebar: if it is not the channel you expect, you are signed in with the wrong account.</p>
+<h2 id="project-structure">Project structure</h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="https://github.com/live-miracles/live-generator/blob/master/Code.js"><code>Code.js</code></a></td>
+<td>Menu, sidebar, sheet logic, row validation and formatting.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/live-miracles/live-generator/blob/master/YouTube.js"><code>YouTube.js</code></a></td>
+<td>Thin wrappers around the YouTube Data API v3 live endpoints.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/live-miracles/live-generator/blob/master/Sidebar.html"><code>Sidebar.html</code></a></td>
+<td>Sidebar UI and client-side handlers.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/live-miracles/live-generator/blob/master/appsscript.json"><code>appsscript.json</code></a></td>
+<td>Apps Script manifest: runtime, time zone and enabled services.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/live-miracles/live-generator/blob/master/v"><code>v/</code></a></td>
+<td>Tagged snapshots of released versions.</td>
+</tr>
+</tbody></table>
+<h2 id="development">Development</h2>
+<p>Format the code with <a href="https://prettier.io">Prettier</a>:</p>
+<pre><code class="language-bash">make pretty
+</code></pre>
+<h2 id="contributing">Contributing</h2>
+<p>Issues and pull requests are welcome. If you plan a larger change, please open an issue first to discuss it.</p>
+<h2 id="license">License</h2>
+<p>Released under the <a href="https://github.com/live-miracles/live-generator/blob/master/LICENSE">MIT License</a>.</p>
 </article></div></div></div></main>
     <footer class="caption waves text-muted border-line border-t pb-28">
       <div class="mx-auto flex w-full max-w-[980px] flex-wrap items-center justify-between gap-x-6 gap-y-2 px-5 py-8 sm:px-6">
