@@ -12,8 +12,8 @@
     <meta property="og:title" content="AJA Bridge Live: IPMI power control — Wake Up Support" />
     <meta property="og:description" content="AJA Bridge Live power control uses IPMI instead of Wake-on-LAN. Use SSH to prepare the IPMI user, then add the AJA LAN IPMI address and credentials in the app." />
     <meta property="og:url" content="https://live-miracles.github.io/projects/wake-up-support/docs/setup/aja-bridge-live-ipmi/" />
-    <meta property="og:image" content="https://live-miracles.github.io/assets/logo.png" />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content="https://live-miracles.github.io/assets/social/wake-up-support.png" />
+    <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="/assets/logo.png" type="image/png" />
     <link rel="alternate" type="application/rss+xml" title="Live Miracles blog" href="/blog/feed.xml" />
     <script>
@@ -72,7 +72,7 @@
               <div class="min-w-0"><details class="bg-parchment text-muted caption mb-8 rounded-xl p-4">
               <summary class="text-ink cursor-pointer font-semibold">On this page</summary>
               <ol class="mt-3 space-y-2">
-                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#log-in-to-the-abl-cli">Log in to the ABL CLI</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#find-the-ipmi-lan-address">Find the IPMI LAN address</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#confirm-the-admin-user-number">Confirm the admin user number</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#set-or-reset-the-ipmi-password">Set or reset the IPMI password</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#enable-admin-ipmi-access">Enable admin IPMI access</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#fix-channel-cipher-suites">Fix channel cipher suites</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#add-the-device-in-the-app">Add the device in the app</a></li>
+                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#log-in-to-the-abl-cli">Log in to the ABL CLI</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#find-the-ipmi-lan-address">Find the IPMI LAN address</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#confirm-the-admin-user-number">Confirm the admin user number</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#set-or-reset-the-ipmi-password">Set or reset the IPMI password</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#enable-admin-ipmi-access">Enable admin IPMI access</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#fix-channel-cipher-suites">Fix channel cipher suites</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#add-the-device-in-the-app">Add the device in the app</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#why-the-app-uses-ipmitool">Why the app uses ipmitool</a></li>
               </ol>
             </details><article class="readme min-w-0"><p>AJA Bridge Live power control uses IPMI instead of Wake-on-LAN. Use SSH to prepare the IPMI
 user, then add the AJA LAN IPMI address and credentials in the app.</p>
@@ -102,6 +102,11 @@ sudo ipmitool raw 0x06 0x40 0x01 0x42 0x44
 <p>Click <strong>ABL</strong> and enter the device name, the AJA LAN 1 IPMI IP, the AJA IP address and the
 IPMI username and password. Passwords are saved on this computer with the rest of the app
 settings.</p>
+<h2 id="why-the-app-uses-ipmitool">Why the app uses ipmitool</h2>
+<p>The first version of the app used <code>ipmiutil.exe</code> for AJA power control, but it did not work
+with AJA Bridge Live. The app now bundles <code>ipmitool.exe</code> (with the Cygwin DLLs it needs),
+which does connect to the AJA unit. Use the <code>ipmitool</code> commands above when preparing the
+device.</p>
 </article><a class="more caption mt-8 inline-block" href="https://github.com/live-miracles/wake-up-support/blob/master/docs/2-setup/2-aja-bridge-live-ipmi.md">Edit this page on GitHub</a><div class="mt-12 grid gap-4 sm:grid-cols-2">
               <a class="panel link-quiet hover:bg-parchment p-5 transition-colors" href="/projects/wake-up-support/docs/setup/dell-wake-on-lan/"><div class="text-muted caption">Previous</div><div class="font-semibold">Dell systems: Wake-on-LAN</div></a>
               
