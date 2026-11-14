@@ -94,7 +94,8 @@ const projects = [
         id: 'wake-up-support',
         name: 'Wake Up Support',
         category: 'monitoring',
-        summary: 'Small Windows app that wakes machines on the local network with Wake-on-LAN.',
+        summary:
+            'Small Windows app that powers on machines on the local network: Wake-on-LAN for PCs, and IPMI power on and off for AJA Bridge Live devices.',
         icon: '/assets/wake-up-support-logo.png',
         download: `https://github.com/${organization}/wake-up-support/releases`,
     },
