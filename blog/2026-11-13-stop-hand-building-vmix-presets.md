@@ -8,9 +8,9 @@ imageAlt: A folder showing a grid of numbered files 01 to 06, photos, videos and
 draft: false
 ---
 
-We stream live sessions in many languages. One program can run in 20 or more languages over time: a few languages one week, a different set the next. Every program has several sessions (five, six, seven), and every session has its own set of media files, which we call a kit. Kits are updated all the time.
+We stream live sessions in many languages. One program can run in 20 or more languages over time: a few languages one week, a different set the next. Every program has several sessions (five, six, seven), and every session has its own set of media files, which we call a kit. Kits are updated all the time. Today we manage over 100 kits, each with its own vMix preset.
 
-For a long time we built the vMix preset for each session by hand. It worked, until it didn't. This post is about the two ways it failed and the small free tool we built so it can't fail that way again. If your team rebuilds a similar playlist for every event, you can reuse the method.
+For a long time we built the vMix preset for each session by hand. It worked, until it didn't. This post is about the two ways it failed and the small free tool we built so it can't fail that way again. If your team rebuilds a similar playlist for every event, you can reuse the method, and you don't need our scale for it to pay off.
 
 ![Folder Player in use: pick a folder, review the playlist, turn on the camera and mic for the host's lower third, save, and create the vMix preset](https://raw.githubusercontent.com/live-miracles/folder-player/master/assets/folder-player-demo.gif)
 
@@ -79,13 +79,21 @@ For every session the app copies the base and adds the numbered files to it, one
 - Mistakes show up in a report before the session, not during it.
 - With a parent folder that holds one folder per session, the app creates a preset for every session in one go.
 
+## Fewer hand-offs between teams
+
+This part is specific to how we are set up, so skip it if you have one team and one server. We keep two volumes on purpose. The programs team keeps every kit on its own server volume, which only that team can open. Each week they copy only the files needed that week to a shared volume for the streaming team, and delete them afterwards, so people can only reach what is actually in use.
+
+Before, that meant a lot of back and forth. When a kit changed, or a new kit arrived without a preset, the streaming team built or fixed the preset and shared the whole kit back through a second folder on the shared volume. The programs team then deleted their old copy of the kit and replaced it with ours. Now the programs team makes the preset themselves, so files only travel one way and the streaming team only opens the result.
+
+![Before: files and updated kits travel both ways between the programs team, a shared volume and the streaming team. Now: files travel one way, and the programs team creates the preset](images/teams-before-now.webp)
+
 ## What it doesn't do
 
 The app writes a preset that you open in vMix. It does not control vMix while you are live, and it only runs on Windows. The installer is not code-signed yet, so Windows SmartScreen may warn you the first time you run it. It also depends on your team agreeing to number the files, which is a habit, not a feature.
 
 ## Try it on your own setup
 
-You don't need 20 languages to have this problem. If you rebuild a similar vMix playlist for every event, the same method works:
+You don't need 20 languages or 100 kits to have this problem. Even with a handful of folders, numbering the files and generating the preset is quicker than building each one by hand, and every preset comes out the same. If you rebuild a similar vMix playlist for every event, the same method works:
 
 1. Make one clean `base.vmix` with your `Cam` and `Mic` inputs and your settings.
 2. Number your content files in playing order.
