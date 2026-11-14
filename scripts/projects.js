@@ -114,6 +114,7 @@ const projects = [
         category: 'events',
         summary:
             'Google Sheets extension that schedules YouTube live events in bulk from rows of stream settings.',
+        icon: '/assets/live-generator-logo.svg',
     },
     {
         id: 'multi-lang-qa',

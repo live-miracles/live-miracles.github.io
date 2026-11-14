@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-labelledby="t">
+  <title id="t">Live Generator logo</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FF4B4B"/>
+      <stop offset="1" stop-color="#C8102E"/>
+    </linearGradient>
+  </defs>
+  <!-- tile -->
+  <rect width="256" height="256" rx="56" fill="url(#bg)"/>
+  <!-- spreadsheet card -->
+  <rect x="40" y="62" width="132" height="148" rx="14" fill="#fff"/>
+  <rect x="40" y="62" width="132" height="32" rx="14" fill="#FFD9D9"/>
+  <rect x="40" y="80" width="132" height="14" fill="#FFD9D9"/>
+  <g stroke="#F1A3A3" stroke-width="3" stroke-linecap="round">
+    <line x1="40" y1="94" x2="172" y2="94"/>
+    <line x1="40" y1="130" x2="172" y2="130"/>
+    <line x1="40" y1="166" x2="172" y2="166"/>
+    <line x1="84" y1="62" x2="84" y2="210"/>
+    <line x1="128" y1="62" x2="128" y2="210"/>
+  </g>
+  <!-- filled cells -->
+  <rect x="50" y="108" width="24" height="10" rx="5" fill="#C8102E"/>
+  <rect x="94" y="108" width="24" height="10" rx="5" fill="#E3A0A0"/>
+  <rect x="50" y="144" width="24" height="10" rx="5" fill="#E3A0A0"/>
+  <rect x="94" y="144" width="24" height="10" rx="5" fill="#C8102E"/>
+  <rect x="50" y="180" width="24" height="10" rx="5" fill="#C8102E"/>
+  <rect x="94" y="180" width="24" height="10" rx="5" fill="#E3A0A0"/>
+  <!-- broadcast arcs -->
+  <g fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round">
+    <path d="M178 54 a38 38 0 0 1 38 38" opacity=".9"/>
+    <path d="M178 30 a62 62 0 0 1 62 62" opacity=".55"/>
+  </g>
+  <!-- play badge -->
+  <circle cx="178" cy="178" r="46" fill="#fff"/>
+  <circle cx="178" cy="178" r="38" fill="#C8102E"/>
+  <path d="M168 160 L198 178 L168 196 Z" fill="#fff" stroke="#fff" stroke-width="6" stroke-linejoin="round"/>
+</svg>
