@@ -106,7 +106,7 @@ JSON, <code>{ &quot;error&quot;: &quot;…&quot; }</code>; an unexpected failure
 <tbody><tr>
 <td>GET</td>
 <td><code>/api/config</code></td>
-<td>Pipelines, outputs, encodings, stream keys, server name. <code>srtPassphrasePending</code> is <code>true</code> while a reset passphrase is waiting for the restart</td>
+<td>Pipelines, outputs, encodings, stream keys, server name, <code>keyVault</code> (the Key Vault link without its token and secret, or <code>null</code>). <code>srtPassphrasePending</code> is <code>true</code> while a reset passphrase is waiting for the restart</td>
 </tr>
 <tr>
 <td>GET</td>
@@ -252,6 +252,16 @@ JSON, <code>{ &quot;error&quot;: &quot;…&quot; }</code>; an unexpected failure
 <td>POST</td>
 <td><code>/api/settings/general</code></td>
 <td>Update the server name and public host <code>{ name, publicHost? }</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/settings/key-vault</code></td>
+<td>Save the Key Vault link <code>{ url, instance, token?, hashSecret? }</code> and apply it at once. An empty <code>token</code> or <code>hashSecret</code> keeps the saved one (needed the first time); an empty <code>url</code> turns the reports off and forgets both. Answers <code>{ keyVault }</code>, the link without its secrets (<code>{ url, instance, tokenSet, hashSecretSet }</code>, or <code>null</code> when off). <code>400</code> for a value that is not valid or a host that is link-local or unspecified; nothing is saved then</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/settings/key-vault/test</code></td>
+<td>Send one report to the saved link now, without retries. Always <code>200</code> with <code>{ ok: true, outputs }</code> or <code>{ ok: false, error }</code> (for example <code>HTTP 401</code>)</td>
 </tr>
 <tr>
 <td>POST</td>

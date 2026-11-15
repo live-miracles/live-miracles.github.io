@@ -47,11 +47,13 @@
             </div>
             <p class="lead mt-5 max-w-3xl">A safer way to store and share stream keys for big events, with role-based access, on Google Apps Script.</p>
             <div class="mt-7 flex flex-wrap gap-3"><a class="pill pill-primary" href="https://github.com/live-miracles/key-vault">GitHub</a><a class="pill " href="https://live-miracles.github.io/key-vault/">Demo</a></div>
-            <div class="text-muted caption mt-6 flex flex-wrap gap-x-5 gap-y-1"><span class="inline-flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 2.5 2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.31l-5.8 3.05 1.11-6.46-4.7-4.58 6.49-.94L12 2.5Z"/></svg>0</span><span class="inline-flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="6" cy="4" r="2"/><circle cx="18" cy="4" r="2"/><circle cx="12" cy="20" r="2"/><path d="M6 6v3a3 3 0 0 0 3 3h3m6-6v3a3 3 0 0 1-3 3h-3m0 0v6"/></svg>0</span><span>TypeScript</span><span>MIT license</span><span>Updated 2026-09-30</span></div>
-            <div class="mt-10"><details class="bg-parchment text-muted caption mb-8 rounded-xl p-4">
+            <div class="text-muted caption mt-6 flex flex-wrap gap-x-5 gap-y-1"><span class="inline-flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 2.5 2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.31l-5.8 3.05 1.11-6.46-4.7-4.58 6.49-.94L12 2.5Z"/></svg>0</span><span class="inline-flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="6" cy="4" r="2"/><circle cx="18" cy="4" r="2"/><circle cx="12" cy="20" r="2"/><path d="M6 6v3a3 3 0 0 0 3 3h3m6-6v3a3 3 0 0 1-3 3h-3m0 0v6"/></svg>0</span><span>TypeScript</span><span>MIT license</span><span>Updated 2026-11-15</span></div>
+            <nav class="border-line mt-8 flex gap-6 border-b" aria-label="Key Vault sections">
+              <a href="/projects/key-vault/" class="tab" aria-current="page">Overview</a><a href="/projects/key-vault/docs/" class="tab">Documentation</a>
+            </nav><div class="mt-10"><details class="bg-parchment text-muted caption mb-8 rounded-xl p-4">
               <summary class="text-ink cursor-pointer font-semibold">On this page</summary>
               <ol class="mt-3 space-y-2">
-                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#project-structure">Project structure</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#local-development">Local development</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#releases">Releases</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#one-time-apps-script-deployment-setup">One-time Apps Script deployment setup</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#deploying-to-google-apps-script-manually">Deploying to Google Apps Script manually</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#roles">Roles</a></li>
+                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#project-structure">Project structure</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#how-it-fits-together">How it fits together</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#local-development">Local development</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#setting-up-supabase-and-vercel">Setting up Supabase and Vercel</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#roles">Roles</a></li>
               </ol>
             </details><article class="readme min-w-0"><p>A safer way to store and manage stream keys for big events.</p>
 <p>This is a Google Apps Script web app backed by a Google Sheet. After creating and configuring the
@@ -62,79 +64,62 @@ Apps Script project, you will be able to:</p>
 <li>Add role-based access controls to restrict which keys each user can access.</li>
 </ul>
 <h2 id="project-structure">Project structure</h2>
-<pre><code class="language-text">├── src/
-│   ├── Code.ts          # Google Apps Script backend source
-│   ├── Index.html       # Generated Apps Script HTML shell
-│   └── appsscript.json  # Apps Script manifest
-├── frontend/
-│   ├── src/*.ts         # Frontend TypeScript source
-│   ├── index.html       # HTML shell template and demo page template
+<pre><code class="language-text">├── frontend/
+│   ├── src/*.ts         # Browser code (plain scripts sharing globals, as the tests load them)
+│   ├── src/supabase.ts  # Google sign-in and the call to the api function (own bundle)
+│   ├── index.html       # HTML shell
 │   └── input.css        # Tailwind CSS source
-└── build-tools/         # Build and release scripts
+├── supabase/
+│   ├── migrations/      # Database schema
+│   └── functions/       # api (the app&#39;s operations) and ingest (bunryu heartbeats)
+├── build-tools/         # Site builds and the Sheet-to-SQL export
+└── docs/refactor-plan.md
 </code></pre>
+<h2 id="how-it-fits-together">How it fits together</h2>
+<pre><code class="language-text">Browser → Vercel static site → Supabase Auth (Google)
+                            └→ Edge Function `api` → Postgres
+bunryu ──every minute──► Edge Function `ingest` → Postgres
+</code></pre>
+<p>The browser never reads the database directly: every table has row-level security with no policy,
+and the <code>api</code> function checks the user&#39;s role (the rules in <code>frontend/src/access.ts</code> and
+<code>supabase/functions/_shared/access.ts</code>, which a test keeps identical) before using the service role.</p>
+<p>bunryu reports the status of each output once a minute. It sends a hash of each destination URL,
+never the URL. Key Vault hashes its own main and backup URLs and matches them, so a key shows
+as running, warning, error or configured-but-stopped without anyone setting a color. A color set
+by hand by an owner or admin still wins. See <code>docs/refactor-plan.md</code> for the heartbeat contract.</p>
 <h2 id="local-development">Local development</h2>
 <pre><code class="language-bash">npm install
 npm run dev
 </code></pre>
-<p>This does an initial CSS compile, then serves the app locally at <code>http://localhost:3000</code> with live
-reload.</p>
-<p>To only compile CSS:</p>
-<pre><code class="language-bash">npm run css
+<p>This serves the demo (a built-in mock backend with sample data and statuses) at
+<code>http://localhost:3000</code> with live reload.</p>
+<pre><code class="language-bash">npm test              # unit tests, no database needed
+npm run typecheck
+npm run test:db       # applies the migrations to a throwaway Postgres in Docker
 </code></pre>
-<p><code>frontend/output.css</code> is generated from <code>frontend/input.css</code> and is intentionally ignored by git.
-Local development and release builds create it as needed.</p>
-<h2 id="releases">Releases</h2>
-<p>This repo now follows the same release pattern as <code>multi-lang-qa</code>.</p>
-<p>Pushing to <code>master</code> publishes the mock-backed demo frontend to GitHub Pages. Pushing a git tag
-also publishes the latest demo and deploys the production Apps Script build. The Apps Script
-deployment is rebuilt as a self-contained HTML project; it does not load its JavaScript or CSS from
-GitHub Pages.</p>
-<pre><code class="language-bash">npm version 0.3.2
-git push origin master --tags
+<p>To build the real site locally, set the project URL and the <strong>publishable</strong> key (never a secret key;
+the build refuses one) and run <code>npm run build:vercel</code>; the result is in <code>web/</code>.</p>
+<pre><code class="language-bash">KEY_VAULT_SUPABASE_URL=https://&lt;project-ref&gt;.supabase.co KEY_VAULT_SUPABASE_PUBLISHABLE_KEY=&lt;publishable key&gt; npm run build:vercel
 </code></pre>
-<p><code>npm version</code> updates <code>package.json</code> and <code>package-lock.json</code>, creates the release commit, and creates
-the git tag. With the default <code>tag-version-prefix</code> of <code>v</code>, <code>npm version 0.3.2</code> creates the tag
-<code>v0.3.2</code>.</p>
-<p>The release tag must match <code>package.json</code>. GitHub Actions checks this before deploying. Run
-<code>npm version</code> from a clean git working tree.</p>
-<p>To build the generated Apps Script project locally:</p>
-<pre><code class="language-bash">npm run css
-npm run apps-script:build
-</code></pre>
-<p>The generated Apps Script files are written to <code>.clasp-build/</code>. <code>Index.html</code> contains the
-frontend CSS and JavaScript inline. The logo and Apps Script favicon use the unversioned GitHub
-Pages logo URL.</p>
-<h3 id="one-time-apps-script-deployment-setup">One-time Apps Script deployment setup</h3>
-<p>Create these GitHub repository secrets before expecting tag releases to update the live Apps Script
-deployment:</p>
-<ul>
-<li><code>APPS_SCRIPT_ID</code>: the script ID from the Apps Script project settings.</li>
-<li><code>APPS_SCRIPT_DEPLOYMENT_ID</code>: the deployment ID of the existing web app deployment that should keep
-the same public URL.</li>
-<li><code>CLASPRC_JSON</code>: the contents of the <code>.clasprc.json</code> file created by <code>npx clasp login</code>.</li>
-</ul>
-<p>Once these are set, a tag like <code>v0.3.2</code> will:</p>
-<ul>
-<li>publish the mock-backed demo site and logo to GitHub Pages</li>
-<li>generate a self-contained Apps Script project in <code>.clasp-build/</code></li>
-<li>push the generated project with <code>clasp</code></li>
-<li>create a new Apps Script version and update the existing deployment to point at it</li>
-</ul>
-<h2 id="deploying-to-google-apps-script-manually">Deploying to Google Apps Script manually</h2>
-<p>If you want to collaborate with others in real time, you will need to create a Google Apps Script
-project.</p>
+<h2 id="setting-up-supabase-and-vercel">Setting up Supabase and Vercel</h2>
 <ol>
-<li>Create a spreadsheet with these tabs and columns:
-<code>Role</code>: <code>id</code>, <code>event</code>, <code>email</code>, <code>type</code>, <code>language</code>, <code>remarks</code>
-<code>Event</code>: <code>id</code>, <code>name</code> (<code>id</code> is generated as <code>E01</code>, <code>E02</code>, etc.)
-<code>Language</code>: <code>id</code>, <code>name</code>, <code>order</code> (<code>id</code> should be a string from <code>L01</code> to <code>L99</code>)
-<code>Key</code>: <code>id</code>, <code>event</code>, <code>name</code>, <code>language</code>, <code>server</code>, <code>key</code>, <code>server2</code>, <code>key2</code>, <code>link</code>, <code>color</code>,
-<code>remarks</code></li>
-<li>Create an Apps Script project and add a script property named <code>SPREADSHEET_ID</code>.</li>
-<li>Run <code>npm run css &amp;&amp; npm run apps-script:build</code>.</li>
-<li>Add the generated files from <code>.clasp-build/</code> to the Apps Script project.</li>
-<li>Deploy the project as a web app.</li>
+<li>Create a Supabase project. Under Authentication → Providers enable Google (client id and secret
+from a Google Cloud OAuth client whose redirect URI is
+<code>https://&lt;project-ref&gt;.supabase.co/auth/v1/callback</code>), and add the site&#39;s URL to Authentication →
+URL Configuration.</li>
+<li>Set the function secrets (see <code>docs/refactor-plan.md</code> for what each is):
+<code>KEY_VAULT_APP_ORIGIN</code>, <code>KEY_VAULT_HASH_SECRET</code>, <code>KEY_VAULT_OWNER_EMAILS</code>, <code>KEY_VAULT_INGEST_TOKEN</code>.</li>
+<li>Add the repository secrets <code>SUPABASE_ACCESS_TOKEN</code>, <code>SUPABASE_PROJECT_REF</code>, <code>SUPABASE_DB_PASSWORD</code>;
+<code>.github/workflows/deploy-supabase.yml</code> then applies the migrations and deploys both functions on every
+change under <code>supabase/</code>.</li>
+<li>Import the repository in Vercel and set <code>KEY_VAULT_SUPABASE_URL</code> and
+<code>KEY_VAULT_SUPABASE_PUBLISHABLE_KEY</code>; <code>vercel.json</code> does the rest.</li>
+<li>To bring over the existing Google Sheet, download its four tabs as CSV
+(<code>Event</code>, <code>Role</code>, <code>Language</code>, <code>Key</code>) into one folder and run
+<code>npm run sheet:sql -- &lt;folder&gt; &gt; .migration/data.sql</code>, then run that file against the database. It lists
+anything that cannot be migrated instead of guessing. The file holds real keys: delete it afterwards.</li>
 </ol>
+<p>The GitHub Pages workflow still publishes the mock-backed demo from <code>master</code>.</p>
 <h2 id="roles">Roles</h2>
 <ul>
 <li>Owner: can edit or delete events and assign event admins.</li>

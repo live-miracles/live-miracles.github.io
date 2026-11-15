@@ -84,7 +84,7 @@
               <div class="min-w-0"><details class="bg-parchment text-muted caption mb-8 rounded-xl p-4">
               <summary class="text-ink cursor-pointer font-semibold">On this page</summary>
               <ol class="mt-3 space-y-2">
-                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#watchdogs">Watchdogs</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#host-resource-alerts">Host resource alerts</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#falling-behind-realtime">Falling behind realtime</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#shared-encodes">Shared encodes</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#input-timestamp-fault-detection">Input timestamp fault detection</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#input-frame-rate">Input frame rate</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#input-keyframe-interval">Input keyframe interval</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#flapping-inputs">Flapping inputs</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#encoder-restarts-do-not-restart-outputs">Encoder restarts do not restart outputs</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#srt-input-output-stalls">SRT-input output stalls</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#ffmpeg-memory-leaks-on-corrupt-input">FFmpeg memory leaks on corrupt input</a></li>
+                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#watchdogs">Watchdogs</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#key-vault-status-reporting">Key Vault status reporting</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#host-resource-alerts">Host resource alerts</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#falling-behind-realtime">Falling behind realtime</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#shared-encodes">Shared encodes</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#input-timestamp-fault-detection">Input timestamp fault detection</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#input-frame-rate">Input frame rate</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#input-keyframe-interval">Input keyframe interval</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#interlaced-input">Interlaced input</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#flapping-inputs">Flapping inputs</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#encoder-restarts-do-not-restart-outputs">Encoder restarts do not restart outputs</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#srt-input-output-stalls">SRT-input output stalls</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#ffmpeg-memory-leaks-on-corrupt-input">FFmpeg memory leaks on corrupt input</a></li>
               </ol>
             </details><article class="readme min-w-0"><p>Bunryu is designed to keep running through long live events: failures are
 isolated to one output, recovered automatically where it is safe, and recorded
@@ -265,6 +265,34 @@ missing. Unlike a schema mismatch this is not fatal: ingest, the dashboard and e
 output that does not need the missing piece keep working. Without the check, a missing
 or incomplete build (an OS package replacing the pinned one, or a wrong <code>ffmpeg_path</code>)
 would show up only as each affected output failing with its own error.</p>
+<h2 id="key-vault-status-reporting">Key Vault status reporting</h2>
+<p>The report to Key Vault (see <a href="/projects/bunryu/docs/operations/configuration/#key-vault-status-reporting">Configuration</a>)
+is a side channel: nothing in the control plane waits for it, so Key Vault being down,
+slow or rejecting reports cannot affect an input, an output or the dashboard.</p>
+<ul>
+<li>Each request times out after 10 s. A timeout, a network error, a <code>5xx</code>, <code>408</code> or <code>429</code>
+is retried twice, after 2 s and 5 s, so one report takes 37 s at the very most, inside
+the minute. Other <code>4xx</code> answers (a wrong token, a rejected payload) are not retried.</li>
+<li>After a report fails the next one is the next heartbeat or status change, never sooner
+than 10 s later; a status change during an outage does not add requests. At most one
+request is open at a time, and a redirect is refused, so the token cannot be sent
+elsewhere.</li>
+<li>The first failed report writes <code>key-vault-report-failed</code> (error, HTTP status, attempts)
+to the journal and the diagnostics; further failures are silent until a report goes
+through, which writes <code>key-vault-report-recovered</code> with the number of failed reports and
+how long it lasted. A failure to build the report (a database error) is logged the
+same way as <code>key-vault-report-build-failed</code> / <code>-recovered</code>.</li>
+<li>Nothing is sent before the first health poll after a start, so a restart does not
+show every output as failed.</li>
+<li>The link is a setting, never part of start-up: a value that cannot be saved is refused
+when it is typed, and a stored one that cannot be used (the database edited by hand)
+leaves the reports off with <code>key-vault-settings-invalid</code> in the journal and
+diagnostics, and the server starts and runs as usual. Saving a change cancels the report
+on its way, drops the old hashes and failure episode, writes <code>key-vault-settings-changed</code>
+and sends the first report to the new link at once.</li>
+<li>Key Vault treats a server it has not heard from for 3 minutes as offline and mutes the
+colours, so a dead Bunryu does not leave keys looking green.</li>
+</ul>
 <h2 id="host-resource-alerts">Host resource alerts</h2>
 <p>The health poll (every 5 s) watches the host itself, because an overloaded or full host
 degrades every pipeline at once and no single output&#39;s error explains it. Each alert
@@ -515,6 +543,16 @@ Checks queue (4 at a time) so that a mass reconnect does not start dozens of
 ffprobe processes at once; a queued check whose publisher changed is dropped. The
 cost and the reasons are in the
 <a href="/projects/bunryu/docs/reference/design-decisions/#measure-the-keyframe-interval-once-per-publisher-in-a-second-ffprobe-and-only-report-it">design decision</a>.</p>
+<h2 id="interlaced-input">Interlaced input</h2>
+<p>When ffprobe reports the input&#39;s video as interlaced (top or bottom field first, shown
+as <code>1080i25tff</code> in the pipeline panel), the pipeline gets an <code>input-interlaced</code>
+warning alert for as long as that publisher is connected. It is reporting only:
+nothing is restarted or converted. YouTube and other RTMP platforms need progressive
+video, and on 2026-11-15 a 1080i SRT input left every copy output of a pipeline
+sending only audio (about 58 kb/s of a 9 Mb/s input) while the FFmpeg processes ran
+as if healthy and logged <code>non-existing PPS 0 referenced</code>. Setting the encoder to
+progressive fixed it. The reason is in the
+<a href="/projects/bunryu/docs/reference/design-decisions/#warn-about-interlaced-input-do-not-convert-or-refuse-it">design decision</a>.</p>
 <h2 id="flapping-inputs">Flapping inputs</h2>
 <p>When an input disconnects 3 or more times within 5 minutes (a bad uplink, a
 crashing encoder), the pipeline gets an <code>input-flapping</code> warning alert saying how
@@ -522,7 +560,7 @@ many times. It is reporting only, like the other alerts, and it clears once fewe
 than 3 disconnects remain inside the window. Each disconnect is still its own line in
 the pipeline log; the alert is what makes a pattern visible without reading it.</p>
 <p>Input alerts (<code>input-flapping</code>, <code>input-low-framerate</code>, <code>input-high-framerate</code>,
-<code>input-keyframe-interval</code>) belong
+<code>input-keyframe-interval</code>, <code>input-interlaced</code>) belong
 to the input itself, so they show on every input, RTMP included: the pipeline&#39;s
 status icon and the Inputs table&#39;s status and Issues column turn to warning, with the
 time the alert began. The SRT link-quality alerts (loss, drops, retransmissions,

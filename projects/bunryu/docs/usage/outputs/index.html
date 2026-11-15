@@ -298,9 +298,11 @@ at the top.</p>
 with its own tooltip; a healthy output has none (every figure, per output, is in the
 Overview&#39;s Outputs table). The badges are:</p>
 <ul>
-<li><strong>Bitrate</strong>, when it is below 60% or above 140% of the input&#39;s (the output copies the
-video and the input&#39;s rate is known), or below 200 kbps. Without an input rate to compare
-with, only the 200 kbps floor applies.</li>
+<li><strong>Bitrate</strong> (yellow, as the status dot is), when it is below 60% or above 140% of the
+input&#39;s (the output copies the video and the input&#39;s rate is known), or below 200 kbps.
+Without an input rate to compare with, only the 200 kbps floor applies. Its tooltip says
+which. A copy output at a few dozen kbps from a multi-Mbps input is sending audio only:
+look at the input&#39;s Issues (an interlaced input is one cause).</li>
 <li><strong>CPU</strong>, from 50% of a core on an output that copies the video. An output with a video
 encode is expected to be busy, so its CPU is not flagged.</li>
 <li><strong>Memory</strong>, from 70% of the output&#39;s limit (yellow; red from 90%).</li>
@@ -332,6 +334,9 @@ unresolvable host, a failed SRT handshake, an output falling behind realtime) th
 adds an info icon to the line; hover or focus it for a &quot;Hint:&quot; with what to check first.
 The pipeline alerts show their hint as a muted line. An error it has no advice for is
 shown as is.
+The card&#39;s status dot says the same on hover: every error and warning on the card, with
+the hint. A yellow dot always has a line on the card (for example &quot;Output bitrate is
+below 200 kb/s.&quot;); a healthy output&#39;s dot has no hover text.
 See <a href="/projects/bunryu/docs/operations/reliability/">Reliability</a> for what is detected and when
 outputs are restarted.</p>
 <h3 id="status">Status</h3>

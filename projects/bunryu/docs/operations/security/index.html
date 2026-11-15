@@ -149,6 +149,13 @@ this. Existing longer names are kept but must comply when edited.</li>
 service user (root runs code from it on every update); the service user writes
 only to the data and config directories. <code>server-reset-password.sh</code> also signs
 out every existing session.</li>
+<li><strong>Key Vault reports (optional):</strong> once the link is set in Settings the app makes one
+outbound HTTPS request a minute, carrying the bearer token. The URL must be <code>https</code>
+(plain <code>http</code> only for localhost) and must not resolve to a link-local or unspecified
+address, no redirect is followed, and the token and hash secret are stored in the
+database, never returned by the API or the dashboard and never logged. Destinations
+leave the server only as an HMAC hash, and error text has URLs, passphrases and
+keys removed (see <a href="/projects/bunryu/docs/operations/configuration/#key-vault-status-reporting">Configuration</a>).</li>
 <li><strong>Hooks:</strong> <code>/api/srs/*</code> is served only on <code>127.0.0.1:&lt;hook_port&gt;</code>; client IPs in
 hook bodies must be IP literals, so a request cannot forge log lines.</li>
 </ul>

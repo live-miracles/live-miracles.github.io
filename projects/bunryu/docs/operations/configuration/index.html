@@ -84,7 +84,7 @@
               <div class="min-w-0"><details class="bg-parchment text-muted caption mb-8 rounded-xl p-4">
               <summary class="text-ink cursor-pointer font-semibold">On this page</summary>
               <ol class="mt-3 space-y-2">
-                <li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#udp-buffer-ceiling">UDP buffer ceiling</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#database-schema-version">Database schema version</a></li>
+                <li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#key-vault-status-reporting">Key Vault status reporting</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#udp-buffer-ceiling">UDP buffer ceiling</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#database-schema-version">Database schema version</a></li>
               </ol>
             </details><article class="readme min-w-0"><p>The app reads runtime settings from <code>bunryu.json</code>. A dev checkout reads the one
 in the app root; the native install keeps it at <code>/etc/bunryu/bunryu.json</code> next to
@@ -276,6 +276,80 @@ rotated daily or at 100 MB, whichever comes first, with a 5 GB total diagnostics
 cap that removes the oldest rotated files first. The installer configures
 persistent journald with a seven-day retention limit, 1 GB system journal cap,
 256 MB runtime cap, and one-day journal file rotation.</p>
+<h3 id="key-vault-status-reporting">Key Vault status reporting</h3>
+<p>Key Vault colours each stream key from what Bunryu says about the outputs that use it.
+Set the link in the dashboard, under <strong>Settings &gt; Key Vault</strong>, and Bunryu sends a report
+once a minute, and at once when an output changes status (at most one every 10 s). It
+applies when you save, with no restart; <strong>Send test report</strong> sends one report now and
+shows Key Vault&#39;s answer.</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>What to enter</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Link</td>
+<td>Key Vault&#39;s ingest endpoint, such as <code>https://&lt;project&gt;.supabase.co/functions/v1/ingest</code>. <code>https</code>, or <code>http</code> only for <code>localhost</code> (a test receiver); no credentials in it, and not a link-local or unspecified address</td>
+</tr>
+<tr>
+<td>Instance</td>
+<td>Names this server to Key Vault, for example <code>prod</code>. Letters, digits, <code>.</code>, <code>_</code> and <code>-</code>, up to 64</td>
+</tr>
+<tr>
+<td>Token</td>
+<td>The ingest token from Key Vault, sent as <code>Authorization: Bearer &lt;token&gt;</code>. Printable ASCII without spaces</td>
+</tr>
+<tr>
+<td>Hash secret</td>
+<td>The secret shared with Key Vault for the hash of each destination URL. At least 16 characters</td>
+</tr>
+</tbody></table>
+<p>A wrong value is refused when you save it, so the saved link always works as far as its
+format goes. The token and secret are never shown again: leave them empty to keep the
+saved ones, and clear the link to turn the reports off (this also forgets them). They
+are stored in the database, like the server name, and the dashboard and
+<a href="/projects/bunryu/docs/reference/api/">API</a> return only whether they are set.</p>
+<p>The report is a JSON <code>POST</code> with the token as a bearer token:</p>
+<pre><code class="language-json">{
+    &quot;version&quot;: 1,
+    &quot;instance&quot;: &quot;prod&quot;,
+    &quot;sentAt&quot;: &quot;2026-11-01T10:00:00.000Z&quot;,
+    &quot;outputs&quot;: [
+        {
+            &quot;hash&quot;: &quot;9cd8fc4d3e06aafeb1aa71d4e7310d38&quot;,
+            &quot;pipeline&quot;: &quot;Hindi&quot;,
+            &quot;output&quot;: &quot;YouTube main&quot;,
+            &quot;status&quot;: &quot;running&quot;,
+            &quot;message&quot;: &quot;&quot;,
+            &quot;failures&quot;: 0,
+            &quot;stoppedAfterFailures&quot;: false,
+            &quot;sinceMs&quot;: 1730455200000
+        }
+    ]
+}
+</code></pre>
+<ul>
+<li><strong><code>status</code></strong> is <code>running</code>, <code>warning</code>, <code>error</code> or <code>stopped</code>: the dashboard&#39;s output status
+(green, amber, red, grey) with its &quot;Problems&quot; rule for errors. A stop after repeated
+failed attempts is <code>error</code> with <code>stoppedAfterFailures: true</code>; a stop an operator chose
+is plain <code>stopped</code>. Advice about the configuration (an output that shares a destination
+with another, encoding tips) is not a warning here.</li>
+<li><strong><code>hash</code></strong> identifies the destination without revealing it: the first 32 hex characters of
+HMAC-SHA256 (keyed with the hash secret) of the URL, trimmed, with a lowercase scheme and host and
+no trailing <code>/</code>. Key Vault matches its own server and key to the same hash. The
+test vectors both sides check are in
+<a href="https://github.com/live-miracles/bunryu/blob/master/test/fixtures/key-vault-hash-vectors.json"><code>test/fixtures/key-vault-hash-vectors.json</code></a>.</li>
+<li><strong><code>message</code></strong> is the output&#39;s current error or warning, one line, at most 300 characters.
+URLs, <code>streamid=</code>, <code>passphrase=</code>, <code>key=</code> values and long token-like strings are removed
+first, because FFmpeg&#39;s text names the destination. The URL itself is never sent.</li>
+<li><strong><code>sinceMs</code></strong> is when the output entered this status (milliseconds since the epoch);
+<code>failures</code> counts the failed starts since it last started.</li>
+<li>Shared-encode rows, which Bunryu manages itself, are not reported.</li>
+</ul>
+<p>What the reporter does when Key Vault is unreachable is under
+<a href="/projects/bunryu/docs/operations/reliability/#key-vault-status-reporting">Reliability</a>.</p>
 <h3 id="udp-buffer-ceiling">UDP buffer ceiling</h3>
 <p>The installer writes <code>/etc/sysctl.d/90-bunryu.conf</code>, which raises
 <code>net.core.rmem_max</code> and <code>net.core.wmem_max</code> to 16 MB (default 212992). libsrt asks

@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Key Vault refactor plan — Key Vault</title>
+    <meta name="description" content="Three changes that land together because they all touch the same frontend and data model:" />
+    <link rel="canonical" href="https://live-miracles.github.io/projects/key-vault/docs/refactor-plan/" />
+    <meta property="og:site_name" content="Live Miracles" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Key Vault refactor plan — Key Vault" />
+    <meta property="og:description" content="Three changes that land together because they all touch the same frontend and data model:" />
+    <meta property="og:url" content="https://live-miracles.github.io/projects/key-vault/docs/refactor-plan/" />
+    <meta property="og:image" content="https://live-miracles.github.io/assets/logo.png" />
+    <meta name="twitter:card" content="summary" />
+    <link rel="icon" href="/assets/logo.png" type="image/png" />
+    <link rel="alternate" type="application/rss+xml" title="Live Miracles blog" href="/blog/feed.xml" />
+    <script>
+      try {
+        var theme = localStorage.getItem('theme');
+        if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
+      } catch (e) {}
+    </script>
+    <link rel="stylesheet" href="/assets/styles.css" />
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <header class="topbar">
+        <nav class="caption mx-auto flex h-12 w-full max-w-[1024px] items-center justify-between gap-4 px-5 sm:px-6" aria-label="Site">
+          <a href="/" class="flex items-center gap-2.5 font-semibold" aria-label="Live Miracles">
+            <img src="/assets/logo.png" alt="" class="logo size-6" />
+            <span>Live Miracles</span>
+          </a>
+          <div class="flex items-center gap-5 sm:gap-7">
+            <a href="/#projects" class="text-muted hover:text-ink transition-colors">Projects</a>
+            <a href="/blog/" class="text-muted hover:text-ink transition-colors">Blog</a>
+            <div class="-mr-2 flex items-center gap-1">
+              <a href="https://github.com/live-miracles" class="icon-btn" aria-label="Live Miracles on GitHub" title="GitHub"><svg xmlns="http://www.w3.org/2000/svg" class="size-[18px]" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.79 23.39c.6.11.82-.26.82-.58v-2.02c-3.34.73-4.04-1.42-4.04-1.42-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.57A12 12 0 0 0 12 .5Z"/></svg></a>
+              <button type="button" id="theme-toggle" class="icon-btn theme-toggle" hidden><svg xmlns="http://www.w3.org/2000/svg" class="icon-sun size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32 1.41-1.41"/></svg><svg xmlns="http://www.w3.org/2000/svg" class="icon-moon size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg></button>
+            </div>
+          </div>
+        </nav>
+      </header>
+    <main class="flex-1"><div class="wash" style="--gx1: 9%; --gx2: 66%; --gx3: 49%; --gy1: -51px; --gy2: -43px; --gy1p: 21%; --gy2p: 7%; --px: 89%; --glow-1: var(--glow-b); --glow-2: var(--glow-a); --tint: #d4a24c; --glow-a: color-mix(in srgb, #d4a24c 30%, transparent); --pattern: url('/assets/patterns/kikko.svg')"><div class="mx-auto w-full max-w-[980px] px-5 py-10 sm:px-6 sm:py-14"><nav class="text-muted caption flex flex-wrap items-center gap-2" aria-label="Breadcrumb">
+              <a href="/projects/key-vault/" class="link-quiet hover:text-ink flex items-center gap-2"><img src="https://live-miracles.github.io/key-vault/logo.png" alt="" class="logo size-5 " /><span>Key Vault</span></a>
+              <span aria-hidden="true">›</span><a class="link-quiet hover:text-ink" href="/projects/key-vault/docs/">Documentation</a>
+            </nav>
+            <h1 class="display display-lg mt-4">Key Vault refactor plan</h1><nav class="border-line mt-8 flex gap-6 border-b" aria-label="Key Vault sections">
+              <a href="/projects/key-vault/" class="tab">Overview</a><a href="/projects/key-vault/docs/" class="tab" aria-current="page">Documentation</a>
+            </nav><details class="bg-parchment caption mt-6 rounded-xl p-4 lg:hidden">
+              <summary class="cursor-pointer font-semibold">Documentation menu</summary>
+              <div class="mt-3"><nav class="lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto" aria-label="Key Vault documentation">
+              <div class="">
+                
+                <ul class="caption"><li><a href="/projects/key-vault/docs/cutover/" class="link-quiet hover:text-ink block py-1 text-muted">Cutover runbook</a></li><li><a href="/projects/key-vault/docs/refactor-plan/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">Key Vault refactor plan</a></li></ul>
+              </div>
+            </nav></div>
+            </details>
+            <div class="mt-10 grid gap-12 lg:grid-cols-[13rem_minmax(0,1fr)]">
+              <div class="hidden lg:block"><nav class="lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto" aria-label="Key Vault documentation">
+              <div class="">
+                
+                <ul class="caption"><li><a href="/projects/key-vault/docs/cutover/" class="link-quiet hover:text-ink block py-1 text-muted">Cutover runbook</a></li><li><a href="/projects/key-vault/docs/refactor-plan/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">Key Vault refactor plan</a></li></ul>
+              </div>
+            </nav></div>
+              <div class="min-w-0"><details class="bg-parchment text-muted caption mb-8 rounded-xl p-4">
+              <summary class="text-ink cursor-pointer font-semibold">On this page</summary>
+              <ol class="mt-3 space-y-2">
+                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#decisions-to-confirm">Decisions to confirm</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#target-architecture">Target architecture</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#heartbeat-contract-platform-independent">Heartbeat contract (platform independent)</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#phases">Phases</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#phase-1--bunryu-reporter-repo-bunryu">Phase 1 — bunryu reporter (repo ../bunryu)</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#phase-2--supabase-backend-for-key-vault-built-not-yet-deployed">Phase 2 — Supabase backend for Key Vault (built, not yet deployed)</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#phase-3--frontend-on-vercel-built">Phase 3 — Frontend on Vercel (built)</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#phase-4--design-system-and-wave-background-built">Phase 4 — Design system and wave background (built)</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#phase-5--cutover">Phase 5 — Cutover</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#risks">Risks</a></li>
+              </ol>
+            </details><article class="readme min-w-0"><p>Three changes that land together because they all touch the same frontend and data model:</p>
+<ol>
+<li><strong>Platform</strong>: Apps Script + Google Sheet → Vercel (static frontend) + Supabase (Postgres, Auth, Edge Function), the same shape as <code>../setu</code>.</li>
+<li><strong>bunryu link</strong>: bunryu reports every output&#39;s status once a minute; Key Vault derives key colors from it instead of people setting them by hand.</li>
+<li><strong>UI</strong>: remove DaisyUI, adopt a DESIGN.md theme from <code>../awesome-design-md</code>, add a Japanese wave (seigaiha) background.</li>
+</ol>
+<h2 id="decisions-to-confirm">Decisions to confirm</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Decision</th>
+<th>Recommendation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>Theme</td>
+<td><strong>Linear</strong> (<code>design-md/linear.app</code>): near-black canvas, hairline borders, one indigo accent (#5e6ad2). Indigo is close to traditional Japanese ai-iro, so waves look native, and a dark UI suits control rooms. Alternative: <strong>Claude</strong> (warm cream, light) with ink-stroke waves.</td>
+</tr>
+<tr>
+<td>2</td>
+<td>UI stack</td>
+<td>Keep vanilla TypeScript + Tailwind v4, drop DaisyUI. Do not copy setu&#39;s React + antd: antd&#39;s own look fights a custom theme and the app is small.</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Hash</td>
+<td>HMAC-SHA256 of the normalised full URL with a secret shared by bunryu and Key Vault, hex, first 32 chars.</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Manual color</td>
+<td>Keep as an optional override (column <code>color_override</code>, owners/admins only). Automatic status wins unless an override is set.</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Auth</td>
+<td>Supabase Auth with Google OAuth. Roles stay email-based (owner/admin/editor/viewer, language restriction) and move into Postgres tables with row-level security.</td>
+</tr>
+</tbody></table>
+<h2 id="target-architecture">Target architecture</h2>
+<pre><code class="language-text">bunryu ──POST /functions/v1/ingest (every 60 s, bearer token)──► Supabase Edge Function
+                                                                   └─► table stream_status (upsert latest)
+Browser → Vercel static app → Supabase Auth
+                           ├→ Edge Function: api (events, roles, languages, keys)
+                           └→ Postgres (no direct browser access)
+</code></pre>
+<p>Free-tier fit (same limits as setu&#39;s AGENTS.md): one bunryu sending every minute is about 43,000 invocations per month against 500,000 free. Only the latest state is stored (upsert, no history), and the steady traffic keeps the free project from pausing.</p>
+<h2 id="heartbeat-contract-platform-independent">Heartbeat contract (platform independent)</h2>
+<p>Sent by bunryu every 60 s, and immediately on a status change (rate-limited to once per 10 s).</p>
+<pre><code class="language-json">{
+    &quot;version&quot;: 1,
+    &quot;instance&quot;: &quot;prod&quot;,
+    &quot;sentAt&quot;: &quot;2026-11-01T10:00:00Z&quot;,
+    &quot;outputs&quot;: [
+        {
+            &quot;hash&quot;: &quot;9f2c…&quot;,
+            &quot;pipeline&quot;: &quot;Hindi&quot;,
+            &quot;output&quot;: &quot;YouTube main&quot;,
+            &quot;status&quot;: &quot;running&quot;,
+            &quot;message&quot;: &quot;&quot;,
+            &quot;failures&quot;: 0,
+            &quot;stoppedAfterFailures&quot;: false,
+            &quot;sinceMs&quot;: 1730455200000
+        }
+    ]
+}
+</code></pre>
+<ul>
+<li><code>status</code> is one of <code>running</code>, <code>warning</code>, <code>error</code>, <code>stopped</code>. A stop after repeated failures is <code>error</code> with <code>stoppedAfterFailures: true</code>; a stop the operator chose is plain <code>stopped</code>.</li>
+<li>Bunryu computes <code>status</code> on the server. Today that logic lives only in the dashboard (<code>public/ts/features/render.ts</code>, <code>outputSeverity</code> in <code>output-card.ts</code>), so it moves to a shared server module that the dashboard and the reporter both use.</li>
+<li><strong><code>message</code> must be redacted.</strong> Bunryu logs contain destination URLs and stream keys (its AGENTS.md says so). The reporter strips <code>rtmp(s)://</code>, <code>srt://</code> URLs and <code>key=</code>/<code>passphrase=</code> values, and truncates to 300 characters.</li>
+<li><strong>Hash input</strong> is the full URL, trimmed, with lowercase scheme and host and no trailing <code>/</code>. Key Vault builds the same string from server + key (<code>getRtmpValue</code>, including the Instagram <code>${s_prp}</code> substitution and the YouTube backup <code>?backup=1/</code> form). A shared file of test vectors (URL → hash) lives in both repos so the two implementations cannot drift.</li>
+<li>Key Vault matches by hash, so main and backup URLs are looked up independently. When one URL appears in several outputs, the worst status wins.</li>
+</ul>
+<p>Key Vault&#39;s view of a key:</p>
+<table>
+<thead>
+<tr>
+<th>Condition</th>
+<th>Meaning</th>
+<th>Color</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>No hash match</td>
+<td>Not configured</td>
+<td>none</td>
+</tr>
+<tr>
+<td>Match, <code>running</code></td>
+<td>Live</td>
+<td>green</td>
+</tr>
+<tr>
+<td>Match, <code>warning</code></td>
+<td>Degraded</td>
+<td>amber</td>
+</tr>
+<tr>
+<td>Match, <code>error</code></td>
+<td>Failing or gave up</td>
+<td>red (stop icon if <code>stoppedAfterFailures</code>)</td>
+</tr>
+<tr>
+<td>Match, <code>stopped</code></td>
+<td>Configured, not sent</td>
+<td>indigo</td>
+</tr>
+<tr>
+<td>Last heartbeat older than 3 minutes</td>
+<td>bunryu offline</td>
+<td>all colors muted, banner</td>
+</tr>
+</tbody></table>
+<h2 id="phases">Phases</h2>
+<p>Each phase ends in something working and is a separate commit series. Phase 1 can run in its own session in parallel with phase 2.</p>
+<h3 id="phase-1--bunryu-reporter-repo-bunryu">Phase 1 — bunryu reporter (repo <code>../bunryu</code>)</h3>
+<ul>
+<li>Shared server-side output status module; dashboard switches to it, so behavior stays identical.</li>
+<li><code>src/services/keyVaultReporter.ts</code>: 60 s timer, redaction, hashing, bounded timeout and retry with backoff, never throws into the control plane, logs each failure once per episode.</li>
+<li>Config in <code>bunryu.json</code>: <code>key_vault: { url, token, hash_secret, instance }</code>. Absent means disabled.</li>
+<li>Tests: status mapping, redaction (URLs, keys, passphrases), hash vectors, failure isolation.</li>
+<li>Docs per its AGENTS.md: configuration page, reliability page, API reference if routes change, design-decisions entry (why a push model, why HMAC). Run lint, format check and the full test suite. Nothing real is committed (public repo).</li>
+</ul>
+<h3 id="phase-2--supabase-backend-for-key-vault-built-not-yet-deployed">Phase 2 — Supabase backend for Key Vault (built, not yet deployed)</h3>
+<p>Code is in <code>supabase/</code>. Decisions made while building it, which differ from the first draft of this plan:</p>
+<ul>
+<li><strong>No direct database access from the browser.</strong> Every table has row-level security with no policy; the browser reaches data only through the <code>api</code> function, which checks the roles and then uses the service role (as setu does). So there is no Realtime on <code>stream_outputs</code>: the page asks <code>getStatus</code> on a timer instead. Realtime can be added later with a read policy if polling is not fresh enough.</li>
+<li><strong>The hash is computed in the <code>api</code> function, not in SQL.</strong> Edge secrets are not visible to Postgres, and the function already has every key in memory. The secret never reaches the browser.</li>
+<li><strong>Same RPC contract.</strong> <code>getAllData</code>, <code>addEvent</code>, <code>editKey</code> and the rest keep their names, arguments and <code>{success, data|error}</code> answers, plus a new <code>getStatus</code>. Ids stay <code>E1</code>, <code>K1</code>, <code>L1</code>, <code>R1</code> (database sequences).</li>
+<li><strong>The rules are one module, tested against the browser&#39;s.</strong> <code>supabase/functions/_shared/access.ts</code> ports <code>frontend/src/access.ts</code>; <code>test/supabase-access.test.mjs</code> runs both over every combination of roles and requires identical answers. <code>_shared/operations.ts</code> ports <code>Code.ts</code> over a <code>Store</code> interface, tested with an in-memory store; <code>_shared/supabase-store.ts</code> is the Postgres one.</li>
+<li><strong>Heartbeat storage keeps only the latest beat per bunryu.</strong> <code>ingest_heartbeat()</code> replaces an instance&#39;s rows in one transaction. An instance silent for 30 days is deleted.</li>
+<li><strong>App owners</strong> come from the <code>KEY_VAULT_OWNER_EMAILS</code> secret (comma separated), replacing &quot;the Apps Script deployer&quot;.</li>
+<li><strong>Sheet migration</strong> is <code>build-tools/sheet-to-sql.mjs</code> (CSV per tab in, SQL out). It refuses data that would not load (roles of an unknown event, unknown languages, duplicate ids) and lists every problem; <code>--skip-orphans</code> drops rows of a missing event. Apps Script keeps running untouched until cutover.</li>
+<li><strong>Deploy</strong> is <code>.github/workflows/deploy-supabase.yml</code> (one project): tests, <code>db push</code>, deploy <code>api</code>, deploy <code>ingest --no-verify-jwt</code>.</li>
+</ul>
+<p>Secrets to set (Supabase <code>secrets set</code>, never committed):</p>
+<table>
+<thead>
+<tr>
+<th>Secret</th>
+<th>Used by</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>KEY_VAULT_APP_ORIGIN</code></td>
+<td>api</td>
+<td>The frontend origin, for CORS</td>
+</tr>
+<tr>
+<td><code>KEY_VAULT_HASH_SECRET</code></td>
+<td>api</td>
+<td>The HMAC secret; the same value as <code>key_vault.hash_secret</code> in bunryu</td>
+</tr>
+<tr>
+<td><code>KEY_VAULT_OWNER_EMAILS</code></td>
+<td>api</td>
+<td>App owners</td>
+</tr>
+<tr>
+<td><code>KEY_VAULT_INGEST_TOKEN</code></td>
+<td>ingest</td>
+<td>The bearer token; the same value as <code>key_vault.token</code> in bunryu</td>
+</tr>
+</tbody></table>
+<p>Checks: <code>npm test</code> (56 tests, no database), <code>npm run typecheck</code>, and <code>npm run test:db</code>, which applies the migrations to a throwaway Postgres in Docker and exercises the SQL functions and constraints. The last one needs Docker Desktop running.</p>
+<h3 id="phase-3--frontend-on-vercel-built">Phase 3 — Frontend on Vercel (built)</h3>
+<ul>
+<li><code>frontend/src/supabase.ts</code> (its own bundle, <code>auth.js</code>) signs in with Google and calls the <code>api</code> function through <code>api-client.ts</code>; the app&#39;s <code>api()</code> goes through it, or through the demo mock when the site has no backend config. The demo (GitHub Pages) keeps its sample data and now shows sample statuses.</li>
+<li><code>npm run build:vercel</code> writes <code>web/</code> and refuses to build without <code>KEY_VAULT_SUPABASE_URL</code> and the <strong>publishable</strong> key (a secret key is rejected). <code>vercel.json</code> sets the headers.</li>
+<li><strong>Not done: ES modules.</strong> The first draft planned them. The app is still plain scripts sharing globals because the existing tests load them that way; the inline Apps Script bundle and its escaping are gone, which was the part that mattered. Converting file by file (and dropping <code>// @ts-nocheck</code>) is a separate, optional piece of work.</li>
+<li><code>getStatus</code> is polled every 30 s; rows and cards are colored from it unless an owner or admin set a color by hand, and a banner appears when no bunryu has reported for 3 minutes.</li>
+<li>Apps Script is removed from the repository (<code>Code.ts</code>, the inline build, clasp, their tests). The deployed script keeps running, untouched, until it is archived.</li>
+</ul>
+<h3 id="phase-4--design-system-and-wave-background-built">Phase 4 — Design system and wave background (built)</h3>
+<ul>
+<li><code>DESIGN.md</code> (root) records the theme; tokens are in <code>frontend/input.css</code> (<code>@theme</code>). Theme: Linear, plus four status colors.</li>
+<li>DaisyUI is gone. The component classes the templates use (<code>btn</code>, <code>input</code>, <code>modal</code>, …) are defined in <code>input.css</code> under the same names, so the markup did not change. Dialogs are still native <code>&lt;dialog&gt;</code>.</li>
+<li>Waves: an inline SVG seigaiha pattern fixed behind the page, masked so it fades out toward the top, with no animation.</li>
+<li>Status tints are opaque (<code>tint-*</code> classes mixed over the surface) so the waves never show through a row.</li>
+<li>Checked in the browser at 1280 px and 375 px (table, cards, key dialog, sign-in panel). Not checked: contrast ratios with a tool, a real touch device, and the role/share, language and settings dialogs.</li>
+</ul>
+<h3 id="phase-5--cutover">Phase 5 — Cutover</h3>
+<p>A runbook is in <a href="/projects/key-vault/docs/cutover/">docs/cutover.md</a>. It needs the Supabase, Google and Vercel accounts, so it is done by a person.</p>
+<h2 id="risks">Risks</h2>
+<ul>
+<li><strong>Auth change</strong>: users must sign in with Google through Supabase, and the owner&#39;s email must be seeded as owner before anyone else can administer.</li>
+<li><strong>Hash mismatches</strong> from URL spelling differences: mitigated by normalisation plus shared vectors, and by showing &quot;not matched&quot; distinctly from &quot;not running&quot; in the UI.</li>
+<li><strong>Stale status</strong>: a dead bunryu must not leave keys looking green; the 3-minute rule handles it.</li>
+<li><strong>Secrets</strong>: the ingest token and HMAC secret live only in Supabase secrets and bunryu&#39;s local config.</li>
+<li><strong>Scope</strong>: phase 3 and 4 both rewrite the same templates; doing them in order avoids reworking markup twice.</li>
+</ul>
+</article><a class="more caption mt-8 inline-block" href="https://github.com/live-miracles/key-vault/blob/master/docs/refactor-plan.md">Edit this page on GitHub</a><div class="mt-12 grid gap-4 sm:grid-cols-2">
+              <a class="panel link-quiet hover:bg-parchment p-5 transition-colors" href="/projects/key-vault/docs/cutover/"><div class="text-muted caption">Previous</div><div class="font-semibold">Cutover runbook</div></a>
+              
+            </div></div>
+            </div></div></div></main>
+    <footer class="caption waves text-muted border-line border-t pb-28">
+      <div class="mx-auto flex w-full max-w-[980px] flex-wrap items-center justify-between gap-x-6 gap-y-2 px-5 py-8 sm:px-6">
+        <span>Live Miracles · Open tools for live teams</span>
+        <span class="flex gap-5">
+          <a class="link-quiet" href="/blog/">Blog</a>
+          <a class="link-quiet" href="/blog/feed.xml">RSS</a>
+          <a class="link-quiet" href="https://github.com/live-miracles">GitHub</a>
+        </span>
+      </div>
+    </footer>
+    <dialog id="lightbox" class="lightbox" aria-label="Enlarged image">
+      <button type="button" class="lightbox-close" aria-label="Close image"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg></button>
+      <div class="lightbox-frame"><img alt="" /></div>
+    </dialog>
+    <script>
+      (function () {
+        var dialog = document.getElementById('lightbox');
+        if (!dialog || !dialog.showModal) return;
+        var shown = dialog.querySelector('img');
+        function zoomable(img) {
+          return !img.closest('a') && img.naturalWidth >= 300 && img.naturalHeight >= 100;
+        }
+        function mark(img) {
+          if (img.dataset.zoom || !zoomable(img)) return;
+          img.dataset.zoom = '1';
+          img.classList.add('zoomable');
+          img.tabIndex = 0;
+          img.setAttribute('role', 'button');
+          img.setAttribute('aria-label', 'Enlarge image: ' + (img.alt || 'screenshot'));
+        }
+        function open(img) {
+          shown.src = img.currentSrc || img.src;
+          shown.alt = img.alt;
+          shown.classList.remove('actual');
+          dialog.showModal();
+          dialog.scrollTo(0, 0);
+        }
+        document.querySelectorAll('.readme img').forEach(function (img) {
+          if (img.complete) mark(img);
+          else img.addEventListener('load', function () { mark(img); }, { once: true });
+        });
+        document.addEventListener('click', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom) open(img);
+        });
+        document.addEventListener('keydown', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom && (event.key === 'Enter' || event.key === ' ')) {
+            event.preventDefault();
+            open(img);
+          }
+        });
+        shown.addEventListener('click', function () {
+          shown.classList.toggle('actual');
+        });
+        dialog.addEventListener('click', function (event) {
+          if (event.target !== shown) dialog.close();
+        });
+      })();
+    </script>
+    <script>
+      (function () {
+        var button = document.getElementById('theme-toggle');
+        if (!button) return;
+        var root = document.documentElement;
+        function current() {
+          return root.dataset.theme === 'light' ? 'light' : 'dark';
+        }
+        function sync() {
+          var theme = current();
+          button.dataset.mode = theme;
+          button.setAttribute('aria-label', 'Switch to ' + (theme === 'dark' ? 'light' : 'dark') + ' theme');
+        }
+        button.hidden = false;
+        sync();
+        button.addEventListener('click', function () {
+          var next = current() === 'dark' ? 'light' : 'dark';
+          root.dataset.theme = next;
+          try {
+            localStorage.setItem('theme', next);
+          } catch (e) {}
+          sync();
+        });
+      })();
+    </script>
+  </body>
+</html>

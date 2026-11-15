@@ -262,6 +262,13 @@ a minute after the publisher connects; &quot;1 in 12 s&quot; means a single keyf
 and recommends 2 s; with a longer interval the pipeline gets a warning alert, and a
 preview starts late. Set the encoder&#39;s keyframe interval to 2 s (the commands above
 do). <strong>Preview</strong> plays the input in the dashboard.</p>
+<p>Whatever is wrong with the input (no audio track, a very low bitrate, an alert) is
+listed in yellow under these lines with advice, and in the hover text of the input&#39;s
+status dot.</p>
+<p>Send <strong>progressive</strong> video (<code>1080p50</code>, not <code>1080i25</code>): the dashboard writes the scan in
+the stream specification, and an interlaced input gets a warning alert, because RTMP
+destinations such as YouTube need progressive video and an output can end up sending
+only audio. Set the encoder&#39;s output to progressive scan.</p>
 <h3 id="preview">Preview</h3>
 <p>The preview is an HLS stream made by the server&#39;s FFmpeg. The input&#39;s video is
 copied unchanged, and only the audio is re-encoded to AAC.</p>

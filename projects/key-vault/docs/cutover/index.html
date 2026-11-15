@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Cutover runbook — Key Vault</title>
+    <meta name="description" content="Moving from the Apps Script app to Supabase + Vercel, and turning on the bunryu link. Do it in this order; each step says how to tell it worked. The Apps Script deployment is not touched until the end" />
+    <link rel="canonical" href="https://live-miracles.github.io/projects/key-vault/docs/cutover/" />
+    <meta property="og:site_name" content="Live Miracles" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Cutover runbook — Key Vault" />
+    <meta property="og:description" content="Moving from the Apps Script app to Supabase + Vercel, and turning on the bunryu link. Do it in this order; each step says how to tell it worked. The Apps Script deployment is not touched until the end" />
+    <meta property="og:url" content="https://live-miracles.github.io/projects/key-vault/docs/cutover/" />
+    <meta property="og:image" content="https://live-miracles.github.io/assets/logo.png" />
+    <meta name="twitter:card" content="summary" />
+    <link rel="icon" href="/assets/logo.png" type="image/png" />
+    <link rel="alternate" type="application/rss+xml" title="Live Miracles blog" href="/blog/feed.xml" />
+    <script>
+      try {
+        var theme = localStorage.getItem('theme');
+        if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
+      } catch (e) {}
+    </script>
+    <link rel="stylesheet" href="/assets/styles.css" />
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <header class="topbar">
+        <nav class="caption mx-auto flex h-12 w-full max-w-[1024px] items-center justify-between gap-4 px-5 sm:px-6" aria-label="Site">
+          <a href="/" class="flex items-center gap-2.5 font-semibold" aria-label="Live Miracles">
+            <img src="/assets/logo.png" alt="" class="logo size-6" />
+            <span>Live Miracles</span>
+          </a>
+          <div class="flex items-center gap-5 sm:gap-7">
+            <a href="/#projects" class="text-muted hover:text-ink transition-colors">Projects</a>
+            <a href="/blog/" class="text-muted hover:text-ink transition-colors">Blog</a>
+            <div class="-mr-2 flex items-center gap-1">
+              <a href="https://github.com/live-miracles" class="icon-btn" aria-label="Live Miracles on GitHub" title="GitHub"><svg xmlns="http://www.w3.org/2000/svg" class="size-[18px]" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.79 23.39c.6.11.82-.26.82-.58v-2.02c-3.34.73-4.04-1.42-4.04-1.42-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.57A12 12 0 0 0 12 .5Z"/></svg></a>
+              <button type="button" id="theme-toggle" class="icon-btn theme-toggle" hidden><svg xmlns="http://www.w3.org/2000/svg" class="icon-sun size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32 1.41-1.41"/></svg><svg xmlns="http://www.w3.org/2000/svg" class="icon-moon size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg></button>
+            </div>
+          </div>
+        </nav>
+      </header>
+    <main class="flex-1"><div class="wash" style="--gx1: 9%; --gx2: 66%; --gx3: 49%; --gy1: -51px; --gy2: -43px; --gy1p: 21%; --gy2p: 7%; --px: 89%; --glow-1: var(--glow-b); --glow-2: var(--glow-a); --tint: #d4a24c; --glow-a: color-mix(in srgb, #d4a24c 30%, transparent); --pattern: url('/assets/patterns/kikko.svg')"><div class="mx-auto w-full max-w-[980px] px-5 py-10 sm:px-6 sm:py-14"><nav class="text-muted caption flex flex-wrap items-center gap-2" aria-label="Breadcrumb">
+              <a href="/projects/key-vault/" class="link-quiet hover:text-ink flex items-center gap-2"><img src="https://live-miracles.github.io/key-vault/logo.png" alt="" class="logo size-5 " /><span>Key Vault</span></a>
+              <span aria-hidden="true">›</span><a class="link-quiet hover:text-ink" href="/projects/key-vault/docs/">Documentation</a>
+            </nav>
+            <h1 class="display display-lg mt-4">Cutover runbook</h1><nav class="border-line mt-8 flex gap-6 border-b" aria-label="Key Vault sections">
+              <a href="/projects/key-vault/" class="tab">Overview</a><a href="/projects/key-vault/docs/" class="tab" aria-current="page">Documentation</a>
+            </nav><details class="bg-parchment caption mt-6 rounded-xl p-4 lg:hidden">
+              <summary class="cursor-pointer font-semibold">Documentation menu</summary>
+              <div class="mt-3"><nav class="lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto" aria-label="Key Vault documentation">
+              <div class="">
+                
+                <ul class="caption"><li><a href="/projects/key-vault/docs/cutover/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">Cutover runbook</a></li><li><a href="/projects/key-vault/docs/refactor-plan/" class="link-quiet hover:text-ink block py-1 text-muted">Key Vault refactor plan</a></li></ul>
+              </div>
+            </nav></div>
+            </details>
+            <div class="mt-10 grid gap-12 lg:grid-cols-[13rem_minmax(0,1fr)]">
+              <div class="hidden lg:block"><nav class="lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto" aria-label="Key Vault documentation">
+              <div class="">
+                
+                <ul class="caption"><li><a href="/projects/key-vault/docs/cutover/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">Cutover runbook</a></li><li><a href="/projects/key-vault/docs/refactor-plan/" class="link-quiet hover:text-ink block py-1 text-muted">Key Vault refactor plan</a></li></ul>
+              </div>
+            </nav></div>
+              <div class="min-w-0"><details class="bg-parchment text-muted caption mb-8 rounded-xl p-4">
+              <summary class="text-ink cursor-pointer font-semibold">On this page</summary>
+              <ol class="mt-3 space-y-2">
+                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#1-create-the-supabase-project">1. Create the Supabase project</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#2-google-sign-in">2. Google sign-in</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#3-deploy-the-database-and-functions">3. Deploy the database and functions</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#4-deploy-the-site">4. Deploy the site</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#5-move-the-data">5. Move the data</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#6-turn-on-bunryu">6. Turn on bunryu</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#7-rehearse-then-switch">7. Rehearse, then switch</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#rollback">Rollback</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#backups">Backups</a></li>
+              </ol>
+            </details><article class="readme min-w-0"><p>Moving from the Apps Script app to Supabase + Vercel, and turning on the bunryu link. Do it in this order; each step says how to tell it worked. The Apps Script deployment is not touched until the end, so you can stop at any step and nothing is lost.</p>
+<p>You need: owner access to a Supabase project, a Google Cloud project for the OAuth client, a Vercel account, admin access to this GitHub repository, and shell access to the machine running bunryu.</p>
+<h2 id="1-create-the-supabase-project">1. Create the Supabase project</h2>
+<ol>
+<li>Create a project. Note the project ref (the <code>abcdefgh</code> in <code>https://abcdefgh.supabase.co</code>).</li>
+<li>Generate two random secrets (for example <code>openssl rand -hex 32</code>): one for <strong>hashing</strong>, one for the <strong>ingest token</strong>. Keep them in a password manager; you will paste each in two places.</li>
+</ol>
+<h2 id="2-google-sign-in">2. Google sign-in</h2>
+<ol>
+<li>In Google Cloud → APIs &amp; Credentials create an OAuth client (Web application). Authorized redirect URI: <code>https://&lt;project-ref&gt;.supabase.co/auth/v1/callback</code>.</li>
+<li>In Supabase → Authentication → Providers → Google, paste the client id and secret and enable it.</li>
+<li>Authentication → URL Configuration: set the Site URL to the Vercel URL (you can add it after step 4).</li>
+</ol>
+<h2 id="3-deploy-the-database-and-functions">3. Deploy the database and functions</h2>
+<p>Set the repository secrets <code>SUPABASE_ACCESS_TOKEN</code>, <code>SUPABASE_PROJECT_REF</code>, <code>SUPABASE_DB_PASSWORD</code>, then set the function secrets:</p>
+<pre><code class="language-bash">npx supabase login
+npx supabase link --project-ref &lt;project-ref&gt;
+npx supabase secrets set KEY_VAULT_APP_ORIGIN=https://&lt;your-site&gt; \
+  KEY_VAULT_HASH_SECRET=&lt;hash secret&gt; \
+  KEY_VAULT_INGEST_TOKEN=&lt;ingest token&gt; \
+  KEY_VAULT_OWNER_EMAILS=&lt;your email&gt;
+</code></pre>
+<p>Then run the <strong>Deploy Supabase</strong> workflow (Actions → Run workflow), or locally <code>npx supabase db push</code> and <code>npx supabase functions deploy api</code> / <code>deploy ingest --no-verify-jwt</code>.</p>
+<p>Check: the Supabase dashboard shows the tables <code>events</code>, <code>languages</code>, <code>roles</code>, <code>keys</code>, <code>ingest_instances</code>, <code>stream_outputs</code>, and both functions. Before this, run <code>npm run test:db</code> once with Docker running; it proves the migrations and SQL functions on a real Postgres.</p>
+<h2 id="4-deploy-the-site">4. Deploy the site</h2>
+<p>Import the repository in Vercel. Environment variables: <code>KEY_VAULT_SUPABASE_URL</code> and <code>KEY_VAULT_SUPABASE_PUBLISHABLE_KEY</code> (the <strong>publishable</strong> key from Project Settings → API Keys; the build fails on a secret key). Deploy, then put the Vercel URL in <code>KEY_VAULT_APP_ORIGIN</code> (step 3) and in the Supabase Site URL (step 2).</p>
+<p>Check: opening the site shows &quot;Sign in with Google&quot;; signing in with the owner email shows an empty app (no events yet).</p>
+<h2 id="5-move-the-data">5. Move the data</h2>
+<ol>
+<li><p>Freeze edits: tell everyone to stop changing keys in the Apps Script app.</p>
+</li>
+<li><p>In the Google Sheet download each tab as CSV into one folder: <code>Event.csv</code>, <code>Role.csv</code>, <code>Language.csv</code>, <code>Key.csv</code>.</p>
+</li>
+<li><p>Convert:</p>
+<pre><code class="language-bash">npm run sheet:sql -- &lt;folder&gt; &gt; .migration/data.sql
+</code></pre>
+<p> It prints the counts (compare them with the sheet) and refuses anything that would not load, listing every problem. Fix the sheet and run it again; <code>--skip-orphans</code> drops roles and keys of an event that no longer exists.</p>
+</li>
+<li><p>Run <code>.migration/data.sql</code> against the database (Supabase SQL editor, or <code>psql</code> with the session pooler connection string).</p>
+</li>
+<li><p><strong>Delete <code>.migration/data.sql</code> and the CSV files</strong>: they contain every stream key.</p>
+</li>
+</ol>
+<p>Check: sign in as the owner; each event shows the same keys as the sheet. Sign in as an editor and a viewer (ask them) and confirm they see only their languages.</p>
+<h2 id="6-turn-on-bunryu">6. Turn on bunryu</h2>
+<p>The reporter is on the bunryu branch <code>claude/key-vault-reporter-a77a29</code> (committed locally, not pushed or merged). After it is merged and deployed, add to <code>bunryu.json</code>:</p>
+<pre><code class="language-json">&quot;key_vault&quot;: {
+    &quot;url&quot;: &quot;https://&lt;project-ref&gt;.supabase.co/functions/v1/ingest&quot;,
+    &quot;token&quot;: &quot;&lt;ingest token&gt;&quot;,
+    &quot;hash_secret&quot;: &quot;&lt;hash secret&gt;&quot;,
+    &quot;instance&quot;: &quot;prod&quot;
+}
+</code></pre>
+<p>and restart bunryu. Use the <strong>same</strong> hash secret and token as in step 3.</p>
+<p>Check, within two minutes:</p>
+<ul>
+<li><code>ingest_instances</code> has a row <code>prod</code> and <code>stream_outputs</code> has one row per configured output.</li>
+<li>In Key Vault a key whose main or backup URL is configured in bunryu is colored by its status; hovering shows the pipeline, output and message. A key not configured in bunryu has no color.</li>
+<li>Stop an output in bunryu: its key turns indigo (&quot;configured, not running&quot;). Make one fail until bunryu gives up: red, with &quot;stopped after N failed attempts&quot;.</li>
+<li>Stop bunryu: after about three minutes the banner appears and the colors clear.</li>
+</ul>
+<p>If a key you know is configured shows no color, the URL differs between the two systems (a trailing path, a different server, a changed key). Compare them; the hash is of the whole URL.</p>
+<h2 id="7-rehearse-then-switch">7. Rehearse, then switch</h2>
+<p>Run one real event (or a rehearsal) on the new system while the Apps Script app stays untouched as a fallback. When it has gone well, tell everyone the new URL, then in Apps Script set the web app to &quot;no access&quot; or archive the project. Keep the Sheet as a backup for a release.</p>
+<h2 id="rollback">Rollback</h2>
+<ul>
+<li>Before step 7: nothing changed for users, so stop. Delete the project or just do not announce it.</li>
+<li>After step 7: re-enable the Apps Script web app. Edits made in the new system are not copied back; export the <code>keys</code> table to the sheet by hand if you need them.</li>
+</ul>
+<h2 id="backups">Backups</h2>
+<p>The free Supabase plan has no managed backups and pauses a project after a week without activity (bunryu&#39;s heartbeat prevents the pause while it runs). Take a dump before and after an event, for example with <code>npx supabase db dump --data-only -f backup.sql</code> (the file contains stream keys: store it like a secret).</p>
+</article><a class="more caption mt-8 inline-block" href="https://github.com/live-miracles/key-vault/blob/master/docs/cutover.md">Edit this page on GitHub</a><div class="mt-12 grid gap-4 sm:grid-cols-2">
+              <span></span>
+              <a class="panel link-quiet hover:bg-parchment p-5 transition-colors sm:text-right" href="/projects/key-vault/docs/refactor-plan/"><div class="text-muted caption">Next</div><div class="font-semibold">Key Vault refactor plan</div></a>
+            </div></div>
+            </div></div></div></main>
+    <footer class="caption waves text-muted border-line border-t pb-28">
+      <div class="mx-auto flex w-full max-w-[980px] flex-wrap items-center justify-between gap-x-6 gap-y-2 px-5 py-8 sm:px-6">
+        <span>Live Miracles · Open tools for live teams</span>
+        <span class="flex gap-5">
+          <a class="link-quiet" href="/blog/">Blog</a>
+          <a class="link-quiet" href="/blog/feed.xml">RSS</a>
+          <a class="link-quiet" href="https://github.com/live-miracles">GitHub</a>
+        </span>
+      </div>
+    </footer>
+    <dialog id="lightbox" class="lightbox" aria-label="Enlarged image">
+      <button type="button" class="lightbox-close" aria-label="Close image"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg></button>
+      <div class="lightbox-frame"><img alt="" /></div>
+    </dialog>
+    <script>
+      (function () {
+        var dialog = document.getElementById('lightbox');
+        if (!dialog || !dialog.showModal) return;
+        var shown = dialog.querySelector('img');
+        function zoomable(img) {
+          return !img.closest('a') && img.naturalWidth >= 300 && img.naturalHeight >= 100;
+        }
+        function mark(img) {
+          if (img.dataset.zoom || !zoomable(img)) return;
+          img.dataset.zoom = '1';
+          img.classList.add('zoomable');
+          img.tabIndex = 0;
+          img.setAttribute('role', 'button');
+          img.setAttribute('aria-label', 'Enlarge image: ' + (img.alt || 'screenshot'));
+        }
+        function open(img) {
+          shown.src = img.currentSrc || img.src;
+          shown.alt = img.alt;
+          shown.classList.remove('actual');
+          dialog.showModal();
+          dialog.scrollTo(0, 0);
+        }
+        document.querySelectorAll('.readme img').forEach(function (img) {
+          if (img.complete) mark(img);
+          else img.addEventListener('load', function () { mark(img); }, { once: true });
+        });
+        document.addEventListener('click', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom) open(img);
+        });
+        document.addEventListener('keydown', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom && (event.key === 'Enter' || event.key === ' ')) {
+            event.preventDefault();
+            open(img);
+          }
+        });
+        shown.addEventListener('click', function () {
+          shown.classList.toggle('actual');
+        });
+        dialog.addEventListener('click', function (event) {
+          if (event.target !== shown) dialog.close();
+        });
+      })();
+    </script>
+    <script>
+      (function () {
+        var button = document.getElementById('theme-toggle');
+        if (!button) return;
+        var root = document.documentElement;
+        function current() {
+          return root.dataset.theme === 'light' ? 'light' : 'dark';
+        }
+        function sync() {
+          var theme = current();
+          button.dataset.mode = theme;
+          button.setAttribute('aria-label', 'Switch to ' + (theme === 'dark' ? 'light' : 'dark') + ' theme');
+        }
+        button.hidden = false;
+        sync();
+        button.addEventListener('click', function () {
+          var next = current() === 'dark' ? 'light' : 'dark';
+          root.dataset.theme = next;
+          try {
+            localStorage.setItem('theme', next);
+          } catch (e) {}
+          sync();
+        });
+      })();
+    </script>
+  </body>
+</html>
