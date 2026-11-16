@@ -117,6 +117,14 @@ const projects = [
         icon: '/assets/live-generator-logo.svg',
     },
     {
+        id: 'setu',
+        name: 'Setu',
+        category: 'events',
+        summary:
+            'Internal operations app for studio and program requests, equipment inventory and staff roster scheduling, on Supabase and Vercel.',
+        icon: '/assets/setu-logo.svg',
+    },
+    {
         id: 'multi-lang-qa',
         name: 'Multi Lang QA',
         category: 'events',
