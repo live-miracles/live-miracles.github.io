@@ -39,10 +39,16 @@ const siteName = 'Live Miracles';
 const siteDescription =
     'Open-source tools for live production teams: restreaming, SRT bonding, vMix control, stream monitoring and multilingual event workflows.';
 const branch = 'master';
+// A project whose repository uses another default branch sets `branch` in projects.js.
+const branches = Object.fromEntries(
+    projects.filter((project) => project.branch).map((project) => [project.id, project.branch]),
+);
+const branchOf = (project) => project.branch ?? branch;
 const localProjects = parseLocalProjects(process.env.LOCAL_PROJECTS);
 const source = createProjectSource({
     organization,
     branch,
+    branches,
     token: process.env.GITHUB_TOKEN,
     localProjects,
     cacheDir: process.env.BUILD_CACHE_DIR,
@@ -61,8 +67,8 @@ const icons = {
 const compact = new Intl.NumberFormat('en', { notation: 'compact', maximumFractionDigits: 1 });
 
 function renderMarkdown(markdown, project, repoPath, siteUrls) {
-    const rawBase = `https://raw.githubusercontent.com/${organization}/${project.id}/${branch}/${repoPath}`;
-    const blobBase = `https://github.com/${organization}/${project.id}/blob/${branch}/`;
+    const rawBase = `https://raw.githubusercontent.com/${organization}/${project.id}/${branchOf(project)}/${repoPath}`;
+    const blobBase = `https://github.com/${organization}/${project.id}/blob/${branchOf(project)}/`;
     const { html, toc, ogImage } = parseMarkdownPage(markdown, {
         rewriteLink: linkResolver({ blobBase, repoPath, siteUrls }),
         rewriteImage: (href) => absoluteUrl(href, rawBase),
@@ -606,7 +612,7 @@ function docPage({ project, repo, readme, docs }, doc, index) {
               ${previous ? `<a class="panel link-quiet hover:bg-parchment p-5 transition-colors" href="${previous.url}"><div class="text-muted caption">Previous</div><div class="font-semibold">${escapeHtml(previous.title)}</div></a>` : '<span></span>'}
               ${next ? `<a class="panel link-quiet hover:bg-parchment p-5 transition-colors sm:text-right" href="${next.url}"><div class="text-muted caption">Next</div><div class="font-semibold">${escapeHtml(next.title)}</div></a>` : ''}
             </div>`;
-    const edit = `<a class="more caption mt-8 inline-block" href="https://github.com/${organization}/${project.id}/blob/${branch}/${doc.repoPath}">Edit this page on GitHub</a>`;
+    const edit = `<a class="more caption mt-8 inline-block" href="https://github.com/${organization}/${project.id}/blob/${branchOf(project)}/${doc.repoPath}">Edit this page on GitHub</a>`;
     const crumbs = [{ label: 'Documentation', url: docsUrl(project) }];
     if (doc.section) crumbs.push({ label: doc.section });
     return layout({

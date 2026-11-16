@@ -180,3 +180,27 @@ test('parseLocalProjects reads id=path pairs and keeps an = inside a path', () =
     );
     assert.equal(parseLocalProjects(undefined).size, 0);
 });
+
+test('a project listed in `branches` is read from that branch, others from the default', async () => {
+    const mainRaw = 'https://raw.githubusercontent.com/org/p/main/';
+    const { source, calls } = sourceFor(
+        {
+            [api]: { stargazers_count: 1 },
+            [`${mainRaw}README.md`]: '# On main',
+            [`${api}/git/trees/main?recursive=1`]: tree('README.md', 'docs/a.md'),
+            [`${mainRaw}docs/a.md`]: '# A',
+        },
+        { branches: { p: 'main' } },
+    );
+    const result = await source.load('p');
+    assert.equal(result.readme, '# On main');
+    assert.deepEqual(
+        result.docs.map((doc) => doc.repoPath),
+        ['docs/a.md'],
+    );
+    assert.deepEqual(result.problems, []);
+    assert.equal(
+        calls.some((url) => url.includes('/master')),
+        false,
+    );
+});

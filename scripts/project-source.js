@@ -42,10 +42,13 @@ function humanize(name) {
 }
 
 // `cacheDir` keeps each fetched response and reuses it. `fetch` can be replaced,
-// which is how tests run without the network.
+// which is how tests run without the network. `branch` is the default branch of
+// every project; `branches` ({ id: branch }) overrides it for a project whose
+// repository uses another one.
 function createProjectSource({
     organization,
     branch,
+    branches = {},
     token,
     localProjects = new Map(),
     cacheDir,
@@ -89,7 +92,7 @@ function createProjectSource({
         const local = localProjects.get(id);
         if (local) return fs.readFileSync(path.join(local, repoPath), 'utf8');
         const response = await cachedRequest(
-            `https://raw.githubusercontent.com/${organization}/${id}/${branch}/${repoPath}`,
+            `https://raw.githubusercontent.com/${organization}/${id}/${branches[id] ?? branch}/${repoPath}`,
         );
         return response.text();
     }
@@ -115,7 +118,7 @@ function createProjectSource({
             ).split('\n');
         } else {
             const response = await cachedRequest(
-                `https://api.github.com/repos/${organization}/${id}/git/trees/${branch}?recursive=1`,
+                `https://api.github.com/repos/${organization}/${id}/git/trees/${branches[id] ?? branch}?recursive=1`,
                 { headers: apiHeaders },
             );
             paths = (await response.json()).tree.map((entry) => entry.path);

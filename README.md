@@ -54,7 +54,9 @@ LOCAL_PROJECTS=bunryu=../bunryu npm run dev
 Add an entry to `scripts/projects.js` (the `id` is the repository name). The
 README, stars, license and topics come from GitHub at build time. The publish
 workflow also runs daily, so README changes in a project repository show up on
-the site within a day.
+the site within a day. Projects are read from their `master` branch; if a
+repository's default branch is different, set `branch` on its entry (as
+`ping-monitor` does with `main`).
 
 ## Link-preview images
 

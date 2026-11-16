@@ -1,6 +1,6 @@
 // The project directory. Each project gets a static page at /projects/<id>/
-// built from its README on the master branch. `id` must match the repository
-// name. Repositories that host their own app on GitHub Pages already own
+// built from its README on the master branch (or on `branch`, for a repository
+// whose default branch is another one). `id` must match the repository name. Repositories that host their own app on GitHub Pages already own
 // /<id>/, which is why project pages live under /projects/.
 
 const organization = 'live-miracles';
@@ -98,6 +98,16 @@ const projects = [
             'Small Windows app that powers on machines on the local network: Wake-on-LAN for PCs, and IPMI power on and off for AJA Bridge Live devices.',
         icon: '/assets/wake-up-support-logo.png',
         download: `https://github.com/${organization}/wake-up-support/releases`,
+    },
+    {
+        id: 'ping-monitor',
+        name: 'Ping Monitor',
+        category: 'monitoring',
+        summary:
+            'Always-on latency, packet loss and traceroute monitor for a studio network: ping YouTube, Facebook, Zoom and your gateway, and see from the hop-by-hop path graph whether a glitch is your network, your ISP or the internet.',
+        icon: '/assets/ping-monitor-logo.svg',
+        download: `https://github.com/${organization}/ping-monitor/releases`,
+        branch: 'main',
     },
     {
         id: 'key-vault',
