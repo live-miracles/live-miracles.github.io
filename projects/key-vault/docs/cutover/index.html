@@ -66,35 +66,84 @@
               <div class="min-w-0"><details class="bg-parchment text-muted caption mb-8 rounded-xl p-4">
               <summary class="text-ink cursor-pointer font-semibold">On this page</summary>
               <ol class="mt-3 space-y-2">
-                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#1-create-the-supabase-project">1. Create the Supabase project</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#2-google-sign-in">2. Google sign-in</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#3-deploy-the-database-and-functions">3. Deploy the database and functions</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#4-deploy-the-site">4. Deploy the site</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#5-move-the-data">5. Move the data</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#6-turn-on-bunryu">6. Turn on bunryu</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#7-rehearse-then-switch">7. Rehearse, then switch</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#rollback">Rollback</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#backups">Backups</a></li>
+                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#1-create-the-supabase-project">1. Create the Supabase project</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#2-deploy-the-database-and-functions">2. Deploy the database and functions</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#3-deploy-the-site">3. Deploy the site</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#4-google-sign-in-and-function-secrets">4. Google sign-in and function secrets</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#5-move-the-data">5. Move the data</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#6-turn-on-bunryu">6. Turn on bunryu</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#7-rehearse-then-switch">7. Rehearse, then switch</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#rollback">Rollback</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#backups">Backups</a></li>
               </ol>
             </details><article class="readme min-w-0"><p>Moving from the Apps Script app to Supabase + Vercel, and turning on the bunryu link. Do it in this order; each step says how to tell it worked. The Apps Script deployment is not touched until the end, so you can stop at any step and nothing is lost.</p>
 <p>You need: owner access to a Supabase project, a Google Cloud project for the OAuth client, a Vercel account, admin access to this GitHub repository, and shell access to the machine running bunryu.</p>
 <h2 id="1-create-the-supabase-project">1. Create the Supabase project</h2>
 <ol>
 <li>Create a project. Note the project ref (the <code>abcdefgh</code> in <code>https://abcdefgh.supabase.co</code>).</li>
-<li>Generate two random secrets (for example <code>openssl rand -hex 32</code>): one for <strong>hashing</strong>, one for the <strong>ingest token</strong>. Keep them in a password manager; you will paste each in two places.</li>
+<li>When Supabase offers to connect the project to GitHub, <strong>skip it</strong>. The <strong>Deploy Supabase</strong> workflow already applies the migrations and deploys the functions; the integration would overlap with it and does not deploy functions with the flags <code>ingest</code> needs.</li>
+<li>Generate two random secrets, each different: <code>openssl rand -hex 32</code> once for <strong>hashing</strong> and once for the <strong>ingest token</strong>. Keep them in a password manager; you paste each in two places (Supabase here, bunryu in step 6). They do different jobs: the token proves a sender may post statuses, the hash secret lets Key Vault match a key to its status without bunryu ever sending the key. Keeping them separate means one leak does not expose the other.</li>
 </ol>
-<h2 id="2-google-sign-in">2. Google sign-in</h2>
+<p>The order below avoids a loop: the database and functions need no site URL, the site needs only the Supabase URL and key, and the secrets and sign-in settings need the site URL, so they come last.</p>
+<h2 id="2-deploy-the-database-and-functions">2. Deploy the database and functions</h2>
 <ol>
-<li>In Google Cloud → APIs &amp; Credentials create an OAuth client (Web application). Authorized redirect URI: <code>https://&lt;project-ref&gt;.supabase.co/auth/v1/callback</code>.</li>
-<li>In Supabase → Authentication → Providers → Google, paste the client id and secret and enable it.</li>
-<li>Authentication → URL Configuration: set the Site URL to the Vercel URL (you can add it after step 4).</li>
+<li>Create a Supabase access token (supabase.com/dashboard/account/tokens) and add the repository secrets <code>SUPABASE_ACCESS_TOKEN</code> and <code>SUPABASE_PROJECT_REF</code>. No database password is needed.</li>
+<li>Run <code>npm run test:db</code> once with Docker running; it proves the migrations and SQL functions on a real Postgres.</li>
+<li>Run the <strong>Deploy Supabase</strong> workflow (Actions → Run workflow), or locally <code>npx supabase db push</code> and <code>npx supabase functions deploy api</code> / <code>deploy ingest --no-verify-jwt</code>.</li>
 </ol>
-<h2 id="3-deploy-the-database-and-functions">3. Deploy the database and functions</h2>
-<p>Set the repository secrets <code>SUPABASE_ACCESS_TOKEN</code>, <code>SUPABASE_PROJECT_REF</code>, <code>SUPABASE_DB_PASSWORD</code>, then set the function secrets:</p>
-<pre><code class="language-bash">npx supabase login
-npx supabase link --project-ref &lt;project-ref&gt;
-npx supabase secrets set KEY_VAULT_APP_ORIGIN=https://&lt;your-site&gt; \
-  KEY_VAULT_HASH_SECRET=&lt;hash secret&gt; \
-  KEY_VAULT_INGEST_TOKEN=&lt;ingest token&gt; \
-  KEY_VAULT_OWNER_EMAILS=&lt;your email&gt;
+<p>Check: the Supabase dashboard shows the tables <code>events</code>, <code>languages</code>, <code>roles</code>, <code>keys</code>, <code>ingest_instances</code>, <code>stream_outputs</code>, and both functions.</p>
+<h2 id="3-deploy-the-site">3. Deploy the site</h2>
+<p>Import the repository in Vercel. Set these environment variables <strong>before the first build</strong> (a build without them fails with &quot;Set KEY_VAULT_SUPABASE_URL and KEY_VAULT_SUPABASE_PUBLISHABLE_KEY&quot;; after adding them, redeploy, since they only apply to new builds):</p>
+<ul>
+<li><code>KEY_VAULT_SUPABASE_URL</code>: <code>https://&lt;project-ref&gt;.supabase.co</code></li>
+<li><code>KEY_VAULT_SUPABASE_PUBLISHABLE_KEY</code>: the <strong>publishable</strong> key (<code>sb_publishable_…</code>) from Project Settings → API Keys. The build refuses a secret key.</li>
+</ul>
+<p>Note the site&#39;s URL (for example <code>https://your-site.vercel.app</code>) for the next two steps.</p>
+<h2 id="4-google-sign-in-and-function-secrets">4. Google sign-in and function secrets</h2>
+<ol>
+<li><p>In Google Cloud → APIs &amp; Credentials create an OAuth client (Web application). Authorized redirect URI: <code>https://&lt;project-ref&gt;.supabase.co/auth/v1/callback</code>.</p>
+</li>
+<li><p>In Supabase → Authentication → Providers → Google, paste the client id and secret and enable it.</p>
+</li>
+<li><p>Authentication → URL Configuration: set the <strong>Site URL</strong> to the site&#39;s URL and add <code>https://&lt;your-site&gt;/**</code> under <strong>Redirect URLs</strong> (and <code>http://localhost:2837/**</code> if you want to sign in during local development). Until you do, Supabase&#39;s default Site URL sends you back to <code>http://localhost:3000</code> after signing in.</p>
+</li>
+<li><p>Set the function secrets. Run this from this repository, with the project ref given explicitly (<code>supabase link</code> is remembered per directory):</p>
+<pre><code class="language-bash">read -rs HASH; echo     # paste the hash secret
+read -rs TOKEN; echo    # paste the ingest token
+npx supabase secrets set \
+  KEY_VAULT_APP_ORIGIN=https://&lt;your-site&gt; \
+  KEY_VAULT_HASH_SECRET=&quot;$HASH&quot; \
+  KEY_VAULT_INGEST_TOKEN=&quot;$TOKEN&quot; \
+  KEY_VAULT_OWNER_EMAILS=&quot;you@example.com,other@example.com&quot; \
+  --project-ref &lt;project-ref&gt;
+unset HASH TOKEN
+npx supabase secrets list --project-ref &lt;project-ref&gt;
 </code></pre>
-<p>Then run the <strong>Deploy Supabase</strong> workflow (Actions → Run workflow), or locally <code>npx supabase db push</code> and <code>npx supabase functions deploy api</code> / <code>deploy ingest --no-verify-jwt</code>.</p>
-<p>Check: the Supabase dashboard shows the tables <code>events</code>, <code>languages</code>, <code>roles</code>, <code>keys</code>, <code>ingest_instances</code>, <code>stream_outputs</code>, and both functions. Before this, run <code>npm run test:db</code> once with Docker running; it proves the migrations and SQL functions on a real Postgres.</p>
-<h2 id="4-deploy-the-site">4. Deploy the site</h2>
-<p>Import the repository in Vercel. Environment variables: <code>KEY_VAULT_SUPABASE_URL</code> and <code>KEY_VAULT_SUPABASE_PUBLISHABLE_KEY</code> (the <strong>publishable</strong> key from Project Settings → API Keys; the build fails on a secret key). Deploy, then put the Vercel URL in <code>KEY_VAULT_APP_ORIGIN</code> (step 3) and in the Supabase Site URL (step 2).</p>
-<p>Check: opening the site shows &quot;Sign in with Google&quot;; signing in with the owner email shows an empty app (no events yet).</p>
+<ul>
+<li><code>KEY_VAULT_APP_ORIGIN</code> is exactly the site&#39;s origin: no trailing slash, no path.</li>
+<li><code>KEY_VAULT_OWNER_EMAILS</code> is a comma-separated list of Google sign-in addresses. Owners can do everything in every event; for anyone who needs less, grant a role in the app. The first owner is how the first event and roles get created.</li>
+<li>The <code>list</code> should show all four <code>KEY_VAULT_*</code> names. Values are not shown afterwards, so keep your copies.</li>
+</ul>
+</li>
+</ol>
+<p>Check: opening the site shows &quot;Sign in with Google&quot;; signing in with an owner email shows an empty app (no events yet) and no error.</p>
+<p>If something is off:</p>
+<table>
+<thead>
+<tr>
+<th>What you see</th>
+<th>Cause</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Sign-in returns to <code>http://localhost:3000</code></td>
+<td>The Supabase Site URL is still the default (step 4.3).</td>
+</tr>
+<tr>
+<td><code>getAllData: Failed to fetch</code></td>
+<td><code>KEY_VAULT_APP_ORIGIN</code> is not set, or does not match the site&#39;s origin exactly, so the browser blocks the call.</td>
+</tr>
+<tr>
+<td><code>getAllData: The server is not configured.</code></td>
+<td>One of the <code>KEY_VAULT_*</code> secrets (usually the hash secret) is missing; compare <code>secrets list</code> with the four names above.</td>
+</tr>
+<tr>
+<td>Build fails with &quot;Set KEY_VAULT_SUPABASE_URL …&quot;</td>
+<td>The Vercel environment variables are missing; add them and redeploy.</td>
+</tr>
+</tbody></table>
 <h2 id="5-move-the-data">5. Move the data</h2>
 <ol>
 <li><p>Freeze edits: tell everyone to stop changing keys in the Apps Script app.</p>
@@ -113,7 +162,7 @@ npx supabase secrets set KEY_VAULT_APP_ORIGIN=https://&lt;your-site&gt; \
 </ol>
 <p>Check: sign in as the owner; each event shows the same keys as the sheet. Sign in as an editor and a viewer (ask them) and confirm they see only their languages.</p>
 <h2 id="6-turn-on-bunryu">6. Turn on bunryu</h2>
-<p>The reporter is on the bunryu branch <code>claude/key-vault-reporter-a77a29</code> (committed locally, not pushed or merged). After it is merged and deployed, add to <code>bunryu.json</code>:</p>
+<p>The reporter is on the bunryu branch <code>claude/key-vault-reporter-a77a29</code> (committed locally, not pushed or merged). After it is merged and deployed, add to <code>bunryu.json</code> (signed in as an owner, click the bunryu indicator in the Key Vault header: it lists every value below, with copy buttons and a ready-to-paste block):</p>
 <pre><code class="language-json">&quot;key_vault&quot;: {
     &quot;url&quot;: &quot;https://&lt;project-ref&gt;.supabase.co/functions/v1/ingest&quot;,
     &quot;token&quot;: &quot;&lt;ingest token&gt;&quot;,
@@ -121,13 +170,14 @@ npx supabase secrets set KEY_VAULT_APP_ORIGIN=https://&lt;your-site&gt; \
     &quot;instance&quot;: &quot;prod&quot;
 }
 </code></pre>
-<p>and restart bunryu. Use the <strong>same</strong> hash secret and token as in step 3.</p>
+<p>and restart bunryu. Use the <strong>same</strong> hash secret and token as in step 4.</p>
 <p>Check, within two minutes:</p>
 <ul>
 <li><code>ingest_instances</code> has a row <code>prod</code> and <code>stream_outputs</code> has one row per configured output.</li>
 <li>In Key Vault a key whose main or backup URL is configured in bunryu is colored by its status; hovering shows the pipeline, output and message. A key not configured in bunryu has no color.</li>
 <li>Stop an output in bunryu: its key turns indigo (&quot;configured, not running&quot;). Make one fail until bunryu gives up: red, with &quot;stopped after N failed attempts&quot;.</li>
-<li>Stop bunryu: after about three minutes the banner appears and the colors clear.</li>
+<li>The header shows &quot;bunryu connected&quot; with a green dot.</li>
+<li>Stop bunryu: after about three minutes the colors clear and the header says &quot;bunryu last seen N min ago&quot; (there is no warning: bunryu is only on during events).</li>
 </ul>
 <p>If a key you know is configured shows no color, the URL differs between the two systems (a trailing path, a different server, a changed key). Compare them; the hash is of the whole URL.</p>
 <h2 id="7-rehearse-then-switch">7. Rehearse, then switch</h2>

@@ -294,10 +294,6 @@ shows Key Vault&#39;s answer.</p>
 <td>Key Vault&#39;s ingest endpoint, such as <code>https://&lt;project&gt;.supabase.co/functions/v1/ingest</code>. <code>https</code>, or <code>http</code> only for <code>localhost</code> (a test receiver); no credentials in it, and not a link-local or unspecified address</td>
 </tr>
 <tr>
-<td>Instance</td>
-<td>Names this server to Key Vault, for example <code>prod</code>. Letters, digits, <code>.</code>, <code>_</code> and <code>-</code>, up to 64</td>
-</tr>
-<tr>
 <td>Token</td>
 <td>The ingest token from Key Vault, sent as <code>Authorization: Bearer &lt;token&gt;</code>. Printable ASCII without spaces</td>
 </tr>
@@ -311,6 +307,9 @@ format goes. The token and secret are never shown again: leave them empty to kee
 saved ones, and clear the link to turn the reports off (this also forgets them). They
 are stored in the database, like the server name, and the dashboard and
 <a href="/projects/bunryu/docs/reference/api/">API</a> return only whether they are set.</p>
+<p>Key Vault tells servers apart by the report&#39;s <code>instance</code>, which is this server&#39;s
+<strong>Server Name</strong> (<strong>Settings &gt; General</strong>). Give each server that reports to the same Key Vault
+its own name. A rename shows in the next report, within a minute.</p>
 <p>The report is a JSON <code>POST</code> with the token as a bearer token:</p>
 <pre><code class="language-json">{
     &quot;version&quot;: 1,

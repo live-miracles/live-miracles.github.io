@@ -262,6 +262,10 @@ a minute after the publisher connects; &quot;1 in 12 s&quot; means a single keyf
 and recommends 2 s; with a longer interval the pipeline gets a warning alert, and a
 preview starts late. Set the encoder&#39;s keyframe interval to 2 s (the commands above
 do). <strong>Preview</strong> plays the input in the dashboard.</p>
+<p>The input is probed once when the publisher connects (and again every 30 s while
+the probe fails). After changing something on the encoder without reconnecting it,
+press the refresh button next to <strong>probed ... ago</strong> to read the input again. The
+keyframe interval is measured only once per publisher, so the button does not repeat it.</p>
 <p>Whatever is wrong with the input (no audio track, a very low bitrate, an alert) is
 listed in yellow under these lines with advice, and in the hover text of the input&#39;s
 status dot.</p>

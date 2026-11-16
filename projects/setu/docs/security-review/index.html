@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Setu Security Review for Internal Rollout — Setu</title>
+    <meta name="description" content="Prepared for Security Review | 2 October 2026" />
+    <link rel="canonical" href="https://live-miracles.github.io/projects/setu/docs/security-review/" />
+    <meta property="og:site_name" content="Live Miracles" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Setu Security Review for Internal Rollout — Setu" />
+    <meta property="og:description" content="Prepared for Security Review | 2 October 2026" />
+    <meta property="og:url" content="https://live-miracles.github.io/projects/setu/docs/security-review/" />
+    <meta property="og:image" content="https://live-miracles.github.io/assets/logo.png" />
+    <meta name="twitter:card" content="summary" />
+    <link rel="icon" href="/assets/logo.png" type="image/png" />
+    <link rel="alternate" type="application/rss+xml" title="Live Miracles blog" href="/blog/feed.xml" />
+    <script>
+      try {
+        var theme = localStorage.getItem('theme');
+        if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
+      } catch (e) {}
+    </script>
+    <link rel="stylesheet" href="/assets/styles.css" />
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <header class="topbar">
+        <nav class="caption mx-auto flex h-12 w-full max-w-[1024px] items-center justify-between gap-4 px-5 sm:px-6" aria-label="Site">
+          <a href="/" class="flex items-center gap-2.5 font-semibold" aria-label="Live Miracles">
+            <img src="/assets/logo.png" alt="" class="logo size-6" />
+            <span>Live Miracles</span>
+          </a>
+          <div class="flex items-center gap-5 sm:gap-7">
+            <a href="/#projects" class="text-muted hover:text-ink transition-colors">Projects</a>
+            <a href="/blog/" class="text-muted hover:text-ink transition-colors">Blog</a>
+            <div class="-mr-2 flex items-center gap-1">
+              <a href="https://github.com/live-miracles" class="icon-btn" aria-label="Live Miracles on GitHub" title="GitHub"><svg xmlns="http://www.w3.org/2000/svg" class="size-[18px]" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.79 23.39c.6.11.82-.26.82-.58v-2.02c-3.34.73-4.04-1.42-4.04-1.42-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.57A12 12 0 0 0 12 .5Z"/></svg></a>
+              <button type="button" id="theme-toggle" class="icon-btn theme-toggle" hidden><svg xmlns="http://www.w3.org/2000/svg" class="icon-sun size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32 1.41-1.41"/></svg><svg xmlns="http://www.w3.org/2000/svg" class="icon-moon size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg></button>
+            </div>
+          </div>
+        </nav>
+      </header>
+    <main class="flex-1"><div class="wash" style="--gx1: 27%; --gx2: 87%; --gx3: 35%; --gy1: -131px; --gy2: -58px; --gy1p: 19%; --gy2p: 24%; --px: 98%; --tint: #d4a24c; --glow-a: color-mix(in srgb, #d4a24c 30%, transparent); --pattern: url('/assets/patterns/kikko.svg')"><div class="mx-auto w-full max-w-[980px] px-5 py-10 sm:px-6 sm:py-14"><nav class="text-muted caption flex flex-wrap items-center gap-2" aria-label="Breadcrumb">
+              <a href="/projects/setu/" class="link-quiet hover:text-ink flex items-center gap-2"><img src="/assets/setu-logo.svg" alt="" class="logo size-5 " /><span>Setu</span></a>
+              <span aria-hidden="true">›</span><a class="link-quiet hover:text-ink" href="/projects/setu/docs/">Documentation</a>
+            </nav>
+            <h1 class="display display-lg mt-4">Setu Security Review for Internal Rollout</h1><nav class="border-line mt-8 flex gap-6 border-b" aria-label="Setu sections">
+              <a href="/projects/setu/" class="tab">Overview</a><a href="/projects/setu/docs/" class="tab" aria-current="page">Documentation</a>
+            </nav><details class="bg-parchment caption mt-6 rounded-xl p-4 lg:hidden">
+              <summary class="cursor-pointer font-semibold">Documentation menu</summary>
+              <div class="mt-3"><nav class="lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto" aria-label="Setu documentation">
+              <div class="">
+                
+                <ul class="caption"><li><a href="/projects/setu/docs/database-backups/" class="link-quiet hover:text-ink block py-1 text-muted">Database backups</a></li><li><a href="/projects/setu/docs/security-review/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">Setu Security Review for Internal Rollout</a></li></ul>
+              </div>
+            </nav></div>
+            </details>
+            <div class="mt-10 grid gap-12 lg:grid-cols-[13rem_minmax(0,1fr)]">
+              <div class="hidden lg:block"><nav class="lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto" aria-label="Setu documentation">
+              <div class="">
+                
+                <ul class="caption"><li><a href="/projects/setu/docs/database-backups/" class="link-quiet hover:text-ink block py-1 text-muted">Database backups</a></li><li><a href="/projects/setu/docs/security-review/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">Setu Security Review for Internal Rollout</a></li></ul>
+              </div>
+            </nav></div>
+              <div class="min-w-0"><details class="bg-parchment text-muted caption mb-8 rounded-xl p-4">
+              <summary class="text-ink cursor-pointer font-semibold">On this page</summary>
+              <ol class="mt-3 space-y-2">
+                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#1-application-overview">1 Application Overview</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#2-authentication-and-authorization">2 Authentication and Authorization</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#3-controls-in-place">3 Controls in Place</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#identity-and-data-access">Identity and data access</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#image-upload-controls">Image upload controls</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#workflow-integrity">Workflow integrity</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#4-intentional-design-decisions">4 Intentional Design Decisions</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#public-delivery-of-operational-images">Public delivery of operational images</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#shared-approved-program-calendar">Shared approved-program calendar</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#domain-allowlist-and-existing-sessions">Domain allowlist and existing sessions</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#5-secrets-and-deployment-controls">5 Secrets and Deployment Controls</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#6-verification-completed">6 Verification Completed</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#7-rollout-recommendation">7 Rollout Recommendation</a></li>
+              </ol>
+            </details><article class="readme min-w-0"><p>Prepared for Security Review | 2 October 2026</p>
+<p>Setu is a small internal operations application used across teams for inventory requests, program scheduling, approvals, comments, and reference data. This document summarizes the current security controls and the intentional design choices relevant to rollout approval.</p>
+<p><strong>Review conclusion.</strong> No known Critical or High severity issue remains in the reviewed authentication, authorization, image upload, comment, idempotency, inventory, or scheduling paths. The application is suitable for a limited internal rollout.</p>
+<blockquote>
+<p>Automated scanners and reviewers without background on the app may flag items that are deliberate. Section 4 lists those items and explains why each is not a security risk in this context. If you change one of those areas, update this document in the same change.</p>
+</blockquote>
+<h2 id="1-application-overview">1 Application Overview</h2>
+<table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Implementation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Frontend</td>
+<td>React application hosted on Vercel</td>
+</tr>
+<tr>
+<td>Authentication</td>
+<td>Google OAuth through Supabase Auth</td>
+</tr>
+<tr>
+<td>Application API</td>
+<td>Authenticated Supabase Edge Functions</td>
+</tr>
+<tr>
+<td>Database</td>
+<td>Supabase PostgreSQL with Row Level Security</td>
+</tr>
+<tr>
+<td>File storage</td>
+<td>Supabase Storage with server-authorized uploads</td>
+</tr>
+<tr>
+<td>Deployment</td>
+<td>GitHub Actions to the single Supabase project</td>
+</tr>
+<tr>
+<td>Expected scale</td>
+<td>Up to 500 internal users and approximately 5 concurrent users</td>
+</tr>
+</tbody></table>
+<h2 id="2-authentication-and-authorization">2 Authentication and Authorization</h2>
+<p>All business operations require a valid Supabase access token. The backend validates the token with Supabase Auth before processing the requested operation and checks whether the authenticated email domain is currently permitted.</p>
+<p>Authorization is enforced on the backend and in PostgreSQL. Frontend visibility is not used as a security boundary.</p>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Authorized access</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Admin</td>
+<td>User roles, domain allowlist, configuration, approvals, and operational data</td>
+</tr>
+<tr>
+<td>Approver</td>
+<td>Request review and approval without admin configuration access</td>
+</tr>
+<tr>
+<td>Viewer</td>
+<td>Read-only access to permitted operational data</td>
+</tr>
+<tr>
+<td>User</td>
+<td>Requests owned by or explicitly shared with the user</td>
+</tr>
+</tbody></table>
+<h2 id="3-controls-in-place">3 Controls in Place</h2>
+<h3 id="identity-and-data-access">Identity and data access</h3>
+<ul>
+<li>Users cannot change their own role or email through the application or direct Data API access.</li>
+<li>Only Admins can manage the allowed email-domain list and user roles.</li>
+<li>Request data is restricted by ownership, participation, and operational role.</li>
+<li>Comments are limited to request owners, participants, Admins, and Approvers, and authorship must match the authenticated user.</li>
+<li>Idempotency records are scoped to the authenticated user so one user cannot receive another user&#39;s cached result.</li>
+</ul>
+<h3 id="image-upload-controls">Image upload controls</h3>
+<ul>
+<li>Each signed upload is tied to an existing inventory request or inventory type.</li>
+<li>Request images require Admin or Approver access, or ownership or participation while the request is in draft.</li>
+<li>Inventory type images require Admin access.</li>
+<li>Storage enforces a 50 KB limit and permits only AVIF, JPEG, PNG, and WebP.</li>
+<li>Users cannot replace or delete images belonging to another user.</li>
+</ul>
+<h3 id="workflow-integrity">Workflow integrity</h3>
+<ul>
+<li>Request transitions execute through service-role-only PostgreSQL functions.</li>
+<li>Request, inventory, and scheduling rows are locked before state and availability checks.</li>
+<li>Concurrent issuance cannot commit more inventory than is available.</li>
+<li>Concurrent approvals cannot commit conflicting use of the same place.</li>
+<li>Status changes and activity comments commit in one transaction and roll back together on failure.</li>
+</ul>
+<h2 id="4-intentional-design-decisions">4 Intentional Design Decisions</h2>
+<p>The following choices are part of the approved operating model for the initial internal rollout. They are documented here because automated review tools may identify them without the application context.</p>
+<h3 id="public-delivery-of-operational-images">Public delivery of operational images</h3>
+<p>The bucket contains only non-sensitive inventory and operational images. Upload, replacement, association, and deletion remain authenticated and authorized. Storage enforces file type and size. Personal, confidential, or regulated images are outside the intended use. If that use changes, the bucket will move to private delivery.</p>
+<h3 id="shared-approved-program-calendar">Shared approved-program calendar</h3>
+<p>Organization-wide visibility of approved programs is required for cross-team scheduling. Access still requires authentication. Draft and rejected requests are not included, comments are not returned in the calendar, and detailed request actions remain subject to request-level authorization.</p>
+<h3 id="domain-allowlist-and-existing-sessions">Domain allowlist and existing sessions</h3>
+<p>Allowlist changes take effect at the application API boundary. Existing Supabase sessions are not globally revoked solely by a domain configuration change. Row Level Security continues to limit data access, and an Admin can delete an individual authentication identity when immediate revocation is required.</p>
+<h2 id="5-secrets-and-deployment-controls">5 Secrets and Deployment Controls</h2>
+<ul>
+<li>The browser receives only the Supabase publishable key, which does not bypass authentication or Row Level Security.</li>
+<li>Service-role credentials, database passwords, OAuth secrets, and deployment credentials are stored in provider or CI/CD secret storage.</li>
+<li>Development and production share one Supabase project (the free plan allows two, and this is a small internal app), so local development reads and writes live data. The API&#39;s CORS policy accepts <code>SETU_APP_ORIGIN</code> plus the optional <code>SETU_EXTRA_ORIGINS</code> (for example <code>http://localhost:47193</code>); CORS is not an authorization boundary, so every request still needs a valid token and passes the same checks. Migrations are tested against an isolated PostgreSQL (PGlite) in <code>npm test</code> before merging, and a weekly encrypted backup is described in <code>docs/database-backups.md</code>.</li>
+<li>Each production change has a recorded Git commit, CI run, migration run, and deployment result.</li>
+<li>The Progressive Web App caches only same-origin static assets; API responses and operational images remain network-first.</li>
+<li>Production is served through HTTPS with HSTS enabled.</li>
+</ul>
+<h2 id="6-verification-completed">6 Verification Completed</h2>
+<p>The reviewed release passed the following checks before production rollout:</p>
+<table>
+<thead>
+<tr>
+<th>Verification area</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Automated authorization and behavior tests</td>
+<td>Passed</td>
+</tr>
+<tr>
+<td>Frontend and backend type checking</td>
+<td>Passed</td>
+</tr>
+<tr>
+<td>Formatting and production builds</td>
+<td>Passed</td>
+</tr>
+<tr>
+<td>Database migration execution in isolated PostgreSQL</td>
+<td>Passed</td>
+</tr>
+<tr>
+<td>Unauthorized upload and image ownership tests</td>
+<td>Passed</td>
+</tr>
+<tr>
+<td>Direct browser-role transaction-function denial</td>
+<td>Passed</td>
+</tr>
+<tr>
+<td>Inventory capacity, schedule conflict, and rollback tests</td>
+<td>Passed</td>
+</tr>
+<tr>
+<td>Post-merge GitHub CI</td>
+<td>Passed</td>
+</tr>
+<tr>
+<td>Supabase deployment</td>
+<td>Passed</td>
+</tr>
+<tr>
+<td>Vercel production deployment and HTTPS availability</td>
+<td>Passed</td>
+</tr>
+</tbody></table>
+<h2 id="7-rollout-recommendation">7 Rollout Recommendation</h2>
+<p>Setu is ready for a limited internal rollout. The initial user group should follow the documented use of the application, particularly the requirement that uploaded images contain no confidential, personal, or regulated information.</p>
+<p>A new security review should be requested if the application begins storing sensitive information, is opened to external users, materially expands its authorization model, or introduces new third-party integrations.</p>
+</article><a class="more caption mt-8 inline-block" href="https://github.com/live-miracles/setu/blob/master/docs/security-review.md">Edit this page on GitHub</a><div class="mt-12 grid gap-4 sm:grid-cols-2">
+              <a class="panel link-quiet hover:bg-parchment p-5 transition-colors" href="/projects/setu/docs/database-backups/"><div class="text-muted caption">Previous</div><div class="font-semibold">Database backups</div></a>
+              
+            </div></div>
+            </div></div></div></main>
+    <footer class="caption waves text-muted border-line border-t pb-28">
+      <div class="mx-auto flex w-full max-w-[980px] flex-wrap items-center justify-between gap-x-6 gap-y-2 px-5 py-8 sm:px-6">
+        <span>Live Miracles · Open tools for live teams</span>
+        <span class="flex gap-5">
+          <a class="link-quiet" href="/blog/">Blog</a>
+          <a class="link-quiet" href="/blog/feed.xml">RSS</a>
+          <a class="link-quiet" href="https://github.com/live-miracles">GitHub</a>
+        </span>
+      </div>
+    </footer>
+    <dialog id="lightbox" class="lightbox" aria-label="Enlarged image">
+      <button type="button" class="lightbox-close" aria-label="Close image"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg></button>
+      <div class="lightbox-frame"><img alt="" /></div>
+    </dialog>
+    <script>
+      (function () {
+        var dialog = document.getElementById('lightbox');
+        if (!dialog || !dialog.showModal) return;
+        var shown = dialog.querySelector('img');
+        function zoomable(img) {
+          return !img.closest('a') && img.naturalWidth >= 300 && img.naturalHeight >= 100;
+        }
+        function mark(img) {
+          if (img.dataset.zoom || !zoomable(img)) return;
+          img.dataset.zoom = '1';
+          img.classList.add('zoomable');
+          img.tabIndex = 0;
+          img.setAttribute('role', 'button');
+          img.setAttribute('aria-label', 'Enlarge image: ' + (img.alt || 'screenshot'));
+        }
+        function open(img) {
+          shown.src = img.currentSrc || img.src;
+          shown.alt = img.alt;
+          shown.classList.remove('actual');
+          dialog.showModal();
+          dialog.scrollTo(0, 0);
+        }
+        document.querySelectorAll('.readme img').forEach(function (img) {
+          if (img.complete) mark(img);
+          else img.addEventListener('load', function () { mark(img); }, { once: true });
+        });
+        document.addEventListener('click', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom) open(img);
+        });
+        document.addEventListener('keydown', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom && (event.key === 'Enter' || event.key === ' ')) {
+            event.preventDefault();
+            open(img);
+          }
+        });
+        shown.addEventListener('click', function () {
+          shown.classList.toggle('actual');
+        });
+        dialog.addEventListener('click', function (event) {
+          if (event.target !== shown) dialog.close();
+        });
+      })();
+    </script>
+    <script>
+      (function () {
+        var button = document.getElementById('theme-toggle');
+        if (!button) return;
+        var root = document.documentElement;
+        function current() {
+          return root.dataset.theme === 'light' ? 'light' : 'dark';
+        }
+        function sync() {
+          var theme = current();
+          button.dataset.mode = theme;
+          button.setAttribute('aria-label', 'Switch to ' + (theme === 'dark' ? 'light' : 'dark') + ' theme');
+        }
+        button.hidden = false;
+        sync();
+        button.addEventListener('click', function () {
+          var next = current() === 'dark' ? 'light' : 'dark';
+          root.dataset.theme = next;
+          try {
+            localStorage.setItem('theme', next);
+          } catch (e) {}
+          sync();
+        });
+      })();
+    </script>
+  </body>
+</html>

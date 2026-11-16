@@ -244,6 +244,11 @@ JSON, <code>{ &quot;error&quot;: &quot;…&quot; }</code>; an unexpected failure
 <td>Stop a running output and start it again; works for any output including a shared encode, whose outputs reconnect with it. Returns <code>{ ok: true }</code>, or 409 when the output is not running or was restarted less than 5 s ago. Recorded in its History as &quot;Restarted by user&quot; (not a failure)</td>
 </tr>
 <tr>
+<td>POST</td>
+<td><code>/api/pipelines/:id/reprobe</code></td>
+<td>Run ffprobe on the connected input again now; the dashboard keeps showing the last result until the new one lands. Returns <code>{ ok: true }</code>, 404 for an unknown pipeline, or 409 when the input is not connected or an ffprobe is already queued or running</td>
+</tr>
+<tr>
 <td>GET</td>
 <td><code>/api/pipelines/:id/outputs/:outId/errors</code></td>
 <td>Output History, oldest first (also for a shared encode). A repeated crash is one record with <code>count</code> and <code>lastTs</code>; <code>recoveredTs</code> is set once the output ran steadily again</td>
@@ -256,7 +261,7 @@ JSON, <code>{ &quot;error&quot;: &quot;…&quot; }</code>; an unexpected failure
 <tr>
 <td>POST</td>
 <td><code>/api/settings/key-vault</code></td>
-<td>Save the Key Vault link <code>{ url, instance, token?, hashSecret? }</code> and apply it at once. An empty <code>token</code> or <code>hashSecret</code> keeps the saved one (needed the first time); an empty <code>url</code> turns the reports off and forgets both. Answers <code>{ keyVault }</code>, the link without its secrets (<code>{ url, instance, tokenSet, hashSecretSet }</code>, or <code>null</code> when off). <code>400</code> for a value that is not valid or a host that is link-local or unspecified; nothing is saved then</td>
+<td>Save the Key Vault link <code>{ url, token?, hashSecret? }</code> and apply it at once. An empty <code>token</code> or <code>hashSecret</code> keeps the saved one (needed the first time); an empty <code>url</code> turns the reports off and forgets both. Answers <code>{ keyVault }</code>, the link without its secrets (<code>{ url, tokenSet, hashSecretSet }</code>, or <code>null</code> when off). <code>400</code> for a value that is not valid or a host that is link-local or unspecified; nothing is saved then</td>
 </tr>
 <tr>
 <td>POST</td>

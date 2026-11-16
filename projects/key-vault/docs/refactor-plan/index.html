@@ -181,7 +181,7 @@ Browser → Vercel static app → Supabase Auth
 <tr>
 <td>Last heartbeat older than 3 minutes</td>
 <td>bunryu offline</td>
-<td>all colors muted, banner</td>
+<td>all colors muted (no warning)</td>
 </tr>
 </tbody></table>
 <h2 id="phases">Phases</h2>
@@ -242,7 +242,7 @@ Browser → Vercel static app → Supabase Auth
 <li><code>frontend/src/supabase.ts</code> (its own bundle, <code>auth.js</code>) signs in with Google and calls the <code>api</code> function through <code>api-client.ts</code>; the app&#39;s <code>api()</code> goes through it, or through the demo mock when the site has no backend config. The demo (GitHub Pages) keeps its sample data and now shows sample statuses.</li>
 <li><code>npm run build:vercel</code> writes <code>web/</code> and refuses to build without <code>KEY_VAULT_SUPABASE_URL</code> and the <strong>publishable</strong> key (a secret key is rejected). <code>vercel.json</code> sets the headers.</li>
 <li><strong>Not done: ES modules.</strong> The first draft planned them. The app is still plain scripts sharing globals because the existing tests load them that way; the inline Apps Script bundle and its escaping are gone, which was the part that mattered. Converting file by file (and dropping <code>// @ts-nocheck</code>) is a separate, optional piece of work.</li>
-<li><code>getStatus</code> is polled every 30 s; rows and cards are colored from it unless an owner or admin set a color by hand, and a banner appears when no bunryu has reported for 3 minutes.</li>
+<li><code>getStatus</code> is polled every 30 s; rows and cards are colored from it unless an owner or admin set a color by hand, and the colors clear when no bunryu has reported for 3 minutes (no warning, since bunryu only runs during events).</li>
 <li>Apps Script is removed from the repository (<code>Code.ts</code>, the inline build, clasp, their tests). The deployed script keeps running, untouched, until it is archived.</li>
 </ul>
 <h3 id="phase-4--design-system-and-wave-background-built">Phase 4 — Design system and wave background (built)</h3>
