@@ -190,7 +190,7 @@ Browser → Vercel static app → Supabase Auth
 <ul>
 <li>Shared server-side output status module; dashboard switches to it, so behavior stays identical.</li>
 <li><code>src/services/keyVaultReporter.ts</code>: 60 s timer, redaction, hashing, bounded timeout and retry with backoff, never throws into the control plane, logs each failure once per episode.</li>
-<li>Config in <code>bunryu.json</code>: <code>key_vault: { url, token, hash_secret, instance }</code>. Absent means disabled.</li>
+<li>Config is the <strong>Settings &gt; Key Vault</strong> page (not <code>bunryu.json</code>): <code>{ url, secret }</code>, checked when it is typed. An empty link means disabled. The instance is bunryu&#39;s Server Name.</li>
 <li>Tests: status mapping, redaction (URLs, keys, passphrases), hash vectors, failure isolation.</li>
 <li>Docs per its AGENTS.md: configuration page, reliability page, API reference if routes change, design-decisions entry (why a push model, why HMAC). Run lint, format check and the full test suite. Nothing real is committed (public repo).</li>
 </ul>
@@ -221,21 +221,17 @@ Browser → Vercel static app → Supabase Auth
 <td>The frontend origin, for CORS</td>
 </tr>
 <tr>
-<td><code>KEY_VAULT_HASH_SECRET</code></td>
-<td>api</td>
-<td>The HMAC secret; the same value as <code>key_vault.hash_secret</code> in bunryu</td>
-</tr>
-<tr>
 <td><code>KEY_VAULT_OWNER_EMAILS</code></td>
 <td>api</td>
 <td>App owners</td>
 </tr>
 <tr>
-<td><code>KEY_VAULT_INGEST_TOKEN</code></td>
-<td>ingest</td>
-<td>The bearer token; the same value as <code>key_vault.token</code> in bunryu</td>
+<td><code>KEY_VAULT_SECRET</code></td>
+<td>api, ingest</td>
+<td>One random secret (at least 32 characters). The bearer token and the HMAC secret are derived from it (<code>_shared/secrets.ts</code>).</td>
 </tr>
 </tbody></table>
+<p>bunryu takes the same <code>KEY_VAULT_SECRET</code> (owners copy it, with the link, from the bunryu dialog in the app) and derives the same two values itself; both repositories pin them in tests. Each is HMAC-SHA256 of the secret under its own label, so the token (sent in a header every minute) reveals nothing about the hash secret.</p>
 <p>Checks: <code>npm test</code> (56 tests, no database), <code>npm run typecheck</code>, and <code>npm run test:db</code>, which applies the migrations to a throwaway Postgres in Docker and exercises the SQL functions and constraints. The last one needs Docker Desktop running.</p>
 <h3 id="phase-3--frontend-on-vercel-built">Phase 3 — Frontend on Vercel (built)</h3>
 <ul>
@@ -260,7 +256,7 @@ Browser → Vercel static app → Supabase Auth
 <li><strong>Auth change</strong>: users must sign in with Google through Supabase, and the owner&#39;s email must be seeded as owner before anyone else can administer.</li>
 <li><strong>Hash mismatches</strong> from URL spelling differences: mitigated by normalisation plus shared vectors, and by showing &quot;not matched&quot; distinctly from &quot;not running&quot; in the UI.</li>
 <li><strong>Stale status</strong>: a dead bunryu must not leave keys looking green; the 3-minute rule handles it.</li>
-<li><strong>Secrets</strong>: the ingest token and HMAC secret live only in Supabase secrets and bunryu&#39;s local config.</li>
+<li><strong>Secrets</strong>: <code>KEY_VAULT_SECRET</code> lives only in Supabase secrets; the two values derived from it live there and in bunryu&#39;s local config.</li>
 <li><strong>Scope</strong>: phase 3 and 4 both rewrite the same templates; doing them in order avoids reworking markup twice.</li>
 </ul>
 </article><a class="more caption mt-8 inline-block" href="https://github.com/live-miracles/key-vault/blob/master/docs/refactor-plan.md">Edit this page on GitHub</a><div class="mt-12 grid gap-4 sm:grid-cols-2">

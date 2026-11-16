@@ -12,8 +12,8 @@
     <meta property="og:title" content="Setu — Live Miracles" />
     <meta property="og:description" content="Internal operations app for studio and program requests, equipment inventory and staff roster scheduling, on Supabase and Vercel." />
     <meta property="og:url" content="https://live-miracles.github.io/projects/setu/" />
-    <meta property="og:image" content="https://live-miracles.github.io/assets/logo.png" />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content="https://raw.githubusercontent.com/live-miracles/setu/master/docs/images/demo.gif" />
+    <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="/assets/logo.png" type="image/png" />
     <link rel="alternate" type="application/rss+xml" title="Live Miracles blog" href="/blog/feed.xml" />
     <script>
@@ -53,42 +53,32 @@
             </nav><div class="mt-10"><details class="bg-parchment text-muted caption mb-8 rounded-xl p-4">
               <summary class="text-ink cursor-pointer font-semibold">On this page</summary>
               <ol class="mt-3 space-y-2">
-                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#features">Features</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#how-it-works">How it works</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#quick-start">Quick start</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#documentation">Documentation</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#contributing-and-security">Contributing and security</a></li>
+                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#screenshots">Screenshots</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#features">Features</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#how-it-works">How it works</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#quick-start">Quick start</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#documentation">Documentation</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#contributing-and-security">Contributing and security</a></li>
               </ol>
-            </details><article class="readme min-w-0"><p align="center">
-  <img src="https://raw.githubusercontent.com/live-miracles/setu/master/design/logo/setu-logo.svg" alt="Setu logo" width="96" height="96" />
-</p>
+            </details><article class="readme min-w-0"><img src="https://raw.githubusercontent.com/live-miracles/setu/master/design/logo/setu-logo.svg" alt="Setu logo" width="96" align="right" />
 
-<h1 align="center">Setu</h1>
+<p><em>Setu (सेतु, &quot;bridge&quot;): the people who request, approve and run a studio, in one app.</em></p>
+<p><a href="https://github.com/live-miracles/setu/actions/workflows/ci.yml"><img src="https://github.com/live-miracles/setu/actions/workflows/ci.yml/badge.svg" alt="CI" loading="lazy" /></a>
+<a href="https://developer.mozilla.org/docs/Web/Progressive_web_apps"><img src="https://img.shields.io/badge/PWA-installable-5a0fc8?logo=pwa&amp;logoColor=white" alt="Installable PWA" loading="lazy" /></a>
+<a href="/projects/setu/docs/deployment/#free-tier-deployment"><img src="https://img.shields.io/badge/Supabase%20%2B%20Vercel-free%20tiers-3fcf8e?logo=supabase&amp;logoColor=white" alt="Runs on free tiers" loading="lazy" /></a>
+<a href="/projects/setu/docs/getting-started/"><img src="https://img.shields.io/badge/node-22%2B-339933?logo=nodedotjs&amp;logoColor=white" alt="Node.js 22+" loading="lazy" /></a></p>
+<p><strong>Program scheduling, equipment inventory, approvals and staff rosters for a studio team, in one installable web app that runs on free tiers.</strong> Teams request equipment and sessions, approvers decide on them, and the crew sees who is on shift. It is a small internal app, built for up to 500 users and 100,000 records, that works in Chrome on desktop and mobile and installs to the home screen as a PWA.</p>
+<p>It is also a compact, working reference for a <strong>React + Supabase + Vercel</strong> app with Google sign-in, role-based access, Postgres Row Level Security, Edge Functions, and an in-repo UI kit instead of a component library.</p>
+<h2 id="screenshots">Screenshots</h2>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/live-miracles/setu/master/docs/images/demo.gif" alt="Walkthrough: open a submitted program request, approve it, see it appear on the calendar, then browse the roster and an inventory request" width="760" />
+</p>
 
 <p align="center">
-  <strong>Studio program scheduling, equipment inventory, approvals and staff rosters<br />in one installable web app that runs entirely on free tiers.</strong>
+  <img src="https://raw.githubusercontent.com/live-miracles/setu/master/docs/images/program-detail.png" alt="A program request with details, sessions, approval actions and activity comments" width="760" />
 </p>
 
 <p align="center">
-  <a href="https://github.com/live-miracles/setu/actions/workflows/ci.yml"><img src="https://github.com/live-miracles/setu/actions/workflows/ci.yml/badge.svg" alt="CI status" /></a>
-  <a href="https://github.com/live-miracles/setu/commits/master"><img src="https://img.shields.io/github/last-commit/live-miracles/setu?logo=github" alt="Last commit" /></a>
-  <a href="https://github.com/live-miracles/setu/stargazers"><img src="https://img.shields.io/github/stars/live-miracles/setu?style=flat&logo=github" alt="GitHub stars" /></a>
-  <img src="https://img.shields.io/badge/Node.js-22%2B-339933?logo=nodedotjs&logoColor=white" alt="Node.js 22 or newer" />
-  <br />
-  <img src="https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white" alt="TypeScript" />
-  <img src="https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black" alt="React 19" />
-  <img src="https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?logo=tailwindcss&logoColor=white" alt="Tailwind CSS 4" />
-  <img src="https://img.shields.io/badge/Supabase-Postgres%20%2B%20Edge%20Functions-3FCF8E?logo=supabase&logoColor=white" alt="Supabase" />
-  <img src="https://img.shields.io/badge/Vercel-static%20frontend-000000?logo=vercel&logoColor=white" alt="Vercel" />
-  <br />
-  <img src="https://img.shields.io/badge/PWA-installable-5A0FC8?logo=pwa&logoColor=white" alt="Installable PWA" />
-  <img src="https://img.shields.io/badge/hosting-free%20tiers-brightgreen" alt="Runs on free tiers" />
-  <img src="https://img.shields.io/badge/code%20style-prettier-ff69b4?logo=prettier&logoColor=white" alt="Prettier" />
+  <img src="https://raw.githubusercontent.com/live-miracles/setu/master/docs/images/roster.png" alt="The roster: shifts per person per day in soft colours" width="760" />
 </p>
 
-<p>Setu (Sanskrit for “bridge”) connects the people who run a studio: the teams that
-request equipment and sessions, the approvers who decide on them, and the crew who
-turn up. It is a small internal app, built for up to 500 users and 100,000 records,
-that works in Chrome on desktop and mobile and installs to the home screen as a PWA.</p>
-<p>It is also a compact, working reference for a <strong>React + Supabase + Vercel</strong> app with
-Google sign-in, role-based access, Postgres Row Level Security, Edge Functions, and
-an in-repo UI kit instead of a component library.</p>
+<p>The GIF and screenshots use made-up data from the built-in demo, not a real organisation.
+Run it yourself with <code>npm run demo</code>; see <a href="/projects/setu/docs/getting-started/#try-it-without-supabase">Try it without Supabase</a>.</p>
 <h2 id="features">Features</h2>
 <ul>
 <li><strong>Program requests and calendar.</strong> Request sessions at a place, see a month

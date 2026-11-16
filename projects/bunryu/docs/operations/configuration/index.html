@@ -280,8 +280,7 @@ persistent journald with a seven-day retention limit, 1 GB system journal cap,
 <p>Key Vault colours each stream key from what Bunryu says about the outputs that use it.
 Set the link in the dashboard, under <strong>Settings &gt; Key Vault</strong>, and Bunryu sends a report
 once a minute, and at once when an output changes status (at most one every 10 s). It
-applies when you save, with no restart; <strong>Send test report</strong> sends one report now and
-shows Key Vault&#39;s answer.</p>
+applies when you save, with no restart, and a report is sent at once.</p>
 <table>
 <thead>
 <tr>
@@ -294,19 +293,18 @@ shows Key Vault&#39;s answer.</p>
 <td>Key Vault&#39;s ingest endpoint, such as <code>https://&lt;project&gt;.supabase.co/functions/v1/ingest</code>. <code>https</code>, or <code>http</code> only for <code>localhost</code> (a test receiver); no credentials in it, and not a link-local or unspecified address</td>
 </tr>
 <tr>
-<td>Token</td>
-<td>The ingest token from Key Vault, sent as <code>Authorization: Bearer &lt;token&gt;</code>. Printable ASCII without spaces</td>
-</tr>
-<tr>
-<td>Hash secret</td>
-<td>The secret shared with Key Vault for the hash of each destination URL. At least 16 characters</td>
+<td>Secret</td>
+<td>The secret Key Vault shows its owners (its <code>KEY_VAULT_SECRET</code>). At least 32 characters of printable ASCII, no spaces</td>
 </tr>
 </tbody></table>
+<p>One secret is all the link needs: Bunryu derives from it the bearer token it sends
+(<code>Authorization: Bearer &lt;token&gt;</code>) and the hash secret for the destination hashes, the same
+way Key Vault does, so the two always agree.</p>
 <p>A wrong value is refused when you save it, so the saved link always works as far as its
-format goes. The token and secret are never shown again: leave them empty to keep the
-saved ones, and clear the link to turn the reports off (this also forgets them). They
-are stored in the database, like the server name, and the dashboard and
-<a href="/projects/bunryu/docs/reference/api/">API</a> return only whether they are set.</p>
+format goes. The secret is never shown again: leave it empty to keep the saved one, and
+clear the link to turn the reports off (this also forgets it). The token and hash secret
+derived from it are stored in the database, like the server name (the secret itself is
+not), and the dashboard and <a href="/projects/bunryu/docs/reference/api/">API</a> return only whether it is set.</p>
 <p>Key Vault tells servers apart by the report&#39;s <code>instance</code>, which is this server&#39;s
 <strong>Server Name</strong> (<strong>Settings &gt; General</strong>). Give each server that reports to the same Key Vault
 its own name. A rename shows in the next report, within a minute.</p>
@@ -336,7 +334,7 @@ failed attempts is <code>error</code> with <code>stoppedAfterFailures: true</cod
 is plain <code>stopped</code>. Advice about the configuration (an output that shares a destination
 with another, encoding tips) is not a warning here.</li>
 <li><strong><code>hash</code></strong> identifies the destination without revealing it: the first 32 hex characters of
-HMAC-SHA256 (keyed with the hash secret) of the URL, trimmed, with a lowercase scheme and host and
+HMAC-SHA256 (keyed with the hash secret derived from the secret) of the URL, trimmed, with a lowercase scheme and host and
 no trailing <code>/</code>. Key Vault matches its own server and key to the same hash. The
 test vectors both sides check are in
 <a href="https://github.com/live-miracles/bunryu/blob/master/test/fixtures/key-vault-hash-vectors.json"><code>test/fixtures/key-vault-hash-vectors.json</code></a>.</li>

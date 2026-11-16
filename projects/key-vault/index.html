@@ -110,7 +110,7 @@ from a Google Cloud OAuth client whose redirect URI is
 site&#39;s address in Authentication → URL Configuration (the default sends sign-in back to
 <code>http://localhost:3000</code>).</li>
 <li>Set the function secrets (see <code>docs/refactor-plan.md</code> for what each is):
-<code>KEY_VAULT_APP_ORIGIN</code>, <code>KEY_VAULT_HASH_SECRET</code>, <code>KEY_VAULT_OWNER_EMAILS</code>, <code>KEY_VAULT_INGEST_TOKEN</code>.</li>
+<code>KEY_VAULT_APP_ORIGIN</code>, <code>KEY_VAULT_OWNER_EMAILS</code>, <code>KEY_VAULT_SECRET</code>.</li>
 <li>Add the repository secrets <code>SUPABASE_ACCESS_TOKEN</code> and <code>SUPABASE_PROJECT_REF</code>;
 <code>.github/workflows/deploy-supabase.yml</code> then applies the migrations and deploys both functions on every
 change under <code>supabase/</code>.</li>

@@ -270,9 +270,9 @@ keyframe interval is measured only once per publisher, so the button does not re
 listed in yellow under these lines with advice, and in the hover text of the input&#39;s
 status dot.</p>
 <p>Send <strong>progressive</strong> video (<code>1080p50</code>, not <code>1080i25</code>): the dashboard writes the scan in
-the stream specification, and an interlaced input gets a warning alert, because RTMP
-destinations such as YouTube need progressive video and an output can end up sending
-only audio. Set the encoder&#39;s output to progressive scan.</p>
+the stream specification, and an interlaced input gets a warning alert, because YouTube
+does not support interlaced video (it warns of artifacts) and an interlaced input has
+also left outputs sending only audio. Set the encoder&#39;s output to progressive scan.</p>
 <h3 id="preview">Preview</h3>
 <p>The preview is an HLS stream made by the server&#39;s FFmpeg. The input&#39;s video is
 copied unchanged, and only the audio is re-encoded to AAC.</p>

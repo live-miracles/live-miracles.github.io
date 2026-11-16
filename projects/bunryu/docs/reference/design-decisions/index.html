@@ -1417,12 +1417,25 @@ The reporter reads the setting at start and again when the route saves it
 (<code>reconfigure()</code>): it cancels the report on its way, drops the hashes (keyed by the old
 secret) and the failure episode, and sends to the new link at once. The token and the
 hash secret sit in the database, like the dashboard password&#39;s hash, so they are written
-only and the dashboard reads back <code>tokenSet</code> / <code>hashSecretSet</code>; an empty field keeps
-the saved value. The host is checked with the output destination policy&#39;s address
+only and the dashboard reads back <code>secretSet</code>; an empty field keeps the saved value. The host is checked with the output destination policy&#39;s address
 classes (link-local and unspecified are refused) because an operator-typed URL is a
-server-side request like an output destination. <strong>Send test report</strong> is one attempt
-without retries that does not touch the failure episode, so the operator sees the
-receiver&#39;s answer (<code>HTTP 401</code>) instead of waiting for the schedule.</li>
+server-side request like an output destination. A &quot;Send test report&quot; button
+(one attempt, no retries, showing the receiver&#39;s answer such as <code>HTTP 401</code>) was removed:
+saving already sends a report at once, and a failure is logged and retried on the
+schedule.</li>
+<li><strong>One secret, two derived values (November 2026).</strong> The first version asked for two
+random secrets, a token and a hash secret, and they had to be copied to Key Vault and
+here without a mix-up. Now there is one, Key Vault&#39;s <code>KEY_VAULT_SECRET</code>, and both sides
+derive the two values as <code>HMAC-SHA256(secret, label)</code> in hex (<code>key-vault/ingest-token</code>,
+<code>key-vault/hash-secret</code>). They stay independent: the token travels in a header every
+minute, and seeing it says nothing about the hash secret, which never leaves this
+server and Key Vault. A split of one long value into a left and a right half was
+rejected because it needs a fixed length and a short value silently gives weak
+halves; the derivation takes any secret of 32 or more characters. Only the two derived
+values are saved, so the reporter and the saved format did not change and the secret
+is not kept. The derivation is pinned by the same two values in both repositories&#39;
+tests (<code>test/keyVaultConfig.test.js</code>). A link saved before this change keeps working
+with its old token and hash secret until Key Vault is moved to the new secret.</li>
 <li><strong>Push, not pull.</strong> Key Vault runs on a free serverless tier and Bunryu sits behind a
 tunnel with a login, so Key Vault cannot call in without a second credential and a new
 public route. One outbound request a minute is about 43,000 a month against the
@@ -1880,6 +1893,12 @@ is restarted, de-interlaced or rejected. The output card&#39;s status dot also l
 problems on hover, and a yellow dot always has a line on the card.</p>
 <p><strong>Why:</strong></p>
 <ul>
+<li><strong>YouTube does not support interlaced video.</strong> Its help page &quot;Live streaming error
+messages&quot; lists &quot;The current video is interlaced, but interlaced video is not
+supported&quot; and says to send progressive video, otherwise &quot;you will see artifacts on
+the video which severely impact the quality&quot;. It does not say whether the video is
+shown, deinterlaced or dropped, and RTMP itself carries H.264 without a scan type, so
+the stream is accepted on ingest.</li>
 <li><strong>It broke every output on the pipeline without an error.</strong> On 2026-11-15 a 1080i
 SRT input at 8 to 10 Mb/s reached YouTube as about 58 kb/s on each of three
 FFmpegs (two outputs and a shared encode): audio only. The FFmpeg arguments map the
@@ -1887,7 +1906,9 @@ video with <code>-map 0:v:0?</code>, so a video stream FFmpeg cannot use is drop
 failing, and the processes ran at speed 1.0 with <code>non-existing PPS 0 referenced</code>
 in their stderr. The only sign was a yellow dot with no explanation anywhere. The
 operator found the cause (the encoder was set to interlaced) and switching it to
-progressive fixed it. We did not reproduce the exact FFmpeg mechanism.</li>
+progressive fixed it. We did not reproduce the exact FFmpeg mechanism, so the alert
+names YouTube&#39;s documented effect (artifacts) and the hint mentions the audio-only
+incident as something that has happened.</li>
 <li><strong>A warning matches the other input faults</strong> (keyframe interval, frame rate): an
 encoder setting only the operator can fix, shown on the input where they look.</li>
 <li><strong>The yellow dot had no text</strong> because the card listed only the warnings the output
@@ -1896,8 +1917,8 @@ reported itself, not the verdict behind the dot (<code>outputHealth</code>).</li
 <p><strong>Not adopted:</strong> de-interlacing in copy mode (it is a video encode, which is the cost
 the copy path avoids); making the video map required (an audio-only input is valid
 and would then never start); refusing the publish (an interlaced input is valid for SRT destinations).</p>
-<p><strong>Revisit when:</strong> an interlaced input is found that works to RTMP, which would make
-the alert noise, or the cause of the dropped video is pinned down in FFmpeg.</p>
+<p><strong>Revisit when:</strong> an interlaced input is found that plays fine on YouTube, which would
+make the alert noise, or the cause of the dropped video is pinned down in FFmpeg.</p>
 <h2 id="ingest-protection">Ingest protection</h2>
 <h3 id="dont-ban-abusive-ingest-clients-with-fail2ban">Don&#39;t ban abusive ingest clients with fail2ban</h3>
 <p><strong>Decision:</strong> the repo does not install or manage fail2ban. The app logs rejected
