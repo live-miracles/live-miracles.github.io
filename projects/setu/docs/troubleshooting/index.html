@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Troubleshooting — Setu</title>
+    <meta name="description" content="Common problems when setting up or deploying Setu." />
+    <link rel="canonical" href="https://live-miracles.github.io/projects/setu/docs/troubleshooting/" />
+    <meta property="og:site_name" content="Live Miracles" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Troubleshooting — Setu" />
+    <meta property="og:description" content="Common problems when setting up or deploying Setu." />
+    <meta property="og:url" content="https://live-miracles.github.io/projects/setu/docs/troubleshooting/" />
+    <meta property="og:image" content="https://live-miracles.github.io/assets/logo.png" />
+    <meta name="twitter:card" content="summary" />
+    <link rel="icon" href="/assets/logo.png" type="image/png" />
+    <link rel="alternate" type="application/rss+xml" title="Live Miracles blog" href="/blog/feed.xml" />
+    <script>
+      try {
+        var theme = localStorage.getItem('theme');
+        if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
+      } catch (e) {}
+    </script>
+    <link rel="stylesheet" href="/assets/styles.css" />
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <header class="topbar">
+        <nav class="caption mx-auto flex h-12 w-full max-w-[1024px] items-center justify-between gap-4 px-5 sm:px-6" aria-label="Site">
+          <a href="/" class="flex items-center gap-2.5 font-semibold" aria-label="Live Miracles">
+            <img src="/assets/logo.png" alt="" class="logo size-6" />
+            <span>Live Miracles</span>
+          </a>
+          <div class="flex items-center gap-5 sm:gap-7">
+            <a href="/#projects" class="text-muted hover:text-ink transition-colors">Projects</a>
+            <a href="/blog/" class="text-muted hover:text-ink transition-colors">Blog</a>
+            <div class="-mr-2 flex items-center gap-1">
+              <a href="https://github.com/live-miracles" class="icon-btn" aria-label="Live Miracles on GitHub" title="GitHub"><svg xmlns="http://www.w3.org/2000/svg" class="size-[18px]" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.79 23.39c.6.11.82-.26.82-.58v-2.02c-3.34.73-4.04-1.42-4.04-1.42-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.57A12 12 0 0 0 12 .5Z"/></svg></a>
+              <button type="button" id="theme-toggle" class="icon-btn theme-toggle" hidden><svg xmlns="http://www.w3.org/2000/svg" class="icon-sun size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32 1.41-1.41"/></svg><svg xmlns="http://www.w3.org/2000/svg" class="icon-moon size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg></button>
+            </div>
+          </div>
+        </nav>
+      </header>
+    <main class="flex-1"><div class="wash" style="--gx1: 27%; --gx2: 87%; --gx3: 35%; --gy1: -131px; --gy2: -58px; --gy1p: 19%; --gy2p: 24%; --px: 98%; --tint: #d4a24c; --glow-a: color-mix(in srgb, #d4a24c 30%, transparent); --pattern: url('/assets/patterns/kikko.svg')"><div class="mx-auto w-full max-w-[980px] px-5 py-10 sm:px-6 sm:py-14"><nav class="text-muted caption flex flex-wrap items-center gap-2" aria-label="Breadcrumb">
+              <a href="/projects/setu/" class="link-quiet hover:text-ink flex items-center gap-2"><img src="/assets/setu-logo.svg" alt="" class="logo size-5 " /><span>Setu</span></a>
+              <span aria-hidden="true">›</span><a class="link-quiet hover:text-ink" href="/projects/setu/docs/">Documentation</a>
+            </nav>
+            <h1 class="display display-lg mt-4">Troubleshooting</h1><nav class="border-line mt-8 flex gap-6 border-b" aria-label="Setu sections">
+              <a href="/projects/setu/" class="tab">Overview</a><a href="/projects/setu/docs/" class="tab" aria-current="page">Documentation</a>
+            </nav><details class="bg-parchment caption mt-6 rounded-xl p-4 lg:hidden">
+              <summary class="cursor-pointer font-semibold">Documentation menu</summary>
+              <div class="mt-3"><nav class="lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto" aria-label="Setu documentation">
+              <div class="">
+                
+                <ul class="caption"><li><a href="/projects/setu/docs/database-backups/" class="link-quiet hover:text-ink block py-1 text-muted">Database backups</a></li><li><a href="/projects/setu/docs/deployment/" class="link-quiet hover:text-ink block py-1 text-muted">Deployment</a></li><li><a href="/projects/setu/docs/getting-started/" class="link-quiet hover:text-ink block py-1 text-muted">Getting started</a></li><li><a href="/projects/setu/docs/security-review/" class="link-quiet hover:text-ink block py-1 text-muted">Setu Security Review for Internal Rollout</a></li><li><a href="/projects/setu/docs/troubleshooting/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">Troubleshooting</a></li></ul>
+              </div>
+            </nav></div>
+            </details>
+            <div class="mt-10 grid gap-12 lg:grid-cols-[13rem_minmax(0,1fr)]">
+              <div class="hidden lg:block"><nav class="lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto" aria-label="Setu documentation">
+              <div class="">
+                
+                <ul class="caption"><li><a href="/projects/setu/docs/database-backups/" class="link-quiet hover:text-ink block py-1 text-muted">Database backups</a></li><li><a href="/projects/setu/docs/deployment/" class="link-quiet hover:text-ink block py-1 text-muted">Deployment</a></li><li><a href="/projects/setu/docs/getting-started/" class="link-quiet hover:text-ink block py-1 text-muted">Getting started</a></li><li><a href="/projects/setu/docs/security-review/" class="link-quiet hover:text-ink block py-1 text-muted">Setu Security Review for Internal Rollout</a></li><li><a href="/projects/setu/docs/troubleshooting/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">Troubleshooting</a></li></ul>
+              </div>
+            </nav></div>
+              <div class="min-w-0"><article class="readme min-w-0"><p>Common problems when setting up or deploying Setu.</p>
+<p><strong>Browser shows &quot;Something went wrong / Failed to send a request to the Edge
+Function&quot;</strong>: the <code>api</code> function isn&#39;t deployed to your linked project yet.
+Run <code>npx supabase functions deploy api</code> (see
+<a href="/projects/setu/docs/getting-started/#3-apply-the-schema-and-deploy-the-api">Getting started</a>).</p>
+<p><strong>Browser shows &quot;Something went wrong / Edge Function returned a non-2xx
+status code&quot;</strong>: check the function logs in the Supabase dashboard
+(<strong>Edge Functions → api → Logs</strong>). An error there reading <code>Cannot coerce the result to a single JSON object</code> means a <code>.single()</code> query got zero rows —
+almost always because the signed-in user has no matching <code>public.profiles</code>
+row. This happens if you signed in before running <code>db push</code>, since the
+profile-creation trigger only fires for auth users created <em>after</em> the
+trigger exists. Fix it by backfilling the missing row(s) for any existing
+<code>auth.users</code> from the Supabase dashboard&#39;s SQL Editor:</p>
+<pre><code class="language-sql">insert into public.profiles (id, email, name)
+select u.id, coalesce(u.email, &#39;&#39;),
+  coalesce(u.raw_user_meta_data -&gt;&gt; &#39;full_name&#39;, u.raw_user_meta_data -&gt;&gt; &#39;name&#39;, &#39;&#39;)
+from auth.users u
+left join public.profiles p on p.id = u.id
+where p.id is null;
+</code></pre>
+<p>This only inserts rows for users missing a profile, so it&#39;s safe to re-run.
+New sign-ins after <code>db push</code> don&#39;t need this — the trigger handles them
+automatically.</p>
+<p>If every account has a profile and you still see this error only for an
+<code>admin</code>/<code>approver</code> account: the <code>profiles</code> RLS policy lets admins/approvers
+read every profile row, so an unfiltered <code>select(&#39;*&#39;).single()</code> query for
+&quot;my own profile&quot; can return more than one row. The Edge Function code
+filters explicitly by <code>.eq(&#39;id&#39;, userId)</code> before <code>.single()</code> for this
+reason — if you&#39;re extending <code>supabase/functions/api/index.ts</code>, follow the
+same pattern rather than relying on RLS alone to narrow a <code>.single()</code> query.</p>
+<p><strong>Browser shows &quot;Unsupported provider: provider is not enabled&quot;</strong>: the
+Google provider isn&#39;t turned on yet, or Client ID/Secret aren&#39;t saved — see
+<a href="/projects/setu/docs/getting-started/#2-configure-supabase-auth">Configure Supabase Auth</a>.</p>
+<p><strong>Signing in on a Vercel deployment redirects to <code>localhost</code> instead of the
+app</strong>: that project&#39;s Supabase Auth <strong>Site URL</strong> is still pointing at the
+local dev default. See
+<a href="/projects/setu/docs/deployment/#2-point-supabase-auth-at-the-vercel-domain">Deploy to Vercel</a>.</p>
+<p><strong>Local requests fail with a CORS error</strong>: the API only accepts the origins in
+<code>SETU_APP_ORIGIN</code> and <code>SETU_EXTRA_ORIGINS</code>. Add your local origin (for example
+<code>http://localhost:47193</code>) to <code>SETU_EXTRA_ORIGINS</code>.</p>
+<p><strong>Comment emails stay pending</strong>: the <code>email-dispatcher</code> function does nothing
+until all its secrets are set. Follow
+<a href="/projects/setu/docs/deployment/#comment-email-delivery">Comment email delivery</a>.</p>
+</article><a class="more caption mt-8 inline-block" href="https://github.com/live-miracles/setu/blob/master/docs/troubleshooting.md">Edit this page on GitHub</a><div class="mt-12 grid gap-4 sm:grid-cols-2">
+              <a class="panel link-quiet hover:bg-parchment p-5 transition-colors" href="/projects/setu/docs/security-review/"><div class="text-muted caption">Previous</div><div class="font-semibold">Setu Security Review for Internal Rollout</div></a>
+              
+            </div></div>
+            </div></div></div></main>
+    <footer class="caption waves text-muted border-line border-t pb-28">
+      <div class="mx-auto flex w-full max-w-[980px] flex-wrap items-center justify-between gap-x-6 gap-y-2 px-5 py-8 sm:px-6">
+        <span>Live Miracles · Open tools for live teams</span>
+        <span class="flex gap-5">
+          <a class="link-quiet" href="/blog/">Blog</a>
+          <a class="link-quiet" href="/blog/feed.xml">RSS</a>
+          <a class="link-quiet" href="https://github.com/live-miracles">GitHub</a>
+        </span>
+      </div>
+    </footer>
+    <dialog id="lightbox" class="lightbox" aria-label="Enlarged image">
+      <button type="button" class="lightbox-close" aria-label="Close image"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg></button>
+      <div class="lightbox-frame"><img alt="" /></div>
+    </dialog>
+    <script>
+      (function () {
+        var dialog = document.getElementById('lightbox');
+        if (!dialog || !dialog.showModal) return;
+        var shown = dialog.querySelector('img');
+        function zoomable(img) {
+          return !img.closest('a') && img.naturalWidth >= 300 && img.naturalHeight >= 100;
+        }
+        function mark(img) {
+          if (img.dataset.zoom || !zoomable(img)) return;
+          img.dataset.zoom = '1';
+          img.classList.add('zoomable');
+          img.tabIndex = 0;
+          img.setAttribute('role', 'button');
+          img.setAttribute('aria-label', 'Enlarge image: ' + (img.alt || 'screenshot'));
+        }
+        function open(img) {
+          shown.src = img.currentSrc || img.src;
+          shown.alt = img.alt;
+          shown.classList.remove('actual');
+          dialog.showModal();
+          dialog.scrollTo(0, 0);
+        }
+        document.querySelectorAll('.readme img').forEach(function (img) {
+          if (img.complete) mark(img);
+          else img.addEventListener('load', function () { mark(img); }, { once: true });
+        });
+        document.addEventListener('click', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom) open(img);
+        });
+        document.addEventListener('keydown', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom && (event.key === 'Enter' || event.key === ' ')) {
+            event.preventDefault();
+            open(img);
+          }
+        });
+        shown.addEventListener('click', function () {
+          shown.classList.toggle('actual');
+        });
+        dialog.addEventListener('click', function (event) {
+          if (event.target !== shown) dialog.close();
+        });
+      })();
+    </script>
+    <script>
+      (function () {
+        var button = document.getElementById('theme-toggle');
+        if (!button) return;
+        var root = document.documentElement;
+        function current() {
+          return root.dataset.theme === 'light' ? 'light' : 'dark';
+        }
+        function sync() {
+          var theme = current();
+          button.dataset.mode = theme;
+          button.setAttribute('aria-label', 'Switch to ' + (theme === 'dark' ? 'light' : 'dark') + ' theme');
+        }
+        button.hidden = false;
+        sync();
+        button.addEventListener('click', function () {
+          var next = current() === 'dark' ? 'light' : 'dark';
+          root.dataset.theme = next;
+          try {
+            localStorage.setItem('theme', next);
+          } catch (e) {}
+          sync();
+        });
+      })();
+    </script>
+  </body>
+</html>

@@ -48,370 +48,162 @@
             <p class="lead mt-5 max-w-3xl">Internal operations app for studio and program requests, equipment inventory and staff roster scheduling, on Supabase and Vercel.</p>
             <div class="mt-7 flex flex-wrap gap-3"><a class="pill pill-primary" href="https://github.com/live-miracles/setu">GitHub</a></div>
             <div class="text-muted caption mt-6 flex flex-wrap gap-x-5 gap-y-1"><span class="inline-flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 2.5 2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.31l-5.8 3.05 1.11-6.46-4.7-4.58 6.49-.94L12 2.5Z"/></svg>1</span><span class="inline-flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="6" cy="4" r="2"/><circle cx="18" cy="4" r="2"/><circle cx="12" cy="20" r="2"/><path d="M6 6v3a3 3 0 0 0 3 3h3m6-6v3a3 3 0 0 1-3 3h-3m0 0v6"/></svg>0</span><span>TypeScript</span><span>Updated 2026-11-16</span></div>
-            <div class="mt-4 flex flex-wrap gap-2"><span class="chip">ant-design</span><span class="chip">react</span><span class="chip">refine</span><span class="chip">supabase</span><span class="chip">vercel</span></div><nav class="border-line mt-8 flex gap-6 border-b" aria-label="Setu sections">
+            <div class="mt-4 flex flex-wrap gap-2"><span class="chip">approval-workflow</span><span class="chip">edge-functions</span><span class="chip">google-oauth</span><span class="chip">internal-tools</span><span class="chip">inventory-management</span><span class="chip">postgresql</span><span class="chip">progressive-web-app</span><span class="chip">pwa</span><span class="chip">qr-code</span><span class="chip">react</span><span class="chip">row-level-security</span><span class="chip">scheduling</span><span class="chip">supabase</span><span class="chip">tailwindcss</span><span class="chip">typescript</span><span class="chip">vercel</span></div><nav class="border-line mt-8 flex gap-6 border-b" aria-label="Setu sections">
               <a href="/projects/setu/" class="tab" aria-current="page">Overview</a><a href="/projects/setu/docs/" class="tab">Documentation</a>
             </nav><div class="mt-10"><details class="bg-parchment text-muted caption mb-8 rounded-xl p-4">
               <summary class="text-ink cursor-pointer font-semibold">On this page</summary>
               <ol class="mt-3 space-y-2">
-                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#free-tier-deployment">Free-tier deployment</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#database-backups">Database backups</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#architecture">Architecture</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#requirements">Requirements</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#start-a-new-developer-environment">Start a new developer environment</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#1-install-the-project">1. Install the project</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#2-configure-supabase-auth">2. Configure Supabase Auth</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#3-apply-the-schema-and-deploy-the-api">3. Apply the schema and deploy the API</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#4-run-the-frontend">4. Run the frontend</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#useful-commands">Useful commands</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#troubleshooting">Troubleshooting</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#deploy-to-vercel">Deploy to Vercel</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#1-connect-the-repository-to-vercel">1. Connect the repository to Vercel</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#2-point-supabase-auth-at-the-vercel-domain">2. Point Supabase Auth at the Vercel domain</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#3-deploy-the-database-and-api-to-this-project">3. Deploy the database and API to this project</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#migration-status">Migration status</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#roles">Roles</a></li>
+                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#features">Features</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#how-it-works">How it works</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#quick-start">Quick start</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#documentation">Documentation</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#contributing-and-security">Contributing and security</a></li>
               </ol>
             </details><article class="readme min-w-0"><p align="center">
   <img src="https://raw.githubusercontent.com/live-miracles/setu/master/design/logo/setu-logo.svg" alt="Setu logo" width="96" height="96" />
 </p>
 
-<p>Setu is an internal operations app built on Supabase and Vercel. The frontend
-is a Vercel-style static app; its API boundary is a Supabase Edge Function
-backed by Postgres.</p>
-<p>It covers equipment and program requests, comments, roster scheduling,
-inventory, programs, home content, and user settings.</p>
-<h2 id="free-tier-deployment">Free-tier deployment</h2>
-<p>This architecture can run on the free tiers of Supabase and Vercel, within each
-provider&#39;s current quotas and terms. Setu uses a single Supabase project for
-both production and local development: the free plan allows only two active
-projects, and this is a small internal app. Supabase hosts the database, Storage, and Edge Functions, including the
-10-minute comment-email worker that sends through the Gmail API, and Vercel
-only serves the static frontend. Supabase&#39;s current Free
-plan includes two active projects, 500,000 Edge Function invocations, 1 GB of
-file storage, and 500 MB of database storage per project. Free projects pause
-after 7 days with no API activity.</p>
-<p><a href="https://github.com/live-miracles/setu/blob/master/.github/workflows/keep-alive.yml"><code>.github/workflows/keep-alive.yml</code></a> pings
-the project every 3 days to prevent this. It needs two repository secrets
-(<strong>Settings → Secrets and variables → Actions</strong> in GitHub), using the URL and
-publishable key from the project&#39;s <strong>Project Settings → API Keys</strong> page (see
-step 1 below for where to find these):</p>
+<h1 align="center">Setu</h1>
+
+<p align="center">
+  <strong>Studio program scheduling, equipment inventory, approvals and staff rosters<br />in one installable web app that runs entirely on free tiers.</strong>
+</p>
+
+<p align="center">
+  <a href="https://github.com/live-miracles/setu/actions/workflows/ci.yml"><img src="https://github.com/live-miracles/setu/actions/workflows/ci.yml/badge.svg" alt="CI status" /></a>
+  <a href="https://github.com/live-miracles/setu/commits/master"><img src="https://img.shields.io/github/last-commit/live-miracles/setu?logo=github" alt="Last commit" /></a>
+  <a href="https://github.com/live-miracles/setu/stargazers"><img src="https://img.shields.io/github/stars/live-miracles/setu?style=flat&logo=github" alt="GitHub stars" /></a>
+  <img src="https://img.shields.io/badge/Node.js-22%2B-339933?logo=nodedotjs&logoColor=white" alt="Node.js 22 or newer" />
+  <br />
+  <img src="https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black" alt="React 19" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?logo=tailwindcss&logoColor=white" alt="Tailwind CSS 4" />
+  <img src="https://img.shields.io/badge/Supabase-Postgres%20%2B%20Edge%20Functions-3FCF8E?logo=supabase&logoColor=white" alt="Supabase" />
+  <img src="https://img.shields.io/badge/Vercel-static%20frontend-000000?logo=vercel&logoColor=white" alt="Vercel" />
+  <br />
+  <img src="https://img.shields.io/badge/PWA-installable-5A0FC8?logo=pwa&logoColor=white" alt="Installable PWA" />
+  <img src="https://img.shields.io/badge/hosting-free%20tiers-brightgreen" alt="Runs on free tiers" />
+  <img src="https://img.shields.io/badge/code%20style-prettier-ff69b4?logo=prettier&logoColor=white" alt="Prettier" />
+</p>
+
+<p>Setu (Sanskrit for “bridge”) connects the people who run a studio: the teams that
+request equipment and sessions, the approvers who decide on them, and the crew who
+turn up. It is a small internal app, built for up to 500 users and 100,000 records,
+that works in Chrome on desktop and mobile and installs to the home screen as a PWA.</p>
+<p>It is also a compact, working reference for a <strong>React + Supabase + Vercel</strong> app with
+Google sign-in, role-based access, Postgres Row Level Security, Edge Functions, and
+an in-repo UI kit instead of a component library.</p>
+<h2 id="features">Features</h2>
 <ul>
-<li><code>SETU_SUPABASE_URL_PROD</code> / <code>SETU_SUPABASE_PUBLISHABLE_KEY_PROD</code></li>
+<li><strong>Program requests and calendar.</strong> Request sessions at a place, see a month
+calendar of approved programs, and rely on the app to block clashes (two approved
+programs can&#39;t use the same place within an hour of each other).</li>
+<li><strong>Equipment inventory.</strong> Track types, brands, places, and individually labelled
+items. Print QR labels as a PDF, scan them with the phone camera, and attach
+photos that are compressed in the browser before upload.</li>
+<li><strong>Approval workflow.</strong> Inventory and program requests share one lifecycle:
+submit, approve, reject, issue, close, cancel, revise, and reopen, enforced by a
+single policy module used by both the app and the API.</li>
+<li><strong>Comments and email.</strong> Comments on every request, with email
+notifications to participants sent through the Gmail API.</li>
+<li><strong>Roster scheduling.</strong> Shift types and per-person rosters for the crew.</li>
+<li><strong>Roles and access control.</strong> <code>admin</code>, <code>approver</code>, <code>viewer</code>, and <code>user</code> roles, an
+email-domain allowlist, and Row Level Security in Postgres.</li>
+<li><strong>Built for phones.</strong> Installable PWA, a bottom dock on mobile, and a
+list-and-detail layout on wide screens.</li>
+<li><strong>Costs nothing to run.</strong> Fits within the free plans of Supabase and Vercel;
+a scheduled workflow keeps the free project from pausing.</li>
 </ul>
-<p>Trigger a manual run from the <strong>Actions</strong> tab (<strong>Keep Supabase projects
-alive → Run workflow</strong>) to verify it after setup.</p>
-<p>Comment email delivery uses the Gmail API sending limits of the mailbox that
-authorized it (roughly 500 recipients a day for a consumer Gmail account and
-2,000 for Google Workspace), so this path is intended for Setu&#39;s low-volume
-internal notifications.</p>
-<p>See the providers&#39; current plan details before relying on these numbers:
-<a href="https://supabase.com/pricing">Supabase pricing</a>,
-<a href="https://vercel.com/pricing">Vercel pricing</a>, and
-<a href="https://support.google.com/a/answer/166852">Gmail sending limits</a>.</p>
-<h2 id="database-backups">Database backups</h2>
-<p>The free Supabase plan has no managed backups; a paid Supabase plan includes
-them. This repository deliberately contains no backup job, because workflow
-artifacts of a public repository can be downloaded by anyone. On the free plan,
-run an encrypted weekly backup from a small separate private repository
-instead. <a href="/projects/setu/docs/database-backups/"><code>docs/database-backups.md</code></a> has the setup,
-a ready-to-use workflow template, and the restore steps.</p>
-<h2 id="architecture">Architecture</h2>
+<h2 id="how-it-works">How it works</h2>
 <pre><code class="language-text">Browser → Vercel static app → Supabase Auth
                            ├→ Edge Function: api
                            ├→ Postgres
                            └→ Storage
 </code></pre>
-<ul>
-<li><code>frontend/</code> contains the browser application.</li>
-<li><code>supabase/migrations/</code> contains the database schema.</li>
-<li><code>supabase/functions/api/</code> contains the authenticated API boundary.</li>
-<li><code>shared/types.d.ts</code> contains the frontend/API contract.</li>
-<li><a href="/projects/setu/docs/security-review/"><code>docs/security-review.md</code></a> documents the security controls and the
-intentional design decisions (public operational images, shared approved-program calendar,
-domain allowlist and existing sessions) that automated scanners may flag.</li>
-</ul>
-<h2 id="requirements">Requirements</h2>
-<ul>
-<li>Node.js 22 or newer</li>
-<li>Access to the Setu Supabase project (shared by production and development)</li>
-<li>A Google OAuth client configured for that Supabase project</li>
-<li>Git</li>
-</ul>
-<p>Docker is not required for the recommended hosted-development workflow. The
-Supabase CLI is installed as a project dependency by <code>npm install</code>.</p>
-<h2 id="start-a-new-developer-environment">Start a new developer environment</h2>
-<h3 id="1-install-the-project">1. Install the project</h3>
-<pre><code class="language-bash">git clone &lt;repository-url&gt;
-cd setu
-npm install
-cp .env.example .env.local
-</code></pre>
-<p>Edit <code>.env.local</code> with the URL and publishable/anon key for the Setu Supabase
-project. Production and local development share this one project, so local
-work reads and writes live data: sign in with a test account, don&#39;t run bulk or
-destructive changes, and remember that comments queue real emails to the
-request&#39;s participants. In the Supabase dashboard, open the project, then go to
-<strong>Project Settings → API Keys</strong>, &quot;Publishable and secret API keys&quot; tab:</p>
-<pre><code class="language-env">SETU_SUPABASE_URL=https://&lt;project-ref&gt;.supabase.co
-SETU_SUPABASE_PUBLISHABLE_KEY=&lt;the &quot;Publishable key&quot; value shown there&gt;
-</code></pre>
-<p><code>.env.local</code> is ignored by Git. Never put a service-role/secret key or OAuth
-secret in it — only the publishable key is safe to use here.</p>
-<h3 id="2-configure-supabase-auth">2. Configure Supabase Auth</h3>
-<p>The frontend signs users in with Google OAuth, which needs an OAuth client in
-Google Cloud plus matching config in Supabase. Do this before your first
-sign-in attempt — see the note at the end of step 3 if you already tried
-signing in.</p>
-<p><strong>In Google Cloud Console</strong> (<a href="https://console.cloud.google.com/apis/credentials">APIs &amp; Credentials</a>):</p>
-<ol>
-<li>Pick or create a GCP project for this app. If prompted, configure the
-OAuth consent screen first (app name, support email) — this is a one-time
-step per GCP project. While the app is in &quot;Testing&quot; mode, only accounts
-you explicitly add as test users can sign in.</li>
-<li><strong>Create Credentials → OAuth client ID</strong> → Application type <strong>Web
-application</strong>.</li>
-<li>Under <strong>Authorized JavaScript origins</strong>, add <code>http://localhost:47193</code> (plus
-the Vercel domain, see <a href="#deploy-to-vercel">Deploy to Vercel</a>).</li>
-<li>Under <strong>Authorized redirect URIs</strong>, add the callback URL shown in the
-Supabase panel from the next step, typically
-<code>https://&lt;project-ref&gt;.supabase.co/auth/v1/callback</code>.</li>
-<li>Click <strong>Create</strong>. Google shows a <strong>Client ID</strong>
-(<code>....apps.googleusercontent.com</code>) and <strong>Client Secret</strong> (<code>GOCSPX-...</code>) —
-keep this tab open, you&#39;ll need both in the next step.</li>
-</ol>
-<p><strong>In the Supabase dashboard</strong>, under <strong>Authentication → Sign In / Providers</strong>
-(this section may just be labeled &quot;Providers&quot; in older dashboard versions),
-scroll to <strong>Auth Providers</strong> and click <strong>Google</strong>:</p>
-<ol>
-<li>Paste the Client ID into <strong>Client IDs</strong> and the Client Secret into
-<strong>Client Secret (for OAuth)</strong>.</li>
-<li>Leave <strong>Skip nonce checks</strong> and <strong>Allow users without an email</strong> off —
-they&#39;re workarounds for platforms Setu doesn&#39;t need (native iOS flows,
-providers that omit email).</li>
-<li>Toggle <strong>Enable Sign in with Google</strong> on, then <strong>Save</strong>.</li>
-</ol>
-<p>Without this provider setup, the browser will show
-<code>Unsupported provider: provider is not enabled</code>.</p>
-<h3 id="3-apply-the-schema-and-deploy-the-api">3. Apply the schema and deploy the API</h3>
-<p>Authenticate the Supabase CLI and connect it to the project. <code>supabase login</code>
-opens a browser tab to authorize the CLI — run it from an interactive
-terminal, not a non-interactive/CI shell. This is the same project that serves
-production, so the commands below are only needed for the first setup; after
-that, merging to <code>master</code> deploys migrations and functions automatically.</p>
-<pre><code class="language-bash">npx supabase login
-npx supabase link --project-ref &lt;project-ref&gt;
-npx supabase db push
-npx supabase secrets set SETU_APP_ORIGIN=https://&lt;vercel-domain&gt; SETU_EXTRA_ORIGINS=http://localhost:47193
-npx supabase functions deploy api
-</code></pre>
-<p><code>SETU_APP_ORIGIN</code> is the public app origin (used for CORS and the “View
-request” email links). <code>SETU_EXTRA_ORIGINS</code> is an optional comma-separated list
-of additional browser origins the API accepts; it lets <code>npm run dev</code> call the
-production API. Without it, the browser blocks local requests with a CORS
-error. If you use another port (<code>PORT=3001 npm run dev</code>), add that origin too.</p>
-<p>Because <code>db push</code> and <code>functions deploy</code> here change production, avoid running
-them from an unmerged branch: a migration that fails halfway or drops data
-cannot be undone without a restore (see
-<a href="#database-backups">Database backups</a>). <code>npm test</code> runs every migration
-against an isolated PostgreSQL (PGlite), so run it before merging.</p>
-<p>Comment email delivery</p>
-<p>Comments enqueue email rows transactionally in <code>email_outbox</code>. Every ten
-minutes pg_cron calls <code>public.run_comment_email_dispatch()</code>, which posts to the
-<code>email-dispatcher</code> Edge Function with a shared secret. The function exchanges a
-stored Google refresh token for an access token, claims at most 50 pending rows
-through the <code>claim_comment_email_batch</code> RPC, sends each one with the Gmail API
-<code>users.messages.send</code> endpoint, and marks it <code>sent</code>. A failed send is retried
-with a growing delay and marked <code>failed</code> after five attempts. Rows are claimed
-with <code>for update skip locked</code>, so overlapping runs never send the same row
-twice. If the token refresh fails, no rows are claimed.</p>
-<p>One-time Gmail setup (free; repeat the last two steps if the token is revoked):</p>
-<ol>
-<li>In the <a href="https://console.cloud.google.com/">Google Cloud console</a>, create a
-project (a personal account can own it), enable the <strong>Gmail API</strong>, and set up
-the OAuth consent screen. Add the <code>https://www.googleapis.com/auth/gmail.send</code>
-scope. With an <strong>External</strong> consent screen, set the publishing status to
-<strong>In production</strong>: refresh tokens issued in <strong>Testing</strong> expire after 7 days.
-An unverified app shows a warning on the one-time sign-in, which is fine for
-a single sending mailbox.</li>
-<li>Create an OAuth client of type <strong>Web application</strong> and add
-<code>https://developers.google.com/oauthplayground</code> as an authorized redirect URI.</li>
-<li>In the <a href="https://developers.google.com/oauthplayground">OAuth 2.0 Playground</a>,
-open the settings, tick <strong>Use your own OAuth credentials</strong>, and enter the
-client ID and secret. Authorize the <code>gmail.send</code> scope while signed in as the
-mailbox that should send the emails, then exchange the authorization code
-and copy the refresh token. If the sign-in says the app is blocked by an
-administrator, that Workspace does not allow third-party Gmail access; use a
-different mailbox or ask the admin to trust the OAuth client.</li>
-<li>Set the function secrets (on each project) and deploy:</li>
-</ol>
-<pre><code class="language-bash">npx supabase secrets set GOOGLE_CLIENT_ID=&lt;client-id&gt; GOOGLE_CLIENT_SECRET=&lt;client-secret&gt; GOOGLE_REFRESH_TOKEN=&lt;refresh-token&gt; GMAIL_SENDER=&lt;sending-address&gt; EMAIL_DISPATCH_SECRET=&lt;random-string&gt; --project-ref &lt;project-ref&gt;
-</code></pre>
-<pre><code class="language-bash">npx supabase functions deploy email-dispatcher --no-verify-jwt --project-ref &lt;project-ref&gt;
-</code></pre>
-<ol start="5">
-<li>Store the scheduler&#39;s endpoint and the same shared secret in Vault by running
-this in the SQL editor (skip any secret that already exists):</li>
-</ol>
-<pre><code class="language-sql">select vault.create_secret(&#39;https://&lt;project-ref&gt;.supabase.co&#39;, &#39;setu_project_url&#39;);
-select vault.create_secret(&#39;&lt;same-random-string&gt;&#39;, &#39;setu_email_dispatch_secret&#39;);
-</code></pre>
-<p><code>GMAIL_SENDER</code> must be the authorized mailbox&#39;s address (or one of its Gmail
-“Send mail as” aliases). Optional secrets: <code>EMAIL_SENDER_NAME</code> (defaults to
-<code>Live Stream Setu</code>), <code>EMAIL_REPLY_TO</code> (where replies should go instead of the
-sending mailbox), <code>EMAIL_TIME_ZONE</code> for session times (defaults to
-<code>Asia/Kolkata</code>), and <code>CC_EMAIL</code>, an additional address that should receive a
-copy of every email; multiple comma-separated addresses are supported. The
-configured address is added alongside the lead and request participants, with
-duplicates and the primary recipient removed automatically. “View request”
-links use the existing <code>SETU_APP_ORIGIN</code> secret. Until the required secrets
-are set, the function does nothing and queued rows stay pending.
-Email subjects use the request serial, the same combined request title shown
-in the detail view, and the start month/year, for example
-<code>PRG-7 - English Workshop Title | Sep 2026</code>. The body starts with the author&#39;s
-name and comment, renders the full session or inventory list as an HTML <code>&lt;ul&gt;</code>,
-and ends with a clickable “View request” link to the request in Setu. A
-plain-text body is included as a fallback.</p>
-<p>Supabase migrations and the <code>api</code> and <code>email-dispatcher</code> Edge Functions are
-deployed automatically to the Setu project by
-<code>.github/workflows/deploy-supabase.yml</code> when Supabase migrations, functions,
-or configuration files change on <code>master</code>. Add <code>SUPABASE_ACCESS_TOKEN</code> and
-<code>SUPABASE_PROJECT_REF_PROD</code> as repository
-secrets, then use the workflow&#39;s manual dispatch when needed. The workflow
-applies migrations and deploys both functions independently; manual dispatch
-runs both deployment areas.</p>
-<p>Email-domain access control</p>
-<p>The Admin Settings page manages the allowed email domains. An empty list keeps
-the app open to all domains; adding the first domain switches the app to
-allowlist mode. The migration creates the Supabase <code>Before User Created</code> Auth
-Hook function. For hosted projects, enable it once in <strong>Authentication →
-Hooks</strong> using the Postgres function
-<code>public.restrict_user_by_email_domain</code> (the checked-in <code>supabase/config.toml</code>
-contains the equivalent local configuration). A refreshed page is enough for
-an existing session to pick up a changed allowlist.</p>
-<p><code>db push</code> applies the checked-in migrations, including the trigger that
-creates a <code>profiles</code> row for each new Supabase Auth user. <code>SETU_APP_ORIGIN</code>
-is required for the API&#39;s CORS policy.</p>
-<p><strong>Complete this step before your first Google sign-in.</strong> If you already
-signed in earlier (e.g. while testing the OAuth setup in step 2, before
-<code>db push</code> had run), your <code>auth.users</code> row exists but has no matching
-<code>profiles</code> row — see <a href="#troubleshooting">Troubleshooting</a> below.</p>
-<h3 id="4-run-the-frontend">4. Run the frontend</h3>
-<pre><code class="language-bash">npm run dev
-</code></pre>
-<p>Open <a href="http://localhost:47193">http://localhost:47193</a> and sign in with Google. The dev server uses the
-same Supabase API transport as the Vercel build.</p>
-<h2 id="useful-commands">Useful commands</h2>
-<pre><code class="language-bash">npm run dev             # Start the local frontend
-npm run typecheck       # Type-check backend and frontend
-npm run format:check    # Check formatting
-npm run build:vercel    # Build the Vercel output in web/
-npx supabase db push   # Apply migrations to the linked project
-npx supabase functions deploy api
-</code></pre>
-<p>There is no mock backend. If the Edge Function reports that an operation has
-not been migrated, that operation is not implemented yet.</p>
-<h2 id="troubleshooting">Troubleshooting</h2>
-<p><strong>Browser shows &quot;Something went wrong / Failed to send a request to the Edge
-Function&quot;</strong>: the <code>api</code> function isn&#39;t deployed to your linked project yet.
-Run <code>npx supabase functions deploy api</code> (step 3).</p>
-<p><strong>Browser shows &quot;Something went wrong / Edge Function returned a non-2xx
-status code&quot;</strong>: check the function logs in the Supabase dashboard
-(<strong>Edge Functions → api → Logs</strong>). An error there reading <code>Cannot coerce the result to a single JSON object</code> means a <code>.single()</code> query got zero rows —
-almost always because the signed-in user has no matching <code>public.profiles</code>
-row. This happens if you signed in before running <code>db push</code>, since the
-profile-creation trigger only fires for auth users created <em>after</em> the
-trigger exists. Fix it by backfilling the missing row(s) for any existing
-<code>auth.users</code> from the Supabase dashboard&#39;s SQL Editor:</p>
-<pre><code class="language-sql">insert into public.profiles (id, email, name)
-select u.id, coalesce(u.email, &#39;&#39;),
-  coalesce(u.raw_user_meta_data -&gt;&gt; &#39;full_name&#39;, u.raw_user_meta_data -&gt;&gt; &#39;name&#39;, &#39;&#39;)
-from auth.users u
-left join public.profiles p on p.id = u.id
-where p.id is null;
-</code></pre>
-<p>This only inserts rows for users missing a profile, so it&#39;s safe to re-run.
-New sign-ins after <code>db push</code> don&#39;t need this — the trigger handles them
-automatically.</p>
-<p>If every account has a profile and you still see this error only for an
-<code>admin</code>/<code>approver</code> account: the <code>profiles</code> RLS policy lets admins/approvers
-read every profile row, so an unfiltered <code>select(&#39;*&#39;).single()</code> query for
-&quot;my own profile&quot; can return more than one row. The Edge Function code
-filters explicitly by <code>.eq(&#39;id&#39;, userId)</code> before <code>.single()</code> for this
-reason — if you&#39;re extending <code>supabase/functions/api/index.ts</code>, follow the
-same pattern rather than relying on RLS alone to narrow a <code>.single()</code> query.</p>
-<p><strong>Browser shows &quot;Unsupported provider: provider is not enabled&quot;</strong>: the
-Google provider isn&#39;t turned on yet, or Client ID/Secret aren&#39;t saved — see
-step 2.</p>
-<p><strong>Signing in on a Vercel deployment redirects to <code>localhost</code> instead of the
-app</strong>: that project&#39;s Supabase Auth <strong>Site URL</strong> is still pointing at the
-local dev default. See <a href="#deploy-to-vercel">Deploy to Vercel</a> step 2.</p>
-<h2 id="deploy-to-vercel">Deploy to Vercel</h2>
-<p>Not required for local development — <code>npm run dev</code> (step 4 above) runs the
-full app against the Setu Supabase project without Vercel. This section only
-applies when you&#39;re ready to deploy a preview or production build. It uses the
-same Supabase project as local development.</p>
-<h3 id="1-connect-the-repository-to-vercel">1. Connect the repository to Vercel</h3>
-<p>Set these environment variables for the appropriate Vercel environments
-(Preview and Production):</p>
-<ul>
-<li><code>SETU_SUPABASE_URL</code></li>
-<li><code>SETU_SUPABASE_PUBLISHABLE_KEY</code></li>
-</ul>
-<p>Vercel uses <code>npm run build:vercel</code> and publishes <code>web/</code> as configured in
-<code>vercel.json</code>.</p>
-<h3 id="2-point-supabase-auth-at-the-vercel-domain">2. Point Supabase Auth at the Vercel domain</h3>
-<p>In the Supabase dashboard, for the project this Vercel deployment uses, go to
-<strong>Authentication → URL Configuration</strong>:</p>
-<ul>
-<li>Set <strong>Site URL</strong> to the deployed domain, e.g. <code>https://&lt;vercel-domain&gt;</code>.</li>
-<li>Add that same URL to <strong>Redirect URLs</strong> (use <code>https://&lt;vercel-domain&gt;/**</code>,
-or <code>https://*.vercel.app/**</code> to also cover preview deployments).</li>
-</ul>
-<p>Skip this and Google sign-in still completes, but the browser is sent back to
-whatever Site URL happens to be set — often <code>http://localhost:3000</code>, left
-over from local dev — instead of the Vercel domain.</p>
-<p>Also add the Vercel domain to the Google OAuth client from step 2 above:
-under <strong>Authorized JavaScript origins</strong>, add <code>https://&lt;vercel-domain&gt;</code>. The
-<strong>Authorized redirect URIs</strong> entry doesn&#39;t need to change — Google always
-redirects to the Supabase callback URL, not the app directly.</p>
-<h3 id="3-deploy-the-database-and-api-to-this-project">3. Deploy the database and API to this project</h3>
-<p>Vercel only builds and serves <code>web/</code>; the database schema and Edge Function
-are deployed separately (automatically from <code>master</code>, see step 3 of the
-developer setup). To do it by hand, run these against the same project used in
-step 1 (pass <code>--project-ref &lt;project-ref&gt;</code> if it isn&#39;t the CLI&#39;s currently
-linked project):</p>
-<pre><code class="language-bash">npx supabase secrets set SETU_APP_ORIGIN=https://&lt;vercel-domain&gt; SETU_EXTRA_ORIGINS=http://localhost:47193 --project-ref &lt;project-ref&gt;
-npx supabase functions deploy api --project-ref &lt;project-ref&gt;
-npx supabase db push --project-ref &lt;project-ref&gt;
-</code></pre>
-<p>Skipping this step is the most common cause of a newly connected Vercel
-deployment showing &quot;Something went wrong / getDashboard: Failed to send a
-request to the Edge Function&quot; — see <a href="#troubleshooting">Troubleshooting</a>.</p>
-<h2 id="migration-status">Migration status</h2>
-<p>The current Edge Function implements <code>whoAmI</code>, <code>getDashboard</code>, and
-<code>updateOwnProfile</code>. The remaining CRUD and workflow operations are still being
-migrated; the frontend contract remains in <code>shared/types.d.ts</code> so each
-operation can be ported incrementally.</p>
-<p>The database schema already replaces Sheets-era JSON and comma-separated
-fields with relational tables. Image storage uses the public <code>request-images</code>
-bucket for cacheable static assets; uploads and deletes still go through the
-trusted Edge Function.</p>
-<h2 id="roles">Roles</h2>
-<p>The database roles are <code>admin</code>, <code>approver</code>, <code>viewer</code>, and <code>user</code>:</p>
 <table>
 <thead>
 <tr>
-<th>Role</th>
-<th>Access</th>
+<th>Layer</th>
+<th>Technology</th>
 </tr>
 </thead>
 <tbody><tr>
-<td><code>admin</code></td>
-<td>Everything, including settings and role management</td>
+<td>Frontend</td>
+<td>React 19, TypeScript, Tailwind CSS 4, TanStack Query, React Router</td>
 </tr>
 <tr>
-<td><code>approver</code></td>
-<td>Requests, approvals, scheduling, and read-only users</td>
+<td>API</td>
+<td>Supabase Edge Function (<code>supabase/functions/api/</code>)</td>
 </tr>
 <tr>
-<td><code>viewer</code></td>
-<td>All requests and standard app sections, including roster and inventory types</td>
+<td>Database</td>
+<td>Supabase Postgres with RLS and <code>pg_cron</code></td>
 </tr>
 <tr>
-<td><code>user</code></td>
-<td>Own and participant requests, plus roster and inventory types</td>
+<td>Auth</td>
+<td>Google OAuth through Supabase Auth</td>
+</tr>
+<tr>
+<td>Hosting</td>
+<td>Vercel serves the static build; GitHub Actions deploy Supabase</td>
+</tr>
+<tr>
+<td>Tests</td>
+<td><code>node --test</code>, migrations run against an in-memory Postgres (PGlite)</td>
 </tr>
 </tbody></table>
-<p>New Supabase Auth users receive a profile through the database trigger. Assign
-the first development administrator explicitly in the Supabase SQL editor:</p>
-<pre><code class="language-sql">update public.profiles
-set role = &#39;admin&#39;
-where email = &#39;your-email@example.com&#39;;
+<h2 id="quick-start">Quick start</h2>
+<p>You need Node.js 22+, a Supabase project, and a Google OAuth client.</p>
+<pre><code class="language-bash">git clone https://github.com/live-miracles/setu.git
+cd setu
+npm install
+cp .env.example .env.local   # add your Supabase URL and publishable key
+npm run dev                  # http://localhost:47193
 </code></pre>
+<p><a href="/projects/setu/docs/getting-started/">Getting started</a> walks through the Supabase and Google
+OAuth setup, applying the schema, and making yourself an admin.</p>
+<blockquote>
+<p>Local development and production share one Supabase project, so local work reads
+and writes live data. Use a test account and avoid bulk or destructive changes.</p>
+</blockquote>
+<h2 id="documentation">Documentation</h2>
+<table>
+<thead>
+<tr>
+<th>Guide</th>
+<th>What&#39;s in it</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="/projects/setu/docs/getting-started/">Getting started</a></td>
+<td>Developer setup, roles, commands, project layout</td>
+</tr>
+<tr>
+<td><a href="/projects/setu/docs/deployment/">Deployment</a></td>
+<td>Free-tier limits, Vercel, automatic deploys, comment email, allowlist</td>
+</tr>
+<tr>
+<td><a href="/projects/setu/docs/database-backups/">Database backups</a></td>
+<td>Encrypted weekly backups on the free plan, and restore steps</td>
+</tr>
+<tr>
+<td><a href="/projects/setu/docs/troubleshooting/">Troubleshooting</a></td>
+<td>Fixes for the setup errors people hit most</td>
+</tr>
+<tr>
+<td><a href="/projects/setu/docs/security-review/">Security review</a></td>
+<td>Security controls and intentional design decisions</td>
+</tr>
+<tr>
+<td><a href="https://github.com/live-miracles/setu/blob/master/docs/adr/">Architecture decisions</a></td>
+<td>Why the app uses its own UI kit instead of Ant Design</td>
+</tr>
+<tr>
+<td><a href="https://github.com/live-miracles/setu/blob/master/CONTEXT.md">Domain glossary</a></td>
+<td>Terms used in the code: request, party, approver, place, and so on</td>
+</tr>
+</tbody></table>
+<h2 id="contributing-and-security">Contributing and security</h2>
+<p>Run <code>npm test</code>, <code>npm run typecheck</code>, and <code>npm run format:check</code> before opening a pull
+request; the same checks run in CI. Repository conventions are in
+<a href="https://github.com/live-miracles/setu/blob/master/AGENTS.md">AGENTS.md</a>. To report a vulnerability, follow <a href="https://github.com/live-miracles/setu/blob/master/SECURITY.md">SECURITY.md</a>
+and contact the repository owner privately instead of opening a public issue.</p>
 </article></div></div></div></main>
     <footer class="caption waves text-muted border-line border-t pb-28">
       <div class="mx-auto flex w-full max-w-[980px] flex-wrap items-center justify-between gap-x-6 gap-y-2 px-5 py-8 sm:px-6">

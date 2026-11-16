@@ -1,0 +1,682 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Architecture and development notes — Ping Monitor</title>
+    <meta name="description" content="Technical documentation for contributors. For what Ping Monitor is and how to use it, see the README." />
+    <link rel="canonical" href="https://live-miracles.github.io/projects/ping-monitor/docs/ARCHITECTURE/" />
+    <meta property="og:site_name" content="Live Miracles" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Architecture and development notes — Ping Monitor" />
+    <meta property="og:description" content="Technical documentation for contributors. For what Ping Monitor is and how to use it, see the README." />
+    <meta property="og:url" content="https://live-miracles.github.io/projects/ping-monitor/docs/ARCHITECTURE/" />
+    <meta property="og:image" content="https://raw.githubusercontent.com/live-miracles/ping-monitor/main/resources/icon.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/assets/logo.png" type="image/png" />
+    <link rel="alternate" type="application/rss+xml" title="Live Miracles blog" href="/blog/feed.xml" />
+    <script>
+      try {
+        var theme = localStorage.getItem('theme');
+        if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
+      } catch (e) {}
+    </script>
+    <link rel="stylesheet" href="/assets/styles.css" />
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <header class="topbar">
+        <nav class="caption mx-auto flex h-12 w-full max-w-[1024px] items-center justify-between gap-4 px-5 sm:px-6" aria-label="Site">
+          <a href="/" class="flex items-center gap-2.5 font-semibold" aria-label="Live Miracles">
+            <img src="/assets/logo.png" alt="" class="logo size-6" />
+            <span>Live Miracles</span>
+          </a>
+          <div class="flex items-center gap-5 sm:gap-7">
+            <a href="/#projects" class="text-muted hover:text-ink transition-colors">Projects</a>
+            <a href="/blog/" class="text-muted hover:text-ink transition-colors">Blog</a>
+            <div class="-mr-2 flex items-center gap-1">
+              <a href="https://github.com/live-miracles" class="icon-btn" aria-label="Live Miracles on GitHub" title="GitHub"><svg xmlns="http://www.w3.org/2000/svg" class="size-[18px]" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.79 23.39c.6.11.82-.26.82-.58v-2.02c-3.34.73-4.04-1.42-4.04-1.42-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.57A12 12 0 0 0 12 .5Z"/></svg></a>
+              <button type="button" id="theme-toggle" class="icon-btn theme-toggle" hidden><svg xmlns="http://www.w3.org/2000/svg" class="icon-sun size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32 1.41-1.41"/></svg><svg xmlns="http://www.w3.org/2000/svg" class="icon-moon size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg></button>
+            </div>
+          </div>
+        </nav>
+      </header>
+    <main class="flex-1"><div class="wash" style="--gx1: 28%; --gx2: 72%; --gx3: 53%; --gy1: -127px; --gy2: -32px; --gy1p: 1%; --gy2p: 23%; --px: 87%; --tint: #2a9d8f; --glow-a: color-mix(in srgb, #2a9d8f 30%, transparent); --pattern: url('/assets/patterns/shippo.svg')"><div class="mx-auto w-full max-w-[980px] px-5 py-10 sm:px-6 sm:py-14"><nav class="text-muted caption flex flex-wrap items-center gap-2" aria-label="Breadcrumb">
+              <a href="/projects/ping-monitor/" class="link-quiet hover:text-ink flex items-center gap-2"><img src="/assets/ping-monitor-logo.svg" alt="" class="logo size-5 " /><span>Ping Monitor</span></a>
+              <span aria-hidden="true">›</span><a class="link-quiet hover:text-ink" href="/projects/ping-monitor/docs/">Documentation</a>
+            </nav>
+            <h1 class="display display-lg mt-4">Architecture and development notes</h1><nav class="border-line mt-8 flex gap-6 border-b" aria-label="Ping Monitor sections">
+              <a href="/projects/ping-monitor/" class="tab">Overview</a><a href="/projects/ping-monitor/docs/" class="tab" aria-current="page">Documentation</a>
+            </nav><details class="bg-parchment caption mt-6 rounded-xl p-4 lg:hidden">
+              <summary class="cursor-pointer font-semibold">Documentation menu</summary>
+              <div class="mt-3"><nav class="lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto" aria-label="Ping Monitor documentation">
+              <div class="">
+                
+                <ul class="caption"><li><a href="/projects/ping-monitor/docs/ARCHITECTURE/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">Architecture and development notes</a></li></ul>
+              </div>
+            </nav></div>
+            </details>
+            <div class="mt-10 grid gap-12 lg:grid-cols-[13rem_minmax(0,1fr)]">
+              <div class="hidden lg:block"><nav class="lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto" aria-label="Ping Monitor documentation">
+              <div class="">
+                
+                <ul class="caption"><li><a href="/projects/ping-monitor/docs/ARCHITECTURE/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">Architecture and development notes</a></li></ul>
+              </div>
+            </nav></div>
+              <div class="min-w-0"><details class="bg-parchment text-muted caption mb-8 rounded-xl p-4">
+              <summary class="text-ink cursor-pointer font-semibold">On this page</summary>
+              <ol class="mt-3 space-y-2">
+                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#development">Development</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#structure">Structure</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#security-model">Security model</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#ipc-contract">IPC contract</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#database-layer">Database layer</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#network-engine-srcmainnetwork">Network engine (src/main/network/)</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#frontend-visualization">Frontend visualization</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#alerting-watchdog-srcmainalerting">Alerting watchdog (src/main/alerting/)</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#system-tray-srcmaintrayts">System tray (src/main/tray.ts)</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#auto-update-srcmainupdaterts-githubworkflowsreleaseyml">Auto-update (src/main/updater.ts, .github/workflows/release.yml)</a></li>
+              </ol>
+            </details><article class="readme min-w-0"><p>Technical documentation for contributors. For what Ping Monitor is and how to use it, see the
+<a href="/projects/ping-monitor/">README</a>.</p>
+<h2 id="development">Development</h2>
+<pre><code class="language-bash">npm install      # also runs `prisma generate` + rebuilds better-sqlite3 for Electron (postinstall)
+npm run dev      # dev server + electron with HMR
+npm run build    # typecheck + production build to out/
+</code></pre>
+<p>Database commands (only needed when you change <code>prisma/schema.prisma</code>):</p>
+<pre><code class="language-bash">npm run db:migrate    # prisma migrate dev --name &lt;...&gt; - creates prisma/migrations/*/migration.sql
+npm run db:generate   # regenerate the Prisma Client into src/generated/prisma
+npm run db:studio     # prisma studio, browsing prisma/dev.db (the CLI&#39;s dev database, not the app&#39;s)
+</code></pre>
+<p>Release builds (<code>npm run build:win</code>/<code>:mac</code>/<code>:linux</code>) only upload anywhere if <code>GH_TOKEN</code> is set and
+<code>--publish</code> is passed - see <code>.github/workflows/release.yml</code>, which does exactly that on every <code>v*</code>
+tag push.</p>
+<h2 id="structure">Structure</h2>
+<pre><code>prisma/
+  schema.prisma        # Target / PingHistory / HopHistory / AlertRule models
+  migrations/           # SQL migrations, shipped with the app and applied at runtime (see below)
+resources/
+  tray-icon.png         # system tray icon, shipped with the app (see electron-builder.yml `files`)
+  icon.png              # window/build icon (1024px)
+  tray-icon.svg / icon.svg  # editable masters the two PNGs are rendered from
+src/
+  main/                 # Electron main process (Node/OS access lives only here)
+    index.ts             # BrowserWindow, security policy, IPC handlers, engine/watchdog/tray/updater wiring
+    tray.ts               # system tray icon + context menu (Show Dashboard / Quit)
+    updater.ts             # electron-updater wiring - checkForUpdates/downloadUpdate, update:status events
+    settings.ts             # persisted app-wide settings (currently just the global ping interval)
+    utils.ts
+    network/
+      engine.ts            # NetworkEngine - per-target ping (1s) + traceroute (30s) loops
+      ping-probe.ts          # real ICMP latency via the `ping` npm package
+      traceroute.ts           # spawns tracert/traceroute via child_process, output parsed to HopSample[]
+      traceroute-windows.ts    # Windows-specific tracert argument/output handling
+      icmp-windows.ts           # native ICMP via koffi (iphlpapi.dll) - custom-TTL probes for traceroute
+      resolve-ipv4.ts            # forces IPv4 resolution for hosts that also carry AAAA records
+      forward-dns.ts              # resolves a hostname (or IP literal) to the address that gets pinged
+      reverse-dns.ts                # PTR lookups for traceroute hop addresses
+      ip-hosting.ts                  # on-demand hosting/ISP-org lookup per hop IP (ip-api.com), paced + cached
+    alerting/
+      watchdog.ts            # AlertWatchdog - evaluates live samples against configured thresholds
+      notifications.ts        # renders an AlertEvent as a native OS Notification
+    db/
+      client.ts           # Prisma Client singleton (better-sqlite3 driver adapter)
+      migrate.ts           # applies prisma/migrations/*/migration.sql at startup
+      targets.ts            # target CRUD + reordering + showInOverview/pingingEnabled toggles
+      ping-history.ts        # savePingRollup (1-min aggregation) / getPingHistory
+      hop-history.ts          # saveHopHistory (traceroute) / getHopHistory / getHopHistoryRange
+      storage-stats.ts         # per-table row counts + on-disk byte usage, for the DB Analytics tab
+      import-export.ts          # export/import the whole SQLite file as a separate, read-only dataset
+  preload/              # The ONLY bridge between main and renderer
+    index.ts             # contextBridge.exposeInMainWorld(&#39;api&#39;, ...)
+    index.d.ts            # types window.api for the renderer
+  renderer/             # React app (sandboxed, no Node access)
+    src/
+      App.tsx                       # owns target state + the per-target 10-min live-update buffer
+      lib/
+        chart-data.ts                 # NetworkUpdate[] -&gt; uPlot series (latency + time-based rolling loss %)
+        chart-loss-markers.ts           # shared uPlot draw hook: one red bar per lost-ping timestamp
+        chart-legend.ts                  # hover-tooltip timestamp formatter (shows seconds, not just h:mm)
+        route-table.ts                     # NetworkUpdate[]/HopRecord[] -&gt; per-hop MTR-style aggregation
+        path-graph.ts                       # same data -&gt; a branching hop graph for Network Path
+        overview-chart.ts                     # live-buffer multi-target series for the Overview tab
+        overview-history-chart.ts               # DB-backed (24h/7d/30d) equivalent of overview-chart.ts
+        ping-history-chart.ts                     # PingHistoryRecord[] -&gt; uPlot series, incl. per-bucket loss %
+        use-hop-hosting.ts                          # shared, cached hosting/ISP lookup hook
+        target-loss.ts                                # rolling recent loss % + severity, for the sidebar&#39;s badge
+      components/
+        Sidebar.tsx                    # target list: add/reorder/edit/delete, &quot;Disable Pinging&quot; trigger,
+                                        #   a rolling loss-% badge per target
+        MainContent.tsx                 # stat cards + alerts + timeline chart + route table + network path
+        TimelineChart.tsx                 # uPlot: latency, loss bars + rolling loss % line, last 10 min
+        RouteTable.tsx                     # MTR-style hop table with hostname/hosting-org lookups
+        PathVisualization.tsx               # ThousandEyes-style branching hop-to-hop path view
+        OverviewChart.tsx                     # all-targets tab: combined or per-target charts, live or historical
+        IndividualLatencyChart.tsx             # one target&#39;s chart within Overview&#39;s &quot;Individual&quot; view
+        AllAlerts.tsx                            # consolidated alert-rule view across every target
+        DbStorageView.tsx                          # DB Analytics: storage stats + export/import
+        ImportedDbView.tsx                           # read-only browsing of a previously imported dataset
+        AddTargetDialog.tsx / EditTargetDialog.tsx     # target create/edit forms
+        DisablePingingDialog.tsx                         # multi-select: pause/resume pinging per target
+        ConfirmDialog.tsx / Modal.tsx / ContextMenu.tsx    # shared dialog/menu chrome
+        TimeRangeControls.tsx / Sparkline.tsx                # small shared chart controls
+        UpdateDialog.tsx                                       # auto-update check/download/restart prompt
+        HelpDialog.tsx
+  shared/               # types + IPC channel names imported by all three sides
+    ip-utils.ts           # private/reserved/CGNAT address check - shared by the main-process hosting
+                          #   lookup (skip it) and the renderer&#39;s path labels (&quot;Your Network&quot;/&quot;No reply&quot;)
+  generated/prisma/     # generated Prisma Client (gitignored, regenerated by `prisma generate`)
+</code></pre>
+<h2 id="security-model">Security model</h2>
+<ul>
+<li><code>contextIsolation: true</code>, <code>nodeIntegration: false</code>, <code>sandbox: true</code> on every <code>BrowserWindow</code>.</li>
+<li>The renderer never touches <code>ipcRenderer</code>, <code>require</code>, or Node globals — the preload script is
+the only place <code>contextBridge</code> is used, and it exposes a narrow, typed <code>window.api</code> (see
+<code>src/shared/types.ts#ExposedApi</code>) instead of raw IPC.</li>
+<li>IPC channel names live in one place (<code>src/shared/ipc-channels.ts</code>) so main/preload/renderer
+can&#39;t drift on string literals.</li>
+<li><code>ipcMain.handle</code> validates <code>event.senderFrame</code> against the app&#39;s own origin before running,
+so a handler can&#39;t be invoked from an unexpected frame (e.g. an injected <code>&lt;iframe&gt;</code>).</li>
+<li>A strict <code>Content-Security-Policy</code> is set both via a <code>&lt;meta&gt;</code> tag and via
+<code>session.defaultSession.webRequest.onHeadersReceived</code>.</li>
+<li><code>setWindowOpenHandler</code> routes <code>target=&quot;_blank&quot;</code> links to the OS browser instead of opening an
+uncontrolled <code>BrowserWindow</code>; <code>will-navigate</code> blocks navigating the main window off its own
+origin; <code>&lt;webview&gt;</code> attachment is disabled entirely.</li>
+<li>The SQLite file lives under <code>app.getPath(&#39;userData&#39;)</code>, never inside the app bundle; only the
+main process ever touches <code>better-sqlite3</code>/Prisma, the renderer only ever sees plain data
+returned from validated IPC handlers.</li>
+<li>Same for the network engine: only the main process spawns <code>ping</code>/<code>tracert</code>/<code>traceroute</code> child
+processes, and only the main process makes the outbound hosting-lookup HTTP request
+(<code>ip-hosting.ts</code>). The renderer never sees a host string go anywhere near <code>child_process</code> or
+<code>http</code> - it only ever receives already-resolved data over IPC.</li>
+</ul>
+<h2 id="ipc-contract">IPC contract</h2>
+<p>Grouped by feature area (see <code>src/shared/ipc-channels.ts</code> for the full channel-name list and
+<code>src/shared/types.ts#ExposedApi</code> for the typed contract every side compiles against).</p>
+<p><strong>Targets</strong></p>
+<table>
+<thead>
+<tr>
+<th>Channel</th>
+<th>Renderer API</th>
+<th>Payload</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>targets:list</code></td>
+<td><code>getTargets()</code></td>
+<td><code>Target[]</code></td>
+</tr>
+<tr>
+<td><code>targets:create</code></td>
+<td><code>createTarget(input)</code></td>
+<td><code>Target</code></td>
+</tr>
+<tr>
+<td><code>targets:update</code></td>
+<td><code>updateTarget(input)</code></td>
+<td><code>Target</code></td>
+</tr>
+<tr>
+<td><code>targets:delete</code></td>
+<td><code>deleteTarget(id)</code></td>
+<td><code>void</code> (cascades history/alerts)</td>
+</tr>
+<tr>
+<td><code>targets:reorder</code></td>
+<td><code>reorderTargets(orderedIds)</code></td>
+<td><code>void</code></td>
+</tr>
+<tr>
+<td><code>targets:set-show-in-overview</code></td>
+<td><code>setTargetShowInOverview(id, showInOverview)</code></td>
+<td><code>Target</code></td>
+</tr>
+<tr>
+<td><code>targets:set-pinging-enabled</code></td>
+<td><code>setTargetPingingEnabled(id, pingingEnabled)</code></td>
+<td><code>Target</code> (re-syncs the engine)</td>
+</tr>
+<tr>
+<td><code>targets:resolve-hostname</code></td>
+<td><code>resolveHostname(host)</code></td>
+<td><code>string | null</code></td>
+</tr>
+<tr>
+<td><code>network:resolve-hop-hosting</code></td>
+<td><code>resolveHopHosting(address)</code></td>
+<td><code>HopHostingInfo | null</code></td>
+</tr>
+</tbody></table>
+<p><strong>History</strong></p>
+<table>
+<thead>
+<tr>
+<th>Channel</th>
+<th>Renderer API</th>
+<th>Payload</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>ping-history:list</code></td>
+<td><code>getPingHistory(query)</code></td>
+<td><code>PingHistoryRecord[]</code></td>
+</tr>
+<tr>
+<td><code>hop-history:list</code></td>
+<td><code>getHopHistory(query)</code></td>
+<td><code>HopRecord[]</code></td>
+</tr>
+<tr>
+<td><code>hop-history:range-list</code></td>
+<td><code>getHopHistoryRange(query)</code></td>
+<td><code>HopRecord[]</code> (most recent runs within a date range)</td>
+</tr>
+</tbody></table>
+<p><strong>DB Analytics / import-export</strong></p>
+<table>
+<thead>
+<tr>
+<th>Channel</th>
+<th>Renderer API</th>
+<th>Payload</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>db:storage-stats</code></td>
+<td><code>getDbStorageStats()</code></td>
+<td><code>DbStorageStats</code></td>
+</tr>
+<tr>
+<td><code>db:export</code></td>
+<td><code>exportDatabase()</code></td>
+<td><code>ExportDatabaseResult</code></td>
+</tr>
+<tr>
+<td><code>db:import</code></td>
+<td><code>importDatabase()</code></td>
+<td><code>ImportDatabaseResult</code></td>
+</tr>
+<tr>
+<td><code>db:imported-info</code></td>
+<td><code>getImportedDbInfo()</code></td>
+<td><code>ImportedDbInfo</code></td>
+</tr>
+<tr>
+<td><code>db:imported-clear</code></td>
+<td><code>clearImportedDatabase()</code></td>
+<td><code>void</code></td>
+</tr>
+<tr>
+<td><code>db:imported-targets-list</code></td>
+<td><code>getImportedTargets()</code></td>
+<td><code>Target[]</code></td>
+</tr>
+<tr>
+<td><code>db:imported-ping-history-list</code></td>
+<td><code>getImportedPingHistory(query)</code></td>
+<td><code>PingHistoryRecord[]</code></td>
+</tr>
+</tbody></table>
+<p><strong>Alerts</strong></p>
+<table>
+<thead>
+<tr>
+<th>Channel</th>
+<th>Renderer API</th>
+<th>Payload</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>alert-rules:list</code></td>
+<td><code>getAlertRules(targetId?)</code></td>
+<td><code>AlertRule[]</code></td>
+</tr>
+<tr>
+<td><code>alert-rules:create</code></td>
+<td><code>createAlertRule(input)</code></td>
+<td><code>AlertRule</code></td>
+</tr>
+<tr>
+<td><code>alert-rules:set-enabled</code></td>
+<td><code>setAlertRuleEnabled(id, enabled)</code></td>
+<td><code>AlertRule</code></td>
+</tr>
+<tr>
+<td><code>alert-rules:delete</code></td>
+<td><code>deleteAlertRule(id)</code></td>
+<td><code>void</code></td>
+</tr>
+</tbody></table>
+<p><strong>Settings, updates &amp; the live stream</strong></p>
+<table>
+<thead>
+<tr>
+<th>Direction</th>
+<th>Channel</th>
+<th>Renderer API</th>
+<th>Payload</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>renderer → main</td>
+<td><code>settings:get</code></td>
+<td><code>getSettings()</code></td>
+<td><code>AppSettings</code></td>
+</tr>
+<tr>
+<td>renderer → main</td>
+<td><code>settings:set-ping-interval</code></td>
+<td><code>setPingIntervalMs(ms)</code></td>
+<td><code>AppSettings</code> (reschedules every target&#39;s timer)</td>
+</tr>
+<tr>
+<td>renderer → main</td>
+<td><code>update:check</code></td>
+<td><code>checkForUpdates()</code></td>
+<td>fire-and-forget</td>
+</tr>
+<tr>
+<td>renderer → main</td>
+<td><code>update:download</code></td>
+<td><code>downloadUpdate()</code></td>
+<td>fire-and-forget</td>
+</tr>
+<tr>
+<td>main → renderer</td>
+<td><code>update:status</code></td>
+<td><code>onUpdateStatus(cb)</code></td>
+<td><code>UpdateStatusEvent</code> (checking/available/downloading/downloaded/error)</td>
+</tr>
+<tr>
+<td>main → renderer</td>
+<td><code>network:update</code></td>
+<td><code>onNetworkUpdate(cb)</code></td>
+<td><code>NetworkUpdate</code> (per target, every ~1s)</td>
+</tr>
+</tbody></table>
+<p>Both push-style subscriptions (<code>onNetworkUpdate</code>, <code>onUpdateStatus</code>) return an unsubscribe function
+so React components can clean up <code>ipcRenderer</code> listeners on unmount.</p>
+<h2 id="database-layer">Database layer</h2>
+<p><strong>Why better-sqlite3 + a Prisma driver adapter, not Prisma&#39;s default engine.</strong> Prisma&#39;s
+<code>prisma-client</code> generator (v6+) can run without its historical Rust query-engine binary by using
+a <strong>driver adapter</strong> instead — here, <code>@prisma/adapter-better-sqlite3</code> wrapping the same
+<code>better-sqlite3</code> connection you&#39;d otherwise reach for directly. That avoids the classic
+Electron+Prisma packaging headache (locating/unpacking a per-platform native query-engine binary
+from inside <code>app.asar</code>): the generated client (<code>src/generated/prisma/</code>) is plain TypeScript, and
+the only native module in the picture is <code>better-sqlite3</code> itself, which needs the usual
+Electron-specific rebuild (<code>electron-rebuild</code>, wired into <code>postinstall</code>).</p>
+<p><strong>Migrations at runtime.</strong> A packaged app has no Prisma CLI and no shadow database available, so
+<code>prisma migrate deploy</code> isn&#39;t an option. Instead, <code>prisma/migrations/*/migration.sql</code> (generated
+by <code>npm run db:migrate</code> during development, and shipped with the app via <code>electron-builder.yml</code>&#39;s
+<code>files</code>) is applied by hand on startup (<code>src/main/db/migrate.ts</code>), tracked in a small
+<code>_app_migrations</code> table — the same idea as Prisma&#39;s own <code>_prisma_migrations</code>, just self-managed
+since the CLI isn&#39;t around to do it for us. See <code>src/main/db/client.ts#initDatabase</code>.</p>
+<p><strong>Schema</strong> (<code>prisma/schema.prisma</code>):</p>
+<ul>
+<li><code>Target</code> — one row per monitored host: <code>id</code>, <code>name</code>, <code>host</code>, <code>sortOrder</code> (drives sidebar/Overview
+display order), <code>showInOverview</code> and <code>pingingEnabled</code> (two independent booleans — a target can be
+hidden from Overview while still actively pinged, but a paused target is <em>always</em> excluded from
+Overview regardless of <code>showInOverview</code>, since there&#39;s no live data to show), <code>createdAt</code>.</li>
+<li><code>PingHistory</code> — one row per <strong>completed 1-minute rollup</strong>, not one row per sample: raw ~1s
+probes are buffered in memory (<code>src/main/index.ts</code>) and flushed once a minute via
+<code>savePingRollup</code>, storing <code>sampleCount</code>, <code>lostCount</code>, and min/avg/max latency. At ~30
+samples/min that&#39;s ~1,440 rows/day/target instead of ~43,000.</li>
+<li><code>HopHistory</code> — one row per hop of one traceroute run; rows sharing a <code>traceId</code> make up a run.
+A run is captured immediately when a target is added and refreshed on its own cadence (below).
+<code>getHopHistoryRange</code> uses a <code>groupBy</code> on <code>traceId</code> to fetch the most recent N runs within an
+arbitrary date range without scanning every hop row in that window.</li>
+<li><code>AlertRule</code> — a user-configured threshold for one target (<code>metric</code>, <code>thresholdValue</code>, <code>enabled</code>).
+<code>metric</code> is a plain string column (SQLite has no enum type); validity is enforced in
+<code>src/main/db/alert-rules.ts</code>, not the schema.</li>
+</ul>
+<p><strong>Export / import / storage stats</strong> (<code>src/main/db/import-export.ts</code>, <code>storage-stats.ts</code>, the DB
+Analytics tab&#39;s <code>DbStorageView.tsx</code>): <code>exportDatabase</code> opens a native save dialog and copies the
+live SQLite file verbatim; <code>importDatabase</code> opens a native open dialog and copies the chosen file
+into its own app-owned location as a <strong>separate, read-only dataset</strong> — it&#39;s never merged into the
+live database, just browsable afterwards via <code>ImportedDbView.tsx</code> (a fresh <code>db:imported-*</code> read-only
+IPC surface, entirely apart from the live one). <code>getDbStorageStats</code> reports live row counts and
+on-disk bytes per table, plus a from-scratch capacity estimate for &quot;today&#39;s targets and cadence,
+run for 30 days&quot; — not a projection from current size, since that would double-count whatever
+history already exists.</p>
+<h2 id="network-engine-srcmainnetwork">Network engine (<code>src/main/network/</code>)</h2>
+<p><code>NetworkEngine</code> (<code>engine.ts</code>) is the actual monitoring service. It owns one independent timer
+pair per target - no shared &quot;tick&quot; loop - so a slow probe on one target never delays another&#39;s.
+It has no notion of &quot;disabled&quot; itself: it just tracks whatever <code>{id, host}[]</code> list it&#39;s handed by
+<code>sync()</code>, diffing against what it already tracks (stop timers for anything missing, start timers
+for anything new). A target&#39;s <code>pingingEnabled</code> flag (toggled via the sidebar&#39;s &quot;Disable Pinging&quot;
+dialog) is enforced one level up, in <code>src/main/index.ts#refreshCurrentTargets</code>, by simply leaving
+disabled targets out of the list passed to <code>sync()</code> - the same mechanism a deleted target already
+relied on to stop being monitored.</p>
+<ul>
+<li><strong>Ping, every 1s</strong> (<code>ping-probe.ts</code>): one ICMP echo, via a persistent native handle
+(<code>icmp-windows.ts</code>, <code>IcmpSendEcho</code> through <code>iphlpapi.dll</code>) on Windows, or the OS <code>ping</code> command
+via the <a href="https://www.npmjs.com/package/ping"><code>ping</code></a> npm package elsewhere. Returns latency in
+ms, or <code>null</code> if the packet was lost - the engine derives <code>status</code> from that (<code>null</code> → <code>offline</code>,
+<code>&gt; 150ms</code> → <code>degraded</code>, else <code>online</code>) and broadcasts a <code>NetworkUpdate</code> immediately. The timeout
+is 3s, not 1s: an earlier, tighter 800ms timeout was measured (see git history around the &quot;ping
+and trace handling&quot; refactor) to read a steady 2-3% &quot;loss&quot; on a target with zero actual loss in a
+parallel <code>ping.exe</code> run - genuine round trips that landed just past 800ms, not real packet loss.
+Each target&#39;s own tick is still guarded against its previous probe still being in flight
+(<code>pingInFlight</code> - skip this tick rather than overlap), even though 3s outlives the 1s tick: that
+guard was briefly removed on the theory that a slow-but-real reply would otherwise get silently
+dropped instead of sampled, which measured fine for a single reachable target (5 concurrent native
+ICMP calls to one host cost no extra loss over 1). It doesn&#39;t hold once a target is genuinely
+unreachable, though - with no guard, a host that never replies picks up a brand new overlapping
+call every tick forever, so a handful of dead targets steady-state at 3-4 simultaneous in-flight
+calls each, all contending for the ONE shared native ICMP handle (<code>icmp-windows.ts</code>). Measured
+directly: 4 always-unreachable targets mixed in with 10 reliable ones collapsed <em>every</em> target,
+not just the dead ones, to ~99% loss - restoring the guard fixed it, and a skipped tick for a
+target that was never going to reply anyway costs nothing worth having.</li>
+<li><strong>Traceroute, every 30s</strong> (<code>traceroute.ts</code>/<code>traceroute-windows.ts</code>, backed by native ICMP via
+<code>icmp-windows.ts</code> on Windows for per-hop TTL control): parses each hop into a <code>HopSample</code>
+(hop number, address, latency; <code>null</code> address/latency = that hop never replied - a common,
+expected outcome for routers that filter or rate-limit ICMP TTL-expired replies, not a bug).
+<strong>Decoupled from the ping cadence on purpose</strong>: a real traceroute routinely takes many seconds
+to tens of seconds (each unresponsive hop waits out its own timeout) - running it every 1s would
+either queue up runs behind each other or hammer the network. A hard kill-timer bounds one
+pathological target&#39;s traceroute from blocking its own next attempt indefinitely.</li>
+<li><strong>Hop hostname/hosting</strong>, resolved separately from the traceroute itself and only for hops
+actually displayed: <code>reverse-dns.ts</code> does PTR lookups per hop address; <code>ip-hosting.ts</code> looks up
+its owning organization/ISP via ip-api.com&#39;s free, keyless API, paced to stay under its
+45-requests/minute free-tier limit and cached per address for the process&#39;s lifetime, since a
+hop&#39;s owning org essentially never changes and the same router IPs repeat across runs/targets.
+Both are skipped entirely for a private/reserved/CGNAT address (<code>shared/ip-utils.ts</code>) - there&#39;s
+no public org to look up for your own router.</li>
+</ul>
+<p>Every <code>NetworkUpdate</code> therefore aggregates two data sources at different freshness: a live ping
+from <em>this</em> tick, plus the most recently completed traceroute&#39;s hops (<code>hops</code>/<code>hopsCapturedAt</code>
+tell the UI how stale that path is). <code>onSample</code>/<code>onTraceroute</code> callbacks (wired in
+<code>src/main/index.ts</code>) are the engine&#39;s only way out - it never touches IPC or Prisma directly, so
+it&#39;s easy to unit-test or swap the probes for something else (e.g. an SNMP poller) later.</p>
+<h2 id="frontend-visualization">Frontend visualization</h2>
+<p><code>App.tsx</code> keeps a rolling <strong>last-10-minutes buffer per target</strong> (<code>updatesByTarget</code>, pruned by
+timestamp on every incoming <code>network:update</code> event) and passes the selected target&#39;s slice to
+the components below - no DB round trip, no polling, just the live IPC stream. Longer views
+(Overview&#39;s 24h/7d/30d ranges, Network Path&#39;s historical hop data) instead query the DB directly
+through <code>ping-history:list</code>/<code>hop-history:range-list</code>.</p>
+<p><strong>Timeline chart</strong> (<code>TimelineChart.tsx</code>), via <a href="https://github.com/leeoniya/uPlot">uPlot</a> - chosen
+over a React-native charting lib (Recharts/ECharts) because it&#39;s canvas-based and built
+specifically to redraw fast and often, which is exactly this use case (a fresh sample arrives
+every ~1s per target and has to hit the chart without jank). It&#39;s a thin imperative wrapper: the
+<code>uPlot</code> instance is created once in a <code>useEffect</code> and updated via <code>.setData()</code>/<code>.setSize()</code>
+afterwards - never torn down and rebuilt on every tick, and never a React-managed DOM subtree.
+Loss is shown two ways at once: a thin red vertical bar at every lost-ping timestamp
+(<code>chart-loss-markers.ts</code>, drawn directly on the canvas so it lines up pixel-for-pixel with the
+latency line&#39;s gap at that same timestamp - no visual offset between them), plus a dashed rolling
+loss-% line on its own right-hand 0–100% axis (<code>chart-data.ts#computeRollingLossPercent</code>, a
+<strong>time-based</strong> sliding window - fixed at 30 seconds of real time, not a fixed sample count, so the
+same underlying loss rate reads the same whether the target is pinged every 1s or every 3s).
+Hovering the chart shows seconds in the timestamp, not just hour:minute (<code>chart-legend.ts</code>).</p>
+<p><strong>Network Path</strong> (<code>PathVisualization.tsx</code>) renders a ThousandEyes-style branching graph, one node
+per hop, built from <code>path-graph.ts</code>&#39;s (hop number, address) grouping across several retained
+traceroute runs - a hop that disagrees between runs (router load-balancing across equal-cost
+paths) shows as parallel branches that re-merge once the runs agree again. Each node&#39;s label
+prefers, in order: the hop&#39;s hosting/network org name (e.g. &quot;Google LLC&quot;), its reverse-DNS
+hostname, <code>&quot;Your Network&quot;</code> for your own private/CGNAT gateway hop, or <code>&quot;No reply&quot;</code> for a hop that
+never answered at all - a bare <code>&quot;Hop N&quot;</code> is only ever a last resort. Every node is colored by
+<code>route-table.ts#hopStatus</code> - the same per-hop-number loss % <code>RouteTable</code> computes, not just that
+node&#39;s own latency - so a hop that&#39;s silent part of the time reads as degraded/offline even on the
+branch where it did reply, instead of only the separate &quot;silent&quot; branch looking unhealthy. Selecting
+a time range on the timeline chart re-queries the path for that same window (<code>getHopHistoryRange</code>),
+so Network Path isn&#39;t limited to only ever showing the live buffer&#39;s most recent runs.</p>
+<p><strong>Route table</strong> (<code>RouteTable.tsx</code>) is deliberately <em>not</em> a plain dump of the latest traceroute -
+<code>route-table.ts</code> aggregates several recent runs into one row per hop number (address/hostname/
+latency from the most recent run that got a reply, hosting org alongside it, and a <strong>loss %</strong> =
+the fraction of those runs where that hop didn&#39;t reply at all). That&#39;s the same idea MTR/WinMTR
+use to tell &quot;this hop is flaky&quot; from &quot;this hop happened to drop one probe.&quot;</p>
+<p><strong>Overview tab</strong> (<code>OverviewChart.tsx</code>) shows every actively-pinged target at once, in one of two
+modes (defaults to <strong>Individual</strong>): &quot;All targets&quot; overlays every target&#39;s latency + rolling loss %
+on one shared chart; &quot;Individual&quot; renders one <code>IndividualLatencyChart</code> per target, each with its
+own per-target checkbox to hide/show it. Either mode can point at the live buffer or, once a
+24h/7d/30d range is selected, at DB-backed history (<code>overview-history-chart.ts</code>) - a target that
+currently has pinging disabled (see below) never appears in either mode, since it has no live or
+historical data worth charting for that window.</p>
+<p><strong>Sidebar loss badge</strong> (<code>target-loss.ts</code>, rendered in <code>Sidebar.tsx</code>): each target row shows a small
+colored badge with its rolling loss % over the last 60 seconds of live samples - separate from the
+status dot, which only reflects the single most recent sample. Thresholds: nothing below 0%, amber
+under 5%, orange 5-15%, red 15%+. It&#39;s a pure function of the trailing window, not a timer someone
+has to clear, so it disappears on its own once a full window has passed with no lost packet -
+&quot;colored for as long as there&#39;s been loss,&quot; nothing more to manage.</p>
+<p><strong>Disable Pinging</strong> (<code>DisablePingingDialog.tsx</code>, opened from the sidebar): a checkbox list of
+every target, checked = actively pinged. Unchecking one immediately stops its engine timer (see
+Network engine above) - it stays visible in the sidebar, dimmed with a &quot;Paused&quot; tag, so it&#39;s easy
+to tell apart from a target that&#39;s merely offline.</p>
+<p><strong>DB Analytics tab</strong> (<code>DbStorageView.tsx</code>) surfaces <code>getDbStorageStats()</code> (per-table row counts,
+on-disk bytes, a 30-day capacity estimate) alongside export/import controls; <strong>Imported Data</strong>
+(<code>ImportedDbView.tsx</code>) browses a previously-imported dataset read-only, entirely separate from the
+live database.</p>
+<h2 id="alerting-watchdog-srcmainalerting">Alerting watchdog (<code>src/main/alerting/</code>)</h2>
+<p><code>AlertWatchdog</code> (<code>watchdog.ts</code>) sits between the engine and notifications. It&#39;s fed every
+<code>NetworkUpdate</code> the moment the engine produces it (<code>engine.onSample</code> -&gt; <code>watchdog.evaluate</code> in
+<code>src/main/index.ts</code>) and maintains its own rolling window per target (last 30 samples, ~1 minute)
+independent of the DB&#39;s 1-minute rollups, which flush too slowly for near-real-time alerting.</p>
+<p>For each <code>AlertRule</code> belonging to that target (configured via the selected target&#39;s <strong>Alerts</strong>
+panel, or the consolidated <strong>Alerts</strong> tab - <code>AllAlerts.tsx</code> - which lists every target&#39;s rules in
+one place; both persist through the same <code>alert-rules:*</code> IPC), it computes the current value
+(rolling packet-loss % or rolling avg latency, whichever the rule&#39;s <code>metric</code> is), requires at
+least 5 samples before evaluating (so one lost packet right after a target is added doesn&#39;t read
+as &quot;50% loss&quot;), and compares it against <code>thresholdValue</code>. Firing is <strong>edge-triggered</strong>: a
+notification goes out on the OK -&gt; breached transition, then only once every 5 minutes while it
+stays breached (not on every 1s tick), plus once more on breached -&gt; OK (&quot;recovered&quot;). The
+watchdog only ever calls back into <code>onAlert</code> - it doesn&#39;t know <code>Notification</code> exists. A target
+with pinging disabled simply produces no samples, so its rules never fire while paused - there&#39;s
+nothing else to wire up for that case.</p>
+<p><code>notifyAlertEvent</code> (<code>notifications.ts</code>) turns that callback into Electron&#39;s native <code>Notification</code>
+API (Action Center / Notification Center / libnotify, depending on OS) - e.g. <em>&quot;Alert: Office
+Router - Packet loss is 12%, above your 5% threshold.&quot;</em> Clicking a notification calls back into
+<code>src/main/index.ts</code> to restore the window, whether it&#39;s hidden in the tray or just unfocused.
+Every alert/recovery is also logged to console (<code>[watchdog] ...</code>) regardless of whether the OS
+notification renders - a lightweight audit trail independent of the platform&#39;s toast system.</p>
+<h2 id="system-tray-srcmaintrayts">System tray (<code>src/main/tray.ts</code>)</h2>
+<p>Closing the window doesn&#39;t quit the app: its <code>close</code> handler calls <code>event.preventDefault()</code> and
+<code>hide()</code>s it instead, so the network engine and watchdog keep polling and can keep firing native
+notifications with no window open at all. A tray icon (left-click toggles the window; right-click
+gives a &quot;Show Dashboard&quot; / &quot;Quit&quot; menu) is the only other way back in - <code>app.on(&#39;window-all-closed&#39;)</code>
+is now a no-op on every platform, since the tray, not a window, is what keeps the app alive.
+<code>isQuitting</code> (flipped in <code>before-quit</code>, which always fires before any window&#39;s <code>close</code> event) is
+what tells the two apart: without it, the tray&#39;s own &quot;Quit&quot; would just re-hide the window forever
+instead of actually exiting.</p>
+<p>Verified directly rather than assumed: attaching Node&#39;s inspector to the main process
+(<code>electron . --inspect=&lt;port&gt;</code>) and calling <code>BrowserWindow.getAllWindows()</code> before/after a
+simulated close confirmed <code>isDestroyed: false</code> throughout - the window is genuinely kept alive and
+hidden, not torn down and silently recreated - and that <code>app.quit()</code> (the tray&#39;s real exit path)
+still terminates the process cleanly.</p>
+<h2 id="auto-update-srcmainupdaterts-githubworkflowsreleaseyml">Auto-update (<code>src/main/updater.ts</code>, <code>.github/workflows/release.yml</code>)</h2>
+<p><code>electron-updater</code> checks <code>github.com/&lt;owner&gt;/&lt;repo&gt;/releases</code> for a newer published release,
+using <code>publish</code> config baked into the build (<code>electron-builder.yml</code>) - <code>checkForUpdates</code>/
+<code>downloadUpdate</code> are user-triggered from <code>UpdateDialog.tsx</code>, which renders whatever <code>update:status</code>
+event the updater last emitted (<code>checking</code> → <code>available</code>/<code>not-available</code> → <code>downloading</code> →
+<code>downloaded</code>, or <code>error</code>); a <code>downloaded</code> update quits and relaunches into itself.</p>
+<p>Releasing is entirely CI-driven: pushing a <code>v*</code> tag (after bumping <code>package.json#version</code>) runs
+<code>.github/workflows/release.yml</code> on <code>windows-latest</code>, which builds and runs
+<code>electron-builder --win --publish=always</code> - <code>releaseType: release</code> in <code>electron-builder.yml</code>
+means a brand-new release publishes immediately rather than sitting as a draft. That setting only
+applies at <em>creation</em> time, though: if a release for a given tag already exists (e.g. from a prior,
+interrupted run), electron-builder reuses it as-is and only uploads assets to it - so a release
+that somehow got stuck as a draft has to be flipped to published by hand
+(<code>gh release edit &lt;tag&gt; --draft=false</code>) rather than by re-running the workflow.</p>
+</article><a class="more caption mt-8 inline-block" href="https://github.com/live-miracles/ping-monitor/blob/main/docs/ARCHITECTURE.md">Edit this page on GitHub</a><div class="mt-12 grid gap-4 sm:grid-cols-2">
+              <span></span>
+              
+            </div></div>
+            </div></div></div></main>
+    <footer class="caption waves text-muted border-line border-t pb-28">
+      <div class="mx-auto flex w-full max-w-[980px] flex-wrap items-center justify-between gap-x-6 gap-y-2 px-5 py-8 sm:px-6">
+        <span>Live Miracles · Open tools for live teams</span>
+        <span class="flex gap-5">
+          <a class="link-quiet" href="/blog/">Blog</a>
+          <a class="link-quiet" href="/blog/feed.xml">RSS</a>
+          <a class="link-quiet" href="https://github.com/live-miracles">GitHub</a>
+        </span>
+      </div>
+    </footer>
+    <dialog id="lightbox" class="lightbox" aria-label="Enlarged image">
+      <button type="button" class="lightbox-close" aria-label="Close image"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg></button>
+      <div class="lightbox-frame"><img alt="" /></div>
+    </dialog>
+    <script>
+      (function () {
+        var dialog = document.getElementById('lightbox');
+        if (!dialog || !dialog.showModal) return;
+        var shown = dialog.querySelector('img');
+        function zoomable(img) {
+          return !img.closest('a') && img.naturalWidth >= 300 && img.naturalHeight >= 100;
+        }
+        function mark(img) {
+          if (img.dataset.zoom || !zoomable(img)) return;
+          img.dataset.zoom = '1';
+          img.classList.add('zoomable');
+          img.tabIndex = 0;
+          img.setAttribute('role', 'button');
+          img.setAttribute('aria-label', 'Enlarge image: ' + (img.alt || 'screenshot'));
+        }
+        function open(img) {
+          shown.src = img.currentSrc || img.src;
+          shown.alt = img.alt;
+          shown.classList.remove('actual');
+          dialog.showModal();
+          dialog.scrollTo(0, 0);
+        }
+        document.querySelectorAll('.readme img').forEach(function (img) {
+          if (img.complete) mark(img);
+          else img.addEventListener('load', function () { mark(img); }, { once: true });
+        });
+        document.addEventListener('click', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom) open(img);
+        });
+        document.addEventListener('keydown', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom && (event.key === 'Enter' || event.key === ' ')) {
+            event.preventDefault();
+            open(img);
+          }
+        });
+        shown.addEventListener('click', function () {
+          shown.classList.toggle('actual');
+        });
+        dialog.addEventListener('click', function (event) {
+          if (event.target !== shown) dialog.close();
+        });
+      })();
+    </script>
+    <script>
+      (function () {
+        var button = document.getElementById('theme-toggle');
+        if (!button) return;
+        var root = document.documentElement;
+        function current() {
+          return root.dataset.theme === 'light' ? 'light' : 'dark';
+        }
+        function sync() {
+          var theme = current();
+          button.dataset.mode = theme;
+          button.setAttribute('aria-label', 'Switch to ' + (theme === 'dark' ? 'light' : 'dark') + ' theme');
+        }
+        button.hidden = false;
+        sync();
+        button.addEventListener('click', function () {
+          var next = current() === 'dark' ? 'light' : 'dark';
+          root.dataset.theme = next;
+          try {
+            localStorage.setItem('theme', next);
+          } catch (e) {}
+          sync();
+        });
+      })();
+    </script>
+  </body>
+</html>

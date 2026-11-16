@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Ping Monitor — Live Miracles</title>
+    <meta name="description" content="Always-on latency, packet loss and traceroute monitor for a studio network: ping YouTube, Facebook, Zoom and your gateway, and see from the hop-by-hop path graph whether a glitch is your network, your ISP or the internet." />
+    <link rel="canonical" href="https://live-miracles.github.io/projects/ping-monitor/" />
+    <meta property="og:site_name" content="Live Miracles" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Ping Monitor — Live Miracles" />
+    <meta property="og:description" content="Always-on latency, packet loss and traceroute monitor for a studio network: ping YouTube, Facebook, Zoom and your gateway, and see from the hop-by-hop path graph whether a glitch is your network, your ISP or the internet." />
+    <meta property="og:url" content="https://live-miracles.github.io/projects/ping-monitor/" />
+    <meta property="og:image" content="https://raw.githubusercontent.com/live-miracles/ping-monitor/main/resources/icon.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/assets/logo.png" type="image/png" />
+    <link rel="alternate" type="application/rss+xml" title="Live Miracles blog" href="/blog/feed.xml" />
+    <script>
+      try {
+        var theme = localStorage.getItem('theme');
+        if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
+      } catch (e) {}
+    </script>
+    <link rel="stylesheet" href="/assets/styles.css" />
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <header class="topbar">
+        <nav class="caption mx-auto flex h-12 w-full max-w-[1024px] items-center justify-between gap-4 px-5 sm:px-6" aria-label="Site">
+          <a href="/" class="flex items-center gap-2.5 font-semibold" aria-label="Live Miracles">
+            <img src="/assets/logo.png" alt="" class="logo size-6" />
+            <span>Live Miracles</span>
+          </a>
+          <div class="flex items-center gap-5 sm:gap-7">
+            <a href="/#projects" class="text-muted hover:text-ink transition-colors">Projects</a>
+            <a href="/blog/" class="text-muted hover:text-ink transition-colors">Blog</a>
+            <div class="-mr-2 flex items-center gap-1">
+              <a href="https://github.com/live-miracles" class="icon-btn" aria-label="Live Miracles on GitHub" title="GitHub"><svg xmlns="http://www.w3.org/2000/svg" class="size-[18px]" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.79 23.39c.6.11.82-.26.82-.58v-2.02c-3.34.73-4.04-1.42-4.04-1.42-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.57A12 12 0 0 0 12 .5Z"/></svg></a>
+              <button type="button" id="theme-toggle" class="icon-btn theme-toggle" hidden><svg xmlns="http://www.w3.org/2000/svg" class="icon-sun size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32 1.41-1.41"/></svg><svg xmlns="http://www.w3.org/2000/svg" class="icon-moon size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg></button>
+            </div>
+          </div>
+        </nav>
+      </header>
+    <main class="flex-1"><div class="wash" style="--gx1: 28%; --gx2: 72%; --gx3: 53%; --gy1: -127px; --gy2: -32px; --gy1p: 1%; --gy2p: 23%; --px: 87%; --tint: #2a9d8f; --glow-a: color-mix(in srgb, #2a9d8f 30%, transparent); --pattern: url('/assets/patterns/shippo.svg')"><div class="mx-auto w-full max-w-[980px] px-5 py-10 sm:px-6 sm:py-14"><div class="flex items-center gap-5">
+              <img src="/assets/ping-monitor-logo.svg" alt="" class="logo size-16 " />
+              <h1 class="display display-lg">Ping Monitor</h1>
+            </div>
+            <p class="lead mt-5 max-w-3xl">Always-on latency, packet loss and traceroute monitor for a studio network: ping YouTube, Facebook, Zoom and your gateway, and see from the hop-by-hop path graph whether a glitch is your network, your ISP or the internet.</p>
+            <div class="mt-7 flex flex-wrap gap-3"><a class="pill pill-primary" href="https://github.com/live-miracles/ping-monitor">GitHub</a><a class="pill " href="https://github.com/live-miracles/ping-monitor/releases">Download</a></div>
+            <div class="text-muted caption mt-6 flex flex-wrap gap-x-5 gap-y-1"><span class="inline-flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 2.5 2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.31l-5.8 3.05 1.11-6.46-4.7-4.58 6.49-.94L12 2.5Z"/></svg>0</span><span class="inline-flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="6" cy="4" r="2"/><circle cx="18" cy="4" r="2"/><circle cx="12" cy="20" r="2"/><path d="M6 6v3a3 3 0 0 0 3 3h3m6-6v3a3 3 0 0 1-3 3h-3m0 0v6"/></svg>0</span><span>TypeScript</span><span>MIT license</span><span>Updated 2026-11-16</span></div>
+            <div class="mt-4 flex flex-wrap gap-2"><span class="chip">desktop-app</span><span class="chip">electron</span><span class="chip">isp</span><span class="chip">latency</span><span class="chip">live-streaming</span><span class="chip">mtr</span><span class="chip">network-diagnostics</span><span class="chip">network-monitoring</span><span class="chip">network-path</span><span class="chip">packet-loss</span><span class="chip">ping</span><span class="chip">ping-monitor</span><span class="chip">pingplotter-alternative</span><span class="chip">react</span><span class="chip">sqlite</span><span class="chip">thousandeyes-alternative</span><span class="chip">traceroute</span><span class="chip">typescript</span></div><nav class="border-line mt-8 flex gap-6 border-b" aria-label="Ping Monitor sections">
+              <a href="/projects/ping-monitor/" class="tab" aria-current="page">Overview</a><a href="/projects/ping-monitor/docs/" class="tab">Documentation</a>
+            </nav><div class="mt-10"><details class="bg-parchment text-muted caption mb-8 rounded-xl p-4">
+              <summary class="text-ink cursor-pointer font-semibold">On this page</summary>
+              <ol class="mt-3 space-y-2">
+                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#why-it-exists">Why it exists</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#how-it-works">How it works</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#features">Features</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#install">Install</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#windows">Windows</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#macos-and-linux">macOS and Linux</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#tips-for-a-streaming-studio">Tips for a streaming studio</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#build-from-source">Build from source</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#documentation">Documentation</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#contributing">Contributing</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#keywords">Keywords</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#license">License</a></li>
+              </ol>
+            </details><article class="readme min-w-0"><div align="center">
+
+<img src="https://raw.githubusercontent.com/live-miracles/ping-monitor/main/resources/icon.png" alt="Ping Monitor logo" width="120" />
+
+<p><strong>Is it your network, your ISP, or the internet in between?</strong><br />
+A free, open-source network monitor that pings YouTube, Facebook, Zoom and anything else around the
+clock, graphs every latency spike and dropped packet, and shows the hop-by-hop path so you can see
+exactly where the problem is.</p>
+<p><a href="https://github.com/live-miracles/ping-monitor/releases/latest"><img src="https://img.shields.io/github/v/release/live-miracles/ping-monitor?label=release&amp;color=4f8cff" alt="Latest release" loading="lazy" /></a>
+<a href="https://github.com/live-miracles/ping-monitor/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/live-miracles/ping-monitor/ci.yml?branch=main&amp;label=CI" alt="CI" loading="lazy" /></a>
+<a href="https://github.com/live-miracles/ping-monitor/releases"><img src="https://img.shields.io/github/downloads/live-miracles/ping-monitor/total?color=3ecf8e" alt="Downloads" loading="lazy" /></a>
+<a href="https://github.com/live-miracles/ping-monitor/blob/main/LICENSE"><img src="https://img.shields.io/github/license/live-miracles/ping-monitor" alt="License: MIT" loading="lazy" /></a>
+<a href="https://github.com/live-miracles/ping-monitor/stargazers"><img src="https://img.shields.io/github/stars/live-miracles/ping-monitor?style=flat" alt="Stars" loading="lazy" /></a>
+<a href="https://github.com/live-miracles/ping-monitor/commits/main"><img src="https://img.shields.io/github/last-commit/live-miracles/ping-monitor" alt="Last commit" loading="lazy" /></a>
+<a href="#install"><img src="https://img.shields.io/badge/installer-Windows-0078d4?logo=windows&amp;logoColor=white" alt="Platform" loading="lazy" /></a>
+<a href="https://www.electronjs.org/"><img src="https://img.shields.io/badge/Electron-33-47848f?logo=electron&amp;logoColor=white" alt="Electron" loading="lazy" /></a>
+<a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-5-3178c6?logo=typescript&amp;logoColor=white" alt="TypeScript" loading="lazy" /></a>
+<a href="https://github.com/live-miracles/ping-monitor/pulls"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen" alt="PRs welcome" loading="lazy" /></a></p>
+<p><a href="https://github.com/live-miracles/ping-monitor/releases/latest"><strong>Download for Windows</strong></a> ·
+<a href="#how-it-works">How it works</a> · <a href="#features">Features</a> · <a href="#build-from-source">Build from source</a> ·
+<a href="/projects/ping-monitor/docs/ARCHITECTURE/">Architecture</a></p>
+</div>
+
+<hr>
+<h2 id="why-it-exists">Why it exists</h2>
+<p>We run live streams from a studio. When viewers report buffering or glitches, the first question is
+always the same: <strong>is it us, or is it them?</strong></p>
+<p>For a long time we answered that with two commercial tools: a PingPlotter-style latency graph,
+and ThousandEyes-style path visibility on Grafana dashboards. They work, but they are expensive,
+and for a single studio that just wants to know why a stream stuttered, most of their features go
+unused.</p>
+<p>So we built the part we actually needed, and made it free. Ping Monitor is a small desktop app
+you install once and leave running. Later, when something went wrong, you open the graph, find the
+moment, and see what happened.</p>
+<blockquote>
+<p>Ping Monitor is an independent project. It is not affiliated with PingPlotter or ThousandEyes,
+and those names belong to their respective owners. It covers one job, continuous latency and path
+monitoring from one machine, and is not a full replacement for their wider feature sets.</p>
+</blockquote>
+<h2 id="how-it-works">How it works</h2>
+<p>Add the destinations your stream depends on, for example <code>youtube.com</code>, <code>facebook.com</code> and
+<code>zoom.us</code>, plus your own router and a public DNS like <code>8.8.8.8</code>. Ping Monitor pings each one every
+second and runs a traceroute to each every 30 seconds. Then read the graphs:</p>
+<table>
+<thead>
+<tr>
+<th>What the graphs show</th>
+<th>What it probably means</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Only <strong>one</strong> destination drops (say, YouTube)</td>
+<td>The problem is on that platform&#39;s side, or on the route to it. Probably not your studio.</td>
+</tr>
+<tr>
+<td><strong>All</strong> destinations drop at the same moment</td>
+<td>The problem is local: your network, your router, or your ISP link.</td>
+</tr>
+<tr>
+<td>Drops begin at a <strong>specific hop</strong> in the path graph</td>
+<td>That hop (with its hostname and owning ISP shown) is where it breaks. Your gateway, your ISP, or somewhere beyond.</td>
+</tr>
+</tbody></table>
+<p>That last row is the point of the Network Path view: it separates <em>&quot;our provider&#39;s link is
+broken&quot;</em> from <em>&quot;something outside our ISP, on the way to YouTube, is broken&quot;</em>, so you know whether
+to call your provider or just wait.</p>
+<h2 id="features">Features</h2>
+<ul>
+<li><strong>Continuous ping</strong>, once a second per target by default (adjustable from 200 ms to 5 minutes),
+with latency and packet loss charted live.</li>
+<li><strong>Look back in time.</strong> Zoom in on the last 5 minutes to 2 hours of live data, or switch to
+<strong>24 hours, 7 days or 30 days</strong> of stored history. Every lost ping is drawn as a red bar on the
+latency line, so a glitch at 21:14 last night is easy to find.</li>
+<li><strong>Network Path view</strong>: every hop between you and the target as a branching graph, colored by
+loss and latency. Hops show their hostname and the <strong>organization / ISP that owns the address</strong>,
+so you can name the link that failed. Load-balanced routes show up as parallel branches.</li>
+<li><strong>Route table</strong>: an MTR-style hop table with per-hop loss % and latency trend, aggregated over
+recent runs so a flaky hop looks different from one that dropped a single probe.</li>
+<li><strong>Overview tab</strong>: all your targets side by side, either overlaid on one chart or each on its own,
+live or from history. Compare YouTube against Zoom against your gateway at a glance.</li>
+<li><strong>Alerts</strong>: native desktop notifications when packet loss or latency crosses a threshold you
+set, and again when it recovers.</li>
+<li><strong>Always on</strong>: closes to the system tray and keeps monitoring in the background, so the graph has
+no gaps when you need it.</li>
+<li><strong>Local and private</strong>: history lives in a SQLite database on your machine. Export it, or import
+someone else&#39;s export to browse read-only. The only outbound lookup besides the probes themselves
+is the ISP/organization name of public hop addresses, via <a href="https://ip-api.com">ip-api.com</a>.</li>
+<li><strong>Self-updating</strong>: checks GitHub releases and updates in place.</li>
+</ul>
+<h2 id="install">Install</h2>
+<h3 id="windows">Windows</h3>
+<ol>
+<li>Download <code>Ping-Monitor-Setup-&lt;version&gt;.exe</code> from the
+<a href="https://github.com/live-miracles/ping-monitor/releases/latest">latest release</a>.</li>
+<li>Run it. It installs per user, with no admin rights needed, and starts Ping Monitor.</li>
+<li>Add a few targets with <strong>+ Add Target</strong> and leave it running.</li>
+</ol>
+<p>The installer is currently unsigned, so Windows SmartScreen may warn you the first time. Choose
+<strong>More info</strong>, then <strong>Run anyway</strong>.</p>
+<h3 id="macos-and-linux">macOS and Linux</h3>
+<p>Only a Windows installer is published right now. The app itself is cross-platform, with macOS
+(<code>dmg</code>) and Linux (<code>AppImage</code>) targets configured, so you can <a href="#build-from-source">build it from source</a>.
+On those systems probes use the OS <code>ping</code> and <code>traceroute</code> commands.</p>
+<h2 id="tips-for-a-streaming-studio">Tips for a streaming studio</h2>
+<ul>
+<li>Monitor <strong>the platforms you stream to</strong> (YouTube, Facebook, Twitch, and so on) and <strong>the tools
+you use to collaborate</strong> (Zoom, Teams, and so on). Add your <strong>local gateway</strong> and a public
+resolver (<code>1.1.1.1</code>, <code>8.8.8.8</code>) as controls: if the gateway is clean but everything beyond it
+drops, it&#39;s your ISP; if the gateway itself drops, it&#39;s inside the studio.</li>
+<li>Set a <strong>loss alert</strong> (for example 5%) on each target so you hear about trouble as it happens,
+not after the stream.</li>
+<li>After an incident, use the <strong>Latency</strong> chart to find the time, then the <strong>Network Path</strong> for the
+same window to see which hop was unhealthy.</li>
+<li>Run it on a machine that is <strong>always on and wired</strong>, so Wi-Fi on the monitor doesn&#39;t create its
+own noise.</li>
+</ul>
+<h2 id="build-from-source">Build from source</h2>
+<p>Requires Node.js 22 or newer.</p>
+<pre><code class="language-bash">git clone https://github.com/live-miracles/ping-monitor.git
+cd ping-monitor
+npm install      # also generates the Prisma client and rebuilds better-sqlite3 for Electron
+npm run dev      # run the app with hot reload
+npm run build:win   # or build:mac / build:linux, to produce an installer in dist/
+</code></pre>
+<p>Releases are built by GitHub Actions whenever a <code>v*</code> tag is pushed.</p>
+<h2 id="documentation">Documentation</h2>
+<ul>
+<li><a href="/projects/ping-monitor/docs/ARCHITECTURE/">Architecture and development notes</a>: process layout, IPC contract, database
+design, how the network engine and alerting work.</li>
+<li>The in-app <strong>Help</strong> entry in the sidebar walks through each view.</li>
+</ul>
+<h2 id="contributing">Contributing</h2>
+<p>Issues and pull requests are welcome. Please run the checks CI runs before opening a PR:</p>
+<pre><code class="language-bash">npm run format:check &amp;&amp; npm run typecheck &amp;&amp; npm test
+</code></pre>
+<h2 id="keywords">Keywords</h2>
+<p>ping monitor, network monitoring, latency monitor, packet loss, traceroute, MTR, network path
+visualization, ISP troubleshooting, live streaming network diagnostics, PingPlotter alternative,
+ThousandEyes alternative, Electron, React, TypeScript, SQLite.</p>
+<h2 id="license">License</h2>
+<p><a href="https://github.com/live-miracles/ping-monitor/blob/main/LICENSE">MIT</a></p>
+</article></div></div></div></main>
+    <footer class="caption waves text-muted border-line border-t pb-28">
+      <div class="mx-auto flex w-full max-w-[980px] flex-wrap items-center justify-between gap-x-6 gap-y-2 px-5 py-8 sm:px-6">
+        <span>Live Miracles · Open tools for live teams</span>
+        <span class="flex gap-5">
+          <a class="link-quiet" href="/blog/">Blog</a>
+          <a class="link-quiet" href="/blog/feed.xml">RSS</a>
+          <a class="link-quiet" href="https://github.com/live-miracles">GitHub</a>
+        </span>
+      </div>
+    </footer>
+    <dialog id="lightbox" class="lightbox" aria-label="Enlarged image">
+      <button type="button" class="lightbox-close" aria-label="Close image"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg></button>
+      <div class="lightbox-frame"><img alt="" /></div>
+    </dialog>
+    <script>
+      (function () {
+        var dialog = document.getElementById('lightbox');
+        if (!dialog || !dialog.showModal) return;
+        var shown = dialog.querySelector('img');
+        function zoomable(img) {
+          return !img.closest('a') && img.naturalWidth >= 300 && img.naturalHeight >= 100;
+        }
+        function mark(img) {
+          if (img.dataset.zoom || !zoomable(img)) return;
+          img.dataset.zoom = '1';
+          img.classList.add('zoomable');
+          img.tabIndex = 0;
+          img.setAttribute('role', 'button');
+          img.setAttribute('aria-label', 'Enlarge image: ' + (img.alt || 'screenshot'));
+        }
+        function open(img) {
+          shown.src = img.currentSrc || img.src;
+          shown.alt = img.alt;
+          shown.classList.remove('actual');
+          dialog.showModal();
+          dialog.scrollTo(0, 0);
+        }
+        document.querySelectorAll('.readme img').forEach(function (img) {
+          if (img.complete) mark(img);
+          else img.addEventListener('load', function () { mark(img); }, { once: true });
+        });
+        document.addEventListener('click', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom) open(img);
+        });
+        document.addEventListener('keydown', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom && (event.key === 'Enter' || event.key === ' ')) {
+            event.preventDefault();
+            open(img);
+          }
+        });
+        shown.addEventListener('click', function () {
+          shown.classList.toggle('actual');
+        });
+        dialog.addEventListener('click', function (event) {
+          if (event.target !== shown) dialog.close();
+        });
+      })();
+    </script>
+    <script>
+      (function () {
+        var button = document.getElementById('theme-toggle');
+        if (!button) return;
+        var root = document.documentElement;
+        function current() {
+          return root.dataset.theme === 'light' ? 'light' : 'dark';
+        }
+        function sync() {
+          var theme = current();
+          button.dataset.mode = theme;
+          button.setAttribute('aria-label', 'Switch to ' + (theme === 'dark' ? 'light' : 'dark') + ' theme');
+        }
+        button.hidden = false;
+        sync();
+        button.addEventListener('click', function () {
+          var next = current() === 'dark' ? 'light' : 'dark';
+          root.dataset.theme = next;
+          try {
+            localStorage.setItem('theme', next);
+          } catch (e) {}
+          sync();
+        });
+      })();
+    </script>
+  </body>
+</html>

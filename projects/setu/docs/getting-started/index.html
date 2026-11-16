@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Getting started — Setu</title>
+    <meta name="description" content="How to set up a developer environment for Setu and run the app locally. To put the app in front of users, continue with Deployment. If something fails, see Troubleshooting." />
+    <link rel="canonical" href="https://live-miracles.github.io/projects/setu/docs/getting-started/" />
+    <meta property="og:site_name" content="Live Miracles" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Getting started — Setu" />
+    <meta property="og:description" content="How to set up a developer environment for Setu and run the app locally. To put the app in front of users, continue with Deployment. If something fails, see Troubleshooting." />
+    <meta property="og:url" content="https://live-miracles.github.io/projects/setu/docs/getting-started/" />
+    <meta property="og:image" content="https://live-miracles.github.io/assets/logo.png" />
+    <meta name="twitter:card" content="summary" />
+    <link rel="icon" href="/assets/logo.png" type="image/png" />
+    <link rel="alternate" type="application/rss+xml" title="Live Miracles blog" href="/blog/feed.xml" />
+    <script>
+      try {
+        var theme = localStorage.getItem('theme');
+        if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
+      } catch (e) {}
+    </script>
+    <link rel="stylesheet" href="/assets/styles.css" />
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <header class="topbar">
+        <nav class="caption mx-auto flex h-12 w-full max-w-[1024px] items-center justify-between gap-4 px-5 sm:px-6" aria-label="Site">
+          <a href="/" class="flex items-center gap-2.5 font-semibold" aria-label="Live Miracles">
+            <img src="/assets/logo.png" alt="" class="logo size-6" />
+            <span>Live Miracles</span>
+          </a>
+          <div class="flex items-center gap-5 sm:gap-7">
+            <a href="/#projects" class="text-muted hover:text-ink transition-colors">Projects</a>
+            <a href="/blog/" class="text-muted hover:text-ink transition-colors">Blog</a>
+            <div class="-mr-2 flex items-center gap-1">
+              <a href="https://github.com/live-miracles" class="icon-btn" aria-label="Live Miracles on GitHub" title="GitHub"><svg xmlns="http://www.w3.org/2000/svg" class="size-[18px]" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.79 23.39c.6.11.82-.26.82-.58v-2.02c-3.34.73-4.04-1.42-4.04-1.42-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.57A12 12 0 0 0 12 .5Z"/></svg></a>
+              <button type="button" id="theme-toggle" class="icon-btn theme-toggle" hidden><svg xmlns="http://www.w3.org/2000/svg" class="icon-sun size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32 1.41-1.41"/></svg><svg xmlns="http://www.w3.org/2000/svg" class="icon-moon size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg></button>
+            </div>
+          </div>
+        </nav>
+      </header>
+    <main class="flex-1"><div class="wash" style="--gx1: 27%; --gx2: 87%; --gx3: 35%; --gy1: -131px; --gy2: -58px; --gy1p: 19%; --gy2p: 24%; --px: 98%; --tint: #d4a24c; --glow-a: color-mix(in srgb, #d4a24c 30%, transparent); --pattern: url('/assets/patterns/kikko.svg')"><div class="mx-auto w-full max-w-[980px] px-5 py-10 sm:px-6 sm:py-14"><nav class="text-muted caption flex flex-wrap items-center gap-2" aria-label="Breadcrumb">
+              <a href="/projects/setu/" class="link-quiet hover:text-ink flex items-center gap-2"><img src="/assets/setu-logo.svg" alt="" class="logo size-5 " /><span>Setu</span></a>
+              <span aria-hidden="true">›</span><a class="link-quiet hover:text-ink" href="/projects/setu/docs/">Documentation</a>
+            </nav>
+            <h1 class="display display-lg mt-4">Getting started</h1><nav class="border-line mt-8 flex gap-6 border-b" aria-label="Setu sections">
+              <a href="/projects/setu/" class="tab">Overview</a><a href="/projects/setu/docs/" class="tab" aria-current="page">Documentation</a>
+            </nav><details class="bg-parchment caption mt-6 rounded-xl p-4 lg:hidden">
+              <summary class="cursor-pointer font-semibold">Documentation menu</summary>
+              <div class="mt-3"><nav class="lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto" aria-label="Setu documentation">
+              <div class="">
+                
+                <ul class="caption"><li><a href="/projects/setu/docs/database-backups/" class="link-quiet hover:text-ink block py-1 text-muted">Database backups</a></li><li><a href="/projects/setu/docs/deployment/" class="link-quiet hover:text-ink block py-1 text-muted">Deployment</a></li><li><a href="/projects/setu/docs/getting-started/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">Getting started</a></li><li><a href="/projects/setu/docs/security-review/" class="link-quiet hover:text-ink block py-1 text-muted">Setu Security Review for Internal Rollout</a></li><li><a href="/projects/setu/docs/troubleshooting/" class="link-quiet hover:text-ink block py-1 text-muted">Troubleshooting</a></li></ul>
+              </div>
+            </nav></div>
+            </details>
+            <div class="mt-10 grid gap-12 lg:grid-cols-[13rem_minmax(0,1fr)]">
+              <div class="hidden lg:block"><nav class="lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto" aria-label="Setu documentation">
+              <div class="">
+                
+                <ul class="caption"><li><a href="/projects/setu/docs/database-backups/" class="link-quiet hover:text-ink block py-1 text-muted">Database backups</a></li><li><a href="/projects/setu/docs/deployment/" class="link-quiet hover:text-ink block py-1 text-muted">Deployment</a></li><li><a href="/projects/setu/docs/getting-started/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">Getting started</a></li><li><a href="/projects/setu/docs/security-review/" class="link-quiet hover:text-ink block py-1 text-muted">Setu Security Review for Internal Rollout</a></li><li><a href="/projects/setu/docs/troubleshooting/" class="link-quiet hover:text-ink block py-1 text-muted">Troubleshooting</a></li></ul>
+              </div>
+            </nav></div>
+              <div class="min-w-0"><details class="bg-parchment text-muted caption mb-8 rounded-xl p-4">
+              <summary class="text-ink cursor-pointer font-semibold">On this page</summary>
+              <ol class="mt-3 space-y-2">
+                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#requirements">Requirements</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#1-install-the-project">1. Install the project</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#2-configure-supabase-auth">2. Configure Supabase Auth</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#3-apply-the-schema-and-deploy-the-api">3. Apply the schema and deploy the API</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#4-run-the-frontend">4. Run the frontend</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#5-make-yourself-an-administrator">5. Make yourself an administrator</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#roles">Roles</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#useful-commands">Useful commands</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#project-layout">Project layout</a></li>
+              </ol>
+            </details><article class="readme min-w-0"><p>How to set up a developer environment for Setu and run the app locally. To put the
+app in front of users, continue with <a href="/projects/setu/docs/deployment/">Deployment</a>. If something
+fails, see <a href="/projects/setu/docs/troubleshooting/">Troubleshooting</a>.</p>
+<h2 id="requirements">Requirements</h2>
+<ul>
+<li>Node.js 22 or newer</li>
+<li>Access to the Setu Supabase project (shared by production and development)</li>
+<li>A Google OAuth client configured for that Supabase project</li>
+<li>Git</li>
+</ul>
+<p>Docker is not required for the recommended hosted-development workflow. The
+Supabase CLI is installed as a project dependency by <code>npm install</code>.</p>
+<h2 id="1-install-the-project">1. Install the project</h2>
+<pre><code class="language-bash">git clone &lt;repository-url&gt;
+cd setu
+npm install
+cp .env.example .env.local
+</code></pre>
+<p>Edit <code>.env.local</code> with the URL and publishable/anon key for the Setu Supabase
+project. Production and local development share this one project, so local
+work reads and writes live data: sign in with a test account, don&#39;t run bulk or
+destructive changes, and remember that comments queue real emails to the
+request&#39;s participants. In the Supabase dashboard, open the project, then go to
+<strong>Project Settings → API Keys</strong>, &quot;Publishable and secret API keys&quot; tab:</p>
+<pre><code class="language-env">SETU_SUPABASE_URL=https://&lt;project-ref&gt;.supabase.co
+SETU_SUPABASE_PUBLISHABLE_KEY=&lt;the &quot;Publishable key&quot; value shown there&gt;
+</code></pre>
+<p><code>.env.local</code> is ignored by Git. Never put a service-role/secret key or OAuth
+secret in it — only the publishable key is safe to use here.</p>
+<h2 id="2-configure-supabase-auth">2. Configure Supabase Auth</h2>
+<p>The frontend signs users in with Google OAuth, which needs an OAuth client in
+Google Cloud plus matching config in Supabase. Do this before your first
+sign-in attempt — see the note at the end of step 3 if you already tried
+signing in.</p>
+<p><strong>In Google Cloud Console</strong> (<a href="https://console.cloud.google.com/apis/credentials">APIs &amp; Credentials</a>):</p>
+<ol>
+<li>Pick or create a GCP project for this app. If prompted, configure the
+OAuth consent screen first (app name, support email) — this is a one-time
+step per GCP project. While the app is in &quot;Testing&quot; mode, only accounts
+you explicitly add as test users can sign in.</li>
+<li><strong>Create Credentials → OAuth client ID</strong> → Application type <strong>Web
+application</strong>.</li>
+<li>Under <strong>Authorized JavaScript origins</strong>, add <code>http://localhost:47193</code> (plus
+the Vercel domain, see <a href="/projects/setu/docs/deployment/#deploy-to-vercel">Deployment</a>).</li>
+<li>Under <strong>Authorized redirect URIs</strong>, add the callback URL shown in the
+Supabase panel from the next step, typically
+<code>https://&lt;project-ref&gt;.supabase.co/auth/v1/callback</code>.</li>
+<li>Click <strong>Create</strong>. Google shows a <strong>Client ID</strong>
+(<code>....apps.googleusercontent.com</code>) and <strong>Client Secret</strong> (<code>GOCSPX-...</code>) —
+keep this tab open, you&#39;ll need both in the next step.</li>
+</ol>
+<p><strong>In the Supabase dashboard</strong>, under <strong>Authentication → Sign In / Providers</strong>
+(this section may just be labeled &quot;Providers&quot; in older dashboard versions),
+scroll to <strong>Auth Providers</strong> and click <strong>Google</strong>:</p>
+<ol>
+<li>Paste the Client ID into <strong>Client IDs</strong> and the Client Secret into
+<strong>Client Secret (for OAuth)</strong>.</li>
+<li>Leave <strong>Skip nonce checks</strong> and <strong>Allow users without an email</strong> off —
+they&#39;re workarounds for platforms Setu doesn&#39;t need (native iOS flows,
+providers that omit email).</li>
+<li>Toggle <strong>Enable Sign in with Google</strong> on, then <strong>Save</strong>.</li>
+</ol>
+<p>Without this provider setup, the browser will show
+<code>Unsupported provider: provider is not enabled</code>.</p>
+<h2 id="3-apply-the-schema-and-deploy-the-api">3. Apply the schema and deploy the API</h2>
+<p>Authenticate the Supabase CLI and connect it to the project. <code>supabase login</code>
+opens a browser tab to authorize the CLI — run it from an interactive
+terminal, not a non-interactive/CI shell. This is the same project that serves
+production, so the commands below are only needed for the first setup; after
+that, merging to <code>master</code> deploys migrations and functions automatically.</p>
+<pre><code class="language-bash">npx supabase login
+npx supabase link --project-ref &lt;project-ref&gt;
+npx supabase db push
+npx supabase secrets set SETU_APP_ORIGIN=https://&lt;vercel-domain&gt; SETU_EXTRA_ORIGINS=http://localhost:47193
+npx supabase functions deploy api
+</code></pre>
+<p><code>SETU_APP_ORIGIN</code> is the public app origin (used for CORS and the “View
+request” email links). <code>SETU_EXTRA_ORIGINS</code> is an optional comma-separated list
+of additional browser origins the API accepts; it lets <code>npm run dev</code> call the
+production API. Without it, the browser blocks local requests with a CORS
+error. If you use another port (<code>PORT=3001 npm run dev</code>), add that origin too.</p>
+<p>Because <code>db push</code> and <code>functions deploy</code> here change production, avoid running
+them from an unmerged branch: a migration that fails halfway or drops data
+cannot be undone without a restore (see <a href="/projects/setu/docs/database-backups/">Database backups</a>).
+<code>npm test</code> runs every migration against an isolated PostgreSQL (PGlite), so run
+it before merging.</p>
+<p><code>db push</code> applies the checked-in migrations, including the trigger that creates
+a <code>profiles</code> row for each new Supabase Auth user.</p>
+<p><strong>Complete this step before your first Google sign-in.</strong> If you already signed
+in earlier (e.g. while testing the OAuth setup in step 2, before <code>db push</code> had
+run), your <code>auth.users</code> row exists but has no matching <code>profiles</code> row — see
+<a href="/projects/setu/docs/troubleshooting/">Troubleshooting</a>.</p>
+<p>Optional one-time setup that is not needed to run the app locally: comment
+email delivery and the email-domain allowlist are covered in
+<a href="/projects/setu/docs/deployment/">Deployment</a>.</p>
+<h2 id="4-run-the-frontend">4. Run the frontend</h2>
+<pre><code class="language-bash">npm run dev
+</code></pre>
+<p>Open <a href="http://localhost:47193">http://localhost:47193</a> and sign in with Google. The dev server uses the
+same Supabase API transport as the Vercel build.</p>
+<h2 id="5-make-yourself-an-administrator">5. Make yourself an administrator</h2>
+<p>New Supabase Auth users receive a profile through the database trigger. Assign
+the first development administrator explicitly in the Supabase SQL editor:</p>
+<pre><code class="language-sql">update public.profiles
+set role = &#39;admin&#39;
+where email = &#39;your-email@example.com&#39;;
+</code></pre>
+<h2 id="roles">Roles</h2>
+<p>The database roles are <code>admin</code>, <code>approver</code>, <code>viewer</code>, and <code>user</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Access</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>admin</code></td>
+<td>Everything, including settings and role management</td>
+</tr>
+<tr>
+<td><code>approver</code></td>
+<td>Requests, approvals, scheduling, and read-only users</td>
+</tr>
+<tr>
+<td><code>viewer</code></td>
+<td>All requests and standard app sections, including roster and inventory types</td>
+</tr>
+<tr>
+<td><code>user</code></td>
+<td>Own and participant requests, plus roster and inventory types</td>
+</tr>
+</tbody></table>
+<h2 id="useful-commands">Useful commands</h2>
+<pre><code class="language-bash">npm run dev             # Start the local frontend
+npm test                # Run the tests (migrations run against an in-memory Postgres)
+npm run typecheck       # Type-check backend and frontend
+npm run format:check    # Check formatting
+npm run format          # Fix formatting
+npm run build:vercel    # Build the Vercel output in web/
+npx supabase db push   # Apply migrations to the linked project
+npx supabase functions deploy api
+</code></pre>
+<p>There is no mock backend: the app always talks to the Supabase project from
+<code>.env.local</code>.</p>
+<h2 id="project-layout">Project layout</h2>
+<ul>
+<li><code>frontend/</code> — the browser application (React, Tailwind, PWA manifest and service worker).</li>
+<li><code>frontend/src/ui/</code> — the in-repo UI kit (see <a href="https://github.com/live-miracles/setu/blob/master/docs/adr/0001-own-ui-kit.md">ADR 0001</a>).</li>
+<li><code>supabase/migrations/</code> — the database schema.</li>
+<li><code>supabase/functions/api/</code> — the authenticated API boundary.</li>
+<li><code>supabase/functions/email-dispatcher/</code> — the comment-email worker.</li>
+<li><code>shared/types.d.ts</code> — the frontend/API contract.</li>
+<li><code>build-tools/</code> — dev server, Vercel build, and the test suite.</li>
+<li><a href="https://github.com/live-miracles/setu/blob/master/CONTEXT.md"><code>CONTEXT.md</code></a> — glossary of the domain terms used in the code.</li>
+</ul>
+</article><a class="more caption mt-8 inline-block" href="https://github.com/live-miracles/setu/blob/master/docs/getting-started.md">Edit this page on GitHub</a><div class="mt-12 grid gap-4 sm:grid-cols-2">
+              <a class="panel link-quiet hover:bg-parchment p-5 transition-colors" href="/projects/setu/docs/deployment/"><div class="text-muted caption">Previous</div><div class="font-semibold">Deployment</div></a>
+              <a class="panel link-quiet hover:bg-parchment p-5 transition-colors sm:text-right" href="/projects/setu/docs/security-review/"><div class="text-muted caption">Next</div><div class="font-semibold">Setu Security Review for Internal Rollout</div></a>
+            </div></div>
+            </div></div></div></main>
+    <footer class="caption waves text-muted border-line border-t pb-28">
+      <div class="mx-auto flex w-full max-w-[980px] flex-wrap items-center justify-between gap-x-6 gap-y-2 px-5 py-8 sm:px-6">
+        <span>Live Miracles · Open tools for live teams</span>
+        <span class="flex gap-5">
+          <a class="link-quiet" href="/blog/">Blog</a>
+          <a class="link-quiet" href="/blog/feed.xml">RSS</a>
+          <a class="link-quiet" href="https://github.com/live-miracles">GitHub</a>
+        </span>
+      </div>
+    </footer>
+    <dialog id="lightbox" class="lightbox" aria-label="Enlarged image">
+      <button type="button" class="lightbox-close" aria-label="Close image"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg></button>
+      <div class="lightbox-frame"><img alt="" /></div>
+    </dialog>
+    <script>
+      (function () {
+        var dialog = document.getElementById('lightbox');
+        if (!dialog || !dialog.showModal) return;
+        var shown = dialog.querySelector('img');
+        function zoomable(img) {
+          return !img.closest('a') && img.naturalWidth >= 300 && img.naturalHeight >= 100;
+        }
+        function mark(img) {
+          if (img.dataset.zoom || !zoomable(img)) return;
+          img.dataset.zoom = '1';
+          img.classList.add('zoomable');
+          img.tabIndex = 0;
+          img.setAttribute('role', 'button');
+          img.setAttribute('aria-label', 'Enlarge image: ' + (img.alt || 'screenshot'));
+        }
+        function open(img) {
+          shown.src = img.currentSrc || img.src;
+          shown.alt = img.alt;
+          shown.classList.remove('actual');
+          dialog.showModal();
+          dialog.scrollTo(0, 0);
+        }
+        document.querySelectorAll('.readme img').forEach(function (img) {
+          if (img.complete) mark(img);
+          else img.addEventListener('load', function () { mark(img); }, { once: true });
+        });
+        document.addEventListener('click', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom) open(img);
+        });
+        document.addEventListener('keydown', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom && (event.key === 'Enter' || event.key === ' ')) {
+            event.preventDefault();
+            open(img);
+          }
+        });
+        shown.addEventListener('click', function () {
+          shown.classList.toggle('actual');
+        });
+        dialog.addEventListener('click', function (event) {
+          if (event.target !== shown) dialog.close();
+        });
+      })();
+    </script>
+    <script>
+      (function () {
+        var button = document.getElementById('theme-toggle');
+        if (!button) return;
+        var root = document.documentElement;
+        function current() {
+          return root.dataset.theme === 'light' ? 'light' : 'dark';
+        }
+        function sync() {
+          var theme = current();
+          button.dataset.mode = theme;
+          button.setAttribute('aria-label', 'Switch to ' + (theme === 'dark' ? 'light' : 'dark') + ' theme');
+        }
+        button.hidden = false;
+        sync();
+        button.addEventListener('click', function () {
+          var next = current() === 'dark' ? 'light' : 'dark';
+          root.dataset.theme = next;
+          try {
+            localStorage.setItem('theme', next);
+          } catch (e) {}
+          sync();
+        });
+      })();
+    </script>
+  </body>
+</html>
