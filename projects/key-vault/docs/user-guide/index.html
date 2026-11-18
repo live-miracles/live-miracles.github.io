@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>User guide — Key Vault</title>
+    <meta name="description" content="For the media team: how to add a stream destination and tell whether it is working. You do not need to know anything technical, and you never have to guess what a colour means. Whoever runs Key Vault " />
+    <link rel="canonical" href="https://live-miracles.github.io/projects/key-vault/docs/user-guide/" />
+    <meta property="og:site_name" content="Live Miracles" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="User guide — Key Vault" />
+    <meta property="og:description" content="For the media team: how to add a stream destination and tell whether it is working. You do not need to know anything technical, and you never have to guess what a colour means. Whoever runs Key Vault " />
+    <meta property="og:url" content="https://live-miracles.github.io/projects/key-vault/docs/user-guide/" />
+    <meta property="og:image" content="https://raw.githubusercontent.com/live-miracles/key-vault/master/docs/images/dashboard.webp" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/assets/logo.png" type="image/png" />
+    <link rel="alternate" type="application/rss+xml" title="Live Miracles blog" href="/blog/feed.xml" />
+    <script>
+      try {
+        var theme = localStorage.getItem('theme');
+        if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
+      } catch (e) {}
+    </script>
+    <link rel="stylesheet" href="/assets/styles.css" />
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <header class="topbar">
+        <nav class="caption mx-auto flex h-12 w-full max-w-[1024px] items-center justify-between gap-4 px-5 sm:px-6" aria-label="Site">
+          <a href="/" class="flex items-center gap-2.5 font-semibold" aria-label="Live Miracles">
+            <img src="/assets/logo.png" alt="" class="logo size-6" />
+            <span>Live Miracles</span>
+          </a>
+          <div class="flex items-center gap-5 sm:gap-7">
+            <a href="/#projects" class="text-muted hover:text-ink transition-colors">Projects</a>
+            <a href="/blog/" class="text-muted hover:text-ink transition-colors">Blog</a>
+            <div class="-mr-2 flex items-center gap-1">
+              <a href="https://github.com/live-miracles" class="icon-btn" aria-label="Live Miracles on GitHub" title="GitHub"><svg xmlns="http://www.w3.org/2000/svg" class="size-[18px]" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.79 23.39c.6.11.82-.26.82-.58v-2.02c-3.34.73-4.04-1.42-4.04-1.42-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.57A12 12 0 0 0 12 .5Z"/></svg></a>
+              <button type="button" id="theme-toggle" class="icon-btn theme-toggle" hidden><svg xmlns="http://www.w3.org/2000/svg" class="icon-sun size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32 1.41-1.41"/></svg><svg xmlns="http://www.w3.org/2000/svg" class="icon-moon size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg></button>
+            </div>
+          </div>
+        </nav>
+      </header>
+    <main class="flex-1"><div class="wash" style="--gx1: 9%; --gx2: 66%; --gx3: 49%; --gy1: -51px; --gy2: -43px; --gy1p: 21%; --gy2p: 7%; --px: 89%; --glow-1: var(--glow-b); --glow-2: var(--glow-a); --tint: #d4a24c; --glow-a: color-mix(in srgb, #d4a24c 30%, transparent); --pattern: url('/assets/patterns/kikko.svg')"><div class="mx-auto w-full max-w-[980px] px-5 py-10 sm:px-6 sm:py-14"><nav class="text-muted caption flex flex-wrap items-center gap-2" aria-label="Breadcrumb">
+              <a href="/projects/key-vault/" class="link-quiet hover:text-ink flex items-center gap-2"><img src="/assets/key-vault-logo.png" alt="" class="logo size-5 " /><span>Key Vault</span></a>
+              <span aria-hidden="true">›</span><a class="link-quiet hover:text-ink" href="/projects/key-vault/docs/">Documentation</a>
+            </nav>
+            <h1 class="display display-lg mt-4">User guide</h1><nav class="border-line mt-8 flex gap-6 border-b" aria-label="Key Vault sections">
+              <a href="/projects/key-vault/" class="tab">Overview</a><a href="/projects/key-vault/docs/" class="tab" aria-current="page">Documentation</a>
+            </nav><details class="bg-parchment caption mt-6 rounded-xl p-4 lg:hidden">
+              <summary class="cursor-pointer font-semibold">Documentation menu</summary>
+              <div class="mt-3"><nav class="lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto" aria-label="Key Vault documentation">
+              <div class="">
+                
+                <ul class="caption"><li><a href="/projects/key-vault/docs/user-guide/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">User guide</a></li><li><a href="/projects/key-vault/docs/install-as-app/" class="link-quiet hover:text-ink block py-1 text-muted">Install Key Vault as an app</a></li><li><a href="/projects/key-vault/docs/setup/" class="link-quiet hover:text-ink block py-1 text-muted">Setting up Key Vault</a></li><li><a href="/projects/key-vault/docs/development/" class="link-quiet hover:text-ink block py-1 text-muted">Development</a></li><li><a href="/projects/key-vault/docs/bunryu-contract/" class="link-quiet hover:text-ink block py-1 text-muted">The bunryu link</a></li></ul>
+              </div>
+            </nav></div>
+            </details>
+            <div class="mt-10 grid gap-12 lg:grid-cols-[13rem_minmax(0,1fr)]">
+              <div class="hidden lg:block"><nav class="lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto" aria-label="Key Vault documentation">
+              <div class="">
+                
+                <ul class="caption"><li><a href="/projects/key-vault/docs/user-guide/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">User guide</a></li><li><a href="/projects/key-vault/docs/install-as-app/" class="link-quiet hover:text-ink block py-1 text-muted">Install Key Vault as an app</a></li><li><a href="/projects/key-vault/docs/setup/" class="link-quiet hover:text-ink block py-1 text-muted">Setting up Key Vault</a></li><li><a href="/projects/key-vault/docs/development/" class="link-quiet hover:text-ink block py-1 text-muted">Development</a></li><li><a href="/projects/key-vault/docs/bunryu-contract/" class="link-quiet hover:text-ink block py-1 text-muted">The bunryu link</a></li></ul>
+              </div>
+            </nav></div>
+              <div class="min-w-0"><details class="bg-parchment text-muted caption mb-8 rounded-xl p-4">
+              <summary class="text-ink cursor-pointer font-semibold">On this page</summary>
+              <ol class="mt-3 space-y-2">
+                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#what-you-see">What you see</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#add-a-destination">Add a destination</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#change-or-replace-a-link">Change or replace a link</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#what-the-labels-mean">What the labels mean</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#when-an-input-is-not-arriving">When an input is not arriving</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#when-a-card-is-red">When a card is red</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#who-can-do-what">Who can do what</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#keep-it-on-your-desktop-or-phone">Keep it on your desktop or phone</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#a-safe-habit">A safe habit</a></li>
+              </ol>
+            </details><article class="readme min-w-0"><p>For the media team: how to add a stream destination and tell whether it is working. You do not need to know anything technical, and you never have to guess what a colour means. Whoever runs Key Vault for your team gives you access with your Google account.</p>
+<p><img src="https://raw.githubusercontent.com/live-miracles/key-vault/master/docs/images/dashboard.webp" alt="Key Vault showing an event&amp;#39;s destinations in plain words: Live, Unstable, Problem and Not set up yet, each with what to try." loading="lazy" /></p>
+<h2 id="what-you-see">What you see</h2>
+<ul>
+<li><strong>An event</strong> is one occasion being streamed. Switch between events with the tabs along the bottom.</li>
+<li><strong>Inputs</strong> (on the left) are the feeds of that event, such as English or Hindi. Click one to see only its destinations, or click <strong>All</strong>. A dot beside each says whether its signal is arriving.</li>
+<li><strong>Destinations</strong> are the cards: every place an input goes live, such as a YouTube channel, a Facebook page or a TV channel.</li>
+<li><strong>Search</strong> at the top finds a destination by name, input, platform or note. Paste a stream key into it to find who is using that key.</li>
+</ul>
+<h2 id="add-a-destination">Add a destination</h2>
+<p>Click <strong>Add destination</strong>. A short form walks you through four steps.</p>
+<p><img src="https://raw.githubusercontent.com/live-miracles/key-vault/master/docs/images/add-destination.webp" alt="The Add a destination form: pick a platform, then follow the steps for finding its stream key." loading="lazy" /></p>
+<ol>
+<li><strong>Where are you streaming to?</strong> Pick YouTube, Facebook, Instagram or VdoCipher. Use <strong>Something else</strong> for a channel that gave you an <code>rtmp://</code> address, and <strong>SRT link</strong> for a link that starts with <code>srt://</code>.</li>
+<li><strong>Get your stream key.</strong> Open the short guide for that platform, copy the key from the platform and click <strong>Paste</strong>. If you paste a whole address by mistake, Key Vault cuts it down to the key for you. If the key looks wrong, the form says what to fix before you can save.</li>
+<li><strong>Name this stream.</strong> Choose the input it belongs to and give it a name you will recognise, such as &quot;YouTube Hindi&quot;. Add the watch link and any notes, such as &quot;new link sent by the channel today&quot;.</li>
+<li><strong>Backup</strong> (optional). Facebook asks for a second key. YouTube sets its backup up by itself and Instagram has none, so those boxes stay out of your way.</li>
+</ol>
+<p>Saving stores the destination for the streaming team, who set it up on their server. Until they do, the card says <strong>Not set up yet</strong>. Once they have, it shows whether the stream is live.</p>
+<h2 id="change-or-replace-a-link">Change or replace a link</h2>
+<p>During an event a channel often sends a new link. Open the card, click the pencil, paste the new key and save. Then watch the card:</p>
+<ul>
+<li><strong>Not set up yet</strong>, or the old status, means the streaming server does not have the new link yet. Tell the streaming team that the link has changed.</li>
+<li>Once the streaming team has put the new link on the server, the card shows its real state within a minute or two. That is how you know the update arrived.</li>
+</ul>
+<p>Hover the small <strong>i</strong> on a card to see who last changed it and when.</p>
+<h2 id="what-the-labels-mean">What the labels mean</h2>
+<p>The colour and the label come from the streaming server itself. Nobody sets them by hand.</p>
+<table>
+<thead>
+<tr>
+<th>Label</th>
+<th>Colour</th>
+<th>What it means</th>
+<th>What to do</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Live</strong></td>
+<td>Green</td>
+<td>The stream is reaching the destination.</td>
+<td>Nothing.</td>
+</tr>
+<tr>
+<td><strong>Unstable</strong></td>
+<td>Amber</td>
+<td>It is sending, but not smoothly.</td>
+<td>Tell the streaming team if it keeps happening.</td>
+</tr>
+<tr>
+<td><strong>Problem</strong></td>
+<td>Red</td>
+<td>Nothing is getting through.</td>
+<td>Read the line on the card. It says what to check first.</td>
+</tr>
+<tr>
+<td><strong>Not sending</strong></td>
+<td>Indigo</td>
+<td>The link is set up, but nothing is being sent right now.</td>
+<td>Nothing, unless the event has started. Then tell the streaming team.</td>
+</tr>
+<tr>
+<td><strong>Not set up yet</strong></td>
+<td>Grey</td>
+<td>The streaming server does not have this link.</td>
+<td>Tell the streaming team, unless they have not set it up yet.</td>
+</tr>
+<tr>
+<td><strong>Check input</strong></td>
+<td>Amber</td>
+<td>The link is running under a different input than its card.</td>
+<td>Open the card and pick the input it belongs to.</td>
+</tr>
+</tbody></table>
+<p>When the whole page shows no colours, the streaming server is simply off. It only runs during events, so that is normal and not a fault.</p>
+<h3 id="when-an-input-is-not-arriving">When an input is not arriving</h3>
+<p>If a red card sits under a banner that says <strong>Nothing is arriving on input &quot;…&quot;</strong>, the platform is not the problem. No signal is coming in, so none of that input&#39;s destinations can be live. There is no need to contact the platforms or the channel: tell the streaming team.</p>
+<h3 id="when-a-card-is-red">When a card is red</h3>
+<p>A red card says in plain words what is probably wrong. The usual ones:</p>
+<ul>
+<li><strong>The platform did not accept the stream key.</strong> The key is wrong or has expired. Get a fresh one from the platform and edit the card.</li>
+<li><strong>Could not reach the platform.</strong> Check the address and key you entered, and that the stream is started on the platform.</li>
+<li><strong>The SRT link was rejected.</strong> Check the link, with its passphrase and stream id, with whoever gave it to you.</li>
+</ul>
+<p>Beside a red card there is a small copy button. It copies the technical details so you can paste them to the streaming team, who read them. You never need to read them yourself.</p>
+<h2 id="who-can-do-what">Who can do what</h2>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Can</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Viewer</strong></td>
+<td>See destinations and their status. Can be limited to one input.</td>
+</tr>
+<tr>
+<td><strong>Editor</strong></td>
+<td>Add, edit and delete destinations. Can be limited to one input.</td>
+</tr>
+<tr>
+<td><strong>Admin</strong></td>
+<td>Everything an editor can, and manage an event&#39;s inputs and who has access.</td>
+</tr>
+<tr>
+<td><strong>Owner</strong></td>
+<td>Everything, in every event, including creating, editing and deleting events.</td>
+</tr>
+</tbody></table>
+<p>If a button you expect is missing, you do not have that role for this event: ask an admin to change it under <strong>Share</strong>.</p>
+<h2 id="keep-it-on-your-desktop-or-phone">Keep it on your desktop or phone</h2>
+<p>Chrome and Edge can install Key Vault as an app with its own window and icon. See <a href="/projects/key-vault/docs/install-as-app/">Install Key Vault as an app</a>.</p>
+<h2 id="a-safe-habit">A safe habit</h2>
+<p>A stream key is like a password to your channel. Key Vault only shows keys to people with access to the event, and never sends one in a link. Do not paste a key into chat or email: add it here instead.</p>
+</article><a class="more caption mt-8 inline-block" href="https://github.com/live-miracles/key-vault/blob/master/docs/1-user-guide.md">Edit this page on GitHub</a><div class="mt-12 grid gap-4 sm:grid-cols-2">
+              <span></span>
+              <a class="panel link-quiet hover:bg-parchment p-5 transition-colors sm:text-right" href="/projects/key-vault/docs/install-as-app/"><div class="text-muted caption">Next</div><div class="font-semibold">Install Key Vault as an app</div></a>
+            </div></div>
+            </div></div></div></main>
+    <footer class="caption waves text-muted border-line border-t pb-28">
+      <div class="mx-auto flex w-full max-w-[980px] flex-wrap items-center justify-between gap-x-6 gap-y-2 px-5 py-8 sm:px-6">
+        <span>Live Miracles · Open tools for live teams</span>
+        <span class="flex gap-5">
+          <a class="link-quiet" href="/blog/">Blog</a>
+          <a class="link-quiet" href="/blog/feed.xml">RSS</a>
+          <a class="link-quiet" href="https://github.com/live-miracles">GitHub</a>
+        </span>
+      </div>
+    </footer>
+    <dialog id="lightbox" class="lightbox" aria-label="Enlarged image">
+      <button type="button" class="lightbox-close" aria-label="Close image"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg></button>
+      <div class="lightbox-frame"><img alt="" /></div>
+    </dialog>
+    <script>
+      (function () {
+        var dialog = document.getElementById('lightbox');
+        if (!dialog || !dialog.showModal) return;
+        var shown = dialog.querySelector('img');
+        function zoomable(img) {
+          return !img.closest('a') && img.naturalWidth >= 300 && img.naturalHeight >= 100;
+        }
+        function mark(img) {
+          if (img.dataset.zoom || !zoomable(img)) return;
+          img.dataset.zoom = '1';
+          img.classList.add('zoomable');
+          img.tabIndex = 0;
+          img.setAttribute('role', 'button');
+          img.setAttribute('aria-label', 'Enlarge image: ' + (img.alt || 'screenshot'));
+        }
+        function open(img) {
+          shown.src = img.currentSrc || img.src;
+          shown.alt = img.alt;
+          shown.classList.remove('actual');
+          dialog.showModal();
+          dialog.scrollTo(0, 0);
+        }
+        document.querySelectorAll('.readme img').forEach(function (img) {
+          if (img.complete) mark(img);
+          else img.addEventListener('load', function () { mark(img); }, { once: true });
+        });
+        document.addEventListener('click', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom) open(img);
+        });
+        document.addEventListener('keydown', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom && (event.key === 'Enter' || event.key === ' ')) {
+            event.preventDefault();
+            open(img);
+          }
+        });
+        shown.addEventListener('click', function () {
+          shown.classList.toggle('actual');
+        });
+        dialog.addEventListener('click', function (event) {
+          if (event.target !== shown) dialog.close();
+        });
+      })();
+    </script>
+    <script>
+      (function () {
+        var button = document.getElementById('theme-toggle');
+        if (!button) return;
+        var root = document.documentElement;
+        function current() {
+          return root.dataset.theme === 'light' ? 'light' : 'dark';
+        }
+        function sync() {
+          var theme = current();
+          button.dataset.mode = theme;
+          button.setAttribute('aria-label', 'Switch to ' + (theme === 'dark' ? 'light' : 'dark') + ' theme');
+        }
+        button.hidden = false;
+        sync();
+        button.addEventListener('click', function () {
+          var next = current() === 'dark' ? 'light' : 'dark';
+          root.dataset.theme = next;
+          try {
+            localStorage.setItem('theme', next);
+          } catch (e) {}
+          sync();
+        });
+      })();
+    </script>
+  </body>
+</html>

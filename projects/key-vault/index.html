@@ -5,15 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="light dark" />
     <title>Key Vault — Live Miracles</title>
-    <meta name="description" content="A safer way to store and share stream keys for big events, with role-based access, on Google Apps Script." />
+    <meta name="description" content="Add every stream destination for an event through a guided form that stops wrong links, and see in plain words whether each one is live. Role-based access and live status from bunryu." />
     <link rel="canonical" href="https://live-miracles.github.io/projects/key-vault/" />
     <meta property="og:site_name" content="Live Miracles" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Key Vault — Live Miracles" />
-    <meta property="og:description" content="A safer way to store and share stream keys for big events, with role-based access, on Google Apps Script." />
+    <meta property="og:description" content="Add every stream destination for an event through a guided form that stops wrong links, and see in plain words whether each one is live. Role-based access and live status from bunryu." />
     <meta property="og:url" content="https://live-miracles.github.io/projects/key-vault/" />
-    <meta property="og:image" content="https://live-miracles.github.io/assets/logo.png" />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content="https://raw.githubusercontent.com/live-miracles/key-vault/master/docs/images/dashboard.webp" />
+    <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="/assets/logo.png" type="image/png" />
     <link rel="alternate" type="application/rss+xml" title="Live Miracles blog" href="/blog/feed.xml" />
     <script>
@@ -42,103 +42,126 @@
         </nav>
       </header>
     <main class="flex-1"><div class="wash" style="--gx1: 9%; --gx2: 66%; --gx3: 49%; --gy1: -51px; --gy2: -43px; --gy1p: 21%; --gy2p: 7%; --px: 89%; --glow-1: var(--glow-b); --glow-2: var(--glow-a); --tint: #d4a24c; --glow-a: color-mix(in srgb, #d4a24c 30%, transparent); --pattern: url('/assets/patterns/kikko.svg')"><div class="mx-auto w-full max-w-[980px] px-5 py-10 sm:px-6 sm:py-14"><div class="flex items-center gap-5">
-              <img src="https://live-miracles.github.io/key-vault/logo.png" alt="" class="logo size-16 " />
+              <img src="/assets/key-vault-logo.png" alt="" class="logo size-16 " />
               <h1 class="display display-lg">Key Vault</h1>
             </div>
-            <p class="lead mt-5 max-w-3xl">A safer way to store and share stream keys for big events, with role-based access, on Google Apps Script.</p>
-            <div class="mt-7 flex flex-wrap gap-3"><a class="pill pill-primary" href="https://github.com/live-miracles/key-vault">GitHub</a><a class="pill " href="https://live-miracles.github.io/key-vault/">Demo</a></div>
+            <p class="lead mt-5 max-w-3xl">Add every stream destination for an event through a guided form that stops wrong links, and see in plain words whether each one is live. Role-based access and live status from bunryu.</p>
+            <div class="mt-7 flex flex-wrap gap-3"><a class="pill pill-primary" href="https://github.com/live-miracles/key-vault">GitHub</a><a class="pill " href="https://livestream-key-vault.vercel.app">Website</a></div>
             <div class="text-muted caption mt-6 flex flex-wrap gap-x-5 gap-y-1"><span class="inline-flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 2.5 2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.31l-5.8 3.05 1.11-6.46-4.7-4.58 6.49-.94L12 2.5Z"/></svg>1</span><span class="inline-flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="6" cy="4" r="2"/><circle cx="18" cy="4" r="2"/><circle cx="12" cy="20" r="2"/><path d="M6 6v3a3 3 0 0 0 3 3h3m6-6v3a3 3 0 0 1-3 3h-3m0 0v6"/></svg>0</span><span>TypeScript</span><span>MIT license</span><span>Updated 2026-11-18</span></div>
             <nav class="border-line mt-8 flex gap-6 border-b" aria-label="Key Vault sections">
               <a href="/projects/key-vault/" class="tab" aria-current="page">Overview</a><a href="/projects/key-vault/docs/" class="tab">Documentation</a>
             </nav><div class="mt-10"><details class="bg-parchment text-muted caption mb-8 rounded-xl p-4">
               <summary class="text-ink cursor-pointer font-semibold">On this page</summary>
               <ol class="mt-3 space-y-2">
-                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#project-structure">Project structure</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#how-it-fits-together">How it fits together</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#local-development">Local development</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#setting-up-supabase-and-vercel">Setting up Supabase and Vercel</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#roles">Roles</a></li>
+                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#why-it-exists">Why it exists</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#try-it">Try it</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#install-it-as-an-app">Install it as an app</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#documentation">Documentation</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#how-it-fits-together">How it fits together</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#roles">Roles</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#part-of-live-miracles">Part of Live Miracles</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#contributing-and-license">Contributing and license</a></li>
               </ol>
-            </details><article class="readme min-w-0"><p>A safer way to store and manage stream keys for big events.</p>
-<p>The media team adds every destination for an event (YouTube, Instagram, Facebook, TV channels and
-other third parties) through a guided form that cleans up and checks what they paste. The streaming
-server, bunryu, is configured from these links and reports each output&#39;s live status back, so every
-destination shows whether it is set up, whether it is running, and what to try when it is not.
-<code>CONTEXT.md</code> has the background and the terms.</p>
-<p>You can:</p>
+            </details><article class="readme min-w-0"><p><a href="https://github.com/live-miracles/key-vault/actions/workflows/deploy.yml"><img src="https://github.com/live-miracles/key-vault/actions/workflows/deploy.yml/badge.svg" alt="Build and deploy" loading="lazy" /></a></p>
+<p><strong>Add every stream destination for a live event, and see in plain words whether each one is working.</strong></p>
+<p>Key Vault is a web app for media teams who send a live stream to many places at once: YouTube,
+Facebook, Instagram, TV channels and other third parties. It replaces the shared spreadsheet of stream
+keys with a guided form that stops wrong links, and it shows the live status of every destination, so
+nobody has to ask &quot;is it going out?&quot; in a chat.</p>
+<p><img src="https://raw.githubusercontent.com/live-miracles/key-vault/master/docs/images/dashboard.webp" alt="Key Vault showing an event&amp;#39;s destinations: Live, Unstable, Problem and Not set up yet, each with what to try." loading="lazy" /></p>
+<h2 id="why-it-exists">Why it exists</h2>
+<p>Stream keys used to travel in a Google Sheet. Then a key went into the address box (or the other way
+round), the backup column held the main link, and nobody knew a link was wrong until the stream failed
+on air. When a channel said it was not receiving anything, the media team could not see which output
+was down, or why.</p>
 <ul>
-<li>Create events, each with its own inputs.</li>
-<li>Add destinations (platform, stream key, optional backup) for an input.</li>
-<li>Give people a role to restrict which destinations each of them can see or change.</li>
+<li><strong>Wrong links cannot be saved.</strong> The form asks only for what each platform needs, cuts a pasted full
+address down to the key, and checks the result. The server checks again, so nothing that skips the
+form can store a bad link.</li>
+<li><strong>Every destination shows its real state.</strong> The streaming server, <a href="https://github.com/live-miracles/bunryu">bunryu</a>,
+reports each output once a minute. A card shows <strong>Live</strong>, <strong>Unstable</strong>, <strong>Problem</strong>, <strong>Not sending</strong> or
+<strong>Not set up yet</strong>. Nobody sets a colour by hand.</li>
+<li><strong>It says what to try.</strong> A red card says, in plain words, what is probably wrong (&quot;The platform did
+not accept the stream key. Get a fresh key from the platform and update it here.&quot;) and who to tell.
+When the input is not arriving, it says so, and nobody wastes time chasing the platform.</li>
+<li><strong>Changes are visible.</strong> A replaced link stays <strong>Not set up yet</strong> until the streaming server has it,
+and each card records who last changed it and when.</li>
+<li><strong>Access follows the work.</strong> People are owners, admins, editors or viewers, and editors and viewers
+can be limited to a single input, such as one language. The server decides what each person may do.</li>
+<li><strong>Installs like an app.</strong> Chrome, Edge and phones can add it to the desktop or home screen.</li>
 </ul>
-<p>It runs on Vercel and Supabase.</p>
-<h2 id="project-structure">Project structure</h2>
-<pre><code class="language-text">├── frontend/
-│   ├── src/             # Browser code: ES modules, one entry (main.ts)
-│   │   ├── demo/        # The demo&#39;s seed data and its in-browser backend
-│   │   └── *.ts         # Pure modules (status wording, search, cards, model) and the screens
-│   ├── index.html       # HTML shell
-│   └── input.css        # Tailwind CSS source and the theme
-├── supabase/
-│   ├── migrations/      # The database schema
-│   └── functions/
-│       ├── api/         # One Edge Function: POST /api/&lt;operation&gt;
-│       ├── ingest/      # Where bunryu reports its heartbeats
-│       └── _shared/     # The rules, shared with the browser where it makes sense:
-│                        #   platforms.ts (where a destination can go), access.ts (who may do what),
-│                        #   operations.ts (the operations, over a Store), status.ts, types.ts
-├── build-tools/         # build.mjs (esbuild, demo and real modes) and dev.mjs (dev server)
-├── docs/                # setup.md, bunryu-contract.md, adr/ (decisions)
-└── test/                # Unit tests; migrations-db-check.mjs needs Docker
+<h2 id="try-it">Try it</h2>
+<p>Run the demo on your own machine. It uses made-up events and statuses, so it needs no account:</p>
+<pre><code class="language-bash">git clone https://github.com/live-miracles/key-vault.git
+cd key-vault
+npm install
+npm run dev        # http://localhost:2837
 </code></pre>
+<p>Use <strong>Add destination</strong> to see the guided form. Everything the demo does runs the same operations as
+the real server.</p>
+<p><img src="https://raw.githubusercontent.com/live-miracles/key-vault/master/docs/images/add-destination.webp" alt="The guided form for adding a destination: pick a platform, then follow the steps for finding its stream key." loading="lazy" /></p>
+<h2 id="install-it-as-an-app">Install it as an app</h2>
+<p>Open the site in Chrome or Edge and click the install icon in the address bar. Key Vault then opens in
+its own window, with its own icon, like any other app. Phones can use <strong>Install app</strong> or <strong>Add to Home
+Screen</strong>. See <a href="/projects/key-vault/docs/install-as-app/">Install Key Vault as an app</a>. It always shows live data, so it
+is not an offline tool.</p>
+<h2 id="documentation">Documentation</h2>
+<table>
+<thead>
+<tr>
+<th>If you...</th>
+<th>Read</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>add destinations and check their status</td>
+<td><a href="/projects/key-vault/docs/user-guide/">User guide</a></td>
+</tr>
+<tr>
+<td>run Key Vault for your team</td>
+<td><a href="/projects/key-vault/docs/setup/">Setting up Key Vault</a></td>
+</tr>
+<tr>
+<td>connect a bunryu server</td>
+<td><a href="/projects/key-vault/docs/bunryu-contract/">The bunryu link</a></td>
+</tr>
+<tr>
+<td>change the code</td>
+<td><a href="/projects/key-vault/docs/development/">Development</a></td>
+</tr>
+<tr>
+<td>want the background and the terms</td>
+<td><a href="https://github.com/live-miracles/key-vault/blob/master/CONTEXT.md">CONTEXT.md</a> and <a href="https://github.com/live-miracles/key-vault/blob/master/DESIGN.md">DESIGN.md</a></td>
+</tr>
+</tbody></table>
+<p>The same pages are published with the other Live Miracles projects at
+<a href="https://live-miracles.github.io/projects/key-vault/">live-miracles.github.io/projects/key-vault</a>.</p>
 <h2 id="how-it-fits-together">How it fits together</h2>
 <pre><code class="language-text">Browser → Vercel static site → Supabase Auth (Google)
                             └→ Edge Function `api` → Postgres
 bunryu ──every minute──► Edge Function `ingest` → Postgres
 </code></pre>
 <p>The browser never reads the database directly: every table has row-level security with no policy.
-Every call goes to the <code>api</code> function, which decides what the signed-in user may do
-(<code>supabase/functions/_shared/access.ts</code>), checks the destination against the platform rules
-(<code>platforms.ts</code>, the same module the form uses) and only then uses the service role. The data it
-returns says what the user may do with each item, so the screens hold no rules of their own.</p>
-<p>bunryu reports the status of each output once a minute. It sends a hash of each destination address,
-never the address. Key Vault hashes its own main and backup addresses and matches them, so a
-destination shows as running, warning, error or configured-but-stopped without anyone setting a
-colour. See <code>docs/bunryu-contract.md</code>.</p>
-<p>The demo site runs the same operations in the browser against an in-memory store, with sample data
-and statuses.</p>
-<h2 id="local-development">Local development</h2>
-<pre><code class="language-bash">npm install
-npm run dev
-</code></pre>
-<p>This serves the demo at <code>http://localhost:2837</code> with live reload (set <code>PORT</code> to use another port).</p>
-<pre><code class="language-bash">npm test              # unit tests, no database needed
-npm run typecheck     # frontend and server
-npm run format:check
-npm run test:db       # applies the migration to a throwaway Postgres in Docker
-</code></pre>
-<p>To build the real site locally, set the project URL and the <strong>publishable</strong> key (never a secret key;
-the build refuses one) and run <code>npm run build</code>; the result is in <code>dist/</code>. <code>npm run build:demo</code> builds
-the demo instead.</p>
-<pre><code class="language-bash">KEY_VAULT_SUPABASE_URL=https://&lt;project-ref&gt;.supabase.co KEY_VAULT_SUPABASE_PUBLISHABLE_KEY=&lt;publishable key&gt; npm run build
-</code></pre>
-<h2 id="setting-up-supabase-and-vercel">Setting up Supabase and Vercel</h2>
-<p>The step-by-step order, with checks and fixes for the usual errors, is in <code>docs/setup.md</code>. In short:</p>
-<ol>
-<li>Create a Supabase project. Under Authentication → Providers enable Google, and set the Site URL
-and a Redirect URL to the site&#39;s address (the default sends sign-in back to <code>http://localhost:3000</code>).</li>
-<li>Set the function secrets <code>KEY_VAULT_APP_ORIGIN</code>, <code>KEY_VAULT_OWNER_EMAILS</code> and <code>KEY_VAULT_SECRET</code>
-(what each is: <code>docs/bunryu-contract.md</code>).</li>
-<li>Add the repository secrets <code>SUPABASE_ACCESS_TOKEN</code> and <code>SUPABASE_PROJECT_REF</code>;
-<code>.github/workflows/deploy-supabase.yml</code> then applies the migration and deploys both functions on
-every change under <code>supabase/</code>.</li>
-<li>Import the repository in Vercel and set <code>KEY_VAULT_SUPABASE_URL</code> and
-<code>KEY_VAULT_SUPABASE_PUBLISHABLE_KEY</code>; <code>vercel.json</code> does the rest.</li>
-</ol>
+Every call goes to the <code>api</code> function, which decides what the signed-in user may do, checks the
+destination against the platform rules (the same module the form uses) and only then uses the service
+role. The data it returns says what the user may do with each item, so the screens hold no rules of
+their own.</p>
+<p>bunryu sends a hash of each destination address, never the address. Key Vault hashes its own main and
+backup addresses and matches them, so a destination shows as running, warning, error or
+configured-but-stopped without anyone setting a colour. Stream keys never go to bunryu&#39;s heartbeat or
+into a URL. The details are in <a href="/projects/key-vault/docs/bunryu-contract/">The bunryu link</a>.</p>
+<p>It runs on <strong>Vercel</strong> (the site) and <strong>Supabase</strong> (sign-in, database and two Edge Functions), and fits
+their free plans.</p>
 <h2 id="roles">Roles</h2>
 <ul>
-<li>Owner: can edit or delete events and assign event admins. An owner anywhere is an owner everywhere.</li>
-<li>Admin: manages an event&#39;s inputs and can add viewers, editors and other admins.</li>
-<li>Editor: can add and edit destinations, and can be limited to one input.</li>
-<li>Viewer: can only view destinations, and can be limited to one input.</li>
+<li><strong>Owner</strong>: can edit or delete events and assign event admins. An owner anywhere is an owner everywhere.</li>
+<li><strong>Admin</strong>: manages an event&#39;s inputs and can add viewers, editors and other admins.</li>
+<li><strong>Editor</strong>: can add and edit destinations, and can be limited to one input.</li>
+<li><strong>Viewer</strong>: can only view destinations, and can be limited to one input.</li>
 </ul>
 <p>Anyone listed in <code>KEY_VAULT_OWNER_EMAILS</code> is an owner without a role.</p>
+<h2 id="part-of-live-miracles">Part of Live Miracles</h2>
+<p>Key Vault is one of the tools the Live Miracles team builds to run large live events, alongside
+<a href="https://github.com/live-miracles/bunryu">bunryu</a> (the restreaming server it reports on),
+<a href="https://github.com/live-miracles/live-gallery">Live Gallery</a> and
+<a href="https://github.com/live-miracles/vmix-master">vMix Master</a>. See all of them at
+<a href="https://live-miracles.github.io/">live-miracles.github.io</a>.</p>
+<h2 id="contributing-and-license">Contributing and license</h2>
+<p>Issues and ideas are welcome in <a href="https://github.com/live-miracles/key-vault/issues">GitHub Issues</a>. See
+<a href="/projects/key-vault/docs/development/">Development</a> to run the checks. Released under the <a href="https://github.com/live-miracles/key-vault/blob/master/LICENSE">MIT License</a>.</p>
 </article></div></div></div></main>
     <footer class="caption waves text-muted border-line border-t pb-28">
       <div class="mx-auto flex w-full max-w-[980px] flex-wrap items-center justify-between gap-x-6 gap-y-2 px-5 py-8 sm:px-6">

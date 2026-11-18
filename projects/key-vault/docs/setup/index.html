@@ -5,15 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="light dark" />
     <title>Setting up Key Vault — Key Vault</title>
-    <meta name="description" content="Do it in this order; each step says how to tell it worked. You need: owner access to a Supabase project, a Google Cloud project for the OAuth client, a Vercel account, admin access to this GitHub repo" />
+    <meta name="description" content="For the people who deploy Key Vault for their team. Editors who only add destinations need the user guide instead." />
     <link rel="canonical" href="https://live-miracles.github.io/projects/key-vault/docs/setup/" />
     <meta property="og:site_name" content="Live Miracles" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Setting up Key Vault — Key Vault" />
-    <meta property="og:description" content="Do it in this order; each step says how to tell it worked. You need: owner access to a Supabase project, a Google Cloud project for the OAuth client, a Vercel account, admin access to this GitHub repo" />
+    <meta property="og:description" content="For the people who deploy Key Vault for their team. Editors who only add destinations need the user guide instead." />
     <meta property="og:url" content="https://live-miracles.github.io/projects/key-vault/docs/setup/" />
-    <meta property="og:image" content="https://live-miracles.github.io/assets/logo.png" />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content="https://raw.githubusercontent.com/live-miracles/key-vault/master/docs/images/dashboard.webp" />
+    <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="/assets/logo.png" type="image/png" />
     <link rel="alternate" type="application/rss+xml" title="Live Miracles blog" href="/blog/feed.xml" />
     <script>
@@ -42,7 +42,7 @@
         </nav>
       </header>
     <main class="flex-1"><div class="wash" style="--gx1: 9%; --gx2: 66%; --gx3: 49%; --gy1: -51px; --gy2: -43px; --gy1p: 21%; --gy2p: 7%; --px: 89%; --glow-1: var(--glow-b); --glow-2: var(--glow-a); --tint: #d4a24c; --glow-a: color-mix(in srgb, #d4a24c 30%, transparent); --pattern: url('/assets/patterns/kikko.svg')"><div class="mx-auto w-full max-w-[980px] px-5 py-10 sm:px-6 sm:py-14"><nav class="text-muted caption flex flex-wrap items-center gap-2" aria-label="Breadcrumb">
-              <a href="/projects/key-vault/" class="link-quiet hover:text-ink flex items-center gap-2"><img src="https://live-miracles.github.io/key-vault/logo.png" alt="" class="logo size-5 " /><span>Key Vault</span></a>
+              <a href="/projects/key-vault/" class="link-quiet hover:text-ink flex items-center gap-2"><img src="/assets/key-vault-logo.png" alt="" class="logo size-5 " /><span>Key Vault</span></a>
               <span aria-hidden="true">›</span><a class="link-quiet hover:text-ink" href="/projects/key-vault/docs/">Documentation</a>
             </nav>
             <h1 class="display display-lg mt-4">Setting up Key Vault</h1><nav class="border-line mt-8 flex gap-6 border-b" aria-label="Key Vault sections">
@@ -52,7 +52,7 @@
               <div class="mt-3"><nav class="lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto" aria-label="Key Vault documentation">
               <div class="">
                 
-                <ul class="caption"><li><a href="/projects/key-vault/docs/bunryu-contract/" class="link-quiet hover:text-ink block py-1 text-muted">The bunryu link</a></li><li><a href="/projects/key-vault/docs/setup/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">Setting up Key Vault</a></li></ul>
+                <ul class="caption"><li><a href="/projects/key-vault/docs/user-guide/" class="link-quiet hover:text-ink block py-1 text-muted">User guide</a></li><li><a href="/projects/key-vault/docs/install-as-app/" class="link-quiet hover:text-ink block py-1 text-muted">Install Key Vault as an app</a></li><li><a href="/projects/key-vault/docs/setup/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">Setting up Key Vault</a></li><li><a href="/projects/key-vault/docs/development/" class="link-quiet hover:text-ink block py-1 text-muted">Development</a></li><li><a href="/projects/key-vault/docs/bunryu-contract/" class="link-quiet hover:text-ink block py-1 text-muted">The bunryu link</a></li></ul>
               </div>
             </nav></div>
             </details>
@@ -60,20 +60,21 @@
               <div class="hidden lg:block"><nav class="lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto" aria-label="Key Vault documentation">
               <div class="">
                 
-                <ul class="caption"><li><a href="/projects/key-vault/docs/bunryu-contract/" class="link-quiet hover:text-ink block py-1 text-muted">The bunryu link</a></li><li><a href="/projects/key-vault/docs/setup/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">Setting up Key Vault</a></li></ul>
+                <ul class="caption"><li><a href="/projects/key-vault/docs/user-guide/" class="link-quiet hover:text-ink block py-1 text-muted">User guide</a></li><li><a href="/projects/key-vault/docs/install-as-app/" class="link-quiet hover:text-ink block py-1 text-muted">Install Key Vault as an app</a></li><li><a href="/projects/key-vault/docs/setup/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">Setting up Key Vault</a></li><li><a href="/projects/key-vault/docs/development/" class="link-quiet hover:text-ink block py-1 text-muted">Development</a></li><li><a href="/projects/key-vault/docs/bunryu-contract/" class="link-quiet hover:text-ink block py-1 text-muted">The bunryu link</a></li></ul>
               </div>
             </nav></div>
               <div class="min-w-0"><details class="bg-parchment text-muted caption mb-8 rounded-xl p-4">
               <summary class="text-ink cursor-pointer font-semibold">On this page</summary>
               <ol class="mt-3 space-y-2">
-                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#1-create-the-supabase-project">1. Create the Supabase project</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#2-deploy-the-database-and-functions">2. Deploy the database and functions</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#3-deploy-the-site">3. Deploy the site</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#4-google-sign-in-and-function-secrets">4. Google sign-in and function secrets</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#5-turn-on-bunryu">5. Turn on bunryu</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#backups">Backups</a></li>
+                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#1-create-the-supabase-project">1. Create the Supabase project</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#2-deploy-the-database-and-functions">2. Deploy the database and functions</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#3-deploy-the-site">3. Deploy the site</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#4-google-sign-in-and-function-secrets">4. Google sign-in and function secrets</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#5-turn-on-bunryu">5. Turn on bunryu</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#6-install-it-as-an-app-optional">6. Install it as an app (optional)</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#backups">Backups</a></li>
               </ol>
-            </details><article class="readme min-w-0"><p>Do it in this order; each step says how to tell it worked. You need: owner access to a Supabase project, a Google Cloud project for the OAuth client, a Vercel account, admin access to this GitHub repository, and shell access to the machine running bunryu.</p>
+            </details><article class="readme min-w-0"><p>For the people who deploy Key Vault for their team. Editors who only add destinations need the <a href="/projects/key-vault/docs/user-guide/">user guide</a> instead.</p>
+<p>Do it in this order; each step says how to tell it worked. You need: owner access to a Supabase project, a Google Cloud project for the OAuth client, a Vercel account, admin access to this GitHub repository, and shell access to the machine running bunryu.</p>
 <h2 id="1-create-the-supabase-project">1. Create the Supabase project</h2>
 <ol>
 <li>Create a project. Note the project ref (the <code>abcdefgh</code> in <code>https://abcdefgh.supabase.co</code>).</li>
 <li>When Supabase offers to connect the project to GitHub, <strong>skip it</strong>. The <strong>Deploy Supabase</strong> workflow already applies the migrations and deploys the functions; the integration would overlap with it and does not deploy functions with the flags <code>ingest</code> needs.</li>
-<li>Generate one random secret: <code>openssl rand -hex 32</code>. Keep it in a password manager; you paste it into Supabase in step 4. See <code>docs/bunryu-contract.md</code> for what is derived from it.</li>
+<li>Generate one random secret: <code>openssl rand -hex 32</code>. Keep it in a password manager; you paste it into Supabase in step 4. See <a href="/projects/key-vault/docs/bunryu-contract/#secrets">The bunryu link</a> for what is derived from it.</li>
 </ol>
 <p>The order below avoids a loop: the database and functions need no site URL, the site needs only the Supabase URL and key, and the secrets and sign-in settings need the site URL, so they come last.</p>
 <h2 id="2-deploy-the-database-and-functions">2. Deploy the database and functions</h2>
@@ -153,11 +154,13 @@ npx supabase secrets list --project-ref &lt;project-ref&gt;
 <li>Stop bunryu: after about three minutes the statuses clear and the header says &quot;bunryu last seen N min ago&quot; (there is no warning: bunryu is only on during events).</li>
 </ul>
 <p>If a destination you know is configured shows nothing, the address differs between the two systems (a trailing path, a different server, a changed key). Compare them; the hash is of the whole address.</p>
+<h2 id="6-install-it-as-an-app-optional">6. Install it as an app (optional)</h2>
+<p>Key Vault is a progressive web app, so once the site is on HTTPS Chrome and Edge offer to install it, with no store or extra build step. See <a href="/projects/key-vault/docs/install-as-app/">Install Key Vault as an app</a> for how your team does it and what to check if the install button is missing.</p>
 <h2 id="backups">Backups</h2>
 <p>The free Supabase plan has no managed backups and pauses a project after a week without activity (bunryu&#39;s heartbeat prevents the pause while it runs). Take a dump before and after an event, for example with <code>npx supabase db dump --data-only -f backup.sql</code> (the file contains stream keys: store it like a secret).</p>
-</article><a class="more caption mt-8 inline-block" href="https://github.com/live-miracles/key-vault/blob/master/docs/setup.md">Edit this page on GitHub</a><div class="mt-12 grid gap-4 sm:grid-cols-2">
-              <a class="panel link-quiet hover:bg-parchment p-5 transition-colors" href="/projects/key-vault/docs/bunryu-contract/"><div class="text-muted caption">Previous</div><div class="font-semibold">The bunryu link</div></a>
-              
+</article><a class="more caption mt-8 inline-block" href="https://github.com/live-miracles/key-vault/blob/master/docs/3-setup.md">Edit this page on GitHub</a><div class="mt-12 grid gap-4 sm:grid-cols-2">
+              <a class="panel link-quiet hover:bg-parchment p-5 transition-colors" href="/projects/key-vault/docs/install-as-app/"><div class="text-muted caption">Previous</div><div class="font-semibold">Install Key Vault as an app</div></a>
+              <a class="panel link-quiet hover:bg-parchment p-5 transition-colors sm:text-right" href="/projects/key-vault/docs/development/"><div class="text-muted caption">Next</div><div class="font-semibold">Development</div></a>
             </div></div>
             </div></div></div></main>
     <footer class="caption waves text-muted border-line border-t pb-28">
