@@ -33,7 +33,8 @@ const categories = [
         tint: '#d4a24c',
         pattern: 'kikko',
         name: 'Event workflows',
-        summary: 'Plan live events, manage stream keys and collect audience questions.',
+        summary:
+            'Plan live events, manage stream keys, translate live and collect audience questions.',
     },
 ];
 
@@ -133,6 +134,14 @@ const projects = [
         summary:
             'Internal operations app for studio and program requests, equipment inventory and staff roster scheduling, on Supabase and Vercel.',
         icon: '/assets/setu-logo.svg',
+    },
+    {
+        id: 'bhasha',
+        name: 'Bhasha',
+        category: 'events',
+        summary:
+            'Bhasha (भाषा, "language"): browser-based live translation for large events. One translator publishes microphone audio; thousands of listeners open a link, pick a language and listen, on a self-hosted LiveKit server.',
+        icon: '/assets/bhasha-logo.svg',
     },
     {
         id: 'multi-lang-qa',
