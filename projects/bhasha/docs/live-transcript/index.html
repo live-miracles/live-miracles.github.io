@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Live transcript for translators — Bhasha</title>
+    <meta name="description" content="Translators see a running transcript of the hall feed, with a translation into their own language under or above each line. It is for translators only; listeners never receive it." />
+    <link rel="canonical" href="https://live-miracles.github.io/projects/bhasha/docs/live-transcript/" />
+    <meta property="og:site_name" content="Live Miracles" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Live transcript for translators — Bhasha" />
+    <meta property="og:description" content="Translators see a running transcript of the hall feed, with a translation into their own language under or above each line. It is for translators only; listeners never receive it." />
+    <meta property="og:url" content="https://live-miracles.github.io/projects/bhasha/docs/live-transcript/" />
+    <meta property="og:image" content="https://raw.githubusercontent.com/live-miracles/bhasha/master/apps/web/public/branding/logo.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/assets/logo.png" type="image/png" />
+    <link rel="alternate" type="application/rss+xml" title="Live Miracles blog" href="/blog/feed.xml" />
+    <script>
+      try {
+        var theme = localStorage.getItem('theme');
+        if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
+      } catch (e) {}
+    </script>
+    <link rel="stylesheet" href="/assets/styles.css" />
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <header class="topbar">
+        <nav class="caption mx-auto flex h-12 w-full max-w-[1024px] items-center justify-between gap-4 px-5 sm:px-6" aria-label="Site">
+          <a href="/" class="flex items-center gap-2.5 font-semibold" aria-label="Live Miracles">
+            <img src="/assets/logo.png" alt="" class="logo size-6" />
+            <span>Live Miracles</span>
+          </a>
+          <div class="flex items-center gap-5 sm:gap-7">
+            <a href="/#projects" class="text-muted hover:text-ink transition-colors">Projects</a>
+            <a href="/blog/" class="text-muted hover:text-ink transition-colors">Blog</a>
+            <div class="-mr-2 flex items-center gap-1">
+              <a href="https://github.com/live-miracles" class="icon-btn" aria-label="Live Miracles on GitHub" title="GitHub"><svg xmlns="http://www.w3.org/2000/svg" class="size-[18px]" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.79 23.39c.6.11.82-.26.82-.58v-2.02c-3.34.73-4.04-1.42-4.04-1.42-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.57A12 12 0 0 0 12 .5Z"/></svg></a>
+              <button type="button" id="theme-toggle" class="icon-btn theme-toggle" hidden><svg xmlns="http://www.w3.org/2000/svg" class="icon-sun size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32 1.41-1.41"/></svg><svg xmlns="http://www.w3.org/2000/svg" class="icon-moon size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg></button>
+            </div>
+          </div>
+        </nav>
+      </header>
+    <main class="flex-1"><div class="wash" style="--gx1: 14%; --gx2: 89%; --gx3: 41%; --gy1: -52px; --gy2: -6px; --gy1p: 23%; --gy2p: 10%; --px: 84%; --glow-1: var(--glow-b); --glow-2: var(--glow-a); --tint: #d4a24c; --glow-a: color-mix(in srgb, #d4a24c 30%, transparent); --pattern: url('/assets/patterns/kikko.svg')"><div class="mx-auto w-full max-w-[980px] px-5 py-10 sm:px-6 sm:py-14"><nav class="text-muted caption flex flex-wrap items-center gap-2" aria-label="Breadcrumb">
+              <a href="/projects/bhasha/" class="link-quiet hover:text-ink flex items-center gap-2"><img src="/assets/bhasha-logo.svg" alt="" class="logo size-5 " /><span>Bhasha</span></a>
+              <span aria-hidden="true">›</span><a class="link-quiet hover:text-ink" href="/projects/bhasha/docs/">Documentation</a>
+            </nav>
+            <h1 class="display display-lg mt-4">Live transcript for translators</h1><nav class="border-line mt-8 flex gap-6 border-b" aria-label="Bhasha sections">
+              <a href="/projects/bhasha/" class="tab">Overview</a><a href="/projects/bhasha/docs/" class="tab" aria-current="page">Documentation</a>
+            </nav><details class="bg-parchment caption mt-6 rounded-xl p-4 lg:hidden">
+              <summary class="cursor-pointer font-semibold">Documentation menu</summary>
+              <div class="mt-3"><nav class="lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto" aria-label="Bhasha documentation">
+              <div class="">
+                
+                <ul class="caption"><li><a href="/projects/bhasha/docs/claude-run-harness/" class="link-quiet hover:text-ink block py-1 text-muted">Claude Run Harness</a></li><li><a href="/projects/bhasha/docs/deployment/" class="link-quiet hover:text-ink block py-1 text-muted">Deployment: one VM on Google Cloud, Cloudflare for DNS only</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Design</div>
+                <ul class="caption"><li><a href="/projects/bhasha/docs/design/README/" class="link-quiet hover:text-ink block py-1 text-muted">Translation App — UI Design</a></li></ul>
+              </div><div class="mt-5">
+                
+                <ul class="caption"><li><a href="/projects/bhasha/docs/event-day-checklist/" class="link-quiet hover:text-ink block py-1 text-muted">Event-Day Checklist</a></li><li><a href="/projects/bhasha/docs/listener-mobile-checklist/" class="link-quiet hover:text-ink block py-1 text-muted">Listener Mobile Checklist</a></li><li><a href="/projects/bhasha/docs/live-transcript/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">Live transcript for translators</a></li><li><a href="/projects/bhasha/docs/livekit/" class="link-quiet hover:text-ink block py-1 text-muted">Brief: Live Translation App Using LiveKit Room Sharding</a></li><li><a href="/projects/bhasha/docs/load-testing/" class="link-quiet hover:text-ink block py-1 text-muted">Load testing the media path</a></li><li><a href="/projects/bhasha/docs/mobile-field-test-report/" class="link-quiet hover:text-ink block py-1 text-muted">Mobile Field Test Report</a></li><li><a href="/projects/bhasha/docs/plan-cloudflare-and-translator-access/" class="link-quiet hover:text-ink block py-1 text-muted">Plan: Cloudflare DNS + temporary translator access</a></li><li><a href="/projects/bhasha/docs/roadmap/" class="link-quiet hover:text-ink block py-1 text-muted">Roadmap: planned features</a></li><li><a href="/projects/bhasha/docs/runbook/" class="link-quiet hover:text-ink block py-1 text-muted">Production Debugging &amp; Recovery Runbook</a></li></ul>
+              </div>
+            </nav></div>
+            </details>
+            <div class="mt-10 grid gap-12 lg:grid-cols-[13rem_minmax(0,1fr)]">
+              <div class="hidden lg:block"><nav class="lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto" aria-label="Bhasha documentation">
+              <div class="">
+                
+                <ul class="caption"><li><a href="/projects/bhasha/docs/claude-run-harness/" class="link-quiet hover:text-ink block py-1 text-muted">Claude Run Harness</a></li><li><a href="/projects/bhasha/docs/deployment/" class="link-quiet hover:text-ink block py-1 text-muted">Deployment: one VM on Google Cloud, Cloudflare for DNS only</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Design</div>
+                <ul class="caption"><li><a href="/projects/bhasha/docs/design/README/" class="link-quiet hover:text-ink block py-1 text-muted">Translation App — UI Design</a></li></ul>
+              </div><div class="mt-5">
+                
+                <ul class="caption"><li><a href="/projects/bhasha/docs/event-day-checklist/" class="link-quiet hover:text-ink block py-1 text-muted">Event-Day Checklist</a></li><li><a href="/projects/bhasha/docs/listener-mobile-checklist/" class="link-quiet hover:text-ink block py-1 text-muted">Listener Mobile Checklist</a></li><li><a href="/projects/bhasha/docs/live-transcript/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">Live transcript for translators</a></li><li><a href="/projects/bhasha/docs/livekit/" class="link-quiet hover:text-ink block py-1 text-muted">Brief: Live Translation App Using LiveKit Room Sharding</a></li><li><a href="/projects/bhasha/docs/load-testing/" class="link-quiet hover:text-ink block py-1 text-muted">Load testing the media path</a></li><li><a href="/projects/bhasha/docs/mobile-field-test-report/" class="link-quiet hover:text-ink block py-1 text-muted">Mobile Field Test Report</a></li><li><a href="/projects/bhasha/docs/plan-cloudflare-and-translator-access/" class="link-quiet hover:text-ink block py-1 text-muted">Plan: Cloudflare DNS + temporary translator access</a></li><li><a href="/projects/bhasha/docs/roadmap/" class="link-quiet hover:text-ink block py-1 text-muted">Roadmap: planned features</a></li><li><a href="/projects/bhasha/docs/runbook/" class="link-quiet hover:text-ink block py-1 text-muted">Production Debugging &amp; Recovery Runbook</a></li></ul>
+              </div>
+            </nav></div>
+              <div class="min-w-0"><details class="bg-parchment text-muted caption mb-8 rounded-xl p-4">
+              <summary class="text-ink cursor-pointer font-semibold">On this page</summary>
+              <ol class="mt-3 space-y-2">
+                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#decisions">Decisions</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#running-it">Running it</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#behaviour-worth-knowing">Behaviour worth knowing</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#limits-and-not-yet-done">Limits and not yet done</a></li>
+              </ol>
+            </details><article class="readme min-w-0"><p>Translators see a running transcript of the hall feed, with a translation into their own language
+under or above each line. It is for translators only; listeners never receive it.</p>
+<pre><code>hall feed (mixer / interface)
+   │  line input on the operator&#39;s computer
+   ▼
+/{program}/source   (browser, admin sign-in)
+   │  16 kHz audio ──────────────► ElevenLabs Scribe v2 Realtime (WebSocket, single-use token)
+   │  ◄──────────── partial + finished English text
+   ▼
+POST /api/admin/transcript/{slug}/events
+   │  finished sentence → Claude (Anthropic Messages API), once per language being watched
+   ▼
+GET /api/translator/transcript/stream   (server-sent events, translator session)
+   ▼
+translator page: &quot;Live transcript&quot; panel
+</code></pre>
+<h2 id="decisions">Decisions</h2>
+<ul>
+<li><strong>The same sound the translators hear.</strong> The hall feed is plugged into the computer that runs the
+source console, from the same mixer output that feeds the translators&#39; headphones. The transcript
+is therefore of exactly what they hear.</li>
+<li><strong>English source only</strong>, as agreed. A translator whose language is English sees the English
+transcript alone.</li>
+<li><strong>The target language is automatic.</strong> It is the language of the stream the translator is
+assigned to (<code>language_streams.language_name</code> / <code>language_code</code>); there is no selector. A
+translator with several streams gets the transcript for the one they have selected.</li>
+<li><strong>ElevenLabs transcribes, Claude translates.</strong> ElevenLabs offers speech-to-text but not text
+translation, so each finished sentence goes to a Claude model (default <code>claude-haiku-5-5</code>) with the
+three previous sentences as context. The segment is quoted as data and the model is told never to
+follow instructions inside it.</li>
+<li><strong>The browser talks to ElevenLabs directly</strong> with a single-use token our server mints, so the API
+key never leaves the server and the audio does not pass through our VM.</li>
+<li><strong>Nothing is stored.</strong> The transcript lives in memory: the last 40 sentences are kept so a
+translator who reconnects catches up, and everything is gone when the process restarts. There is
+no database table and nothing in the listener reports.</li>
+</ul>
+<h2 id="running-it">Running it</h2>
+<ol>
+<li>Set <code>ELEVENLABS_API_KEY</code> (required) and <code>ANTHROPIC_API_KEY</code> (for translation) in <code>.env</code>, then
+restart the app. With only the ElevenLabs key translators see the English transcript; with
+neither the console reports that transcription is not set up.</li>
+<li>On the computer with the hall audio, sign in at <code>/manage</code>, then open
+<code>https://&lt;domain&gt;/&lt;program-slug&gt;/source</code> (the Share / QR section links to it).</li>
+<li>Pick the audio input that carries the hall feed, check the level bar moves, press
+<strong>Start transcribing</strong>. Allow microphone access when the browser asks.</li>
+<li>Translators open their normal page; the <strong>Live transcript</strong> panel shows
+&quot;Waiting for the hall feed&quot; until the console is live.</li>
+</ol>
+<p>Use a desktop Chrome or Edge for the console. Keep the tab open and the computer awake during the
+event; closing it stops the transcript (translators see &quot;Waiting for the hall feed&quot; within
+~45 seconds).</p>
+<h2 id="behaviour-worth-knowing">Behaviour worth knowing</h2>
+<ul>
+<li><p><strong>Several consoles at once are fine.</strong> Open the source page on as many computers as you like
+(a spare, a second operator). Each has its own id. The oldest one sends its text to translators;
+the others show &quot;Standing by&quot;, keep transcribing, and take over automatically (within ~30 s, or
+at once if the first is stopped) if it stops, with no repeated or lost numbering. Nothing errors
+and translators never see duplicates. A standby also uses ElevenLabs while it runs, so it costs a
+second stream of transcription time.</p>
+</li>
+<li><p><strong>Reconnects:</strong> if the ElevenLabs connection drops, the console reconnects on its own with a
+fresh token (1 s, 2 s, 5 s, then every 10 s) and says so on screen. Speech during the gap is not
+transcribed.</p>
+</li>
+<li><p><strong>Sentence boundaries</strong> are decided by ElevenLabs&#39; voice activity detection (0.8 s of silence).
+A long uninterrupted passage arrives as one long segment.</p>
+</li>
+<li><p><strong>Translation failures</strong> show &quot;Translation unavailable&quot; on that line; the next line carries on.</p>
+</li>
+<li><p><strong>Language of the audio is fixed to English</strong> (<code>language_code=en</code>), which also stops the
+recogniser guessing wrongly on accented speech.</p>
+</li>
+<li><p><strong>Cost</strong> (check current prices): ElevenLabs bills per hour of audio transcribed; Claude bills per
+token, and a Haiku-class model is a few cents per language-hour at speaking pace.</p>
+</li>
+<li><p><strong>Privacy:</strong> the hall audio is sent to ElevenLabs and the English text to Anthropic. Confirm both
+providers&#39; retention terms are acceptable for the event before enabling this.</p>
+</li>
+</ul>
+<h2 id="limits-and-not-yet-done">Limits and not yet done</h2>
+<ul>
+<li>Not tested against real ElevenLabs or Anthropic endpoints from this repository: the code follows
+their current documentation, and unit tests use fakes. Run a rehearsal with real keys and a
+recorded English talk before the event.</li>
+<li>Not tested with a real audio interface or on the translators&#39; real computers. The panel is a
+plain scrolling list; check its size and readability next to the publishing controls on the
+screens they actually use.</li>
+<li>Only the final English text is relayed; there is no speaker labelling.</li>
+</ul>
+</article><a class="more caption mt-8 inline-block" href="https://github.com/live-miracles/bhasha/blob/master/docs/live-transcript.md">Edit this page on GitHub</a><div class="mt-12 grid gap-4 sm:grid-cols-2">
+              <a class="panel link-quiet hover:bg-parchment p-5 transition-colors" href="/projects/bhasha/docs/listener-mobile-checklist/"><div class="text-muted caption">Previous</div><div class="font-semibold">Listener Mobile Checklist</div></a>
+              <a class="panel link-quiet hover:bg-parchment p-5 transition-colors sm:text-right" href="/projects/bhasha/docs/livekit/"><div class="text-muted caption">Next</div><div class="font-semibold">Brief: Live Translation App Using LiveKit Room Sharding</div></a>
+            </div></div>
+            </div></div></div></main>
+    <footer class="caption waves text-muted border-line border-t pb-28">
+      <div class="mx-auto flex w-full max-w-[980px] flex-wrap items-center justify-between gap-x-6 gap-y-2 px-5 py-8 sm:px-6">
+        <span>Live Miracles · Open tools for live teams</span>
+        <span class="flex gap-5">
+          <a class="link-quiet" href="/blog/">Blog</a>
+          <a class="link-quiet" href="/blog/feed.xml">RSS</a>
+          <a class="link-quiet" href="https://github.com/live-miracles">GitHub</a>
+        </span>
+      </div>
+    </footer>
+    <dialog id="lightbox" class="lightbox" aria-label="Enlarged image">
+      <button type="button" class="lightbox-close" aria-label="Close image"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg></button>
+      <div class="lightbox-frame"><img alt="" /></div>
+    </dialog>
+    <script>
+      (function () {
+        var dialog = document.getElementById('lightbox');
+        if (!dialog || !dialog.showModal) return;
+        var shown = dialog.querySelector('img');
+        function zoomable(img) {
+          return !img.closest('a') && img.naturalWidth >= 300 && img.naturalHeight >= 100;
+        }
+        function mark(img) {
+          if (img.dataset.zoom || !zoomable(img)) return;
+          img.dataset.zoom = '1';
+          img.classList.add('zoomable');
+          img.tabIndex = 0;
+          img.setAttribute('role', 'button');
+          img.setAttribute('aria-label', 'Enlarge image: ' + (img.alt || 'screenshot'));
+        }
+        function open(img) {
+          shown.src = img.currentSrc || img.src;
+          shown.alt = img.alt;
+          shown.classList.remove('actual');
+          dialog.showModal();
+          dialog.scrollTo(0, 0);
+        }
+        document.querySelectorAll('.readme img').forEach(function (img) {
+          if (img.complete) mark(img);
+          else img.addEventListener('load', function () { mark(img); }, { once: true });
+        });
+        document.addEventListener('click', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom) open(img);
+        });
+        document.addEventListener('keydown', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom && (event.key === 'Enter' || event.key === ' ')) {
+            event.preventDefault();
+            open(img);
+          }
+        });
+        shown.addEventListener('click', function () {
+          shown.classList.toggle('actual');
+        });
+        dialog.addEventListener('click', function (event) {
+          if (event.target !== shown) dialog.close();
+        });
+      })();
+    </script>
+    <script>
+      (function () {
+        var button = document.getElementById('theme-toggle');
+        if (!button) return;
+        var root = document.documentElement;
+        function current() {
+          return root.dataset.theme === 'light' ? 'light' : 'dark';
+        }
+        function sync() {
+          var theme = current();
+          button.dataset.mode = theme;
+          button.setAttribute('aria-label', 'Switch to ' + (theme === 'dark' ? 'light' : 'dark') + ' theme');
+        }
+        button.hidden = false;
+        sync();
+        button.addEventListener('click', function () {
+          var next = current() === 'dark' ? 'light' : 'dark';
+          root.dataset.theme = next;
+          try {
+            localStorage.setItem('theme', next);
+          } catch (e) {}
+          sync();
+        });
+      })();
+    </script>
+  </body>
+</html>

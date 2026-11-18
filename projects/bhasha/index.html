@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Bhasha — Live Miracles</title>
+    <meta name="description" content="Bhasha (भाषा, &quot;language&quot;): browser-based live translation for large events. One translator publishes microphone audio; thousands of listeners open a link, pick a language and listen, on a self-hosted LiveKit server." />
+    <link rel="canonical" href="https://live-miracles.github.io/projects/bhasha/" />
+    <meta property="og:site_name" content="Live Miracles" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Bhasha — Live Miracles" />
+    <meta property="og:description" content="Bhasha (भाषा, &quot;language&quot;): browser-based live translation for large events. One translator publishes microphone audio; thousands of listeners open a link, pick a language and listen, on a self-hosted LiveKit server." />
+    <meta property="og:url" content="https://live-miracles.github.io/projects/bhasha/" />
+    <meta property="og:image" content="https://raw.githubusercontent.com/live-miracles/bhasha/master/apps/web/public/branding/logo.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/assets/logo.png" type="image/png" />
+    <link rel="alternate" type="application/rss+xml" title="Live Miracles blog" href="/blog/feed.xml" />
+    <script>
+      try {
+        var theme = localStorage.getItem('theme');
+        if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
+      } catch (e) {}
+    </script>
+    <link rel="stylesheet" href="/assets/styles.css" />
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <header class="topbar">
+        <nav class="caption mx-auto flex h-12 w-full max-w-[1024px] items-center justify-between gap-4 px-5 sm:px-6" aria-label="Site">
+          <a href="/" class="flex items-center gap-2.5 font-semibold" aria-label="Live Miracles">
+            <img src="/assets/logo.png" alt="" class="logo size-6" />
+            <span>Live Miracles</span>
+          </a>
+          <div class="flex items-center gap-5 sm:gap-7">
+            <a href="/#projects" class="text-muted hover:text-ink transition-colors">Projects</a>
+            <a href="/blog/" class="text-muted hover:text-ink transition-colors">Blog</a>
+            <div class="-mr-2 flex items-center gap-1">
+              <a href="https://github.com/live-miracles" class="icon-btn" aria-label="Live Miracles on GitHub" title="GitHub"><svg xmlns="http://www.w3.org/2000/svg" class="size-[18px]" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.79 23.39c.6.11.82-.26.82-.58v-2.02c-3.34.73-4.04-1.42-4.04-1.42-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.57A12 12 0 0 0 12 .5Z"/></svg></a>
+              <button type="button" id="theme-toggle" class="icon-btn theme-toggle" hidden><svg xmlns="http://www.w3.org/2000/svg" class="icon-sun size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32 1.41-1.41"/></svg><svg xmlns="http://www.w3.org/2000/svg" class="icon-moon size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg></button>
+            </div>
+          </div>
+        </nav>
+      </header>
+    <main class="flex-1"><div class="wash" style="--gx1: 14%; --gx2: 89%; --gx3: 41%; --gy1: -52px; --gy2: -6px; --gy1p: 23%; --gy2p: 10%; --px: 84%; --glow-1: var(--glow-b); --glow-2: var(--glow-a); --tint: #d4a24c; --glow-a: color-mix(in srgb, #d4a24c 30%, transparent); --pattern: url('/assets/patterns/kikko.svg')"><div class="mx-auto w-full max-w-[980px] px-5 py-10 sm:px-6 sm:py-14"><div class="flex items-center gap-5">
+              <img src="/assets/bhasha-logo.svg" alt="" class="logo size-16 " />
+              <h1 class="display display-lg">Bhasha</h1>
+            </div>
+            <p class="lead mt-5 max-w-3xl">Bhasha (भाषा, &quot;language&quot;): browser-based live translation for large events. One translator publishes microphone audio; thousands of listeners open a link, pick a language and listen, on a self-hosted LiveKit server.</p>
+            <div class="mt-7 flex flex-wrap gap-3"><a class="pill pill-primary" href="https://github.com/live-miracles/bhasha">GitHub</a></div>
+            <div class="text-muted caption mt-6 flex flex-wrap gap-x-5 gap-y-1"><span class="inline-flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 2.5 2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.31l-5.8 3.05 1.11-6.46-4.7-4.58 6.49-.94L12 2.5Z"/></svg>0</span><span class="inline-flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="6" cy="4" r="2"/><circle cx="18" cy="4" r="2"/><circle cx="12" cy="20" r="2"/><path d="M6 6v3a3 3 0 0 0 3 3h3m6-6v3a3 3 0 0 1-3 3h-3m0 0v6"/></svg>0</span><span>TypeScript</span><span>Updated 2026-11-18</span></div>
+            <div class="mt-4 flex flex-wrap gap-2"><span class="chip">audio-streaming</span><span class="chip">docker</span><span class="chip">hono</span><span class="chip">live-events</span><span class="chip">live-streaming</span><span class="chip">live-translation</span><span class="chip">livekit</span><span class="chip">multilingual</span><span class="chip">nodejs</span><span class="chip">react</span><span class="chip">real-time-translation</span><span class="chip">self-hosted</span><span class="chip">sfu</span><span class="chip">simultaneous-interpretation</span><span class="chip">sqlite</span><span class="chip">typescript</span><span class="chip">vite</span><span class="chip">webrtc</span></div><nav class="border-line mt-8 flex gap-6 border-b" aria-label="Bhasha sections">
+              <a href="/projects/bhasha/" class="tab" aria-current="page">Overview</a><a href="/projects/bhasha/docs/" class="tab">Documentation</a>
+            </nav><div class="mt-10"><details class="bg-parchment text-muted caption mb-8 rounded-xl p-4">
+              <summary class="text-ink cursor-pointer font-semibold">On this page</summary>
+              <ol class="mt-3 space-y-2">
+                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#features">Features</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#roles">Roles</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#url-structure">URL structure</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#architecture--stack">Architecture &amp; stack</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#stream-state-semantics">Stream state semantics</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#realtime-flow-notes">Realtime flow notes</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#prerequisites">Prerequisites</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#configuration">Configuration</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#install">Install</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#run-locally">Run locally</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#tests">Tests</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#operational-guardrails">Operational guardrails</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#documentation">Documentation</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#repository-layout">Repository layout</a></li>
+              </ol>
+            </details><article class="readme min-w-0"><p align="center">
+  <img src="https://raw.githubusercontent.com/live-miracles/bhasha/master/apps/web/public/branding/logo.png" width="96" height="96" alt="Bhasha logo" />
+</p>
+
+<p>Open-source, browser-based <strong>live translation and simultaneous interpretation</strong>
+for large in-person events. <strong>Voice-only</strong>: no app to install, no headsets to hand
+out. Attendees scan a QR code and listen to the interpreter in their own language on
+their own phone.</p>
+<blockquote>
+<p>One translator publishes. Thousands of people listen.</p>
+</blockquote>
+<p>A translator speaks into their microphone; the translated audio is fanned out to
+listeners over a self-hosted LiveKit WebRTC SFU. Listeners are strictly receive-only —
+clients never request audio/video publishing permission.</p>
+<p>Part of the <a href="https://live-miracles.github.io/projects/bhasha/">Live Miracles</a> open-source
+tools for live events.</p>
+<h2 id="features">Features</h2>
+<ul>
+<li><strong>Zero-install listening</strong> — participants open <code>/{programSlug}</code> (or scan the QR code)
+in any phone browser, pick a live language, and tap to listen.</li>
+<li><strong>One stream per language</strong> — switch languages without leaving the page.</li>
+<li><strong>Translator console</strong> — sign in with a time-limited link or QR, publish the
+microphone, mute/unmute, and reconnect.</li>
+<li><strong>Honest &quot;Live&quot; status</strong> — a stream shows as live only when the translator is
+connected, audio is published, and sound was heard recently.</li>
+<li><strong>Listener counts for organizers</strong> — active listeners per language, counted only
+once they are actually connected.</li>
+<li><strong>Live transcript for translators</strong> — hall-feed speech-to-text with a translation,
+to help interpreters follow the speaker (<a href="/projects/bhasha/docs/live-transcript/">docs</a>).</li>
+<li><strong>Self-hosted</strong> — one server running Docker Compose (app + LiveKit with built-in
+TURN + Caddy for HTTPS). Load-tested; see <a href="/projects/bhasha/docs/load-testing/">docs/load-testing.md</a>.</li>
+<li><strong>Mobile-first</strong> — built and field-tested for iPhone Safari and Android Chrome.</li>
+</ul>
+<p>This is not a meeting app. Keep the system optimized for: voice only, receive-only
+participants, fast joining, clear language selection, reliable reconnection, and low
+operational complexity.</p>
+<h2 id="roles">Roles</h2>
+<ul>
+<li><strong>Translator</strong> — signs in with a time-limited access link/QR for their language
+(or a password set by hand), publishes microphone audio, mutes/unmutes, and
+reconnects. Each language has one active credential; generating a new link replaces
+it and signs the translator out. The link carries its credentials in the URL
+fragment (<code>#s=&lt;streamId&gt;&amp;t=&lt;token&gt;</code>), so they never reach a server or its logs, and
+the page removes them from the address bar after signing in.
+(<code>apps/api/src/routes/translator.ts</code>)</li>
+<li><strong>Listener / participant</strong> — opens <code>/{programSlug}</code>, picks a live language,
+listens, switches streams, and reconnects. Receive-only. (<code>apps/api/src/routes/listeners.ts</code>)</li>
+<li><strong>Program manager</strong> — manages owned programs, language streams, translator
+access, QR codes, stream status, and listener counts. Admin users can manage
+all programs and user accounts. (<code>apps/api/src/routes/admin.ts</code>)</li>
+<li><strong>Approver</strong> — approves/manages listener access at the event.
+(<code>apps/api/src/routes/approver.ts</code>)</li>
+</ul>
+<p>All realtime access (translator publish, listener subscribe) uses short-lived,
+server-generated LiveKit access tokens (JWTs) — the API process is the only thing
+that ever holds the LiveKit API key/secret.</p>
+<h2 id="url-structure">URL structure</h2>
+<ul>
+<li><code>/{programSlug}</code> — public listener page.</li>
+<li><code>/{programSlug}/translate</code> — translator page.</li>
+<li><code>/manage</code> — program manager / admin workspace.</li>
+</ul>
+<h2 id="architecture--stack">Architecture &amp; stack</h2>
+<p>Single-server, self-hosted:</p>
+<ul>
+<li><strong>Web</strong> — the React + Vite app (<code>apps/web</code>), built to static <code>dist/</code> and
+served by the Node app itself (no separate frontend host). UI is built on
+<strong>Mantine</strong> (component system and theme layer) with <strong>TanStack Query</strong> for
+API/server state, cache invalidation, and polling, and <strong>React Router</strong> as
+the single routing tree for admin, listener, translator, and approver
+routes. One shared component system was chosen deliberately over a second
+UI framework or local CSS-from-scratch, since admin, listener, and
+translator each need accessible tables, forms, dialogs, and status/layout
+primitives, and the product is draft-stage enough that a full visual
+rebuild was an acceptable cost — the compatibility boundary that had to
+stay intact was behavior (public URLs, API contracts, LiveKit permissions,
+listener receive-only/translator publish behavior), not the old CSS.</li>
+<li><strong>API</strong> — Node.js + Hono (<code>apps/api</code>, entry <code>src/index.ts</code>), run directly
+from TypeScript via <code>tsx</code>.</li>
+<li><strong>better-sqlite3</strong> — durable data for programs, streams, translators,
+listeners, event logs, in one WAL-mode SQLite file (<code>DATABASE_PATH</code>).
+<code>foreign_keys = ON</code> is set explicitly on open — unlike D1 (the pre-migration
+store), better-sqlite3 doesn&#39;t enable it by default, and the repositories
+rely on FK-violation errors plus <code>ON DELETE CASCADE</code> in the schema. The
+product isn&#39;t in production yet, so the local DB may be wiped and recreated
+when the schema changes; no migration history is maintained at this stage.</li>
+<li><strong>LiveKit</strong> — a self-hosted LiveKit server is the WebRTC SFU: one room per
+language stream (<code>program-{programId}-stream-{streamId}</code>), translator
+publishes, listeners subscribe directly — no relay/bridge process, since
+LiveKit&#39;s own room model natively supports many subscribers off one
+publisher&#39;s track. This also keeps language isolation and listener
+switching simple.</li>
+<li><strong>Presence</strong> — an in-process manager (<code>apps/api/src/presence/status.ts</code>)
+driven by LiveKit&#39;s webhooks (<code>participant_joined</code>/<code>participant_left</code>/
+<code>track_published</code>/<code>track_unpublished</code>), not app-level heartbeats — a
+webhook is a materially stronger liveness signal than a heartbeat, since it
+comes from LiveKit&#39;s real WebRTC connection state. It has no persistence
+and doesn&#39;t survive a process restart, which is fine for the single-server
+target; a staleness-pruning safety net (six hours) guards only against a
+lost webhook delivery. Listener lifecycle endpoints (<code>/request</code>,
+<code>/connected</code>, <code>/leave</code>, <code>/switch</code>, <code>/reconnect</code>) still write
+<code>listener_connections</code> rows for admin reporting/audit, but presence counts
+come from the webhooks, not from those calls.</li>
+<li><strong>Docker Compose</strong> — three containers for deployment: <code>app</code> (Node/Hono +
+the built SPA), <code>livekit</code> (<code>livekit/livekit-server</code>, built-in TURN), and
+<code>caddy</code> (TLS-terminating reverse proxy, auto Let&#39;s Encrypt certs).</li>
+<li>Also: <code>node-cron</code> for the daily retention job (in-process, no external
+scheduler).</li>
+</ul>
+<p>The Vite dev server proxies <code>/api</code> to the local Node API, so the web app and
+API work together locally.</p>
+<h3 id="stream-state-semantics">Stream state semantics</h3>
+<p>Derived in <code>apps/api/src/presence/streamState.ts</code>:</p>
+<ul>
+<li><code>offline</code> — no current published publisher pointer.</li>
+<li><code>silent</code> — translator has a published track, but no recent matching audio
+activity.</li>
+<li><code>live</code> — a current publisher exists and matching audio activity was seen
+within the last 5 seconds.</li>
+</ul>
+<p>Never infer &quot;live&quot; from listener count alone. A stream is live only when a
+translator is connected, a track is published, and recent audio activity
+exists.</p>
+<h3 id="realtime-flow-notes">Realtime flow notes</h3>
+<ul>
+<li>Translator publish is a single <code>POST /api/translator/realtime/token</code> call —
+it replaced an earlier three-step handshake (session + publish + track).
+The API reserves a <code>realtime_publish_sessions</code> row (state <code>reserved</code>) and
+mints a publish-only LiveKit JWT; LiveKit&#39;s <code>track_published</code> webhook flips
+it to <code>published</code> once audio is actually flowing.</li>
+<li>LiveKit&#39;s client SDK owns transport-level reconnect/ICE-restart internally;
+clients only react to <code>Room</code> events for UI state. On a terminal
+disconnect, the browser mints a fresh token and rejoins the room rather
+than hand-rolling renegotiation.</li>
+<li><code>participant_left</code>/<code>track_unpublished</code> webhooks best-effort close a
+translator&#39;s publisher reservation too, in case the client&#39;s own <code>/stop</code>
+call never lands (tab crash, network loss) — idempotent against an
+already-closed reservation.</li>
+<li>Audio activity is currently self-reported by the browser&#39;s own mic-level
+meter (<code>POST /api/translator/realtime/audio-activity</code>); switching to
+LiveKit-native audio-energy detection is a possible follow-up, pending
+confirmation of what signal LiveKit exposes it through.</li>
+</ul>
+<p>LiveKit&#39;s docs are the source of truth for its server-sdk/client-sdk/webhook
+behavior — use the documentation lookup process in <a href="https://github.com/live-miracles/bhasha/blob/master/AGENTS.md">AGENTS.md</a>
+before changing token grants, webhook handling, or <code>livekit-client</code> usage.</p>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li><strong>Node.js 22</strong> (matches CI and the Docker image&#39;s base).</li>
+<li><strong>npm</strong> (repo uses npm workspaces).</li>
+<li><strong>Docker + Docker Compose</strong> — only required to run the full deployment
+topology (app + LiveKit + Caddy) locally or in production; not required to
+run the API/web dev servers directly against Node.</li>
+<li>A self-hosted <strong>LiveKit</strong> server is only required for live <strong>audio</strong>
+(translator publish / listener subscribe) — the rest of the app (admin,
+programs, streams, auth) runs fully without one configured. <code>docker-compose.yml</code>
+provisions LiveKit for you; alternatively point <code>LIVEKIT_URL</code>/
+<code>LIVEKIT_API_KEY</code>/<code>LIVEKIT_API_SECRET</code> at any LiveKit server (including
+LiveKit Cloud) for local development.</li>
+</ul>
+<blockquote>
+<p>Secrets: admin/translator/approver session secrets and LiveKit API
+credentials are provided via environment variables (see <code>.env.example</code>) and
+are <strong>not</strong> committed. Do not add credentials to this repo.</p>
+</blockquote>
+<h2 id="configuration">Configuration</h2>
+<p>Copy <code>.env.example</code> to <code>.env</code> and fill in real values — <code>.env</code> is gitignored
+and must never be committed with real secrets. See the comments in
+<code>.env.example</code> for what each variable does and how the app/LiveKit/Caddy
+containers share them (e.g. <code>LIVEKIT_API_KEY</code>/<code>LIVEKIT_API_SECRET</code> are the
+one source of truth for the JWT trust relationship between the app and the
+LiveKit server).</p>
+<p>On the first startup with a new database, set <code>ADMIN_INITIAL_PASSWORD</code> in
+<code>.env</code>. The app creates the initial <code>admin</code> account with that password. Once an
+admin exists, the value is ignored and changing it does not reset the account.</p>
+<p><code>LIVEKIT_URL</code>/<code>LIVEKIT_API_KEY</code>/<code>LIVEKIT_API_SECRET</code> are optional at the type
+level and not required at process boot, so the app can start before LiveKit
+is provisioned — management actions that require realtime access report a
+configuration error until all three are set.</p>
+<h2 id="install">Install</h2>
+<pre><code>npm ci
+</code></pre>
+<h2 id="run-locally">Run locally</h2>
+<p>The default development command starts the Docker development stack with API
+and Vite hot reload, LiveKit, and a separate development database:</p>
+<pre><code>npm run dev
+</code></pre>
+<p>Open the web app at <code>http://127.0.0.1:5173</code>. The API remains available at
+<code>http://127.0.0.1:8787</code>.</p>
+<p>The first run builds the development images automatically. After changing
+dependencies, the Dockerfile, or Compose configuration, rebuild explicitly:</p>
+<pre><code>npm run dev:build
+</code></pre>
+<p>Stop the development stack with:</p>
+<pre><code>npm run dev:down
+</code></pre>
+<p>Health check:</p>
+<pre><code>curl http://127.0.0.1:8787/api/health
+curl &quot;http://127.0.0.1:8787/api/health?deep=1&quot;   # includes a DB check
+</code></pre>
+<p>Run the full deployment topology locally (app + LiveKit + Caddy, matching
+production):</p>
+<pre><code>cp .env.example .env   # then fill in real values
+docker compose up --build
+</code></pre>
+<h2 id="tests">Tests</h2>
+<p><strong>Unit tests (all workspaces):</strong></p>
+<pre><code>npm test --workspaces
+# or a single workspace:
+npm test --workspace apps/api
+npm test --workspace apps/web
+</code></pre>
+<p><strong>Type-check (all workspaces):</strong></p>
+<pre><code>npm run typecheck --workspaces
+</code></pre>
+<p><strong>End-to-end (Playwright, web) — builds &amp; serves on <a href="http://127.0.0.1:4173">http://127.0.0.1:4173</a>:</strong></p>
+<pre><code>npm run e2e --workspace apps/web
+</code></pre>
+<p><strong>Full regression gate (unit + typecheck + e2e):</strong></p>
+<pre><code>npm run test:regression
+</code></pre>
+<blockquote>
+<p>First e2e run may need browsers: <code>npx playwright install</code>.</p>
+</blockquote>
+<h2 id="operational-guardrails">Operational guardrails</h2>
+<ul>
+<li>Listener clients are receive-only — never request microphone/camera or
+publish a track.</li>
+<li>Translator clients request microphone only, never camera.</li>
+<li>Keep all LiveKit/session secrets server-side.</li>
+<li>Don&#39;t store listener IP/user-agent on heartbeats — only on admin-facing
+connection records.</li>
+<li>Don&#39;t count a token/session request as an active listener; count only
+after subscribe/connected confirmation.</li>
+<li>Mobile behavior is first-class: iPhone Safari and Android Chrome must be
+tested before real events, and phone lock/backgrounding can cut microphone
+capture despite browser wake-lock attempts — treat real-device testing as
+mandatory for event readiness.</li>
+<li>Avoid destructive DB changes in production; prefer route-owned recovery
+flows over manual mutation.</li>
+</ul>
+<h2 id="documentation">Documentation</h2>
+<ul>
+<li><a href="/projects/bhasha/docs/deployment/">Deployment: Google Cloud VM + Cloudflare DNS</a></li>
+<li><a href="/projects/bhasha/docs/load-testing/">Load testing the media path: method, results, pitfalls</a></li>
+<li><a href="/projects/bhasha/docs/runbook/">Production debugging &amp; recovery runbook</a></li>
+<li><a href="/projects/bhasha/docs/live-transcript/">Live transcript for translators (hall feed → English text → translation)</a></li>
+<li><a href="/projects/bhasha/docs/roadmap/">Roadmap: planned features &amp; platform decision</a></li>
+<li><a href="/projects/bhasha/docs/livekit/">LiveKit room-sharding brief</a> (early speculative notes — see the note at
+the top of that file for how it differs from what was actually built)</li>
+<li><a href="/projects/bhasha/docs/event-day-checklist/">Event-day checklist</a></li>
+<li><a href="/projects/bhasha/docs/mobile-field-test-report/">Mobile field test report</a></li>
+<li><a href="/projects/bhasha/docs/listener-mobile-checklist/">Listener mobile checklist</a></li>
+<li>Contributor/agent workflow conventions: <a href="https://github.com/live-miracles/bhasha/blob/master/AGENTS.md">AGENTS.md</a></li>
+</ul>
+<h2 id="repository-layout">Repository layout</h2>
+<pre><code>apps/api    Node.js + Hono API (better-sqlite3, LiveKit server-sdk)
+apps/web    React + Vite web app (built to static dist/, served by apps/api)
+docs/       Runbooks, checklists, and plans
+</code></pre>
+</article></div></div></div></main>
+    <footer class="caption waves text-muted border-line border-t pb-28">
+      <div class="mx-auto flex w-full max-w-[980px] flex-wrap items-center justify-between gap-x-6 gap-y-2 px-5 py-8 sm:px-6">
+        <span>Live Miracles · Open tools for live teams</span>
+        <span class="flex gap-5">
+          <a class="link-quiet" href="/blog/">Blog</a>
+          <a class="link-quiet" href="/blog/feed.xml">RSS</a>
+          <a class="link-quiet" href="https://github.com/live-miracles">GitHub</a>
+        </span>
+      </div>
+    </footer>
+    <dialog id="lightbox" class="lightbox" aria-label="Enlarged image">
+      <button type="button" class="lightbox-close" aria-label="Close image"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg></button>
+      <div class="lightbox-frame"><img alt="" /></div>
+    </dialog>
+    <script>
+      (function () {
+        var dialog = document.getElementById('lightbox');
+        if (!dialog || !dialog.showModal) return;
+        var shown = dialog.querySelector('img');
+        function zoomable(img) {
+          return !img.closest('a') && img.naturalWidth >= 300 && img.naturalHeight >= 100;
+        }
+        function mark(img) {
+          if (img.dataset.zoom || !zoomable(img)) return;
+          img.dataset.zoom = '1';
+          img.classList.add('zoomable');
+          img.tabIndex = 0;
+          img.setAttribute('role', 'button');
+          img.setAttribute('aria-label', 'Enlarge image: ' + (img.alt || 'screenshot'));
+        }
+        function open(img) {
+          shown.src = img.currentSrc || img.src;
+          shown.alt = img.alt;
+          shown.classList.remove('actual');
+          dialog.showModal();
+          dialog.scrollTo(0, 0);
+        }
+        document.querySelectorAll('.readme img').forEach(function (img) {
+          if (img.complete) mark(img);
+          else img.addEventListener('load', function () { mark(img); }, { once: true });
+        });
+        document.addEventListener('click', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom) open(img);
+        });
+        document.addEventListener('keydown', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom && (event.key === 'Enter' || event.key === ' ')) {
+            event.preventDefault();
+            open(img);
+          }
+        });
+        shown.addEventListener('click', function () {
+          shown.classList.toggle('actual');
+        });
+        dialog.addEventListener('click', function (event) {
+          if (event.target !== shown) dialog.close();
+        });
+      })();
+    </script>
+    <script>
+      (function () {
+        var button = document.getElementById('theme-toggle');
+        if (!button) return;
+        var root = document.documentElement;
+        function current() {
+          return root.dataset.theme === 'light' ? 'light' : 'dark';
+        }
+        function sync() {
+          var theme = current();
+          button.dataset.mode = theme;
+          button.setAttribute('aria-label', 'Switch to ' + (theme === 'dark' ? 'light' : 'dark') + ' theme');
+        }
+        button.hidden = false;
+        sync();
+        button.addEventListener('click', function () {
+          var next = current() === 'dark' ? 'light' : 'dark';
+          root.dataset.theme = next;
+          try {
+            localStorage.setItem('theme', next);
+          } catch (e) {}
+          sync();
+        });
+      })();
+    </script>
+  </body>
+</html>

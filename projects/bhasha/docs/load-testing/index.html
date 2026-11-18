@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Load testing the media path — Bhasha</title>
+    <meta name="description" content="How the capacity numbers in deployment.md were measured, what the results were, and the mistakes to avoid when repeating it. Measured in October 2026 on Google Cloud (asia-south1), LiveKit v1.13.10." />
+    <link rel="canonical" href="https://live-miracles.github.io/projects/bhasha/docs/load-testing/" />
+    <meta property="og:site_name" content="Live Miracles" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Load testing the media path — Bhasha" />
+    <meta property="og:description" content="How the capacity numbers in deployment.md were measured, what the results were, and the mistakes to avoid when repeating it. Measured in October 2026 on Google Cloud (asia-south1), LiveKit v1.13.10." />
+    <meta property="og:url" content="https://live-miracles.github.io/projects/bhasha/docs/load-testing/" />
+    <meta property="og:image" content="https://raw.githubusercontent.com/live-miracles/bhasha/master/apps/web/public/branding/logo.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/assets/logo.png" type="image/png" />
+    <link rel="alternate" type="application/rss+xml" title="Live Miracles blog" href="/blog/feed.xml" />
+    <script>
+      try {
+        var theme = localStorage.getItem('theme');
+        if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
+      } catch (e) {}
+    </script>
+    <link rel="stylesheet" href="/assets/styles.css" />
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <header class="topbar">
+        <nav class="caption mx-auto flex h-12 w-full max-w-[1024px] items-center justify-between gap-4 px-5 sm:px-6" aria-label="Site">
+          <a href="/" class="flex items-center gap-2.5 font-semibold" aria-label="Live Miracles">
+            <img src="/assets/logo.png" alt="" class="logo size-6" />
+            <span>Live Miracles</span>
+          </a>
+          <div class="flex items-center gap-5 sm:gap-7">
+            <a href="/#projects" class="text-muted hover:text-ink transition-colors">Projects</a>
+            <a href="/blog/" class="text-muted hover:text-ink transition-colors">Blog</a>
+            <div class="-mr-2 flex items-center gap-1">
+              <a href="https://github.com/live-miracles" class="icon-btn" aria-label="Live Miracles on GitHub" title="GitHub"><svg xmlns="http://www.w3.org/2000/svg" class="size-[18px]" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.79 23.39c.6.11.82-.26.82-.58v-2.02c-3.34.73-4.04-1.42-4.04-1.42-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.57A12 12 0 0 0 12 .5Z"/></svg></a>
+              <button type="button" id="theme-toggle" class="icon-btn theme-toggle" hidden><svg xmlns="http://www.w3.org/2000/svg" class="icon-sun size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32 1.41-1.41"/></svg><svg xmlns="http://www.w3.org/2000/svg" class="icon-moon size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg></button>
+            </div>
+          </div>
+        </nav>
+      </header>
+    <main class="flex-1"><div class="wash" style="--gx1: 14%; --gx2: 89%; --gx3: 41%; --gy1: -52px; --gy2: -6px; --gy1p: 23%; --gy2p: 10%; --px: 84%; --glow-1: var(--glow-b); --glow-2: var(--glow-a); --tint: #d4a24c; --glow-a: color-mix(in srgb, #d4a24c 30%, transparent); --pattern: url('/assets/patterns/kikko.svg')"><div class="mx-auto w-full max-w-[980px] px-5 py-10 sm:px-6 sm:py-14"><nav class="text-muted caption flex flex-wrap items-center gap-2" aria-label="Breadcrumb">
+              <a href="/projects/bhasha/" class="link-quiet hover:text-ink flex items-center gap-2"><img src="/assets/bhasha-logo.svg" alt="" class="logo size-5 " /><span>Bhasha</span></a>
+              <span aria-hidden="true">›</span><a class="link-quiet hover:text-ink" href="/projects/bhasha/docs/">Documentation</a>
+            </nav>
+            <h1 class="display display-lg mt-4">Load testing the media path</h1><nav class="border-line mt-8 flex gap-6 border-b" aria-label="Bhasha sections">
+              <a href="/projects/bhasha/" class="tab">Overview</a><a href="/projects/bhasha/docs/" class="tab" aria-current="page">Documentation</a>
+            </nav><details class="bg-parchment caption mt-6 rounded-xl p-4 lg:hidden">
+              <summary class="cursor-pointer font-semibold">Documentation menu</summary>
+              <div class="mt-3"><nav class="lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto" aria-label="Bhasha documentation">
+              <div class="">
+                
+                <ul class="caption"><li><a href="/projects/bhasha/docs/claude-run-harness/" class="link-quiet hover:text-ink block py-1 text-muted">Claude Run Harness</a></li><li><a href="/projects/bhasha/docs/deployment/" class="link-quiet hover:text-ink block py-1 text-muted">Deployment: one VM on Google Cloud, Cloudflare for DNS only</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Design</div>
+                <ul class="caption"><li><a href="/projects/bhasha/docs/design/README/" class="link-quiet hover:text-ink block py-1 text-muted">Translation App — UI Design</a></li></ul>
+              </div><div class="mt-5">
+                
+                <ul class="caption"><li><a href="/projects/bhasha/docs/event-day-checklist/" class="link-quiet hover:text-ink block py-1 text-muted">Event-Day Checklist</a></li><li><a href="/projects/bhasha/docs/listener-mobile-checklist/" class="link-quiet hover:text-ink block py-1 text-muted">Listener Mobile Checklist</a></li><li><a href="/projects/bhasha/docs/live-transcript/" class="link-quiet hover:text-ink block py-1 text-muted">Live transcript for translators</a></li><li><a href="/projects/bhasha/docs/livekit/" class="link-quiet hover:text-ink block py-1 text-muted">Brief: Live Translation App Using LiveKit Room Sharding</a></li><li><a href="/projects/bhasha/docs/load-testing/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">Load testing the media path</a></li><li><a href="/projects/bhasha/docs/mobile-field-test-report/" class="link-quiet hover:text-ink block py-1 text-muted">Mobile Field Test Report</a></li><li><a href="/projects/bhasha/docs/plan-cloudflare-and-translator-access/" class="link-quiet hover:text-ink block py-1 text-muted">Plan: Cloudflare DNS + temporary translator access</a></li><li><a href="/projects/bhasha/docs/roadmap/" class="link-quiet hover:text-ink block py-1 text-muted">Roadmap: planned features</a></li><li><a href="/projects/bhasha/docs/runbook/" class="link-quiet hover:text-ink block py-1 text-muted">Production Debugging &amp; Recovery Runbook</a></li></ul>
+              </div>
+            </nav></div>
+            </details>
+            <div class="mt-10 grid gap-12 lg:grid-cols-[13rem_minmax(0,1fr)]">
+              <div class="hidden lg:block"><nav class="lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto" aria-label="Bhasha documentation">
+              <div class="">
+                
+                <ul class="caption"><li><a href="/projects/bhasha/docs/claude-run-harness/" class="link-quiet hover:text-ink block py-1 text-muted">Claude Run Harness</a></li><li><a href="/projects/bhasha/docs/deployment/" class="link-quiet hover:text-ink block py-1 text-muted">Deployment: one VM on Google Cloud, Cloudflare for DNS only</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Design</div>
+                <ul class="caption"><li><a href="/projects/bhasha/docs/design/README/" class="link-quiet hover:text-ink block py-1 text-muted">Translation App — UI Design</a></li></ul>
+              </div><div class="mt-5">
+                
+                <ul class="caption"><li><a href="/projects/bhasha/docs/event-day-checklist/" class="link-quiet hover:text-ink block py-1 text-muted">Event-Day Checklist</a></li><li><a href="/projects/bhasha/docs/listener-mobile-checklist/" class="link-quiet hover:text-ink block py-1 text-muted">Listener Mobile Checklist</a></li><li><a href="/projects/bhasha/docs/live-transcript/" class="link-quiet hover:text-ink block py-1 text-muted">Live transcript for translators</a></li><li><a href="/projects/bhasha/docs/livekit/" class="link-quiet hover:text-ink block py-1 text-muted">Brief: Live Translation App Using LiveKit Room Sharding</a></li><li><a href="/projects/bhasha/docs/load-testing/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">Load testing the media path</a></li><li><a href="/projects/bhasha/docs/mobile-field-test-report/" class="link-quiet hover:text-ink block py-1 text-muted">Mobile Field Test Report</a></li><li><a href="/projects/bhasha/docs/plan-cloudflare-and-translator-access/" class="link-quiet hover:text-ink block py-1 text-muted">Plan: Cloudflare DNS + temporary translator access</a></li><li><a href="/projects/bhasha/docs/roadmap/" class="link-quiet hover:text-ink block py-1 text-muted">Roadmap: planned features</a></li><li><a href="/projects/bhasha/docs/runbook/" class="link-quiet hover:text-ink block py-1 text-muted">Production Debugging &amp; Recovery Runbook</a></li></ul>
+              </div>
+            </nav></div>
+              <div class="min-w-0"><details class="bg-parchment text-muted caption mb-8 rounded-xl p-4">
+              <summary class="text-ink cursor-pointer font-semibold">On this page</summary>
+              <ol class="mt-3 space-y-2">
+                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#what-it-answers">What it answers</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#setup">Setup</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#results">Results</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#what-we-learned-and-got-wrong-first">What we learned (and got wrong first)</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#not-covered-yet">Not covered yet</a></li>
+              </ol>
+            </details><article class="readme min-w-0"><p>How the capacity numbers in <a href="/projects/bhasha/docs/deployment/">deployment.md</a> were measured, what the results were,
+and the mistakes to avoid when repeating it. Measured in October 2026 on Google Cloud
+(<code>asia-south1</code>), LiveKit <code>v1.13.10</code>.</p>
+<h2 id="what-it-answers">What it answers</h2>
+<p>&quot;How many listeners can one VM serve on a single language, and does every one of them actually
+get all of the audio?&quot; The worst case for this product is one translator publishing one audio
+track to everyone who chose that language, so that is what is tested.</p>
+<h2 id="setup">Setup</h2>
+<ul>
+<li><strong>Server:</strong> the VM under test, running this repo&#39;s compose file (<code>app</code> + <code>livekit</code>; a Caddy in
+front for the final-topology runs).</li>
+<li><strong>Load generator:</strong> a separate, larger VM in the same region (16 vCPU), because a laptop&#39;s
+bandwidth and NAT distort the result. It runs LiveKit&#39;s own tester from the
+<code>livekit/livekit-cli</code> image. Firewall: only the generator&#39;s address may reach the server, and
+the generator may only talk to the server.</li>
+<li><strong>Publisher and listeners:</strong> <code>lk perf load-test</code> publishes one synthetic Opus audio track and
+opens N subscriber connections. Each healthy listener receives about 20 kbit/s (50 packets/s).</li>
+</ul>
+<pre><code class="language-bash">docker run --rm --network host --env-file lk.env livekit/livekit-cli perf load-test \
+  --room test --audio-publishers 1 --subscribers 1000 --num-per-second 50 --duration 240s
+</code></pre>
+<p><code>lk.env</code> holds <code>LIVEKIT_URL</code>, <code>LIVEKIT_API_KEY</code> and <code>LIVEKIT_API_SECRET</code> (keep it mode 600).
+Run <code>lk</code> detached and write its output to a file on the generator, then copy it back: an IAP
+SSH tunnel dropped silently during the 90-second quiet period of one run and the summary table
+was lost.</p>
+<p>On the server, <a href="https://github.com/live-miracles/bhasha/blob/master/scripts/load/server-sampler.py"><code>scripts/load/server-sampler.py</code></a> records
+CPU, per-thread CPU, memory and NIC packets/s every few seconds.</p>
+<p>The control plane (what happens when a crowd opens the page) is tested separately, with no media,
+by <a href="https://github.com/live-miracles/bhasha/blob/master/scripts/load/join-surge.mjs"><code>scripts/load/join-surge.mjs</code></a>.</p>
+<h2 id="results">Results</h2>
+<p>&quot;Audio delivered&quot; is the median over listeners of the bitrate each one received, as a percentage
+of the source&#39;s 20.3 kbit/s. Everything here is one language, one track.</p>
+<table>
+<thead>
+<tr>
+<th>Server configuration</th>
+<th>Listeners</th>
+<th>Audio delivered</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Single UDP port (<code>rtc.udp_port</code>), 4 vCPU</td>
+<td>250</td>
+<td>100%</td>
+<td></td>
+</tr>
+<tr>
+<td>Single UDP port (<code>rtc.udp_port</code>), 4 vCPU</td>
+<td>1,000</td>
+<td><strong>~63%</strong></td>
+<td>NIC flat at ~31,000 packets/s for 30 s; LiveKit reports 0% loss</td>
+</tr>
+<tr>
+<td>UDP range via Docker NAT (userland proxy off), 4 vCPU</td>
+<td>1,000</td>
+<td>100%</td>
+<td>6 min to publish ports, ~14 min to recover after a reboot</td>
+</tr>
+<tr>
+<td>UDP range via Docker NAT, 8 vCPU</td>
+<td>1,000</td>
+<td>100%</td>
+<td></td>
+</tr>
+<tr>
+<td>Host network, 8 vCPU</td>
+<td>1,000</td>
+<td>100%</td>
+<td>LiveKit CPU 171% avg of 800%</td>
+</tr>
+<tr>
+<td>Host network, 8 vCPU</td>
+<td>2,000</td>
+<td>100%</td>
+<td>CPU 328% avg / 409% peak of 800%; RAM plateau 4.7 GB</td>
+</tr>
+<tr>
+<td><strong>Final topology</strong> (Caddy → loopback LiveKit, host network), 4 vCPU</td>
+<td>1,000</td>
+<td>100%</td>
+<td>CPU 157% avg / 256% peak of 400%; RAM 2.3 GB; hottest thread 38%</td>
+</tr>
+<tr>
+<td>Four rooms × 250 listeners, 4 vCPU</td>
+<td>1,000</td>
+<td>99%</td>
+<td>similar CPU to one room of 1,000</td>
+</tr>
+</tbody></table>
+<p>Control plane, 1,000 listeners from one IP through Caddy on the real VM: all joined, p95 under
+5 ms per step, no rate limiting (60 s ramp and a 10 s stampede). Caddy replaced the forged
+<code>X-Forwarded-For</code> the script sent, so every listener was recorded with the generator&#39;s real
+address.</p>
+<h2 id="what-we-learned-and-got-wrong-first">What we learned (and got wrong first)</h2>
+<ol>
+<li><strong>Publishing a big UDP range through Docker is a trap</strong>, and the obvious workaround, a single
+multiplexed UDP port, silently caps egress. Both are explained in deployment.md section 7.
+Host networking avoids both.</li>
+<li><strong>LiveKit&#39;s <code>0% packet loss</code> is not evidence of full delivery.</strong> It drops packets before
+sequence numbers are assigned, so a starved listener simply receives a lower bitrate with no
+gaps. Always compare the per-listener bitrate (20 kbit/s expected) and the server&#39;s NIC
+packets/s (about 49 × listeners expected) with the source rate.</li>
+<li><strong>Do not trust the <code>Total … avg</code> row</strong> of <code>lk</code>&#39;s summary table. It averages over the whole run
+including connection ramp-up and gave ~14 kbit/s for runs where every listener&#39;s own row said
+20.2. Use the per-listener rows.</li>
+<li><strong>The ramp is much slower than <code>--num-per-second</code> says.</strong> 1,000 listeners took roughly 90-100 s
+to all connect, not 20 s. A 70 s hold was therefore mostly ramp, and an &quot;average over the
+steady window&quot; mixed in the ramp and the idle time after the run. Hold long enough (240 s for
+1,000), then average only the samples where the NIC packet rate is on its plateau.</li>
+<li><strong>My first explanation (a per-track fan-out limit that bigger machines cannot fix) was wrong.</strong>
+It rested on the two mistakes above: an 8 vCPU run and a 4 vCPU run both averaged ~62% of the
+expected packet rate, but both windows were still mostly ramp-up, so identical averages meant
+nothing. Only a run that reached its plateau, and a control that changed one thing (the network
+configuration), separated the real cause. Write a hypothesis down only after a control like that.</li>
+<li><strong>Resizing a VM can change its external address.</strong> LiveKit advertises it, so firewall rules
+that name it must be updated, or media silently fails.</li>
+<li>The load generator was never the limit (it stayed ~80% idle). Splitting the publisher into its
+own process gave the same low result under the single-port configuration, which ruled out the
+&quot;publisher starved inside the tester&quot; explanation.</li>
+</ol>
+<h2 id="not-covered-yet">Not covered yet</h2>
+<ul>
+<li>Runs of several hours (does memory stay flat over a whole event day?).</li>
+<li>Real phones on real networks, including venue Wi-Fi that blocks UDP (listeners fall back to TCP
+7881, which scales differently).</li>
+<li>A real translator&#39;s microphone and Opus settings instead of the tester&#39;s synthetic track.</li>
+<li>More than one language at once on the same VM beyond the 4 × 250 check.</li>
+</ul>
+</article><a class="more caption mt-8 inline-block" href="https://github.com/live-miracles/bhasha/blob/master/docs/load-testing.md">Edit this page on GitHub</a><div class="mt-12 grid gap-4 sm:grid-cols-2">
+              <a class="panel link-quiet hover:bg-parchment p-5 transition-colors" href="/projects/bhasha/docs/livekit/"><div class="text-muted caption">Previous</div><div class="font-semibold">Brief: Live Translation App Using LiveKit Room Sharding</div></a>
+              <a class="panel link-quiet hover:bg-parchment p-5 transition-colors sm:text-right" href="/projects/bhasha/docs/mobile-field-test-report/"><div class="text-muted caption">Next</div><div class="font-semibold">Mobile Field Test Report</div></a>
+            </div></div>
+            </div></div></div></main>
+    <footer class="caption waves text-muted border-line border-t pb-28">
+      <div class="mx-auto flex w-full max-w-[980px] flex-wrap items-center justify-between gap-x-6 gap-y-2 px-5 py-8 sm:px-6">
+        <span>Live Miracles · Open tools for live teams</span>
+        <span class="flex gap-5">
+          <a class="link-quiet" href="/blog/">Blog</a>
+          <a class="link-quiet" href="/blog/feed.xml">RSS</a>
+          <a class="link-quiet" href="https://github.com/live-miracles">GitHub</a>
+        </span>
+      </div>
+    </footer>
+    <dialog id="lightbox" class="lightbox" aria-label="Enlarged image">
+      <button type="button" class="lightbox-close" aria-label="Close image"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg></button>
+      <div class="lightbox-frame"><img alt="" /></div>
+    </dialog>
+    <script>
+      (function () {
+        var dialog = document.getElementById('lightbox');
+        if (!dialog || !dialog.showModal) return;
+        var shown = dialog.querySelector('img');
+        function zoomable(img) {
+          return !img.closest('a') && img.naturalWidth >= 300 && img.naturalHeight >= 100;
+        }
+        function mark(img) {
+          if (img.dataset.zoom || !zoomable(img)) return;
+          img.dataset.zoom = '1';
+          img.classList.add('zoomable');
+          img.tabIndex = 0;
+          img.setAttribute('role', 'button');
+          img.setAttribute('aria-label', 'Enlarge image: ' + (img.alt || 'screenshot'));
+        }
+        function open(img) {
+          shown.src = img.currentSrc || img.src;
+          shown.alt = img.alt;
+          shown.classList.remove('actual');
+          dialog.showModal();
+          dialog.scrollTo(0, 0);
+        }
+        document.querySelectorAll('.readme img').forEach(function (img) {
+          if (img.complete) mark(img);
+          else img.addEventListener('load', function () { mark(img); }, { once: true });
+        });
+        document.addEventListener('click', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom) open(img);
+        });
+        document.addEventListener('keydown', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom && (event.key === 'Enter' || event.key === ' ')) {
+            event.preventDefault();
+            open(img);
+          }
+        });
+        shown.addEventListener('click', function () {
+          shown.classList.toggle('actual');
+        });
+        dialog.addEventListener('click', function (event) {
+          if (event.target !== shown) dialog.close();
+        });
+      })();
+    </script>
+    <script>
+      (function () {
+        var button = document.getElementById('theme-toggle');
+        if (!button) return;
+        var root = document.documentElement;
+        function current() {
+          return root.dataset.theme === 'light' ? 'light' : 'dark';
+        }
+        function sync() {
+          var theme = current();
+          button.dataset.mode = theme;
+          button.setAttribute('aria-label', 'Switch to ' + (theme === 'dark' ? 'light' : 'dark') + ' theme');
+        }
+        button.hidden = false;
+        sync();
+        button.addEventListener('click', function () {
+          var next = current() === 'dark' ? 'light' : 'dark';
+          root.dataset.theme = next;
+          try {
+            localStorage.setItem('theme', next);
+          } catch (e) {}
+          sync();
+        });
+      })();
+    </script>
+  </body>
+</html>

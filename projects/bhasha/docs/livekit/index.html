@@ -1,0 +1,613 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Brief: Live Translation App Using LiveKit Room Sharding — Bhasha</title>
+    <meta name="description" content="Note: this is an early speculative brief exploring a multi-server, room-sharded LiveKit design (3 servers, 2,000 listeners/shard, a backend shard allocator, and an audio relay/bridge service republish" />
+    <link rel="canonical" href="https://live-miracles.github.io/projects/bhasha/docs/livekit/" />
+    <meta property="og:site_name" content="Live Miracles" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Brief: Live Translation App Using LiveKit Room Sharding — Bhasha" />
+    <meta property="og:description" content="Note: this is an early speculative brief exploring a multi-server, room-sharded LiveKit design (3 servers, 2,000 listeners/shard, a backend shard allocator, and an audio relay/bridge service republish" />
+    <meta property="og:url" content="https://live-miracles.github.io/projects/bhasha/docs/livekit/" />
+    <meta property="og:image" content="https://raw.githubusercontent.com/live-miracles/bhasha/master/apps/web/public/branding/logo.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/assets/logo.png" type="image/png" />
+    <link rel="alternate" type="application/rss+xml" title="Live Miracles blog" href="/blog/feed.xml" />
+    <script>
+      try {
+        var theme = localStorage.getItem('theme');
+        if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
+      } catch (e) {}
+    </script>
+    <link rel="stylesheet" href="/assets/styles.css" />
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <header class="topbar">
+        <nav class="caption mx-auto flex h-12 w-full max-w-[1024px] items-center justify-between gap-4 px-5 sm:px-6" aria-label="Site">
+          <a href="/" class="flex items-center gap-2.5 font-semibold" aria-label="Live Miracles">
+            <img src="/assets/logo.png" alt="" class="logo size-6" />
+            <span>Live Miracles</span>
+          </a>
+          <div class="flex items-center gap-5 sm:gap-7">
+            <a href="/#projects" class="text-muted hover:text-ink transition-colors">Projects</a>
+            <a href="/blog/" class="text-muted hover:text-ink transition-colors">Blog</a>
+            <div class="-mr-2 flex items-center gap-1">
+              <a href="https://github.com/live-miracles" class="icon-btn" aria-label="Live Miracles on GitHub" title="GitHub"><svg xmlns="http://www.w3.org/2000/svg" class="size-[18px]" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.79 23.39c.6.11.82-.26.82-.58v-2.02c-3.34.73-4.04-1.42-4.04-1.42-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.57A12 12 0 0 0 12 .5Z"/></svg></a>
+              <button type="button" id="theme-toggle" class="icon-btn theme-toggle" hidden><svg xmlns="http://www.w3.org/2000/svg" class="icon-sun size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32 1.41-1.41"/></svg><svg xmlns="http://www.w3.org/2000/svg" class="icon-moon size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg></button>
+            </div>
+          </div>
+        </nav>
+      </header>
+    <main class="flex-1"><div class="wash" style="--gx1: 14%; --gx2: 89%; --gx3: 41%; --gy1: -52px; --gy2: -6px; --gy1p: 23%; --gy2p: 10%; --px: 84%; --glow-1: var(--glow-b); --glow-2: var(--glow-a); --tint: #d4a24c; --glow-a: color-mix(in srgb, #d4a24c 30%, transparent); --pattern: url('/assets/patterns/kikko.svg')"><div class="mx-auto w-full max-w-[980px] px-5 py-10 sm:px-6 sm:py-14"><nav class="text-muted caption flex flex-wrap items-center gap-2" aria-label="Breadcrumb">
+              <a href="/projects/bhasha/" class="link-quiet hover:text-ink flex items-center gap-2"><img src="/assets/bhasha-logo.svg" alt="" class="logo size-5 " /><span>Bhasha</span></a>
+              <span aria-hidden="true">›</span><a class="link-quiet hover:text-ink" href="/projects/bhasha/docs/">Documentation</a>
+            </nav>
+            <h1 class="display display-lg mt-4">Brief: Live Translation App Using LiveKit Room Sharding</h1><nav class="border-line mt-8 flex gap-6 border-b" aria-label="Bhasha sections">
+              <a href="/projects/bhasha/" class="tab">Overview</a><a href="/projects/bhasha/docs/" class="tab" aria-current="page">Documentation</a>
+            </nav><details class="bg-parchment caption mt-6 rounded-xl p-4 lg:hidden">
+              <summary class="cursor-pointer font-semibold">Documentation menu</summary>
+              <div class="mt-3"><nav class="lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto" aria-label="Bhasha documentation">
+              <div class="">
+                
+                <ul class="caption"><li><a href="/projects/bhasha/docs/claude-run-harness/" class="link-quiet hover:text-ink block py-1 text-muted">Claude Run Harness</a></li><li><a href="/projects/bhasha/docs/deployment/" class="link-quiet hover:text-ink block py-1 text-muted">Deployment: one VM on Google Cloud, Cloudflare for DNS only</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Design</div>
+                <ul class="caption"><li><a href="/projects/bhasha/docs/design/README/" class="link-quiet hover:text-ink block py-1 text-muted">Translation App — UI Design</a></li></ul>
+              </div><div class="mt-5">
+                
+                <ul class="caption"><li><a href="/projects/bhasha/docs/event-day-checklist/" class="link-quiet hover:text-ink block py-1 text-muted">Event-Day Checklist</a></li><li><a href="/projects/bhasha/docs/listener-mobile-checklist/" class="link-quiet hover:text-ink block py-1 text-muted">Listener Mobile Checklist</a></li><li><a href="/projects/bhasha/docs/live-transcript/" class="link-quiet hover:text-ink block py-1 text-muted">Live transcript for translators</a></li><li><a href="/projects/bhasha/docs/livekit/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">Brief: Live Translation App Using LiveKit Room Sharding</a></li><li><a href="/projects/bhasha/docs/load-testing/" class="link-quiet hover:text-ink block py-1 text-muted">Load testing the media path</a></li><li><a href="/projects/bhasha/docs/mobile-field-test-report/" class="link-quiet hover:text-ink block py-1 text-muted">Mobile Field Test Report</a></li><li><a href="/projects/bhasha/docs/plan-cloudflare-and-translator-access/" class="link-quiet hover:text-ink block py-1 text-muted">Plan: Cloudflare DNS + temporary translator access</a></li><li><a href="/projects/bhasha/docs/roadmap/" class="link-quiet hover:text-ink block py-1 text-muted">Roadmap: planned features</a></li><li><a href="/projects/bhasha/docs/runbook/" class="link-quiet hover:text-ink block py-1 text-muted">Production Debugging &amp; Recovery Runbook</a></li></ul>
+              </div>
+            </nav></div>
+            </details>
+            <div class="mt-10 grid gap-12 lg:grid-cols-[13rem_minmax(0,1fr)]">
+              <div class="hidden lg:block"><nav class="lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto" aria-label="Bhasha documentation">
+              <div class="">
+                
+                <ul class="caption"><li><a href="/projects/bhasha/docs/claude-run-harness/" class="link-quiet hover:text-ink block py-1 text-muted">Claude Run Harness</a></li><li><a href="/projects/bhasha/docs/deployment/" class="link-quiet hover:text-ink block py-1 text-muted">Deployment: one VM on Google Cloud, Cloudflare for DNS only</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Design</div>
+                <ul class="caption"><li><a href="/projects/bhasha/docs/design/README/" class="link-quiet hover:text-ink block py-1 text-muted">Translation App — UI Design</a></li></ul>
+              </div><div class="mt-5">
+                
+                <ul class="caption"><li><a href="/projects/bhasha/docs/event-day-checklist/" class="link-quiet hover:text-ink block py-1 text-muted">Event-Day Checklist</a></li><li><a href="/projects/bhasha/docs/listener-mobile-checklist/" class="link-quiet hover:text-ink block py-1 text-muted">Listener Mobile Checklist</a></li><li><a href="/projects/bhasha/docs/live-transcript/" class="link-quiet hover:text-ink block py-1 text-muted">Live transcript for translators</a></li><li><a href="/projects/bhasha/docs/livekit/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">Brief: Live Translation App Using LiveKit Room Sharding</a></li><li><a href="/projects/bhasha/docs/load-testing/" class="link-quiet hover:text-ink block py-1 text-muted">Load testing the media path</a></li><li><a href="/projects/bhasha/docs/mobile-field-test-report/" class="link-quiet hover:text-ink block py-1 text-muted">Mobile Field Test Report</a></li><li><a href="/projects/bhasha/docs/plan-cloudflare-and-translator-access/" class="link-quiet hover:text-ink block py-1 text-muted">Plan: Cloudflare DNS + temporary translator access</a></li><li><a href="/projects/bhasha/docs/roadmap/" class="link-quiet hover:text-ink block py-1 text-muted">Roadmap: planned features</a></li><li><a href="/projects/bhasha/docs/runbook/" class="link-quiet hover:text-ink block py-1 text-muted">Production Debugging &amp; Recovery Runbook</a></li></ul>
+              </div>
+            </nav></div>
+              <div class="min-w-0"><details class="bg-parchment text-muted caption mb-8 rounded-xl p-4">
+              <summary class="text-ink cursor-pointer font-semibold">On this page</summary>
+              <ol class="mt-3 space-y-2">
+                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#goal">Goal</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#key-architecture">Key Architecture</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#livekit-setup">LiveKit Setup</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#user-roles">User Roles</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#1-admin">1. Admin</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#2-translator">2. Translator</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#3-listener">3. Listener</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#backend-responsibilities">Backend Responsibilities</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#1-program-management">1. Program Management</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#2-listener-shard-allocation">2. Listener Shard Allocation</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#3-capacity-rule">3. Capacity Rule</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#4-health-checks">4. Health Checks</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#audio-relay--bridge">Audio Relay / Bridge</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#frontend-pages">Frontend Pages</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#public-program-page">Public Program Page</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#translator-page">Translator Page</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#admin-page">Admin Page</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#api-endpoints">API Endpoints</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#token-rules">Token Rules</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#listener-token">Listener Token</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#translator-token">Translator Token</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#relay-token">Relay Token</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#infrastructure">Infrastructure</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#load-testing">Load Testing</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#acceptance-criteria">Acceptance Criteria</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#important-risks">Important Risks</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#1-relay-complexity">1. Relay Complexity</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#2-mobile-browser-behavior">2. Mobile Browser Behavior</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#3-server-capacity">3. Server Capacity</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#4-network-egress">4. Network Egress</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#5-room-shard-sync">5. Room Shard Sync</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#first-milestone">First Milestone</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#suggested-naming">Suggested Naming</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#final-target">Final Target</a></li>
+              </ol>
+            </details><article class="readme min-w-0"><blockquote>
+<p><strong>Note:</strong> this is an early speculative brief exploring a multi-server, room-sharded LiveKit
+design (3 servers, 2,000 listeners/shard, a backend shard allocator, and an audio relay/bridge
+service republishing into every shard). That is <strong>not</strong> what was actually built. The implemented
+architecture (see <code>../README.md</code>) targets 1–2k listeners with a <strong>single self-hosted
+LiveKit server and one room per language stream</strong> — no sharding, no shard allocator, and no
+relay/bridge process (LiveKit&#39;s own room model natively supports many subscribers off one
+publisher&#39;s track). Kept for historical context; do not treat this as current-stack
+documentation.</p>
+</blockquote>
+<h2 id="goal">Goal</h2>
+<p>Build a proof-of-concept live translation audio broadcast system using <strong>3 self-hosted LiveKit servers</strong>, each handling up to <strong>2,000 listeners</strong>, for a total target capacity of <strong>6,000 listeners per language stream</strong>.</p>
+<p>The first use case is:</p>
+<ul>
+<li>Original event audio is in English.</li>
+<li>Translator listens to English externally or through an admin/source feed.</li>
+<li>Translator speaks Hindi.</li>
+<li>Participants scan a QR code and listen to the Hindi translation stream.</li>
+<li>Listeners are distributed across 3 LiveKit rooms/servers.</li>
+</ul>
+<p>LiveKit rooms should be treated as <strong>audio broadcast shards</strong>.</p>
+<hr>
+<h2 id="key-architecture">Key Architecture</h2>
+<pre><code class="language-text">Participant QR
+   ↓
+Program landing page
+   ↓
+Backend shard allocator
+   ↓
+LiveKit Server 1 / Hindi Room 1   max 2,000 listeners
+LiveKit Server 2 / Hindi Room 2   max 2,000 listeners
+LiveKit Server 3 / Hindi Room 3   max 2,000 listeners
+</code></pre>
+<p>The translator publishes one Hindi audio stream.</p>
+<p>That stream must be replicated into all 3 LiveKit rooms.</p>
+<p>Recommended approach:</p>
+<pre><code class="language-text">Translator Browser
+   ↓
+Source LiveKit Room
+   ↓
+Backend Audio Bridge / Relay
+   ↓
+Hindi Room Shard 1
+Hindi Room Shard 2
+Hindi Room Shard 3
+</code></pre>
+<p>Avoid making the translator browser publish directly to 3 servers unless needed for a quick hack. It is less reliable and puts more load on the translator’s device.</p>
+<hr>
+<h2 id="livekit-setup">LiveKit Setup</h2>
+<p>Deploy 3 independent LiveKit servers:</p>
+<pre><code class="language-text">livekit-1.example.com
+livekit-2.example.com
+livekit-3.example.com
+</code></pre>
+<p>Each server has one Hindi listener room for the program:</p>
+<pre><code class="language-text">program-123-hi-shard-1
+program-123-hi-shard-2
+program-123-hi-shard-3
+</code></pre>
+<p>Capacity target:</p>
+<pre><code class="language-text">2,000 listeners per shard
+6,000 total Hindi listeners
+</code></pre>
+<p>Important assumption:</p>
+<p>LiveKit self-hosted rooms must be sized so that each room fits on one node. Do not assume one very large room can automatically span multiple servers.</p>
+<hr>
+<h2 id="user-roles">User Roles</h2>
+<h3 id="1-admin">1. Admin</h3>
+<p>Can create:</p>
+<ul>
+<li>Program</li>
+<li>Language stream</li>
+<li>Translator login/password</li>
+<li>QR code / public program URL</li>
+<li>LiveKit shard configuration</li>
+</ul>
+<h3 id="2-translator">2. Translator</h3>
+<p>URL:</p>
+<pre><code class="language-text">/program-123/translate
+</code></pre>
+<p>Translator can:</p>
+<ul>
+<li>Login with password</li>
+<li>Select assigned language, e.g. Hindi</li>
+<li>Start/stop microphone</li>
+<li>See connection status</li>
+<li>See whether audio is being relayed to all shards</li>
+</ul>
+<p>Translator should publish as:</p>
+<pre><code class="language-text">canPublish: true
+canSubscribe: false or limited
+</code></pre>
+<h3 id="3-listener">3. Listener</h3>
+<p>URL:</p>
+<pre><code class="language-text">/program-123
+</code></pre>
+<p>Listener can:</p>
+<ul>
+<li>Select Hindi stream</li>
+<li>Join as listener</li>
+<li>Listen only</li>
+<li>Not publish microphone/camera</li>
+</ul>
+<p>Listener token should have:</p>
+<pre><code class="language-text">canSubscribe: true
+canPublish: false
+</code></pre>
+<hr>
+<h2 id="backend-responsibilities">Backend Responsibilities</h2>
+<p>Build a backend service with these responsibilities:</p>
+<h3 id="1-program-management">1. Program Management</h3>
+<p>Basic data model:</p>
+<pre><code class="language-text">Program
+- id
+- title
+- slug
+- status: draft/live/ended
+
+LanguageStream
+- id
+- program_id
+- language_code: hi
+- language_name: Hindi
+- status: live/offline
+- source_room_name
+- shard_room_names[]
+
+Shard
+- id
+- language_stream_id
+- livekit_url
+- room_name
+- max_capacity: 2000
+- current_listener_count
+- status: healthy/unhealthy/full
+
+Translator
+- id
+- program_id
+- language_stream_id
+- password_hash
+</code></pre>
+<h3 id="2-listener-shard-allocation">2. Listener Shard Allocation</h3>
+<p>When a listener clicks Hindi:</p>
+<p>Backend should:</p>
+<ol>
+<li>Check available shards.</li>
+<li>Pick the shard with the lowest active listener count.</li>
+<li>Avoid shards marked unhealthy or full.</li>
+<li>Generate LiveKit token for that shard.</li>
+<li>Return:</li>
+</ol>
+<pre><code class="language-json">{
+    &quot;livekitUrl&quot;: &quot;wss://livekit-2.example.com&quot;,
+    &quot;roomName&quot;: &quot;program-123-hi-shard-2&quot;,
+    &quot;token&quot;: &quot;...&quot;
+}
+</code></pre>
+<h3 id="3-capacity-rule">3. Capacity Rule</h3>
+<p>For each shard:</p>
+<pre><code class="language-text">max_listeners = 2000
+soft_limit = 1800
+hard_limit = 2000
+</code></pre>
+<p>Allocation should prefer shards below the soft limit.</p>
+<p>If all shards are full, return a graceful message:</p>
+<pre><code class="language-text">This language stream is currently full. Please try again in a few minutes.
+</code></pre>
+<h3 id="4-health-checks">4. Health Checks</h3>
+<p>Backend should regularly check:</p>
+<ul>
+<li>Is LiveKit server reachable?</li>
+<li>Can room be listed?</li>
+<li>Current participant count</li>
+<li>Is relay publisher connected?</li>
+<li>Is audio track active?</li>
+</ul>
+<p>Mark shard unhealthy if:</p>
+<ul>
+<li>Server API unavailable</li>
+<li>Relay disconnected</li>
+<li>No audio packets received for a defined timeout</li>
+<li>Participant count query fails repeatedly</li>
+</ul>
+<hr>
+<h2 id="audio-relay--bridge">Audio Relay / Bridge</h2>
+<p>Build a relay service that:</p>
+<ol>
+<li>Subscribes to translator audio from the source room.</li>
+<li>Republishes that audio into each listener shard room.</li>
+</ol>
+<p>Desired behavior:</p>
+<pre><code class="language-text">Source room receives translator mic
+Relay joins source room as subscriber
+Relay joins shard rooms as publisher
+Relay republishes same audio track to all shards
+</code></pre>
+<p>Relay should expose status:</p>
+<pre><code class="language-json">{
+    &quot;sourceConnected&quot;: true,
+    &quot;shards&quot;: [
+        {
+            &quot;room&quot;: &quot;program-123-hi-shard-1&quot;,
+            &quot;connected&quot;: true,
+            &quot;publishing&quot;: true
+        },
+        {
+            &quot;room&quot;: &quot;program-123-hi-shard-2&quot;,
+            &quot;connected&quot;: true,
+            &quot;publishing&quot;: true
+        },
+        {
+            &quot;room&quot;: &quot;program-123-hi-shard-3&quot;,
+            &quot;connected&quot;: true,
+            &quot;publishing&quot;: true
+        }
+    ]
+}
+</code></pre>
+<p>For the proof of concept, the relay can be implemented in Node.js if LiveKit SDK support is sufficient, or Go if lower-level media forwarding is easier.</p>
+<hr>
+<h2 id="frontend-pages">Frontend Pages</h2>
+<h3 id="public-program-page">Public Program Page</h3>
+<p>Route:</p>
+<pre><code class="language-text">/:programSlug
+</code></pre>
+<p>Show:</p>
+<ul>
+<li>Program title</li>
+<li>Available language streams</li>
+<li>Hindi button</li>
+<li>Stream status: Live / Not Live</li>
+<li>Join button</li>
+</ul>
+<p>When user selects Hindi:</p>
+<ol>
+<li>Call backend allocation API.</li>
+<li>Receive LiveKit URL, room name, token.</li>
+<li>Connect to LiveKit.</li>
+<li>Auto-play audio after user gesture.</li>
+</ol>
+<p>Important: browser autoplay restrictions require a user click before playing audio.</p>
+<hr>
+<h3 id="translator-page">Translator Page</h3>
+<p>Route:</p>
+<pre><code class="language-text">/:programSlug/translate
+</code></pre>
+<p>Show:</p>
+<ul>
+<li>Password login</li>
+<li>Assigned language</li>
+<li>Start microphone button</li>
+<li>Audio level meter</li>
+<li>Source room connection status</li>
+<li>Relay status to all 3 shards</li>
+<li>Warning if any shard is down</li>
+</ul>
+<hr>
+<h3 id="admin-page">Admin Page</h3>
+<p>Basic version:</p>
+<ul>
+<li>Create program</li>
+<li>Add Hindi stream</li>
+<li>Configure 3 LiveKit shards</li>
+<li>Generate QR URL</li>
+<li>See listener counts per shard</li>
+<li>See translator online/offline</li>
+<li>See stream live/offline</li>
+</ul>
+<hr>
+<h2 id="api-endpoints">API Endpoints</h2>
+<p>Suggested endpoints:</p>
+<pre><code class="language-text">POST /api/admin/programs
+POST /api/admin/programs/:id/languages
+POST /api/translator/login
+POST /api/translator/token
+GET  /api/programs/:slug
+POST /api/programs/:slug/languages/:languageCode/join
+GET  /api/programs/:slug/status
+GET  /api/admin/programs/:id/shards/status
+</code></pre>
+<p>Important endpoint:</p>
+<pre><code class="language-text">POST /api/programs/:slug/languages/:languageCode/join
+</code></pre>
+<p>Response:</p>
+<pre><code class="language-json">{
+    &quot;language&quot;: &quot;Hindi&quot;,
+    &quot;shardId&quot;: &quot;hi-shard-2&quot;,
+    &quot;livekitUrl&quot;: &quot;wss://livekit-2.example.com&quot;,
+    &quot;roomName&quot;: &quot;program-123-hi-shard-2&quot;,
+    &quot;token&quot;: &quot;LIVEKIT_JWT&quot;
+}
+</code></pre>
+<hr>
+<h2 id="token-rules">Token Rules</h2>
+<h3 id="listener-token">Listener Token</h3>
+<pre><code class="language-text">roomJoin: true
+room: assigned shard room
+canSubscribe: true
+canPublish: false
+canPublishData: false
+</code></pre>
+<h3 id="translator-token">Translator Token</h3>
+<pre><code class="language-text">roomJoin: true
+room: source room
+canPublish: true
+canSubscribe: optional
+canPublishData: true
+</code></pre>
+<h3 id="relay-token">Relay Token</h3>
+<p>For source room:</p>
+<pre><code class="language-text">canSubscribe: true
+canPublish: false
+</code></pre>
+<p>For shard rooms:</p>
+<pre><code class="language-text">canSubscribe: false
+canPublish: true
+</code></pre>
+<hr>
+<h2 id="infrastructure">Infrastructure</h2>
+<p>For POC:</p>
+<pre><code class="language-text">Backend API: Node.js / Express or Fastify
+Frontend: React / Vite
+Database: Postgres or SQLite for POC
+Realtime: 3 LiveKit servers
+Relay: separate Node.js or Go service
+Reverse proxy: Nginx / Caddy / Cloudflare
+</code></pre>
+<p>LiveKit servers:</p>
+<pre><code class="language-text">LiveKit Server 1
+LiveKit Server 2
+LiveKit Server 3
+</code></pre>
+<p>Each should have:</p>
+<ul>
+<li>Public WSS endpoint</li>
+<li>TURN/STUN configured</li>
+<li>API key/secret</li>
+<li>Monitoring enabled</li>
+<li>Sufficient CPU/network capacity</li>
+</ul>
+<hr>
+<h2 id="load-testing">Load Testing</h2>
+<p>Create a load test plan before real usage.</p>
+<p>Test cases:</p>
+<ol>
+<li>100 listeners on one shard</li>
+<li>500 listeners on one shard</li>
+<li>1,000 listeners on one shard</li>
+<li>2,000 listeners on one shard</li>
+<li>6,000 listeners spread across 3 shards</li>
+<li>Translator disconnect/reconnect</li>
+<li>One shard failure</li>
+<li>Relay failure</li>
+<li>Late join while event is live</li>
+<li>Mobile browser lock-screen behavior</li>
+</ol>
+<p>Metrics to monitor:</p>
+<ul>
+<li>CPU</li>
+<li>RAM</li>
+<li>Network egress</li>
+<li>Packet loss</li>
+<li>Audio latency</li>
+<li>Join failure rate</li>
+<li>Reconnect rate</li>
+<li>Listener count accuracy</li>
+<li>Relay status</li>
+</ul>
+<hr>
+<h2 id="acceptance-criteria">Acceptance Criteria</h2>
+<p>The POC is successful if:</p>
+<ul>
+<li>One translator can speak Hindi.</li>
+<li>Audio is heard by listeners across all 3 LiveKit shard rooms.</li>
+<li>Listeners are distributed approximately evenly.</li>
+<li>Each listener joins as subscribe-only.</li>
+<li>Translator does not need to manually connect to 3 rooms.</li>
+<li>Admin can see listener count per shard.</li>
+<li>If one shard fails, new listeners are routed to healthy shards.</li>
+<li>Existing listeners on healthy shards continue unaffected.</li>
+<li>System can support at least 2,000 simulated listeners per shard in testing.</li>
+</ul>
+<hr>
+<h2 id="important-risks">Important Risks</h2>
+<h3 id="1-relay-complexity">1. Relay Complexity</h3>
+<p>Republishing one WebRTC audio track into multiple LiveKit rooms may need careful implementation.</p>
+<p>Fallback for quick POC:</p>
+<p>Have the translator browser publish to 3 rooms directly.</p>
+<p>Production recommendation:</p>
+<p>Use a backend relay.</p>
+<h3 id="2-mobile-browser-behavior">2. Mobile Browser Behavior</h3>
+<p>If translator uses a phone and the screen locks, the microphone may stop. Translator should ideally use:</p>
+<ul>
+<li>Laptop browser</li>
+<li>Phone with screen awake</li>
+<li>Native mobile app if phone-lock support is required</li>
+</ul>
+<h3 id="3-server-capacity">3. Server Capacity</h3>
+<p>Do not assume 2,000 listeners will work on any server. Benchmark actual instance type and network bandwidth.</p>
+<h3 id="4-network-egress">4. Network Egress</h3>
+<p>Audio-only is lighter than video, but 6,000 listeners still creates meaningful egress. Calculate bandwidth and cost.</p>
+<h3 id="5-room-shard-sync">5. Room Shard Sync</h3>
+<p>Listeners in different rooms are not aware of each other. That is fine for listen-only translation.</p>
+<hr>
+<h2 id="first-milestone">First Milestone</h2>
+<p>Build the simplest working version:</p>
+<ol>
+<li>Hardcode one program: <code>program-123</code></li>
+<li>Hardcode one language: Hindi</li>
+<li>Configure 3 LiveKit servers</li>
+<li>Create one translator source room</li>
+<li>Create 3 listener shard rooms</li>
+<li>Create listener allocation API</li>
+<li>Create listener page</li>
+<li>Create translator page</li>
+<li>Create relay service</li>
+<li>Test with 10 listeners per shard</li>
+<li>Then load test upwards</li>
+</ol>
+<hr>
+<h2 id="suggested-naming">Suggested Naming</h2>
+<pre><code class="language-text">Program slug:
+demo-event
+
+Source room:
+demo-event-hi-source
+
+Shard rooms:
+demo-event-hi-shard-1
+demo-event-hi-shard-2
+demo-event-hi-shard-3
+</code></pre>
+<hr>
+<h2 id="final-target">Final Target</h2>
+<p>A working live translation system where:</p>
+<pre><code class="language-text">1 translator → Hindi audio → 3 LiveKit shard rooms → 6,000 listeners
+</code></pre>
+<p>with each shard capped at approximately 2,000 listeners.</p>
+</article><a class="more caption mt-8 inline-block" href="https://github.com/live-miracles/bhasha/blob/master/docs/livekit.md">Edit this page on GitHub</a><div class="mt-12 grid gap-4 sm:grid-cols-2">
+              <a class="panel link-quiet hover:bg-parchment p-5 transition-colors" href="/projects/bhasha/docs/live-transcript/"><div class="text-muted caption">Previous</div><div class="font-semibold">Live transcript for translators</div></a>
+              <a class="panel link-quiet hover:bg-parchment p-5 transition-colors sm:text-right" href="/projects/bhasha/docs/load-testing/"><div class="text-muted caption">Next</div><div class="font-semibold">Load testing the media path</div></a>
+            </div></div>
+            </div></div></div></main>
+    <footer class="caption waves text-muted border-line border-t pb-28">
+      <div class="mx-auto flex w-full max-w-[980px] flex-wrap items-center justify-between gap-x-6 gap-y-2 px-5 py-8 sm:px-6">
+        <span>Live Miracles · Open tools for live teams</span>
+        <span class="flex gap-5">
+          <a class="link-quiet" href="/blog/">Blog</a>
+          <a class="link-quiet" href="/blog/feed.xml">RSS</a>
+          <a class="link-quiet" href="https://github.com/live-miracles">GitHub</a>
+        </span>
+      </div>
+    </footer>
+    <dialog id="lightbox" class="lightbox" aria-label="Enlarged image">
+      <button type="button" class="lightbox-close" aria-label="Close image"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg></button>
+      <div class="lightbox-frame"><img alt="" /></div>
+    </dialog>
+    <script>
+      (function () {
+        var dialog = document.getElementById('lightbox');
+        if (!dialog || !dialog.showModal) return;
+        var shown = dialog.querySelector('img');
+        function zoomable(img) {
+          return !img.closest('a') && img.naturalWidth >= 300 && img.naturalHeight >= 100;
+        }
+        function mark(img) {
+          if (img.dataset.zoom || !zoomable(img)) return;
+          img.dataset.zoom = '1';
+          img.classList.add('zoomable');
+          img.tabIndex = 0;
+          img.setAttribute('role', 'button');
+          img.setAttribute('aria-label', 'Enlarge image: ' + (img.alt || 'screenshot'));
+        }
+        function open(img) {
+          shown.src = img.currentSrc || img.src;
+          shown.alt = img.alt;
+          shown.classList.remove('actual');
+          dialog.showModal();
+          dialog.scrollTo(0, 0);
+        }
+        document.querySelectorAll('.readme img').forEach(function (img) {
+          if (img.complete) mark(img);
+          else img.addEventListener('load', function () { mark(img); }, { once: true });
+        });
+        document.addEventListener('click', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom) open(img);
+        });
+        document.addEventListener('keydown', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom && (event.key === 'Enter' || event.key === ' ')) {
+            event.preventDefault();
+            open(img);
+          }
+        });
+        shown.addEventListener('click', function () {
+          shown.classList.toggle('actual');
+        });
+        dialog.addEventListener('click', function (event) {
+          if (event.target !== shown) dialog.close();
+        });
+      })();
+    </script>
+    <script>
+      (function () {
+        var button = document.getElementById('theme-toggle');
+        if (!button) return;
+        var root = document.documentElement;
+        function current() {
+          return root.dataset.theme === 'light' ? 'light' : 'dark';
+        }
+        function sync() {
+          var theme = current();
+          button.dataset.mode = theme;
+          button.setAttribute('aria-label', 'Switch to ' + (theme === 'dark' ? 'light' : 'dark') + ' theme');
+        }
+        button.hidden = false;
+        sync();
+        button.addEventListener('click', function () {
+          var next = current() === 'dark' ? 'light' : 'dark';
+          root.dataset.theme = next;
+          try {
+            localStorage.setItem('theme', next);
+          } catch (e) {}
+          sync();
+        });
+      })();
+    </script>
+  </body>
+</html>
