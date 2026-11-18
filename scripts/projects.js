@@ -12,7 +12,7 @@ const categories = [
         tint: '#2f6fb3',
         pattern: 'seigaiha',
         name: 'Streaming & transport',
-        summary: 'Ingest, forward and watch live streams reliably.',
+        summary: 'Ingest, forward, watch and listen to live streams reliably.',
     },
     {
         id: 'vmix',
@@ -33,8 +33,7 @@ const categories = [
         tint: '#d4a24c',
         pattern: 'kikko',
         name: 'Event workflows',
-        summary:
-            'Plan live events, manage stream keys, translate live and collect audience questions.',
+        summary: 'Plan live events, manage stream keys and collect audience questions.',
     },
 ];
 
@@ -44,7 +43,7 @@ const projects = [
         name: 'Bunryu',
         category: 'streaming',
         summary:
-            'Bunryu (分流, "branching flow"): self-hosted restreaming server. RTMP, SRT and bonded SRT inputs forwarded to many RTMP/SRT destinations, with watchdogs and translation audio mixing.',
+            'Bunryu (分流, "branching flow"): self-hosted restreaming server. RTMP, SRT and bonded SRT inputs forwarded to many RTMP/SRT destinations, with watchdogs and a live dashboard.',
         icon: '/assets/bunryu-logo.png',
     },
     {
@@ -63,6 +62,14 @@ const projects = [
             'Watch a YouTube live stream at a fixed delay, and keep it there when the player jumps back to live.',
         icon: `${pages}/delayed-yt/logo.png`,
         website: `${pages}/delayed-yt/`,
+    },
+    {
+        id: 'bhasha',
+        name: 'Bhasha',
+        category: 'streaming',
+        summary:
+            'Bhasha (भाषा, "language"): browser-based live translation for large events. One translator publishes microphone audio; thousands of listeners open a link, pick a language and listen, on a self-hosted LiveKit server.',
+        icon: '/assets/bhasha-logo.svg',
     },
     {
         id: 'vmix-master',
@@ -134,14 +141,6 @@ const projects = [
         summary:
             'Internal operations app for studio and program requests, equipment inventory and staff roster scheduling, on Supabase and Vercel.',
         icon: '/assets/setu-logo.svg',
-    },
-    {
-        id: 'bhasha',
-        name: 'Bhasha',
-        category: 'events',
-        summary:
-            'Bhasha (भाषा, "language"): browser-based live translation for large events. One translator publishes microphone audio; thousands of listeners open a link, pick a language and listen, on a self-hosted LiveKit server.',
-        icon: '/assets/bhasha-logo.svg',
     },
     {
         id: 'multi-lang-qa',
