@@ -33,7 +33,7 @@ const categories = [
         tint: '#d4a24c',
         pattern: 'kikko',
         name: 'Event workflows',
-        summary: 'Google Workspace tools for scheduling, stream keys and audience Q&A.',
+        summary: 'Plan live events, manage stream keys and collect audience questions.',
     },
 ];
 
@@ -114,9 +114,9 @@ const projects = [
         name: 'Key Vault',
         category: 'events',
         summary:
-            'A safer way to store and share stream keys for big events, with role-based access, on Google Apps Script.',
-        icon: `${pages}/key-vault/logo.png`,
-        demo: `${pages}/key-vault/`,
+            'Add every stream destination for an event through a guided form that stops wrong links, and see in plain words whether each one is live. Role-based access and live status from bunryu.',
+        icon: '/assets/key-vault-logo.png',
+        website: 'https://livestream-key-vault.vercel.app',
     },
     {
         id: 'live-generator',
