@@ -4,14 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="light dark" />
-    <title>Cutover runbook — Key Vault</title>
-    <meta name="description" content="Moving from the Apps Script app to Supabase + Vercel, and turning on the bunryu link. Do it in this order; each step says how to tell it worked. The Apps Script deployment is not touched until the end" />
-    <link rel="canonical" href="https://live-miracles.github.io/projects/key-vault/docs/cutover/" />
+    <title>Setting up Key Vault — Key Vault</title>
+    <meta name="description" content="Do it in this order; each step says how to tell it worked. You need: owner access to a Supabase project, a Google Cloud project for the OAuth client, a Vercel account, admin access to this GitHub repo" />
+    <link rel="canonical" href="https://live-miracles.github.io/projects/key-vault/docs/setup/" />
     <meta property="og:site_name" content="Live Miracles" />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Cutover runbook — Key Vault" />
-    <meta property="og:description" content="Moving from the Apps Script app to Supabase + Vercel, and turning on the bunryu link. Do it in this order; each step says how to tell it worked. The Apps Script deployment is not touched until the end" />
-    <meta property="og:url" content="https://live-miracles.github.io/projects/key-vault/docs/cutover/" />
+    <meta property="og:title" content="Setting up Key Vault — Key Vault" />
+    <meta property="og:description" content="Do it in this order; each step says how to tell it worked. You need: owner access to a Supabase project, a Google Cloud project for the OAuth client, a Vercel account, admin access to this GitHub repo" />
+    <meta property="og:url" content="https://live-miracles.github.io/projects/key-vault/docs/setup/" />
     <meta property="og:image" content="https://live-miracles.github.io/assets/logo.png" />
     <meta name="twitter:card" content="summary" />
     <link rel="icon" href="/assets/logo.png" type="image/png" />
@@ -45,14 +45,14 @@
               <a href="/projects/key-vault/" class="link-quiet hover:text-ink flex items-center gap-2"><img src="https://live-miracles.github.io/key-vault/logo.png" alt="" class="logo size-5 " /><span>Key Vault</span></a>
               <span aria-hidden="true">›</span><a class="link-quiet hover:text-ink" href="/projects/key-vault/docs/">Documentation</a>
             </nav>
-            <h1 class="display display-lg mt-4">Cutover runbook</h1><nav class="border-line mt-8 flex gap-6 border-b" aria-label="Key Vault sections">
+            <h1 class="display display-lg mt-4">Setting up Key Vault</h1><nav class="border-line mt-8 flex gap-6 border-b" aria-label="Key Vault sections">
               <a href="/projects/key-vault/" class="tab">Overview</a><a href="/projects/key-vault/docs/" class="tab" aria-current="page">Documentation</a>
             </nav><details class="bg-parchment caption mt-6 rounded-xl p-4 lg:hidden">
               <summary class="cursor-pointer font-semibold">Documentation menu</summary>
               <div class="mt-3"><nav class="lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto" aria-label="Key Vault documentation">
               <div class="">
                 
-                <ul class="caption"><li><a href="/projects/key-vault/docs/cutover/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">Cutover runbook</a></li><li><a href="/projects/key-vault/docs/refactor-plan/" class="link-quiet hover:text-ink block py-1 text-muted">Key Vault refactor plan</a></li></ul>
+                <ul class="caption"><li><a href="/projects/key-vault/docs/bunryu-contract/" class="link-quiet hover:text-ink block py-1 text-muted">The bunryu link</a></li><li><a href="/projects/key-vault/docs/setup/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">Setting up Key Vault</a></li></ul>
               </div>
             </nav></div>
             </details>
@@ -60,37 +60,37 @@
               <div class="hidden lg:block"><nav class="lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto" aria-label="Key Vault documentation">
               <div class="">
                 
-                <ul class="caption"><li><a href="/projects/key-vault/docs/cutover/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">Cutover runbook</a></li><li><a href="/projects/key-vault/docs/refactor-plan/" class="link-quiet hover:text-ink block py-1 text-muted">Key Vault refactor plan</a></li></ul>
+                <ul class="caption"><li><a href="/projects/key-vault/docs/bunryu-contract/" class="link-quiet hover:text-ink block py-1 text-muted">The bunryu link</a></li><li><a href="/projects/key-vault/docs/setup/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">Setting up Key Vault</a></li></ul>
               </div>
             </nav></div>
               <div class="min-w-0"><details class="bg-parchment text-muted caption mb-8 rounded-xl p-4">
               <summary class="text-ink cursor-pointer font-semibold">On this page</summary>
               <ol class="mt-3 space-y-2">
-                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#1-create-the-supabase-project">1. Create the Supabase project</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#2-deploy-the-database-and-functions">2. Deploy the database and functions</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#3-deploy-the-site">3. Deploy the site</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#4-google-sign-in-and-function-secrets">4. Google sign-in and function secrets</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#5-move-the-data">5. Move the data</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#6-turn-on-bunryu">6. Turn on bunryu</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#7-rehearse-then-switch">7. Rehearse, then switch</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#rollback">Rollback</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#backups">Backups</a></li>
+                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#1-create-the-supabase-project">1. Create the Supabase project</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#2-deploy-the-database-and-functions">2. Deploy the database and functions</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#3-deploy-the-site">3. Deploy the site</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#4-google-sign-in-and-function-secrets">4. Google sign-in and function secrets</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#5-turn-on-bunryu">5. Turn on bunryu</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#backups">Backups</a></li>
               </ol>
-            </details><article class="readme min-w-0"><p>Moving from the Apps Script app to Supabase + Vercel, and turning on the bunryu link. Do it in this order; each step says how to tell it worked. The Apps Script deployment is not touched until the end, so you can stop at any step and nothing is lost.</p>
-<p>You need: owner access to a Supabase project, a Google Cloud project for the OAuth client, a Vercel account, admin access to this GitHub repository, and shell access to the machine running bunryu.</p>
+            </details><article class="readme min-w-0"><p>Do it in this order; each step says how to tell it worked. You need: owner access to a Supabase project, a Google Cloud project for the OAuth client, a Vercel account, admin access to this GitHub repository, and shell access to the machine running bunryu.</p>
 <h2 id="1-create-the-supabase-project">1. Create the Supabase project</h2>
 <ol>
 <li>Create a project. Note the project ref (the <code>abcdefgh</code> in <code>https://abcdefgh.supabase.co</code>).</li>
 <li>When Supabase offers to connect the project to GitHub, <strong>skip it</strong>. The <strong>Deploy Supabase</strong> workflow already applies the migrations and deploys the functions; the integration would overlap with it and does not deploy functions with the flags <code>ingest</code> needs.</li>
-<li>Generate one random secret: <code>openssl rand -hex 32</code>. Keep it in a password manager; you paste it into Supabase in step 4. Key Vault derives two different values from it: the <strong>ingest token</strong> (proves a sender may post statuses) and the <strong>hash secret</strong> (lets Key Vault match a key to its status without bunryu ever sending the key). Knowing one does not reveal the other. bunryu takes the same secret and derives both itself, so nobody types either by hand; step 6 copies the secret from the app.</li>
+<li>Generate one random secret: <code>openssl rand -hex 32</code>. Keep it in a password manager; you paste it into Supabase in step 4. See <code>docs/bunryu-contract.md</code> for what is derived from it.</li>
 </ol>
 <p>The order below avoids a loop: the database and functions need no site URL, the site needs only the Supabase URL and key, and the secrets and sign-in settings need the site URL, so they come last.</p>
 <h2 id="2-deploy-the-database-and-functions">2. Deploy the database and functions</h2>
 <ol>
 <li>Create a Supabase access token (supabase.com/dashboard/account/tokens) and add the repository secrets <code>SUPABASE_ACCESS_TOKEN</code> and <code>SUPABASE_PROJECT_REF</code>. No database password is needed.</li>
-<li>Run <code>npm run test:db</code> once with Docker running; it proves the migrations and SQL functions on a real Postgres.</li>
+<li>Run <code>npm run test:db</code> once with Docker running; it proves the schema and SQL functions on a real Postgres.</li>
 <li>Run the <strong>Deploy Supabase</strong> workflow (Actions → Run workflow), or locally <code>npx supabase db push</code> and <code>npx supabase functions deploy api</code> / <code>deploy ingest --no-verify-jwt</code>.</li>
 </ol>
-<p>Check: the Supabase dashboard shows the tables <code>events</code>, <code>languages</code>, <code>roles</code>, <code>keys</code>, <code>ingest_instances</code>, <code>stream_outputs</code>, and both functions.</p>
+<p>The schema is one migration. If you applied an earlier version of this project&#39;s migrations to a database that has no data worth keeping, reset it once with <code>npx supabase db reset --linked</code> (this deletes everything in it) before deploying.</p>
+<p>Check: the Supabase dashboard shows the tables <code>events</code>, <code>inputs</code>, <code>roles</code>, <code>keys</code>, <code>ingest_instances</code>, <code>stream_outputs</code>, <code>stream_inputs</code>, and both functions.</p>
 <h2 id="3-deploy-the-site">3. Deploy the site</h2>
 <p>Import the repository in Vercel. Set these environment variables <strong>before the first build</strong> (a build without them fails with &quot;Set KEY_VAULT_SUPABASE_URL and KEY_VAULT_SUPABASE_PUBLISHABLE_KEY&quot;; after adding them, redeploy, since they only apply to new builds):</p>
 <ul>
 <li><code>KEY_VAULT_SUPABASE_URL</code>: <code>https://&lt;project-ref&gt;.supabase.co</code></li>
 <li><code>KEY_VAULT_SUPABASE_PUBLISHABLE_KEY</code>: the <strong>publishable</strong> key (<code>sb_publishable_…</code>) from Project Settings → API Keys. The build refuses a secret key.</li>
 </ul>
-<p>Note the site&#39;s URL (for example <code>https://your-site.vercel.app</code>) for the next two steps.</p>
+<p>Note the site&#39;s URL (for example <code>https://your-site.vercel.app</code>) for the next step.</p>
 <h2 id="4-google-sign-in-and-function-secrets">4. Google sign-in and function secrets</h2>
 <ol>
 <li><p>In Google Cloud → APIs &amp; Credentials create an OAuth client (Web application). Authorized redirect URI: <code>https://&lt;project-ref&gt;.supabase.co/auth/v1/callback</code>.</p>
@@ -130,11 +130,11 @@ npx supabase secrets list --project-ref &lt;project-ref&gt;
 <td>The Supabase Site URL is still the default (step 4.3).</td>
 </tr>
 <tr>
-<td><code>getAllData: Failed to fetch</code></td>
+<td>&quot;Failed to fetch&quot; on load</td>
 <td><code>KEY_VAULT_APP_ORIGIN</code> is not set, or does not match the site&#39;s origin exactly, so the browser blocks the call.</td>
 </tr>
 <tr>
-<td><code>getAllData: The server is not configured.</code></td>
+<td>&quot;The server is not configured.&quot;</td>
 <td><code>KEY_VAULT_SECRET</code> (or another <code>KEY_VAULT_*</code> secret) is missing, or <code>KEY_VAULT_SECRET</code> is shorter than 32 characters; compare <code>secrets list</code> with the three names above.</td>
 </tr>
 <tr>
@@ -142,46 +142,22 @@ npx supabase secrets list --project-ref &lt;project-ref&gt;
 <td>The Vercel environment variables are missing; add them and redeploy.</td>
 </tr>
 </tbody></table>
-<h2 id="5-move-the-data">5. Move the data</h2>
-<ol>
-<li><p>Freeze edits: tell everyone to stop changing keys in the Apps Script app.</p>
-</li>
-<li><p>In the Google Sheet download each tab as CSV into one folder: <code>Event.csv</code>, <code>Role.csv</code>, <code>Language.csv</code>, <code>Key.csv</code>.</p>
-</li>
-<li><p>Convert:</p>
-<pre><code class="language-bash">npm run sheet:sql -- &lt;folder&gt; &gt; .migration/data.sql
-</code></pre>
-<p> It prints the counts (compare them with the sheet) and refuses anything that would not load, listing every problem. Fix the sheet and run it again; <code>--skip-orphans</code> drops roles and keys of an event that no longer exists.</p>
-</li>
-<li><p>Run <code>.migration/data.sql</code> against the database (Supabase SQL editor, or <code>psql</code> with the session pooler connection string).</p>
-</li>
-<li><p><strong>Delete <code>.migration/data.sql</code> and the CSV files</strong>: they contain every stream key.</p>
-</li>
-</ol>
-<p>Check: sign in as the owner; each event shows the same keys as the sheet. Sign in as an editor and a viewer (ask them) and confirm they see only their languages.</p>
-<h2 id="6-turn-on-bunryu">6. Turn on bunryu</h2>
+<h2 id="5-turn-on-bunryu">5. Turn on bunryu</h2>
 <p>In bunryu open <strong>Settings &gt; Key Vault</strong> and enter the <strong>Link</strong> and the <strong>Secret</strong>, then <strong>Save</strong> and <strong>Send test report</strong>. Signed in as a Key Vault owner, click the bunryu indicator in the Key Vault header: it shows both values with copy buttons. The secret is the <code>KEY_VAULT_SECRET</code> from step 4; bunryu derives the token and the hash secret from it, as Key Vault does. If you ever change <code>KEY_VAULT_SECRET</code>, enter the new one in bunryu too. bunryu reports under its <strong>Server Name</strong> (Settings &gt; General); give each server its own.</p>
 <p>Check, within two minutes:</p>
 <ul>
 <li><code>ingest_instances</code> has a row named after bunryu&#39;s Server Name and <code>stream_outputs</code> has one row per configured output.</li>
-<li>In Key Vault a key whose main or backup URL is configured in bunryu is colored by its status; hovering shows the pipeline, output and message. A key not configured in bunryu has no color.</li>
-<li>Stop an output in bunryu: its key turns indigo (&quot;configured, not running&quot;). Make one fail until bunryu gives up: red, with &quot;stopped after N failed attempts&quot;.</li>
+<li>In Key Vault a destination whose main or backup address is configured in bunryu shows its status; hovering shows the pipeline, output and message (owners and admins). One not configured in bunryu says &quot;Not set up yet&quot;.</li>
+<li>Stop an output in bunryu: its destination turns indigo (&quot;configured, not running&quot;). Make one fail until bunryu gives up: red, with &quot;stopped after N failed attempts&quot;.</li>
 <li>The header shows &quot;bunryu connected&quot; with a green dot.</li>
-<li>Stop bunryu: after about three minutes the colors clear and the header says &quot;bunryu last seen N min ago&quot; (there is no warning: bunryu is only on during events).</li>
+<li>Stop bunryu: after about three minutes the statuses clear and the header says &quot;bunryu last seen N min ago&quot; (there is no warning: bunryu is only on during events).</li>
 </ul>
-<p>If a key you know is configured shows no color, the URL differs between the two systems (a trailing path, a different server, a changed key). Compare them; the hash is of the whole URL.</p>
-<h2 id="7-rehearse-then-switch">7. Rehearse, then switch</h2>
-<p>Run one real event (or a rehearsal) on the new system while the Apps Script app stays untouched as a fallback. When it has gone well, tell everyone the new URL, then in Apps Script set the web app to &quot;no access&quot; or archive the project. Keep the Sheet as a backup for a release.</p>
-<h2 id="rollback">Rollback</h2>
-<ul>
-<li>Before step 7: nothing changed for users, so stop. Delete the project or just do not announce it.</li>
-<li>After step 7: re-enable the Apps Script web app. Edits made in the new system are not copied back; export the <code>keys</code> table to the sheet by hand if you need them.</li>
-</ul>
+<p>If a destination you know is configured shows nothing, the address differs between the two systems (a trailing path, a different server, a changed key). Compare them; the hash is of the whole address.</p>
 <h2 id="backups">Backups</h2>
 <p>The free Supabase plan has no managed backups and pauses a project after a week without activity (bunryu&#39;s heartbeat prevents the pause while it runs). Take a dump before and after an event, for example with <code>npx supabase db dump --data-only -f backup.sql</code> (the file contains stream keys: store it like a secret).</p>
-</article><a class="more caption mt-8 inline-block" href="https://github.com/live-miracles/key-vault/blob/master/docs/cutover.md">Edit this page on GitHub</a><div class="mt-12 grid gap-4 sm:grid-cols-2">
-              <span></span>
-              <a class="panel link-quiet hover:bg-parchment p-5 transition-colors sm:text-right" href="/projects/key-vault/docs/refactor-plan/"><div class="text-muted caption">Next</div><div class="font-semibold">Key Vault refactor plan</div></a>
+</article><a class="more caption mt-8 inline-block" href="https://github.com/live-miracles/key-vault/blob/master/docs/setup.md">Edit this page on GitHub</a><div class="mt-12 grid gap-4 sm:grid-cols-2">
+              <a class="panel link-quiet hover:bg-parchment p-5 transition-colors" href="/projects/key-vault/docs/bunryu-contract/"><div class="text-muted caption">Previous</div><div class="font-semibold">The bunryu link</div></a>
+              
             </div></div>
             </div></div></div></main>
     <footer class="caption waves text-muted border-line border-t pb-28">

@@ -277,10 +277,11 @@ cap that removes the oldest rotated files first. The installer configures
 persistent journald with a seven-day retention limit, 1 GB system journal cap,
 256 MB runtime cap, and one-day journal file rotation.</p>
 <h3 id="key-vault-status-reporting">Key Vault status reporting</h3>
-<p>Key Vault colours each stream key from what Bunryu says about the outputs that use it.
+<p>Key Vault colours each stream key from what Bunryu says about the outputs that use it, and
+shows whether the signal of each input is arriving from what it says about the pipelines.
 Set the link in the dashboard, under <strong>Settings &gt; Key Vault</strong>, and Bunryu sends a report
-once a minute, and at once when an output changes status (at most one every 10 s). It
-applies when you save, with no restart, and a report is sent at once.</p>
+once a minute, and at once when an output or an input changes status (at most one every
+10 s). It applies when you save, with no restart, and a report is sent at once.</p>
 <table>
 <thead>
 <tr>
@@ -305,6 +306,12 @@ format goes. The secret is never shown again: leave it empty to keep the saved o
 clear the link to turn the reports off (this also forgets it). The token and hash secret
 derived from it are stored in the database, like the server name (the secret itself is
 not), and the dashboard and <a href="/projects/bunryu/docs/reference/api/">API</a> return only whether it is set.</p>
+<p>Under the fields, Settings shows whether the reports get through: <strong>Connected</strong> with the
+time of the last report, or <strong>Not reaching Key Vault</strong> with the reason (a refused secret, a
+link whose host does not exist, Key Vault down) and how long it has lasted. A report is sent
+as soon as you save, and the line updates every few seconds while Settings is open. When Key
+Vault says it left entries out of a report because it could not use them, the line says how
+many; the reasons are in Key Vault&#39;s function logs.</p>
 <p>Key Vault tells servers apart by the report&#39;s <code>instance</code>, which is this server&#39;s
 <strong>Server Name</strong> (<strong>Settings &gt; General</strong>). Give each server that reports to the same Key Vault
 its own name. A rename shows in the next report, within a minute.</p>
@@ -323,6 +330,14 @@ its own name. A rename shows in the next report, within a minute.</p>
             &quot;failures&quot;: 0,
             &quot;stoppedAfterFailures&quot;: false,
             &quot;sinceMs&quot;: 1730455200000
+        }
+    ],
+    &quot;inputs&quot;: [
+        {
+            &quot;pipeline&quot;: &quot;Hindi&quot;,
+            &quot;status&quot;: &quot;running&quot;,
+            &quot;message&quot;: &quot;&quot;,
+            &quot;sinceMs&quot;: 1730455100000
         }
     ]
 }
@@ -344,6 +359,53 @@ first, because FFmpeg&#39;s text names the destination. The URL itself is never 
 <li><strong><code>sinceMs</code></strong> is when the output entered this status (milliseconds since the epoch);
 <code>failures</code> counts the failed starts since it last started.</li>
 <li>Shared-encode rows, which Bunryu manages itself, are not reported.</li>
+</ul>
+<p><code>inputs</code> has one entry for every pipeline, also one with no outputs. It is the state of the
+signal coming in, from the same rules as the input&#39;s dot on the dashboard:</p>
+<table>
+<thead>
+<tr>
+<th>Dashboard input</th>
+<th>Reported <code>status</code></th>
+<th>Key Vault shows</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Good</td>
+<td><code>running</code></td>
+<td>Receiving</td>
+</tr>
+<tr>
+<td>Warning (no audio, low bitrate, still probing, an alert about the input)</td>
+<td><code>warning</code></td>
+<td>Unstable</td>
+</tr>
+<tr>
+<td>Error (the probe failed, an error alert)</td>
+<td><code>error</code></td>
+<td>Not arriving</td>
+</tr>
+<tr>
+<td>Off, and at least one output of the pipeline is set to run</td>
+<td><code>error</code>, &quot;No signal is arriving.&quot;</td>
+<td>Not arriving</td>
+</tr>
+<tr>
+<td>Off, and no output of the pipeline is set to run</td>
+<td><code>stopped</code></td>
+<td>Idle</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong><code>pipeline</code></strong> is the pipeline&#39;s name exactly as it is typed. Key Vault matches it to the
+input of the same name, ignoring case, leading and trailing spaces and repeated spaces
+(&quot;Hindi&quot;, &quot;hindi&quot; and &quot; Hindi &quot; are one), so <strong>name each pipeline the same as its input
+in Key Vault</strong>. A pipeline whose name matches no input there is ignored. A blank name is
+not reported, and a name is cut at 200 characters.</li>
+<li><strong><code>message</code></strong> is the first problem, redacted like an output&#39;s, and empty for <code>running</code> and
+<code>stopped</code>. <strong><code>sinceMs</code></strong> is when the input entered this status.</li>
+<li>Key Vault also compares an output&#39;s <code>pipeline</code> with the input its stream was filed under,
+and warns when they differ. That needs nothing more from Bunryu.</li>
 </ul>
 <p>What the reporter does when Key Vault is unreachable is under
 <a href="/projects/bunryu/docs/operations/reliability/#key-vault-status-reporting">Reliability</a>.</p>

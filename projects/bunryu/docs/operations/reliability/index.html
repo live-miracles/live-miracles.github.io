@@ -270,18 +270,25 @@ would show up only as each affected output failing with its own error.</p>
 is a side channel: nothing in the control plane waits for it, so Key Vault being down,
 slow or rejecting reports cannot affect an input, an output or the dashboard.</p>
 <ul>
-<li>Each request times out after 10 s. A timeout, a network error, a <code>5xx</code>, <code>408</code> or <code>429</code>
-is retried twice, after 2 s and 5 s, so one report takes 37 s at the very most, inside
-the minute. Other <code>4xx</code> answers (a wrong token, a rejected payload) are not retried.</li>
-<li>After a report fails the next one is the next heartbeat or status change, never sooner
-than 10 s later; a status change during an outage does not add requests. At most one
-request is open at a time, and a redirect is refused, so the token cannot be sent
-elsewhere.</li>
-<li>The first failed report writes <code>key-vault-report-failed</code> (error, HTTP status, attempts)
+<li>Each request times out after 10 s. A failed report is not retried: every report carries
+the whole state, so the next heartbeat (at most a minute later) is the retry, and a
+status change that arrives sooner is sent at most 10 s after the last attempt. Key Vault
+mutes its colours only after 3 minutes of silence, which covers two failed reports in a
+row.</li>
+<li>During an outage a status change does not add requests. At most one request is open at
+a time, and a redirect is refused, so the token cannot be sent elsewhere.</li>
+<li>The first failed report writes <code>key-vault-report-failed</code> (error, HTTP status)
 to the journal and the diagnostics; further failures are silent until a report goes
 through, which writes <code>key-vault-report-recovered</code> with the number of failed reports and
 how long it lasted. A failure to build the report (a database error) is logged the
 same way as <code>key-vault-report-build-failed</code> / <code>-recovered</code>.</li>
+<li>The same episode is what <strong>Settings &gt; Key Vault</strong> shows (<code>status()</code> on the reporter, read
+through <code>GET /api/settings/key-vault/status</code>), so an operator sees a failing link without
+reading the journal: the failure was otherwise visible only as one log line per episode.
+It is kept in memory, starts again when the settings are saved, and is asked for only while
+Settings is the open view. Key Vault&#39;s answer is read up to 4 KB, only for the number of
+entries it left out, and an answer that cannot be read never turns an accepted report into
+a failure.</li>
 <li>Nothing is sent before the first health poll after a start, so a restart does not
 show every output as failed.</li>
 <li>The link is a setting, never part of start-up: a value that cannot be saved is refused

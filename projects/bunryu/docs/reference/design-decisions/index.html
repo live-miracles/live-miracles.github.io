@@ -84,7 +84,7 @@
               <div class="min-w-0"><details class="bg-parchment text-muted caption mb-8 rounded-xl p-4">
               <summary class="text-ink cursor-pointer font-semibold">On this page</summary>
               <ol class="mt-3 space-y-2">
-                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#current-architecture-in-one-paragraph">Current architecture in one paragraph</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#media-server">Media server</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#use-srs-for-ingest-from-the-official-release">Use SRS for ingest, from the official release</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#keep-srss-srt_to_rtmp-off-ffmpeg-converts-srt-inputs">Keep SRS&#39;s srt_to_rtmp off; FFmpeg converts SRT inputs</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#dont-use-srss-built-in-forwarding-for-outputs">Don&#39;t use SRS&#39;s built-in forwarding for outputs</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#dont-use-mediamtx-for-srt-ingest-or-srtrtmp-conversion">Don&#39;t use MediaMTX for SRT ingest or SRT→RTMP conversion</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#dont-build-on-datarhei-restreamer">Don&#39;t build on datarhei Restreamer</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#dont-build-our-own-media-server">Don&#39;t build our own media server</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#srt-ingest">SRT ingest</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#a-separate-relay-accepts-bonded-srt-because-neither-ffmpeg-nor-srs-can">A separate relay accepts bonded SRT, because neither FFmpeg nor SRS can</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#plain-srt-goes-directly-to-srs-by-default-the-relay-also-accepts-it">Plain SRT goes directly to SRS by default; the relay also accepts it</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#link-stats-for-a-direct-srt-input-are-not-read-from-srss-log">Link stats for a direct SRT input are not read from SRS&#39;s log</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#a-lost-bonded-leg-is-found-by-counting-legs-because-the-relay-drops-it-instead-of-reporting-broken">A lost bonded leg is found by counting legs, because the relay drops it instead of reporting broken</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#srt-loss-retransmit-and-drop-figures-cover-the-last-10-minutes-not-the-session">SRT loss, retransmit and drop figures cover the last 10 minutes, not the session</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#relay-stream-errors-go-to-the-pipeline-log-merged-while-they-repeat">Relay stream errors go to the pipeline log, merged while they repeat</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#outputs-pull-from-srs-not-from-the-relay">Outputs pull from SRS, not from the relay</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#keep-goryu-in-its-own-repository">Keep goryu in its own repository</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#raise-the-kernel-udp-buffer-ceiling-but-dont-alert-on-it">Raise the kernel UDP buffer ceiling, but don&#39;t alert on it</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#outputs-and-preview">Outputs and preview</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#one-ffmpeg-process-per-output">One FFmpeg process per output</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#outputs-with-the-same-encode-share-one-ffmpeg-shared-encodes">Outputs with the same encode share one FFmpeg (shared encodes)</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#preview-copies-the-video-only-audio-is-encoded">Preview copies the video; only audio is encoded</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#give-up-on-a-blocked-rtmprtmps-destination-with-an-output--rw_timeout">Give up on a blocked RTMP/RTMPS destination with an output -rw_timeout</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#an-output-that-never-connected-is-reported-as-waiting-for-input-and-restarts-record-the-input-source">An output that never connected is reported as waiting for input, and restarts record the input source</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#a-repeated-crash-is-one-history-record-and-recovery-is-a-field-on-it">A repeated crash is one History record, and recovery is a field on it</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#dont-add-an-ss--ti-ack-progress-check--rw_timeout-is-the-knob">Don&#39;t add an ss -ti ack-progress check; -rw_timeout is the knob</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#srt-destinations-need-no-output-timeout">SRT destinations need no output timeout</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#translation-outputs-were-removed">Translation outputs were removed</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#an-output-may-not-publish-into-its-own-pipeline-directly-or-through-other-pipelines">An output may not publish into its own pipeline, directly or through other pipelines</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#sizing">Sizing</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#sizing-guidance-is-a-measured-table-not-a-calculator">Sizing guidance is a measured table, not a calculator</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#no-hard-cap-on-inputs-or-outputs-the-stream-key-count-is-a-setting">No hard cap on inputs or outputs; the stream key count is a setting</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#dashboard">Dashboard</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#installable-as-an-app-with-a-manifest-only-no-service-worker">Installable as an app with a manifest only, no service worker</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#every-two-half-status-dot-has-the-same-hover">Every two-half status dot has the same hover</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#the-overview-filters-in-the-browser-and-searches-names-keys-and-urls">The Overview filters in the browser, and searches names, keys and URLs</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#the-outputs-list-has-a-filter-bar-and-a-pipelines-problems-filter-means-what-the-card-shows">The Outputs list has a filter bar, and a pipeline&#39;s Problems filter means what the card shows</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#an-outputs-figures-are-shown-only-when-they-are-off">An output&#39;s figures are shown only when they are off</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#alert-sound-beeps-for-new-problems-only-in-the-browser">Alert sound beeps for new problems only, in the browser</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#the-status-view-is-one-page-without-the-sidebar-drawn-in-parts">The Status view is one page without the sidebar, drawn in parts</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#the-events-table-is-built-on-request-from-what-is-already-stored">The Events table is built on request from what is already stored</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#dont-probe-platform-hosts-from-the-server">Don&#39;t probe platform hosts from the server</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#the-dashboard-keeps-its-own-copy-of-the-shared-encode-recipe-rule">The dashboard keeps its own copy of the shared-encode recipe rule</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#the-dashboard-has-its-own-small-design-system-instead-of-daisyui">The dashboard has its own small design system instead of daisyUI</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#key-vault-link">Key Vault link</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#bunryu-pushes-a-status-report-to-key-vault-with-hashed-destinations-and-redacted-text">Bunryu pushes a status report to Key Vault, with hashed destinations and redacted text</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#tooling">Tooling</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#eslint-checks-promise-handling-prettier-stays-the-formatter">ESLint checks promise handling; Prettier stays the formatter</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#logging-and-diagnostics">Logging and diagnostics</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#keep-the-process-running-after-an-uncaught-error">Keep the process running after an uncaught error</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#diagnostics-ideas-taken-from-srs-mediamtx-and-restream-krsna">Diagnostics ideas taken from SRS, MediaMTX and restream-krsna</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#warn-when-an-output-falls-behind-realtime-measured-from-its-media-clock">Warn when an output falls behind realtime, measured from its media clock</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#host-resource-alerts-cpu-pressure-memory-and-disk">Host resource alerts: CPU pressure, memory and disk</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#failures-that-need-an-operator-exit-with-status-78-which-systemd-does-not-restart">Failures that need an operator exit with status 78, which systemd does not restart</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#keep-a-fixed-2-s-systemd-restart-delay-with-no-back-off">Keep a fixed 2 s systemd restart delay, with no back-off</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#hints-are-a-dashboard-lookup-not-an-api-field">Hints are a dashboard lookup, not an API field</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#restart-outputs-when-a-reconnecting-encoder-changes-format-not-when-it-merely-reconnects">Restart outputs when a reconnecting encoder changes format, not when it merely reconnects</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#measure-the-keyframe-interval-once-per-publisher-in-a-second-ffprobe-and-only-report-it">Measure the keyframe interval once per publisher, in a second ffprobe, and only report it</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#warn-about-interlaced-input-do-not-convert-or-refuse-it">Warn about interlaced input, do not convert or refuse it</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#ingest-protection">Ingest protection</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#dont-ban-abusive-ingest-clients-with-fail2ban">Don&#39;t ban abusive ingest clients with fail2ban</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#install-and-secrets">Install and secrets</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#the-initial-dashboard-password-is-supplied-never-generated-or-printed-the-app-config-lives-in-etcbunryu">The initial dashboard password is supplied, never generated or printed; the app config lives in /etc/bunryu</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#the-srt-passphrase-is-reset-from-settings-by-rewriting-both-files-the-app-does-not-restart-srs-or-goryu">The SRT passphrase is reset from Settings by rewriting both files; the app does not restart SRS or Goryu</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#the-docker-image-is-x86_64-only-arm-hosts-run-it-emulated-for-development">The Docker image is x86_64 only; ARM hosts run it emulated, for development</a></li>
+                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#current-architecture-in-one-paragraph">Current architecture in one paragraph</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#media-server">Media server</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#use-srs-for-ingest-from-the-official-release">Use SRS for ingest, from the official release</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#keep-srss-srt_to_rtmp-off-ffmpeg-converts-srt-inputs">Keep SRS&#39;s srt_to_rtmp off; FFmpeg converts SRT inputs</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#dont-use-srss-built-in-forwarding-for-outputs">Don&#39;t use SRS&#39;s built-in forwarding for outputs</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#dont-use-mediamtx-for-srt-ingest-or-srtrtmp-conversion">Don&#39;t use MediaMTX for SRT ingest or SRT→RTMP conversion</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#dont-build-on-datarhei-restreamer">Don&#39;t build on datarhei Restreamer</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#dont-build-our-own-media-server">Don&#39;t build our own media server</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#srt-ingest">SRT ingest</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#a-separate-relay-accepts-bonded-srt-because-neither-ffmpeg-nor-srs-can">A separate relay accepts bonded SRT, because neither FFmpeg nor SRS can</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#plain-srt-goes-directly-to-srs-by-default-the-relay-also-accepts-it">Plain SRT goes directly to SRS by default; the relay also accepts it</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#link-stats-for-a-direct-srt-input-are-not-read-from-srss-log">Link stats for a direct SRT input are not read from SRS&#39;s log</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#a-lost-bonded-leg-is-found-by-counting-legs-because-the-relay-drops-it-instead-of-reporting-broken">A lost bonded leg is found by counting legs, because the relay drops it instead of reporting broken</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#srt-loss-retransmit-and-drop-figures-cover-the-last-10-minutes-not-the-session">SRT loss, retransmit and drop figures cover the last 10 minutes, not the session</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#relay-stream-errors-go-to-the-pipeline-log-merged-while-they-repeat">Relay stream errors go to the pipeline log, merged while they repeat</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#outputs-pull-from-srs-not-from-the-relay">Outputs pull from SRS, not from the relay</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#keep-goryu-in-its-own-repository">Keep goryu in its own repository</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#raise-the-kernel-udp-buffer-ceiling-but-dont-alert-on-it">Raise the kernel UDP buffer ceiling, but don&#39;t alert on it</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#outputs-and-preview">Outputs and preview</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#one-ffmpeg-process-per-output">One FFmpeg process per output</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#outputs-with-the-same-encode-share-one-ffmpeg-shared-encodes">Outputs with the same encode share one FFmpeg (shared encodes)</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#preview-copies-the-video-only-audio-is-encoded">Preview copies the video; only audio is encoded</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#give-up-on-a-blocked-rtmprtmps-destination-with-an-output--rw_timeout">Give up on a blocked RTMP/RTMPS destination with an output -rw_timeout</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#an-output-that-never-connected-is-reported-as-waiting-for-input-and-restarts-record-the-input-source">An output that never connected is reported as waiting for input, and restarts record the input source</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#a-repeated-crash-is-one-history-record-and-recovery-is-a-field-on-it">A repeated crash is one History record, and recovery is a field on it</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#dont-add-an-ss--ti-ack-progress-check--rw_timeout-is-the-knob">Don&#39;t add an ss -ti ack-progress check; -rw_timeout is the knob</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#srt-destinations-need-no-output-timeout">SRT destinations need no output timeout</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#translation-outputs-were-removed">Translation outputs were removed</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#an-output-may-not-publish-into-its-own-pipeline-directly-or-through-other-pipelines">An output may not publish into its own pipeline, directly or through other pipelines</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#sizing">Sizing</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#sizing-guidance-is-a-measured-table-not-a-calculator">Sizing guidance is a measured table, not a calculator</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#no-hard-cap-on-inputs-or-outputs-the-stream-key-count-is-a-setting">No hard cap on inputs or outputs; the stream key count is a setting</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#dashboard">Dashboard</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#installable-as-an-app-with-a-manifest-only-no-service-worker">Installable as an app with a manifest only, no service worker</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#every-two-half-status-dot-has-the-same-hover">Every two-half status dot has the same hover</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#the-overview-filters-in-the-browser-and-searches-names-keys-and-urls">The Overview filters in the browser, and searches names, keys and URLs</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#the-outputs-list-has-a-filter-bar-and-a-pipelines-problems-filter-means-what-the-card-shows">The Outputs list has a filter bar, and a pipeline&#39;s Problems filter means what the card shows</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#an-outputs-figures-are-shown-only-when-they-are-off">An output&#39;s figures are shown only when they are off</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#alert-sound-beeps-for-new-problems-only-in-the-browser">Alert sound beeps for new problems only, in the browser</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#the-status-view-is-one-page-without-the-sidebar-drawn-in-parts">The Status view is one page without the sidebar, drawn in parts</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#the-events-table-is-built-on-request-from-what-is-already-stored">The Events table is built on request from what is already stored</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#dont-probe-platform-hosts-from-the-server">Don&#39;t probe platform hosts from the server</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#the-server-decides-the-status-of-an-input-or-output-the-dashboard-shows-it">The server decides the status of an input or output; the dashboard shows it</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#one-dashboard-module-decides-what-is-a-problem-and-what-a-pipelines-dot-shows">One dashboard module decides what is a Problem and what a pipeline&#39;s dot shows</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#the-dashboard-keeps-its-own-copy-of-the-shared-encode-recipe-rule">The dashboard keeps its own copy of the shared-encode recipe rule</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#the-dashboard-has-its-own-small-design-system-instead-of-daisyui">The dashboard has its own small design system instead of daisyUI</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#key-vault-link">Key Vault link</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#bunryu-pushes-a-status-report-to-key-vault-with-hashed-destinations-and-redacted-text">Bunryu pushes a status report to Key Vault, with hashed destinations and redacted text</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#tooling">Tooling</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#eslint-checks-promise-handling-prettier-stays-the-formatter">ESLint checks promise handling; Prettier stays the formatter</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#logging-and-diagnostics">Logging and diagnostics</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#keep-the-process-running-after-an-uncaught-error">Keep the process running after an uncaught error</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#diagnostics-ideas-taken-from-srs-mediamtx-and-restream-krsna">Diagnostics ideas taken from SRS, MediaMTX and restream-krsna</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#warn-when-an-output-falls-behind-realtime-measured-from-its-media-clock">Warn when an output falls behind realtime, measured from its media clock</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#host-resource-alerts-cpu-pressure-memory-and-disk">Host resource alerts: CPU pressure, memory and disk</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#failures-that-need-an-operator-exit-with-status-78-which-systemd-does-not-restart">Failures that need an operator exit with status 78, which systemd does not restart</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#keep-a-fixed-2-s-systemd-restart-delay-with-no-back-off">Keep a fixed 2 s systemd restart delay, with no back-off</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#hints-are-a-dashboard-lookup-not-an-api-field">Hints are a dashboard lookup, not an API field</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#restart-outputs-when-a-reconnecting-encoder-changes-format-not-when-it-merely-reconnects">Restart outputs when a reconnecting encoder changes format, not when it merely reconnects</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#measure-the-keyframe-interval-once-per-publisher-in-a-second-ffprobe-and-only-report-it">Measure the keyframe interval once per publisher, in a second ffprobe, and only report it</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#warn-about-interlaced-input-do-not-convert-or-refuse-it">Warn about interlaced input, do not convert or refuse it</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#ingest-protection">Ingest protection</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#dont-ban-abusive-ingest-clients-with-fail2ban">Don&#39;t ban abusive ingest clients with fail2ban</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#install-and-secrets">Install and secrets</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#the-initial-dashboard-password-is-supplied-never-generated-or-printed-the-app-config-lives-in-etcbunryu">The initial dashboard password is supplied, never generated or printed; the app config lives in /etc/bunryu</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#the-srt-passphrase-is-reset-from-settings-by-rewriting-both-files-the-app-does-not-restart-srs-or-goryu">The SRT passphrase is reset from Settings by rewriting both files; the app does not restart SRS or Goryu</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#the-docker-image-is-x86_64-only-arm-hosts-run-it-emulated-for-development">The Docker image is x86_64 only; ARM hosts run it emulated, for development</a></li>
               </ol>
             </details><article class="readme min-w-0"><p>Why Bunryu is built the way it is, and why some obvious alternatives are not
 used. Each entry gives the decision, the reasons, the evidence behind them, and
@@ -320,8 +320,17 @@ who needs link stats for an input sends it through the relay port.</p>
 <h3 id="a-lost-bonded-leg-is-found-by-counting-legs-because-the-relay-drops-it-instead-of-reporting-broken">A lost bonded leg is found by counting legs, because the relay drops it instead of reporting <code>broken</code></h3>
 <p><strong>Decision:</strong> the health poll remembers the most legs a bonded input has had since it
 connected (<code>expectedLegs</code>). Fewer legs than that is a down leg: a <code>bonded-leg-down</code>
-alert, a warning on the input, and &quot;N of M bonded legs down&quot; in the dashboard. The
-count resets when the input goes away.</p>
+alert, a warning on the input, and &quot;N of M bonded legs down&quot; in the dashboard. A leg
+count only raises that figure once it has held for 15 s, and the figure resets when the
+input goes away or the group has no legs left.</p>
+<p><strong>Why the hold and the reset:</strong> on 2026-11-18, restarting a two-leg encoder within one
+poll left the relay listing the old connection&#39;s leg beside the two new ones (three legs,
+two from one encoder address) for one poll. The figure became 3 and the alert
+&quot;1 of 3 bonded legs is down&quot; stayed, through a later full disconnect and reconnect,
+because the relay still called the input active and nothing reset it. A stale leg lasted
+about one 5 s poll; a real leg that stays is counted after three. A leg that dies within
+15 s of joining raises no alert (the pipeline log still records it joining and leaving).
+<strong>Revisit when</strong> the relay&#39;s status says which connection a leg belongs to.</p>
 <p><strong>Why:</strong> the relay&#39;s <code>/status</code> documented a <code>broken</code> leg state but never sent it. It
 skips broken group members, and with that filter removed a pulled LAN cable still
 never showed <code>broken</code>: libsrt dropped the leg from the group within the relay&#39;s
@@ -1350,6 +1359,83 @@ The pipelines and outputs have to be created again from the <code>.bak</code> co
 could not be told from the output&#39;s own error. Then log one TCP connect check to
 that destination in the output&#39;s existing failure event, which needs no
 configuration, loop, table or UI.</p>
+<h3 id="the-server-decides-the-status-of-an-input-or-output-the-dashboard-shows-it">The server decides the status of an input or output; the dashboard shows it</h3>
+<p><strong>Decision (November 2026):</strong> the status of every saved input and output (good, warn, error
+or off) and the problems behind it, its verdict, is worked out on the server
+(<code>src/utils/healthVerdicts.ts</code>, with the rules in <code>outputStatus.ts</code> and <code>inputStatus.ts</code>)
+and sent in <code>/api/health</code> as <code>verdicts</code>. The dashboard reads it and works out nothing: its own
+copy of the rules (<code>outputHealth</code>, <code>inputHealth</code>) is deleted. The Key Vault report uses the
+same rules. See <a href="https://github.com/live-miracles/bunryu/blob/master/docs/adr/0006-the-server-decides-status.md">ADR 0006</a>.</p>
+<p><strong>Why:</strong></p>
+<ul>
+<li><strong>There were two copies of the rules.</strong> Key Vault needed the verdict on the server, and the
+server cannot import <code>public/ts/core/status.ts</code>: a probe file in <code>src/</code> that imported it
+failed <code>tsc -p tsconfig.backend.json</code> with <code>TS6059</code> (the imported <code>hints.ts</code>, <code>utils.ts</code> and
+<code>types.ts</code> are outside <code>rootDir</code> <code>src</code>) and <code>Cannot find name &#39;document&#39;</code> (<code>utils.ts</code> uses
+the DOM; the backend has no DOM <code>lib</code>). So the server got a second copy, about 400 lines
+with 390 lines of tests that ran both on every combination of state. Tests catch only the
+combinations they list, and the copies had already drifted in shape (the dashboard&#39;s
+<code>outputHealth</code> had an <code>includeInput</code> switch the server&#39;s lacked).</li>
+<li><strong>The join was a third copy.</strong> The dashboard assembles each output&#39;s view from the config
+and the health response (<code>parsePipelines</code>, including which shared encode it reads); the
+server assembles the same view (<code>buildOutputViews</code>). Sharing only the verdict function would
+have left that twin.</li>
+<li><strong>It costs the dashboard nothing it had.</strong> The verdicts are worked out when <code>/api/health</code> is
+asked for, from the saved rows as they are then and the last poll, so a change just made (an
+output started) shows at once, as it did when the dashboard worked it out from a fresh
+<code>/api/pipelines</code> and the polled status.</li>
+<li><strong>A bad row cannot fail the health response.</strong> A verdict that throws is <code>warn</code>, &quot;The status
+could not be worked out.&quot;, is logged once a minute per input or output, and the rest are
+unaffected; if the database cannot be read there are none and the dashboard shows each as
+unknown.</li>
+</ul>
+<p><strong>Not adopted:</strong> one source file compiled into both builds. A shared folder needs a common
+<code>rootDir</code>, which moves the backend output from <code>dist/index.js</code> to <code>dist/src/index.js</code>
+(the <code>start</code> script, the systemd unit, <code>docker/entrypoint.sh</code>, the install docs); a copy step
+that generates a second copy at build time avoids that but still leaves the join twin.</p>
+<p><strong>Tradeoffs:</strong> a dashboard tab left open across a server upgrade shows each status as unknown
+until it is reloaded. The relay path&#39;s verdict (<code>relayHealth</code>) is still worked out in the
+browser. So is the advice about how an output or pipeline is configured (a destination
+another output uses, audio settings that do not suit the input, a stream key two pipelines
+share): it is not a status, only the dashboard shows it, and its wording is the dashboard&#39;s to
+change, so it is a pure dashboard module (<code>public/ts/core/output-advice.ts</code>) and a change to
+it needs no server change. Each line is a mistake or a tip. A mistake (the same destination as
+another output, a track selection the input cannot supply) counts as a warning in every list
+and count of problems: the Outputs list, the Overview&#39;s Issues and the Status view&#39;s cards.
+A tip (Track 1 costs CPU, SRT to RTMP with copy audio can jitter) is a muted note on the card
+and counts nowhere: tips that turned working outputs amber would teach people to ignore amber,
+the reason Key Vault leaves advice out. Neither changes a status dot, which stays the
+server&#39;s verdict; before this the Outputs list counted all advice and the other views none. The dashboard repeats three values for display: the input alert codes, the
+200 kb/s floor and the 30 s warm-up for SRS&#39;s zero bitrate; <code>test/statusConstants.test.js</code> pins
+them to the server&#39;s.</p>
+<p><strong>Checked on the isolated test stack:</strong> a healthy pipeline showed every dot green; with the
+timestamp-discontinuity flood on, each output showed its warning and the pipeline dot was
+half yellow; with the publisher killed, each output said &quot;Output is running but input is not
+live&quot; and the input half went grey.</p>
+<p><strong>Revisit when:</strong> a second client needs the advice (an API consumer, notifications, a check
+when an output is saved), or tabs left open across upgrades turn out to matter.</p>
+<h3 id="one-dashboard-module-decides-what-is-a-problem-and-what-a-pipelines-dot-shows">One dashboard module decides what is a Problem and what a pipeline&#39;s dot shows</h3>
+<p><strong>Decision (November 2026):</strong> <code>public/ts/core/problems.ts</code> works out, once per render, each
+pipeline&#39;s input half, each output&#39;s Problem and the group roll-up, and the sidebar, the Status
+view, the Overview and the Outputs list draw its answer. The input half is the server&#39;s input
+verdict raised to the relay&#39;s warning or error, so an unstable or lost leg, or a relay that
+cannot reach SRS, shows on the dot even while the input is off; the relay never turns an input
+that is off into a healthy one. <strong>Status</strong> (dot colour, the counts beside it) and <strong>Problem</strong>
+(lists, filters, &quot;has issues&quot;) stay separate: a Problem also counts an advice mistake and an
+output stopped after repeated failures, whose status is off.</p>
+<p><strong>Why:</strong> the rules had been written out in four places and had drifted. A verdict of warn with a
+relay error was yellow in the sidebar (it folded the relay in only for a good verdict) and red in
+the Status view; the Status view skipped the relay for an off input, which hid a relay that could
+not reach SRS; the group header ignored the relay; the sidebar&#39;s output counts, the Overview and
+the Outputs filter each had their own idea of a Problem, and only the filter counted a stop after
+repeated failures. Six commits had moved or patched this rule before it had one home.</p>
+<p><strong>Not changed:</strong> a relay connected to SRS that SRS has not yet listed as the input stays a
+warning (the gap after a new publisher connects is normal, and an error would flash on every
+connect; <code>relay-forwarding-stalled</code> catches one that never starts). The Overview&#39;s input rows
+stay on the server&#39;s verdict, because the relay has its own table there. The sidebar&#39;s output
+badges stay status-only so they match the dots.</p>
+<p><strong>Revisit when:</strong> a second client needs the roll-up, or the server takes over the relay path&#39;s
+verdict.</p>
 <h3 id="the-dashboard-keeps-its-own-copy-of-the-shared-encode-recipe-rule">The dashboard keeps its own copy of the shared-encode recipe rule</h3>
 <p><strong>Decision (October 2026):</strong> <code>public/ts/core/renditions.ts</code> stays a hand-kept twin of
 <code>encodeRecipe</code> and <code>RENDITION_URL_RE</code> in <code>src/utils/renditions.ts</code>. <code>test/renditions.test.js</code>
@@ -1400,11 +1486,11 @@ on a status change at most once per 10 s, the app <code>POST</code>s one JSON re
 endpoint with a bearer token, all set in Settings (see below). An output is named by <code>HMAC-SHA256(secret, normalised URL)</code> cut to 32 hex characters, never by its URL, and the <code>message</code> has URLs, <code>streamid=</code>,
 <code>passphrase=</code>, <code>key=</code> values and long token-like strings removed and is cut to 300
 characters. The status is worked out on the server by the same rules as the dashboard
-dot, minus the advisory warnings (see
+dot, minus the advice (see
 <a href="/projects/bunryu/docs/operations/configuration/#key-vault-status-reporting">Configuration</a>).</p>
 <p><strong>Why:</strong></p>
 <ul>
-<li><strong>The link is a setting, not part of <code>bunryu.json</code>.</strong> The first version read a
+<li><p><strong>The link is a setting, not part of <code>bunryu.json</code>.</strong> The first version read a
 <code>key_vault</code> block from <code>bunryu.json</code> at start-up. That made the operator edit a file on
 the server and restart the app to change a token, and, to catch typos, a bad block had
 to stop the start (exit 78, which systemd does not restart): a typo in optional
@@ -1421,9 +1507,12 @@ only and the dashboard reads back <code>secretSet</code>; an empty field keeps t
 classes (link-local and unspecified are refused) because an operator-typed URL is a
 server-side request like an output destination. A &quot;Send test report&quot; button
 (one attempt, no retries, showing the receiver&#39;s answer such as <code>HTTP 401</code>) was removed:
-saving already sends a report at once, and a failure is logged and retried on the
-schedule.</li>
-<li><strong>One secret, two derived values (November 2026).</strong> The first version asked for two
+saving already sends a report at once, and a failure is logged and the next
+heartbeat sends the state again. A report is not retried within itself (the first
+version retried twice, after 2 s and 5 s): every report carries the whole state, so the
+heartbeat is already the retry, and Key Vault tolerates two missed ones before it mutes.</p>
+</li>
+<li><p><strong>One secret, two derived values (November 2026).</strong> The first version asked for two
 random secrets, a token and a hash secret, and they had to be copied to Key Vault and
 here without a mix-up. Now there is one, Key Vault&#39;s <code>KEY_VAULT_SECRET</code>, and both sides
 derive the two values as <code>HMAC-SHA256(secret, label)</code> in hex (<code>key-vault/ingest-token</code>,
@@ -1435,13 +1524,15 @@ halves; the derivation takes any secret of 32 or more characters. Only the two d
 values are saved, so the reporter and the saved format did not change and the secret
 is not kept. The derivation is pinned by the same two values in both repositories&#39;
 tests (<code>test/keyVaultConfig.test.js</code>). A link saved before this change keeps working
-with its old token and hash secret until Key Vault is moved to the new secret.</li>
-<li><strong>Push, not pull.</strong> Key Vault runs on a free serverless tier and Bunryu sits behind a
+with its old token and hash secret until Key Vault is moved to the new secret.</p>
+</li>
+<li><p><strong>Push, not pull.</strong> Key Vault runs on a free serverless tier and Bunryu sits behind a
 tunnel with a login, so Key Vault cannot call in without a second credential and a new
 public route. One outbound request a minute is about 43,000 a month against the
 500,000 the tier allows, and its steady arrival is also the proof that Bunryu is alive
-(Key Vault mutes its colours after 3 minutes of silence).</li>
-<li><strong>A hash, because the destination is the secret.</strong> An output URL contains the platform&#39;s
+(Key Vault mutes its colours after 3 minutes of silence).</p>
+</li>
+<li><p><strong>A hash, because the destination is the secret.</strong> An output URL contains the platform&#39;s
 stream key. Key Vault already holds the same server and key, so it only needs to
 recognise a URL, not read it. HMAC rather than a bare hash because stream keys come
 from small formats that could be guessed, and a keyed hash cannot be checked offline
@@ -1449,37 +1540,47 @@ by someone who sees a report. 32 hex characters (128 bits) keep a collision out 
 reach with the 500 outputs at most. The URL is normalised (trimmed, lowercase scheme
 and host, no trailing <code>/</code>) because Key Vault builds the same string from a server and a
 key and must not differ by spelling; both sides check the vectors in
-<code>test/fixtures/key-vault-hash-vectors.json</code>.</li>
-<li><strong>Redaction, because the text is FFmpeg&#39;s.</strong> An output&#39;s error line is stderr, which
+<code>test/fixtures/key-vault-hash-vectors.json</code>.</p>
+</li>
+<li><p><strong>Redaction, because the text is FFmpeg&#39;s.</strong> An output&#39;s error line is stderr, which
 names the destination (<code>Failed to open rtmp://…/&lt;key&gt;</code>), and the SRT streamid and
 passphrase appear in relay errors. Logs here are private and unredacted; a report
 leaves the machine, so it is cleaned at the point of sending, after the text is chosen
 and before it is cut, so a secret cannot be left half-cut. It errs towards removing:
-any 16-character run with a digit goes.</li>
-<li><strong>Advisory warnings are not warnings to Key Vault.</strong> The dashboard&#39;s Problems rule
+any 16-character run with a digit goes.</p>
+</li>
+<li><p><strong>Advice is not a warning to Key Vault.</strong> The dashboard&#39;s Problems filter
 also counts a destination shared with another output and encoding advice (&quot;Track 1
 re-encodes the audio&quot;). Neither means the stream is not being delivered, and a
 key shown amber for a working output would teach people to ignore the colour. A
-running output with an unresolved crash is an error, as in the Problems filter.</li>
-<li><strong>A second copy of the status rules, pinned by a test.</strong> The reporter needs the
-dashboard&#39;s <code>outputHealth</code> (about 100 lines, with the error-age rule and the
-shared-encode wait), and the server cannot import <code>public/ts/core/status.ts</code>: a
-probe file in <code>src/</code> that imported it failed <code>tsc -p tsconfig.backend.json</code> with
-<code>TS6059</code> (the imported <code>hints.ts</code>, <code>utils.ts</code> and <code>types.ts</code> are outside <code>rootDir</code>
-<code>src</code>) and with <code>Cannot find name &#39;document&#39;</code> / <code>&#39;window&#39;</code> (<code>utils.ts</code> uses the DOM;
-the backend has no DOM <code>lib</code>). Making one file reach both builds means a shared source
-folder and a common <code>rootDir</code>, which moves the backend output from <code>dist/index.js</code> to
-<code>dist/src/index.js</code> (the <code>start</code> script, the systemd unit and the Dockerfile), or
-splitting the pure rules out of <code>status.ts</code> and <code>utils.ts</code> and adding that folder to
-both configs. That is the build change the
-<a href="#the-dashboard-keeps-its-own-copy-of-the-shared-encode-recipe-rule">recipe twin</a> was
-also kept to avoid, for a file this size. So <code>src/utils/outputStatus.ts</code> mirrors
-<code>outputHealth</code>, and <code>test/outputStatusParity.test.js</code> runs both on every combination
-of desired state, process status, bitrate, warning, error age, failures and input
-state, and on shared-encode outputs, and fails if they differ.</li>
+running output with an unresolved crash is an error, as in the Problems filter.</p>
+</li>
+<li><p><strong>The reporter uses the dashboard&#39;s status rules.</strong> The statuses are the verdicts the
+dashboard shows (<code>outputStatus.ts</code>, <code>inputStatus.ts</code>; see
+<a href="#the-server-decides-the-status-of-an-input-or-output-the-dashboard-shows-it">The server decides the status</a>),
+mapped to <code>running</code>, <code>warning</code>, <code>error</code> and <code>stopped</code> by <code>reportedState</code>: a stop after repeated
+failures and an unresolved crash on a running output are errors, and the advice is left
+out, as above.</p>
+</li>
+<li><p><strong>Inputs are reported too, matched by name (November 2026).</strong> The report also carries the
+state of each pipeline&#39;s input, so Key Vault can say that a stream is failing because the
+signal is not arriving, which is not the platform&#39;s fault, instead of sending the media
+team to chase the vendor. The match is by the pipeline&#39;s name, ignoring case and extra
+spaces, because an id would have to be configured on both sides and a link that cannot be
+mistyped is not worth that; Key Vault&#39;s input form tells the team to name them alike, and
+a pipeline that matches nothing is ignored. Outputs already carry their pipeline&#39;s name,
+so Key Vault can also warn when a stream&#39;s link runs in a differently named pipeline,
+with no new data. <strong>No signal with an output set to run is an error</strong>, not <code>stopped</code>:
+that is what makes the feature useful, since an input nobody is sending to would never
+otherwise read as a problem. The cost is that before an event, with outputs set to run
+and no encoder connected yet, every input reads &quot;Not arriving&quot;; Bunryu runs during events
+and this is the state somebody wants to know about, so it was accepted. Alerts count only
+when they are about the input (<code>INPUT_ALERT_CODES</code>); the SRT relay link alerts do not. The report carries no <code>hint</code>: Key Vault writes its own advice for the media team
+(see <a href="#hints-are-a-dashboard-lookup-not-an-api-field">Hints are a dashboard lookup, not an API field</a>).</p>
+</li>
 </ul>
-<p><strong>Revisit when:</strong> the status rules change often, or a build change gives the server and
-the dashboard a common source folder.</p>
+<p><strong>Revisit when:</strong> matching inputs by name causes a wrong match in practice (then configure an
+id on both sides).</p>
 <p><strong>Evidence:</strong> a report for 50 pipelines with 10 outputs each is 91 KB and builds in 3.4 ms
 once the hashes are cached (31 ms the first time), cheap enough for the check Bunryu
 makes after every 5 s health poll to see whether a status changed. The first hash vector
@@ -1912,7 +2013,7 @@ incident as something that has happened.</li>
 <li><strong>A warning matches the other input faults</strong> (keyframe interval, frame rate): an
 encoder setting only the operator can fix, shown on the input where they look.</li>
 <li><strong>The yellow dot had no text</strong> because the card listed only the warnings the output
-reported itself, not the verdict behind the dot (<code>outputHealth</code>).</li>
+reported itself, not the verdict behind the dot.</li>
 </ul>
 <p><strong>Not adopted:</strong> de-interlacing in copy mode (it is a video encode, which is the cost
 the copy path avoids); making the video map required (an audio-only input is valid
