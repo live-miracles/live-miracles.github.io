@@ -37,7 +37,7 @@ const dist = path.join(root, 'dist');
 const siteUrl = `https://${organization}.github.io`;
 const siteName = 'Live Miracles';
 const siteDescription =
-    'Open-source tools for live production teams: restreaming, SRT bonding, vMix control, stream monitoring, live translation and multilingual event workflows.';
+    'Open-source tools for live production teams: restreaming, SRT bonding, vMix control, stream and network monitoring, live translation and event workflows.';
 const branch = 'master';
 // A project whose repository uses another default branch sets `branch` in projects.js.
 const branches = Object.fromEntries(

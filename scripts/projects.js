@@ -26,14 +26,15 @@ const categories = [
         tint: '#2a9d8f',
         pattern: 'shippo',
         name: 'Monitoring & operations',
-        summary: 'Keep an eye on many feeds and machines at once.',
+        summary: 'Keep an eye on feeds, machines and the studio network.',
     },
     {
         id: 'events',
         tint: '#d4a24c',
         pattern: 'kikko',
         name: 'Event workflows',
-        summary: 'Plan live events, manage stream keys and collect audience questions.',
+        summary:
+            'Run the work around a live event: schedule broadcasts and studio programs, manage stream keys, collect audience questions.',
     },
 ];
 
@@ -112,7 +113,7 @@ const projects = [
         name: 'Ping Monitor',
         category: 'monitoring',
         summary:
-            'Always-on latency, packet loss and traceroute monitor for a studio network: ping YouTube, Facebook, Zoom and your gateway, and see from the hop-by-hop path graph whether a glitch is your network, your ISP or the internet.',
+            'Always-on latency, packet loss and traceroute monitor for a studio network. Shows whether a glitch is your network, your ISP or the internet.',
         icon: '/assets/ping-monitor-logo.svg',
         download: `https://github.com/${organization}/ping-monitor/releases`,
         branch: 'main',
@@ -124,7 +125,6 @@ const projects = [
         summary:
             'Add every stream destination for an event through a guided form that stops wrong links, and see in plain words whether each one is live. Role-based access and live status from bunryu.',
         icon: '/assets/key-vault-logo.png',
-        website: 'https://livestream-key-vault.vercel.app',
     },
     {
         id: 'live-generator',
@@ -139,7 +139,7 @@ const projects = [
         name: 'Setu',
         category: 'events',
         summary:
-            'Internal operations app for studio and program requests, equipment inventory and staff roster scheduling, on Supabase and Vercel.',
+            'Setu (सेतु, "bridge"): installable web app for a studio team. Program requests and calendar, equipment inventory with QR labels, approvals and staff rosters, on Supabase and Vercel.',
         icon: '/assets/setu-logo.svg',
     },
     {
