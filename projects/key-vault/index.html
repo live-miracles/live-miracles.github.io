@@ -47,7 +47,7 @@
             </div>
             <p class="lead mt-5 max-w-3xl">Add every stream destination for an event through a guided form that stops wrong links, and see in plain words whether each one is live. Role-based access and live status from bunryu.</p>
             <div class="mt-7 flex flex-wrap gap-3"><a class="pill pill-primary" href="https://github.com/live-miracles/key-vault">GitHub</a><a class="pill " href="https://livestream-key-vault.vercel.app">Website</a></div>
-            <div class="text-muted caption mt-6 flex flex-wrap gap-x-5 gap-y-1"><span class="inline-flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 2.5 2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.31l-5.8 3.05 1.11-6.46-4.7-4.58 6.49-.94L12 2.5Z"/></svg>1</span><span class="inline-flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="6" cy="4" r="2"/><circle cx="18" cy="4" r="2"/><circle cx="12" cy="20" r="2"/><path d="M6 6v3a3 3 0 0 0 3 3h3m6-6v3a3 3 0 0 1-3 3h-3m0 0v6"/></svg>0</span><span>TypeScript</span><span>MIT license</span><span>Updated 2026-11-18</span></div>
+            <div class="text-muted caption mt-6 flex flex-wrap gap-x-5 gap-y-1"><span class="inline-flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 2.5 2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.31l-5.8 3.05 1.11-6.46-4.7-4.58 6.49-.94L12 2.5Z"/></svg>1</span><span class="inline-flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="6" cy="4" r="2"/><circle cx="18" cy="4" r="2"/><circle cx="12" cy="20" r="2"/><path d="M6 6v3a3 3 0 0 0 3 3h3m6-6v3a3 3 0 0 1-3 3h-3m0 0v6"/></svg>0</span><span>TypeScript</span><span>MIT license</span><span>Updated 2026-11-19</span></div>
             <div class="mt-4 flex flex-wrap gap-2"><span class="chip">live-streaming</span><span class="chip">pwa</span><span class="chip">rtmp</span><span class="chip">srt</span><span class="chip">stream-keys</span><span class="chip">supabase</span></div><nav class="border-line mt-8 flex gap-6 border-b" aria-label="Key Vault sections">
               <a href="/projects/key-vault/" class="tab" aria-current="page">Overview</a><a href="/projects/key-vault/docs/" class="tab">Documentation</a>
             </nav><div class="mt-10"><details class="bg-parchment text-muted caption mb-8 rounded-xl p-4">
@@ -79,8 +79,9 @@ not accept the stream key. Get a fresh key from the platform and update it here.
 When the input is not arriving, it says so, and nobody wastes time chasing the platform.</li>
 <li><strong>Changes are visible.</strong> A replaced link stays <strong>Not set up yet</strong> until the streaming server has it,
 and each card records who last changed it and when.</li>
-<li><strong>Access follows the work.</strong> People are owners, admins, editors or viewers, and editors and viewers
-can be limited to a single input, such as one language. The server decides what each person may do.</li>
+<li><strong>Access follows the work.</strong> Admins have every event. Everyone else is an editor or a viewer of an event, and
+can be limited to a single input, such as one language. The
+server decides what each person may do.</li>
 <li><strong>Installs like an app.</strong> Chrome, Edge and phones can add it to the desktop or home screen.</li>
 </ul>
 <h2 id="try-it">Try it</h2>
@@ -147,12 +148,22 @@ into a URL. The details are in <a href="/projects/key-vault/docs/bunryu-contract
 their free plans.</p>
 <h2 id="roles">Roles</h2>
 <ul>
-<li><strong>Owner</strong>: can edit or delete events and assign event admins. An owner anywhere is an owner everywhere.</li>
-<li><strong>Admin</strong>: manages an event&#39;s inputs and can add viewers, editors and other admins.</li>
 <li><strong>Editor</strong>: can add and edit destinations, and can be limited to one input.</li>
 <li><strong>Viewer</strong>: can only view destinations, and can be limited to one input.</li>
+<li><strong>Admin</strong>: has every event and can do everything: create, rename, delete and restore events, manage inputs,
+share events, and add or remove other admins.</li>
+<li><strong>Owner</strong>: an admin named in <code>KEY_VAULT_OWNER_EMAILS</code>. Owners cannot be added or removed in the app, and also
+open the bunryu settings and read bunryu&#39;s technical report.</li>
 </ul>
-<p>Anyone listed in <code>KEY_VAULT_OWNER_EMAILS</code> is an owner without a role.</p>
+<p>Editor and viewer are given per event, in <strong>Share</strong>. Admin is not: admins are listed once for the whole app, in the
+<strong>Admins</strong> dialog (bottom right), where the owners are shown as fixed. Share lists them too, read only.</p>
+<ul>
+<li>Any admin can add and remove the other admins in that dialog, except themselves.</li>
+<li>A deleted event is kept for 30 days, and an admin brings it back from <strong>History</strong> (bottom right, admins only).</li>
+<li><strong>History</strong> (admins only) keeps every change of the last 30 days: who, when, and the row before and after. An admin
+can open an event as it was right after any change, see every difference from now, and restore the whole event to
+it. A restore is itself recorded, so it can be undone. See <a href="https://github.com/live-miracles/key-vault/blob/master/docs/adr/0005-history-is-a-change-log.md">ADR 5</a>.</li>
+</ul>
 <h2 id="part-of-live-miracles">Part of Live Miracles</h2>
 <p>Key Vault is one of the tools the Live Miracles team builds to run large live events, alongside
 <a href="https://github.com/live-miracles/bunryu">bunryu</a> (the restreaming server it reports on),

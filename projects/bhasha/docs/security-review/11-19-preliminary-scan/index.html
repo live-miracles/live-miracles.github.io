@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>安全扫描（初版）— 2026-11-19 — Bhasha</title>
+    <meta name="description" content="范围：整个仓库，基线提交 d2f308c（master）。手工代码审阅：apps/api 全部路由、认证、数据层、LiveKit 令牌与 webhook、实时转录；apps/web 的危险 sink 与凭证处理；部署配置（Caddyfile、docker-compose.yml、Dockerfile、.env.example）；npm audit；仓库及 git 历史的密钥扫描。" />
+    <link rel="canonical" href="https://live-miracles.github.io/projects/bhasha/docs/security-review/11-19-preliminary-scan/" />
+    <meta property="og:site_name" content="Live Miracles" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="安全扫描（初版）— 2026-11-19 — Bhasha" />
+    <meta property="og:description" content="范围：整个仓库，基线提交 d2f308c（master）。手工代码审阅：apps/api 全部路由、认证、数据层、LiveKit 令牌与 webhook、实时转录；apps/web 的危险 sink 与凭证处理；部署配置（Caddyfile、docker-compose.yml、Dockerfile、.env.example）；npm audit；仓库及 git 历史的密钥扫描。" />
+    <meta property="og:url" content="https://live-miracles.github.io/projects/bhasha/docs/security-review/11-19-preliminary-scan/" />
+    <meta property="og:image" content="https://raw.githubusercontent.com/live-miracles/bhasha/master/apps/web/public/branding/logo.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/assets/logo.png" type="image/png" />
+    <link rel="alternate" type="application/rss+xml" title="Live Miracles blog" href="/blog/feed.xml" />
+    <script>
+      try {
+        var theme = localStorage.getItem('theme');
+        if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
+      } catch (e) {}
+    </script>
+    <link rel="stylesheet" href="/assets/styles.css" />
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <header class="topbar">
+        <nav class="caption mx-auto flex h-12 w-full max-w-[1024px] items-center justify-between gap-4 px-5 sm:px-6" aria-label="Site">
+          <a href="/" class="flex items-center gap-2.5 font-semibold" aria-label="Live Miracles">
+            <img src="/assets/logo.png" alt="" class="logo size-6" />
+            <span>Live Miracles</span>
+          </a>
+          <div class="flex items-center gap-5 sm:gap-7">
+            <a href="/#projects" class="text-muted hover:text-ink transition-colors">Projects</a>
+            <a href="/blog/" class="text-muted hover:text-ink transition-colors">Blog</a>
+            <div class="-mr-2 flex items-center gap-1">
+              <a href="https://github.com/live-miracles" class="icon-btn" aria-label="Live Miracles on GitHub" title="GitHub"><svg xmlns="http://www.w3.org/2000/svg" class="size-[18px]" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.79 23.39c.6.11.82-.26.82-.58v-2.02c-3.34.73-4.04-1.42-4.04-1.42-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.57A12 12 0 0 0 12 .5Z"/></svg></a>
+              <button type="button" id="theme-toggle" class="icon-btn theme-toggle" hidden><svg xmlns="http://www.w3.org/2000/svg" class="icon-sun size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32 1.41-1.41"/></svg><svg xmlns="http://www.w3.org/2000/svg" class="icon-moon size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg></button>
+            </div>
+          </div>
+        </nav>
+      </header>
+    <main class="flex-1"><div class="wash" style="--gx1: 14%; --gx2: 89%; --gx3: 41%; --gy1: -52px; --gy2: -6px; --gy1p: 23%; --gy2p: 10%; --px: 84%; --glow-1: var(--glow-b); --glow-2: var(--glow-a); --tint: #2f6fb3; --glow-a: color-mix(in srgb, #2f6fb3 30%, transparent); --pattern: url('/assets/patterns/seigaiha.svg')"><div class="mx-auto w-full max-w-[980px] px-5 py-10 sm:px-6 sm:py-14"><nav class="text-muted caption flex flex-wrap items-center gap-2" aria-label="Breadcrumb">
+              <a href="/projects/bhasha/" class="link-quiet hover:text-ink flex items-center gap-2"><img src="/assets/bhasha-logo.svg" alt="" class="logo size-5 " /><span>Bhasha</span></a>
+              <span aria-hidden="true">›</span><a class="link-quiet hover:text-ink" href="/projects/bhasha/docs/">Documentation</a><span aria-hidden="true">›</span><span>Security review</span>
+            </nav>
+            <h1 class="display display-lg mt-4">安全扫描（初版）— 2026-11-19</h1><nav class="border-line mt-8 flex gap-6 border-b" aria-label="Bhasha sections">
+              <a href="/projects/bhasha/" class="tab">Overview</a><a href="/projects/bhasha/docs/" class="tab" aria-current="page">Documentation</a>
+            </nav><details class="bg-parchment caption mt-6 rounded-xl p-4 lg:hidden">
+              <summary class="cursor-pointer font-semibold">Documentation menu</summary>
+              <div class="mt-3"><nav class="lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto" aria-label="Bhasha documentation">
+              <div class="">
+                
+                <ul class="caption"><li><a href="/projects/bhasha/docs/claude-run-harness/" class="link-quiet hover:text-ink block py-1 text-muted">Claude Run Harness</a></li><li><a href="/projects/bhasha/docs/deployment/" class="link-quiet hover:text-ink block py-1 text-muted">Deployment: one VM on Google Cloud, Cloudflare for DNS only</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Design</div>
+                <ul class="caption"><li><a href="/projects/bhasha/docs/design/README/" class="link-quiet hover:text-ink block py-1 text-muted">Translation App — UI Design</a></li></ul>
+              </div><div class="mt-5">
+                
+                <ul class="caption"><li><a href="/projects/bhasha/docs/event-day-checklist/" class="link-quiet hover:text-ink block py-1 text-muted">Event-Day Checklist</a></li><li><a href="/projects/bhasha/docs/hosting-options/" class="link-quiet hover:text-ink block py-1 text-muted">Hosting options: own data center vs Google Cloud vs Cloudflare</a></li><li><a href="/projects/bhasha/docs/listener-mobile-checklist/" class="link-quiet hover:text-ink block py-1 text-muted">Listener Mobile Checklist</a></li><li><a href="/projects/bhasha/docs/live-transcript/" class="link-quiet hover:text-ink block py-1 text-muted">Live transcript for translators</a></li><li><a href="/projects/bhasha/docs/livekit/" class="link-quiet hover:text-ink block py-1 text-muted">Brief: Live Translation App Using LiveKit Room Sharding</a></li><li><a href="/projects/bhasha/docs/load-testing/" class="link-quiet hover:text-ink block py-1 text-muted">Load testing the media path</a></li><li><a href="/projects/bhasha/docs/mobile-field-test-report/" class="link-quiet hover:text-ink block py-1 text-muted">Mobile Field Test Report</a></li><li><a href="/projects/bhasha/docs/plan-cloudflare-and-translator-access/" class="link-quiet hover:text-ink block py-1 text-muted">Plan: Cloudflare DNS + temporary translator access</a></li><li><a href="/projects/bhasha/docs/roadmap/" class="link-quiet hover:text-ink block py-1 text-muted">Roadmap: planned features</a></li><li><a href="/projects/bhasha/docs/runbook/" class="link-quiet hover:text-ink block py-1 text-muted">Production Debugging &amp; Recovery Runbook</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Security review</div>
+                <ul class="caption"><li><a href="/projects/bhasha/docs/security-review/11-19-fix-handbook/" class="link-quiet hover:text-ink block py-1 text-muted">安全修复执行手册（临时文档）— 2026-11-19</a></li><li><a href="/projects/bhasha/docs/security-review/11-19-preliminary-scan/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">安全扫描（初版）— 2026-11-19</a></li></ul>
+              </div>
+            </nav></div>
+            </details>
+            <div class="mt-10 grid gap-12 lg:grid-cols-[13rem_minmax(0,1fr)]">
+              <div class="hidden lg:block"><nav class="lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto" aria-label="Bhasha documentation">
+              <div class="">
+                
+                <ul class="caption"><li><a href="/projects/bhasha/docs/claude-run-harness/" class="link-quiet hover:text-ink block py-1 text-muted">Claude Run Harness</a></li><li><a href="/projects/bhasha/docs/deployment/" class="link-quiet hover:text-ink block py-1 text-muted">Deployment: one VM on Google Cloud, Cloudflare for DNS only</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Design</div>
+                <ul class="caption"><li><a href="/projects/bhasha/docs/design/README/" class="link-quiet hover:text-ink block py-1 text-muted">Translation App — UI Design</a></li></ul>
+              </div><div class="mt-5">
+                
+                <ul class="caption"><li><a href="/projects/bhasha/docs/event-day-checklist/" class="link-quiet hover:text-ink block py-1 text-muted">Event-Day Checklist</a></li><li><a href="/projects/bhasha/docs/hosting-options/" class="link-quiet hover:text-ink block py-1 text-muted">Hosting options: own data center vs Google Cloud vs Cloudflare</a></li><li><a href="/projects/bhasha/docs/listener-mobile-checklist/" class="link-quiet hover:text-ink block py-1 text-muted">Listener Mobile Checklist</a></li><li><a href="/projects/bhasha/docs/live-transcript/" class="link-quiet hover:text-ink block py-1 text-muted">Live transcript for translators</a></li><li><a href="/projects/bhasha/docs/livekit/" class="link-quiet hover:text-ink block py-1 text-muted">Brief: Live Translation App Using LiveKit Room Sharding</a></li><li><a href="/projects/bhasha/docs/load-testing/" class="link-quiet hover:text-ink block py-1 text-muted">Load testing the media path</a></li><li><a href="/projects/bhasha/docs/mobile-field-test-report/" class="link-quiet hover:text-ink block py-1 text-muted">Mobile Field Test Report</a></li><li><a href="/projects/bhasha/docs/plan-cloudflare-and-translator-access/" class="link-quiet hover:text-ink block py-1 text-muted">Plan: Cloudflare DNS + temporary translator access</a></li><li><a href="/projects/bhasha/docs/roadmap/" class="link-quiet hover:text-ink block py-1 text-muted">Roadmap: planned features</a></li><li><a href="/projects/bhasha/docs/runbook/" class="link-quiet hover:text-ink block py-1 text-muted">Production Debugging &amp; Recovery Runbook</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Security review</div>
+                <ul class="caption"><li><a href="/projects/bhasha/docs/security-review/11-19-fix-handbook/" class="link-quiet hover:text-ink block py-1 text-muted">安全修复执行手册（临时文档）— 2026-11-19</a></li><li><a href="/projects/bhasha/docs/security-review/11-19-preliminary-scan/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">安全扫描（初版）— 2026-11-19</a></li></ul>
+              </div>
+            </nav></div>
+              <div class="min-w-0"><details class="bg-parchment text-muted caption mb-8 rounded-xl p-4">
+              <summary class="text-ink cursor-pointer font-semibold">On this page</summary>
+              <ol class="mt-3 space-y-2">
+                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#汇总">汇总</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#m-1-听众-connectionid-对同房间所有人可见且它是唯一凭证中高">M-1 听众 connectionId 对同房间所有人可见，且它是唯一凭证（中高）</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#m-2-没有任何安全响应头中">M-2 没有任何安全响应头（中）</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#m-3-登录锁定可被恶意触发活动当天-dos中">M-3 登录锁定可被恶意触发（活动当天 DoS）（中）</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#m-4-公开-api-缺少请求体--字段长度上限限流可绕过中">M-4 公开 API 缺少请求体 / 字段长度上限，限流可绕过（中）</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#m-5-译员--审批员凭证哈希偏弱中低">M-5 译员 / 审批员凭证哈希偏弱（中低）</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#l-1-修改自己的密码没有最小长度低">L-1 修改自己的密码没有最小长度（低）</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#l-2-维护接口缺少角色检查低">L-2 维护接口缺少角色检查（低）</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#l-3-译员令牌没有限制发布源低">L-3 译员令牌没有限制发布源（低）</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#l-4-pbkdf2-迭代次数偏低低">L-4 PBKDF2 迭代次数偏低（低）</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#l-5-依赖漏洞低需要升级">L-5 依赖漏洞（低，需要升级）</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#l-6-容器以-root-运行低">L-6 容器以 root 运行（低）</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#l-7-转录相关的计费调用没有限额低">L-7 转录相关的计费调用没有限额（低）</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#信息--纵深防御">信息 / 纵深防御</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#已确认做得好的地方便于安全组快速过">已确认做得好的地方（便于安全组快速过）</a></li>
+              </ol>
+            </details><article class="readme min-w-0"><p>范围：整个仓库，基线提交 <code>d2f308c</code>（master）。手工代码审阅：<code>apps/api</code> 全部路由、认证、数据层、LiveKit 令牌与 webhook、实时转录；<code>apps/web</code> 的危险 sink 与凭证处理；部署配置（<code>Caddyfile</code>、<code>docker-compose.yml</code>、<code>Dockerfile</code>、<code>.env.example</code>）；<code>npm audit</code>；仓库及 git 历史的密钥扫描。</p>
+<p>未覆盖：动态渗透测试 / PoC 复现、LiveKit 服务端自身配置的深入审查（TURN 见 I-5）、移动端浏览器行为、<code>scripts/</code> 下的一次性 spike / 压测脚本。</p>
+<p>严重度是初步判断，供修复排序用，最终以安全组评审为准。</p>
+<h2 id="汇总">汇总</h2>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>严重度</th>
+<th>标题</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>M-1</td>
+<td>中高</td>
+<td>任何听众都能看到并冒用同房间其他听众的 connectionId，可把对方踢下线</td>
+</tr>
+<tr>
+<td>M-2</td>
+<td>中</td>
+<td>没有任何安全响应头（HSTS / CSP / frame-ancestors / nosniff）</td>
+</tr>
+<tr>
+<td>M-3</td>
+<td>中</td>
+<td>登录锁定可被外部恶意触发，活动当天能把译员 / 审批员 / admin 锁在门外</td>
+</tr>
+<tr>
+<td>M-4</td>
+<td>中</td>
+<td>公开听众 API 没有请求体大小和字段长度上限，按主体限流可被绕过 → 磁盘 / 内存 DoS</td>
+</tr>
+<tr>
+<td>M-5</td>
+<td>中低</td>
+<td>译员 / 审批员密码只做单轮 SHA-256；手动设置的译员密码没有长度下限</td>
+</tr>
+<tr>
+<td>L-1</td>
+<td>低</td>
+<td>修改自己的密码时没有 8 位最小长度校验</td>
+</tr>
+<tr>
+<td>L-2</td>
+<td>低</td>
+<td>维护接口 <code>backfill-device-labels</code> 缺少 admin 角色检查</td>
+</tr>
+<tr>
+<td>L-3</td>
+<td>低</td>
+<td>译员 LiveKit 令牌没有限制为仅麦克风（可推视频 / 屏幕共享）</td>
+</tr>
+<tr>
+<td>L-4</td>
+<td>低</td>
+<td>admin 密码 PBKDF2 只有 10 万次迭代</td>
+</tr>
+<tr>
+<td>L-5</td>
+<td>低</td>
+<td>依赖有已知漏洞（生产依赖：hono、@hono/node-server、react-router）</td>
+</tr>
+<tr>
+<td>L-6</td>
+<td>低</td>
+<td>容器以 root 运行</td>
+</tr>
+<tr>
+<td>L-7</td>
+<td>低</td>
+<td>任意 <code>user</code> 账号可无限制触发 ElevenLabs / Claude 的计费调用</td>
+</tr>
+<tr>
+<td>I-1…I-6</td>
+<td>信息</td>
+<td>纵深防御建议（见文末）</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="m-1-听众-connectionid-对同房间所有人可见且它是唯一凭证中高">M-1 听众 connectionId 对同房间所有人可见，且它是唯一凭证（中高）</h2>
+<p><strong>位置</strong>：<a href="https://github.com/live-miracles/bhasha/blob/master/apps/api/src/livekit/tokens.ts">tokens.ts:79-97</a>、<a href="https://github.com/live-miracles/bhasha/blob/master/apps/api/src/routes/listeners.ts">listeners.ts</a>（<code>/token</code>、<code>/leave</code>、<code>/heartbeat</code>、<code>/connected</code>、<code>/switch</code>、<code>/reconnect</code>）</p>
+<p><strong>问题</strong>：</p>
+<ol>
+<li>听众令牌的 identity 是 <code>listener:&lt;connectionId&gt;</code>，metadata 里也带 <code>connectionId</code>，但 grant 没设置 <code>hidden: true</code>。LiveKit 会把房间内所有参与者的 identity / metadata 推送给每个订阅者，所以同一语言房间里的任何听众都能拿到其他所有听众的 connectionId。</li>
+<li>公开的听众接口只凭 <code>connectionId</code>（加上公开的 slug / streamId）鉴权。</li>
+<li>LiveKit 文档明确写着：identity 在房间内唯一，同 identity 后加入者会把之前的连接<strong>自动断开</strong>。</li>
+</ol>
+<p><strong>利用</strong>：听众 A 进房后，从 <code>room.remoteParticipants</code> 读出所有 <code>listener:&lt;id&gt;</code>，对每个 id 调 <code>POST /api/listeners/token</code> 拿到同 identity 的令牌并加入房间，原听众就被 LiveKit 踢下线。单个 IP 每分钟允许 6000 次 join 类请求，脚本可以持续把整个语言频道的听众都踢掉。开启 access control 的活动里，攻击者需要先有一个已审批的 access token（见 I-3：token 可共享）。另外还可以调 <code>/leave</code> 或 <code>/switch</code>，篡改别人在管理端报表里的连接记录。</p>
+<p><strong>建议</strong>：</p>
+<ul>
+<li>听众 grant 加 <code>hidden: true</code>（规模上也有好处：数千听众不会互相广播参与者列表）。</li>
+<li>metadata 里去掉 <code>connectionId</code>，webhook 改为从 identity 解析。</li>
+<li>发一个仅创建者持有的 <code>connectionSecret</code>（随 <code>/request</code> 返回、只存哈希），<code>/token</code>、<code>/leave</code>、<code>/switch</code>、<code>/reconnect</code> 都要求带上它。</li>
+</ul>
+<blockquote>
+<p>尚未做实际复现，建议修复前先在本地写一个 e2e / 脚本 PoC 确认。</p>
+</blockquote>
+<h2 id="m-2-没有任何安全响应头中">M-2 没有任何安全响应头（中）</h2>
+<p><strong>位置</strong>：<a href="https://github.com/live-miracles/bhasha/blob/master/apps/api/src/index.ts">index.ts:83-87</a>（只设置了 <code>Accept-CH</code> / <code>Critical-CH</code>）、<a href="https://github.com/live-miracles/bhasha/blob/master/Caddyfile">Caddyfile</a></p>
+<p><strong>问题</strong>：应用和 Caddy 都没有设置 <code>Strict-Transport-Security</code>、<code>Content-Security-Policy</code>（含 <code>frame-ancestors</code>）、<code>X-Frame-Options</code>、<code>X-Content-Type-Options</code>、<code>Referrer-Policy</code>、<code>Permissions-Policy</code>。</p>
+<p><strong>影响</strong>：<code>/manage</code>、<code>/{slug}/approver</code>、<code>/{slug}/translate</code> 可以被第三方页面 iframe 嵌入，构成点击劫持（例如诱导点击“踢下线”、“撤销访问”、“生成新链接”）。也没有 CSP 作为 XSS 的第二道防线。</p>
+<p><strong>建议</strong>：在 Caddy 的两个站点块（或用 Hono 的 <code>secureHeaders()</code>）统一加：HSTS（<code>max-age=31536000</code>）、<code>frame-ancestors &#39;none&#39;</code>、<code>nosniff</code>、<code>Referrer-Policy: no-referrer</code>（译员链接的凭证在 fragment 里，fragment 本来就不会进 Referer，这里只是加固）、<code>Permissions-Policy: camera=(), microphone=(self)</code>，CSP 先以 report-only 模式上线（需要放行 LiveKit 的 <code>wss://rtc.&lt;domain&gt;</code> 和 ElevenLabs 的 WebSocket）。</p>
+<h2 id="m-3-登录锁定可被恶意触发活动当天-dos中">M-3 登录锁定可被恶意触发（活动当天 DoS）（中）</h2>
+<p><strong>位置</strong>：<a href="https://github.com/live-miracles/bhasha/blob/master/apps/api/src/auth/loginThrottle.ts">loginThrottle.ts:4-9</a>、<a href="https://github.com/live-miracles/bhasha/blob/master/apps/api/src/db/approverRepository.ts">approverRepository.ts:10-12</a></p>
+<table>
+<thead>
+<tr>
+<th>角色</th>
+<th>锁定键</th>
+<th>阈值</th>
+<th>键是否公开</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>译员</td>
+<td><code>programId + streamId</code></td>
+<td>15 分钟内 10 次 → 锁 15 分钟</td>
+<td>是：<code>streamId</code> 在公开的 <code>/api/public/programs/{slug}/status</code> 里</td>
+</tr>
+<tr>
+<td>审批员</td>
+<td>整个 program</td>
+<td>5 分钟内 100 次</td>
+<td>是：slug 印在 QR 上</td>
+</tr>
+<tr>
+<td>admin</td>
+<td>用户名</td>
+<td>15 分钟内 20 次 → 锁 15 分钟</td>
+<td>是：固定为 <code>admin</code></td>
+</tr>
+</tbody></table>
+<p><strong>影响</strong>：攻击者换 IP（或者只发错密码）就能让某个语言的译员在活动中途无法重新登录（例如断线、换设备之后），或者让审批员在入场高峰时登不上去。已有会话不受影响，所以影响限于需要重新登录的场景。</p>
+<p><strong>建议</strong>：用户 / 程序级的桶不要硬锁，改为渐进延迟或 CAPTCHA 类挑战。硬锁只保留在 IP 桶上。译员登录可以考虑只接受随机 token（256 bit，暴力破解不可行），这样可以放宽 streamId 桶。管理端加一个“解锁”操作。</p>
+<h2 id="m-4-公开-api-缺少请求体--字段长度上限限流可绕过中">M-4 公开 API 缺少请求体 / 字段长度上限，限流可绕过（中）</h2>
+<p><strong>位置</strong>：<a href="https://github.com/live-miracles/bhasha/blob/master/apps/api/src/http.ts">http.ts:38</a>（<code>request.json()</code> 无上限）、<a href="https://github.com/live-miracles/bhasha/blob/master/apps/api/src/routes/listeners.ts">listeners.ts</a>（<code>clientId</code>、<code>reason</code>、<code>streamId</code> 无长度校验；<code>user-agent</code> 和 <code>sec-ch-*</code> 头原样入库）、<a href="https://github.com/live-miracles/bhasha/blob/master/apps/api/src/security/rateLimiter.ts">rateLimiter.ts:93-96</a></p>
+<p><strong>问题</strong>：Hono / Node 和 Caddy 都没有 body size 限制。每主体限流以客户端自己选的 <code>clientId</code> 为键，换一个 <code>clientId</code> 就能绕过，所以实际只剩每 IP 6000 次/分钟的上限。</p>
+<p><strong>利用</strong>：单个 IP 每分钟能往 <code>listener_connections</code> / <code>listener_access</code> 写约 6000 行带超长字符串的数据（<code>/request</code>、<code>/access/claim</code>），一天约 860 万行，可以把 VM 磁盘写满，SQLite 也会变慢。大 body 本身也会占用内存。</p>
+<p><strong>建议</strong>：Caddy 加 <code>request_body { max_size 64KB }</code>（或用 Hono 的 <code>bodyLimit</code>）。所有听众字段做长度和字符集校验（<code>clientId</code> ≤ 64、<code>reason</code> 使用枚举、UA 截断到 512，和译员登录保持一致）。考虑给每个 program 的待审 claim / 未连接 connection 数设上限。</p>
+<h2 id="m-5-译员--审批员凭证哈希偏弱中低">M-5 译员 / 审批员凭证哈希偏弱（中低）</h2>
+<p><strong>位置</strong>：<a href="https://github.com/live-miracles/bhasha/blob/master/apps/api/src/db/translatorRepository.ts">translatorRepository.ts:483, 733-735</a>、<a href="https://github.com/live-miracles/bhasha/blob/master/apps/api/src/db/approverRepository.ts">approverRepository.ts:186, 396</a>、<a href="https://github.com/live-miracles/bhasha/blob/master/apps/api/src/domain/programs.ts">programs.ts:211, 247, 263</a></p>
+<p><strong>问题</strong>：</p>
+<ul>
+<li>哈希是 <code>sha256(password + pepper)</code>：没有每行 salt，只做一轮。<code>.env.example</code> 里的注释“in addition to its per-row salt”和实际实现不符。</li>
+<li>译员比较用的是 <code>!==</code>，不是恒定时间比较（审批员用了恒定时间比较）。</li>
+<li>手动设置的译员密码（创建 stream 时的 <code>translatorPassword</code>、<code>reset-password</code>）只要求非空，可以只有 1 个字符。</li>
+</ul>
+<p><strong>影响</strong>：随机生成的 256 bit token 不受影响。手动设置的弱密码加上 M-3 的阈值，在活动期间有被在线猜中的可能；如果 DB 和 pepper 同时泄露，可以离线快速破解。</p>
+<p><strong>建议</strong>：手动密码统一要求 ≥ 12 位（或者直接取消手动密码，只用生成的链接）；改用 PBKDF2 / scrypt 加每行 salt（复用 <code>UsersRepository</code> 的实现）；比较改为 <code>timingSafeEqual</code>；修正 <code>.env.example</code> 里的注释。</p>
+<h2 id="l-1-修改自己的密码没有最小长度低">L-1 修改自己的密码没有最小长度（低）</h2>
+<p><a href="https://github.com/live-miracles/bhasha/blob/master/apps/api/src/auth/adminAuth.ts">adminAuth.ts:239-242</a> 只检查非空，绕过了 <a href="https://github.com/live-miracles/bhasha/blob/master/apps/api/src/domain/users.ts">users.ts:9</a> 的 8 位规则（admin 也能把自己的密码改成 1 位）。另外这个接口验证 <code>currentPassword</code> 时没有走登录限流。<strong>建议</strong>：复用 <code>parsePassword</code>，并接入限流。</p>
+<h2 id="l-2-维护接口缺少角色检查低">L-2 维护接口缺少角色检查（低）</h2>
+<p><a href="https://github.com/live-miracles/bhasha/blob/master/apps/api/src/routes/admin.ts">admin.ts:1077-1088</a>：<code>POST /api/admin/maintenance/backfill-device-labels</code> 只要求登录，普通 <code>user</code> 账号也能对<strong>所有 program</strong> 的听众数据触发批量回填。数据是确定性派生的，危害有限，但属于越权。<strong>建议</strong>：加 <code>auth.role === &#39;admin&#39;</code> 检查。</p>
+<h2 id="l-3-译员令牌没有限制发布源低">L-3 译员令牌没有限制发布源（低）</h2>
+<p><a href="https://github.com/live-miracles/bhasha/blob/master/apps/api/src/livekit/tokens.ts">tokens.ts:58-64</a>：<code>canPublish: true</code> 但没设 <code>canPublishSources</code>。持有译员凭证的人可以向所有听众推送视频或屏幕共享，和“只传语音”的产品原则不符。<strong>建议</strong>：<code>canPublishSources: [TrackSource.MICROPHONE]</code>。</p>
+<h2 id="l-4-pbkdf2-迭代次数偏低低">L-4 PBKDF2 迭代次数偏低（低）</h2>
+<p><a href="https://github.com/live-miracles/bhasha/blob/master/apps/api/src/db/usersRepository.ts">usersRepository.ts:43</a>：10 万次。这是 Workers 时期的限制遗留，代码注释里已经标为待办。OWASP 当前对 PBKDF2-SHA256 的建议约为 60 万次。迭代次数按行存储，可以平滑升级（登录成功时重新哈希）。</p>
+<h2 id="l-5-依赖漏洞低需要升级">L-5 依赖漏洞（低，需要升级）</h2>
+<p><code>npm audit</code>：共 20 个（7 high，13 moderate）。只看生产依赖：</p>
+<ul>
+<li><code>hono</code> / <code>@hono/node-server</code>（moderate）：<code>serveStatic</code> 二次解码、反斜杠路径等。本项目的路由在 <code>serveStatic</code> 之前按 <code>url.pathname</code> 手工分发，静态目录下也没有受保护的文件，<strong>目前看不可利用</strong>，但建议升级。</li>
+<li><code>react-router(-dom)</code>（high）：RSC 模式下的 CSRF。本项目是纯 SPA，<strong>不适用</strong>。</li>
+</ul>
+<p>其余是开发依赖（vite、vitest、eslint、undici 等），只影响本地 dev server。<code>npm audit fix</code> 可以修掉大部分；vite 需要升级到 8.3.x。</p>
+<h2 id="l-6-容器以-root-运行低">L-6 容器以 root 运行（低）</h2>
+<p><a href="https://github.com/live-miracles/bhasha/blob/master/Dockerfile">Dockerfile</a> 的 runtime 阶段没有 <code>USER node</code>。<strong>建议</strong>：加上 <code>USER node</code>，并确保 <code>/data</code> 卷的属主正确。</p>
+<h2 id="l-7-转录相关的计费调用没有限额低">L-7 转录相关的计费调用没有限额（低）</h2>
+<p><a href="https://github.com/live-miracles/bhasha/blob/master/apps/api/src/routes/transcript.ts">transcript.ts</a>：任何拥有某个 program 的 <code>user</code> 账号都能无限调用 <code>/session</code>（铸造 ElevenLabs 单次 token）和推送 segment（每条触发每种语言一次 Claude 调用）。另外每个译员会话可以开任意多条 SSE 连接。<strong>建议</strong>：按用户 / program 做简单的速率和并发限制。</p>
+<hr>
+<h2 id="信息--纵深防御">信息 / 纵深防御</h2>
+<ul>
+<li><strong>I-1 CSRF</strong>：目前依赖 <code>SameSite=Lax</code> + JSON body，在没有同站点子域被攻破的前提下是安全的。建议对非 GET 的 <code>/api/*</code> 加 <code>Origin</code> / <code>Sec-Fetch-Site</code> 校验，并要求 <code>Content-Type: application/json</code>。Cookie 可以改用 <code>__Host-</code> 前缀。</li>
+<li><strong>I-2</strong> <code>GET /api/public/programs/{slug}/access/approved</code> 公开返回最近 90 秒内审批通过的 claimId。兑换 token 还需要 claimSecret，所以危害很低，但会暴露审批节奏。如果前端只是用它判断“我是否已被批准”，可以改为客户端带 claimSecret 查询自己的状态（<code>/access/status</code> 已经支持）。</li>
+<li><strong>I-3</strong> 听众 access token 不绑定设备，可以无限共享（一个人被审批后，把 token 分享出去，所有人都能进）。如果活动对准入有严格要求，需要在产品层面决定是否绑定 clientId 或限制并发。</li>
+<li><strong>I-4</strong> LiveKit 未配置时 <code>/api/livekit/webhook</code> 仍然开放，会用空 key 构造 <code>WebhookReceiver</code>。建议未配置时直接返回 503。</li>
+<li><strong>I-5</strong> LiveKit 内置 TURN（udp 3478）运行在 host 网络上。请安全组确认 TURN 不能中继到 <code>127.0.0.1</code> / <code>169.254.169.254</code>（GCP 元数据服务）/ 内网地址。</li>
+<li><strong>I-6</strong> <code>/api/admin/transcript/{slug}/…</code> 遇到非法百分号编码时 <code>decodeURIComponent</code> 会抛异常，返回 500（无安全影响）。</li>
+</ul>
+<h2 id="已确认做得好的地方便于安全组快速过">已确认做得好的地方（便于安全组快速过）</h2>
+<ul>
+<li>SQL 全部用参数化查询；动态拼接的部分只有常量列名 / 表名。</li>
+<li>会话 token 是高熵随机值，库里只存 <code>sha256(token + secret)</code>；修改密码、重置密码、生成新译员链接时都会吊销旧会话。</li>
+<li>program 级访问控制是集中的（<code>requireProgramAccess</code>），对不存在和无权访问的资源返回一致的 404；子资源查询都带 <code>program_id</code> 条件。</li>
+<li>听众 LiveKit grant 为只订阅（<code>canPublish: false</code>、<code>canPublishData: false</code>），webhook 有签名校验。</li>
+<li>译员链接的凭证放在 URL fragment 中，登录后会从地址栏清除。</li>
+<li>CSV 导出防了公式注入；React 端没有 <code>dangerouslySetInnerHTML</code> 之类的 sink。</li>
+<li>部署上：应用只绑定 <code>127.0.0.1</code>，LiveKit 信令只绑定 loopback，经 Caddy 统一入口；只信任 Caddy 覆盖过的 <code>X-Forwarded-For</code>；启动检查会拒绝占位符或过短的密钥和 dev LiveKit 凭证。</li>
+<li>仓库和 git 历史中未发现提交过的真实密钥或 <code>.env</code> 文件。</li>
+</ul>
+</article><a class="more caption mt-8 inline-block" href="https://github.com/live-miracles/bhasha/blob/master/docs/security-review/2026-11-19-preliminary-scan.md">Edit this page on GitHub</a><div class="mt-12 grid gap-4 sm:grid-cols-2">
+              <a class="panel link-quiet hover:bg-parchment p-5 transition-colors" href="/projects/bhasha/docs/security-review/11-19-fix-handbook/"><div class="text-muted caption">Previous</div><div class="font-semibold">安全修复执行手册（临时文档）— 2026-11-19</div></a>
+              
+            </div></div>
+            </div></div></div></main>
+    <footer class="caption waves text-muted border-line border-t pb-28">
+      <div class="mx-auto flex w-full max-w-[980px] flex-wrap items-center justify-between gap-x-6 gap-y-2 px-5 py-8 sm:px-6">
+        <span>Live Miracles · Open tools for live teams</span>
+        <span class="flex gap-5">
+          <a class="link-quiet" href="/blog/">Blog</a>
+          <a class="link-quiet" href="/blog/feed.xml">RSS</a>
+          <a class="link-quiet" href="https://github.com/live-miracles">GitHub</a>
+        </span>
+      </div>
+    </footer>
+    <dialog id="lightbox" class="lightbox" aria-label="Enlarged image">
+      <button type="button" class="lightbox-close" aria-label="Close image"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg></button>
+      <div class="lightbox-frame"><img alt="" /></div>
+    </dialog>
+    <script>
+      (function () {
+        var dialog = document.getElementById('lightbox');
+        if (!dialog || !dialog.showModal) return;
+        var shown = dialog.querySelector('img');
+        function zoomable(img) {
+          return !img.closest('a') && img.naturalWidth >= 300 && img.naturalHeight >= 100;
+        }
+        function mark(img) {
+          if (img.dataset.zoom || !zoomable(img)) return;
+          img.dataset.zoom = '1';
+          img.classList.add('zoomable');
+          img.tabIndex = 0;
+          img.setAttribute('role', 'button');
+          img.setAttribute('aria-label', 'Enlarge image: ' + (img.alt || 'screenshot'));
+        }
+        function open(img) {
+          shown.src = img.currentSrc || img.src;
+          shown.alt = img.alt;
+          shown.classList.remove('actual');
+          dialog.showModal();
+          dialog.scrollTo(0, 0);
+        }
+        document.querySelectorAll('.readme img').forEach(function (img) {
+          if (img.complete) mark(img);
+          else img.addEventListener('load', function () { mark(img); }, { once: true });
+        });
+        document.addEventListener('click', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom) open(img);
+        });
+        document.addEventListener('keydown', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom && (event.key === 'Enter' || event.key === ' ')) {
+            event.preventDefault();
+            open(img);
+          }
+        });
+        shown.addEventListener('click', function () {
+          shown.classList.toggle('actual');
+        });
+        dialog.addEventListener('click', function (event) {
+          if (event.target !== shown) dialog.close();
+        });
+      })();
+    </script>
+    <script>
+      (function () {
+        var button = document.getElementById('theme-toggle');
+        if (!button) return;
+        var root = document.documentElement;
+        function current() {
+          return root.dataset.theme === 'light' ? 'light' : 'dark';
+        }
+        function sync() {
+          var theme = current();
+          button.dataset.mode = theme;
+          button.setAttribute('aria-label', 'Switch to ' + (theme === 'dark' ? 'light' : 'dark') + ' theme');
+        }
+        button.hidden = false;
+        sync();
+        button.addEventListener('click', function () {
+          var next = current() === 'dark' ? 'light' : 'dark';
+          root.dataset.theme = next;
+          try {
+            localStorage.setItem('theme', next);
+          } catch (e) {}
+          sync();
+        });
+      })();
+    </script>
+  </body>
+</html>

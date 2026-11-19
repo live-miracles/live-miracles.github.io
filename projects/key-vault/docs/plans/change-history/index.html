@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Plan: change history and restoring an event to an earlier version (admins only) — Key Vault</title>
+    <meta name="description" content="Status: implemented (2026-11-19). The decisions and design below are as agreed; where the implementation differs, docs/adr/0005-history-is-a-change-log.md says how and why." />
+    <link rel="canonical" href="https://live-miracles.github.io/projects/key-vault/docs/plans/change-history/" />
+    <meta property="og:site_name" content="Live Miracles" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Plan: change history and restoring an event to an earlier version (admins only) — Key Vault" />
+    <meta property="og:description" content="Status: implemented (2026-11-19). The decisions and design below are as agreed; where the implementation differs, docs/adr/0005-history-is-a-change-log.md says how and why." />
+    <meta property="og:url" content="https://live-miracles.github.io/projects/key-vault/docs/plans/change-history/" />
+    <meta property="og:image" content="https://raw.githubusercontent.com/live-miracles/key-vault/master/docs/images/dashboard.webp" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/assets/logo.png" type="image/png" />
+    <link rel="alternate" type="application/rss+xml" title="Live Miracles blog" href="/blog/feed.xml" />
+    <script>
+      try {
+        var theme = localStorage.getItem('theme');
+        if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
+      } catch (e) {}
+    </script>
+    <link rel="stylesheet" href="/assets/styles.css" />
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <header class="topbar">
+        <nav class="caption mx-auto flex h-12 w-full max-w-[1024px] items-center justify-between gap-4 px-5 sm:px-6" aria-label="Site">
+          <a href="/" class="flex items-center gap-2.5 font-semibold" aria-label="Live Miracles">
+            <img src="/assets/logo.png" alt="" class="logo size-6" />
+            <span>Live Miracles</span>
+          </a>
+          <div class="flex items-center gap-5 sm:gap-7">
+            <a href="/#projects" class="text-muted hover:text-ink transition-colors">Projects</a>
+            <a href="/blog/" class="text-muted hover:text-ink transition-colors">Blog</a>
+            <div class="-mr-2 flex items-center gap-1">
+              <a href="https://github.com/live-miracles" class="icon-btn" aria-label="Live Miracles on GitHub" title="GitHub"><svg xmlns="http://www.w3.org/2000/svg" class="size-[18px]" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.79 23.39c.6.11.82-.26.82-.58v-2.02c-3.34.73-4.04-1.42-4.04-1.42-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.57A12 12 0 0 0 12 .5Z"/></svg></a>
+              <button type="button" id="theme-toggle" class="icon-btn theme-toggle" hidden><svg xmlns="http://www.w3.org/2000/svg" class="icon-sun size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32 1.41-1.41"/></svg><svg xmlns="http://www.w3.org/2000/svg" class="icon-moon size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg></button>
+            </div>
+          </div>
+        </nav>
+      </header>
+    <main class="flex-1"><div class="wash" style="--gx1: 9%; --gx2: 66%; --gx3: 49%; --gy1: -51px; --gy2: -43px; --gy1p: 21%; --gy2p: 7%; --px: 89%; --glow-1: var(--glow-b); --glow-2: var(--glow-a); --tint: #d4a24c; --glow-a: color-mix(in srgb, #d4a24c 30%, transparent); --pattern: url('/assets/patterns/kikko.svg')"><div class="mx-auto w-full max-w-[980px] px-5 py-10 sm:px-6 sm:py-14"><nav class="text-muted caption flex flex-wrap items-center gap-2" aria-label="Breadcrumb">
+              <a href="/projects/key-vault/" class="link-quiet hover:text-ink flex items-center gap-2"><img src="/assets/key-vault-logo.png" alt="" class="logo size-5 " /><span>Key Vault</span></a>
+              <span aria-hidden="true">›</span><a class="link-quiet hover:text-ink" href="/projects/key-vault/docs/">Documentation</a><span aria-hidden="true">›</span><span>Plans</span>
+            </nav>
+            <h1 class="display display-lg mt-4">Plan: change history and restoring an event to an earlier version (admins only)</h1><nav class="border-line mt-8 flex gap-6 border-b" aria-label="Key Vault sections">
+              <a href="/projects/key-vault/" class="tab">Overview</a><a href="/projects/key-vault/docs/" class="tab" aria-current="page">Documentation</a>
+            </nav><details class="bg-parchment caption mt-6 rounded-xl p-4 lg:hidden">
+              <summary class="cursor-pointer font-semibold">Documentation menu</summary>
+              <div class="mt-3"><nav class="lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto" aria-label="Key Vault documentation">
+              <div class="">
+                
+                <ul class="caption"><li><a href="/projects/key-vault/docs/user-guide/" class="link-quiet hover:text-ink block py-1 text-muted">User guide</a></li><li><a href="/projects/key-vault/docs/install-as-app/" class="link-quiet hover:text-ink block py-1 text-muted">Install Key Vault as an app</a></li><li><a href="/projects/key-vault/docs/setup/" class="link-quiet hover:text-ink block py-1 text-muted">Setting up Key Vault</a></li><li><a href="/projects/key-vault/docs/development/" class="link-quiet hover:text-ink block py-1 text-muted">Development</a></li><li><a href="/projects/key-vault/docs/bunryu-contract/" class="link-quiet hover:text-ink block py-1 text-muted">The bunryu link</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Plans</div>
+                <ul class="caption"><li><a href="/projects/key-vault/docs/plans/change-history/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">Plan: change history and restoring an event to an earlier version (admins only)</a></li></ul>
+              </div>
+            </nav></div>
+            </details>
+            <div class="mt-10 grid gap-12 lg:grid-cols-[13rem_minmax(0,1fr)]">
+              <div class="hidden lg:block"><nav class="lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto" aria-label="Key Vault documentation">
+              <div class="">
+                
+                <ul class="caption"><li><a href="/projects/key-vault/docs/user-guide/" class="link-quiet hover:text-ink block py-1 text-muted">User guide</a></li><li><a href="/projects/key-vault/docs/install-as-app/" class="link-quiet hover:text-ink block py-1 text-muted">Install Key Vault as an app</a></li><li><a href="/projects/key-vault/docs/setup/" class="link-quiet hover:text-ink block py-1 text-muted">Setting up Key Vault</a></li><li><a href="/projects/key-vault/docs/development/" class="link-quiet hover:text-ink block py-1 text-muted">Development</a></li><li><a href="/projects/key-vault/docs/bunryu-contract/" class="link-quiet hover:text-ink block py-1 text-muted">The bunryu link</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Plans</div>
+                <ul class="caption"><li><a href="/projects/key-vault/docs/plans/change-history/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">Plan: change history and restoring an event to an earlier version (admins only)</a></li></ul>
+              </div>
+            </nav></div>
+              <div class="min-w-0"><details class="bg-parchment text-muted caption mb-8 rounded-xl p-4">
+              <summary class="text-ink cursor-pointer font-semibold">On this page</summary>
+              <ol class="mt-3 space-y-2">
+                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#goal">Goal</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#decisions-already-made">Decisions already made</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#the-trash">The trash</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#data">Data</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#server">Server</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#typests">types.ts</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#operations">Operations</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#a-new-pure-module-supabasefunctions_sharedhistoryts">A new pure module: supabase/functions/_shared/history.ts</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#validation">Validation</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#store-both-supabase-storets-and-memory-storets">Store (both supabase-store.ts and memory-store.ts)</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#recording-ordinary-changes-in-operationsts">Recording ordinary changes, in operations.ts</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#frontend">Frontend</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#1-history-dialog-for-all-events">1. History dialog for all events</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#2-history-button-on-each-event">2. History button on each event</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#3-compare-view">3. Compare view</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#docs-to-update">Docs to update</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#tests">Tests</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#order-of-work">Order of work</a></li>
+              </ol>
+            </details><article class="readme min-w-0"><p>Status: implemented (2026-11-19). The decisions and design below are as agreed; where the
+implementation differs, <code>docs/adr/0005-history-is-a-change-log.md</code> says how and why.</p>
+<h2 id="goal">Goal</h2>
+<p>Like version history in Google Sheets, or checking out a commit in git, for each event:</p>
+<ul>
+<li>Admins can see every change of the last 30 days: who, when, what.</li>
+<li>They pick a point in an event&#39;s timeline and see the whole event as it was right after that
+change, with every difference from now marked. This is the net effect of all the changes made
+since.</li>
+<li>They restore the whole event to that point. Everything in that event goes back to how it was
+then: name, inputs and their order, destinations and people. Other events are never touched.</li>
+</ul>
+<p>Restoring one row and keeping the rest is out of scope. An admin who wants only one thing back
+can copy it by hand from the compare view.</p>
+<p>Editors and viewers see nothing new.</p>
+<p>What is recorded: destinations (keys) most of all, plus inputs, people (roles), events (added,
+renamed, deleted, restored) and the admin list. Expected volume: a few thousand changes a month.</p>
+<h2 id="decisions-already-made">Decisions already made</h2>
+<ol>
+<li><strong>A change log, not snapshots.</strong> One row per changed row, with who, when, and the row before
+and after as JSON. Any earlier version of an event is computed from it: start from the event
+as it is now and undo every newer change, newest first. Daily snapshots were rejected
+because they miss a change made and fixed within a day, and do not say who made it.</li>
+<li><strong>Restore a whole version, not single changes.</strong> Each change in an event&#39;s timeline is a
+version: the event as it was right after that change, like a commit. A restore makes the
+event equal to that version. Undoing one change in the middle is not offered, because later
+changes may depend on it.</li>
+<li><strong>One history for all events; restore is per event.</strong> The History dialog lists changes in
+every event, including deleted ones and admin changes. Compare and Restore always work on a
+single event.</li>
+<li><strong>Admins only</strong> (owners included). History holds old stream keys, which admins can already
+see, so nothing is masked on the server. The browser hides key values until clicked.</li>
+<li><strong>Kept 30 days</strong>, then deleted, like the trash. The timeline begins when recording starts.
+Nothing before that can be restored.</li>
+<li><strong>Recorded in <code>operations.ts</code>, not in database triggers.</strong><ul>
+<li>The API writes with the service role, so a trigger cannot know who made the change.</li>
+<li>With triggers, the demo&#39;s memory store would get no history (ADR 0004: the demo runs the
+real operations).</li>
+<li>Each operation already loads the old row, so &quot;before&quot; costs nothing.</li>
+</ul>
+</li>
+<li><strong>A restore is one transaction and is itself recorded.</strong> It applies completely or not at
+all. It appears in the timeline as one entry (&quot;Asha restored Winter Event to 18 Nov 18:05&quot;),
+which is itself a version, so it can be reverted the same way.</li>
+<li><strong>The trash keeps its storage, loses its own dialog.</strong> See &quot;The trash&quot; below.</li>
+</ol>
+<h2 id="the-trash">The trash</h2>
+<p>Keep the soft delete (<code>events.deleted_at</code>, <code>deleted_by</code>, <code>trashEvent</code>, <code>restoreEvent</code>,
+<code>purgeTrash</code>). It already works and is tested, it keeps the original ids, and bringing a whole
+event back is one update. Rebuilding it on the change log would need a migration for the events
+already in the trash, and nobody would see a difference.</p>
+<p>What changes:</p>
+<ul>
+<li>Deleting an event records a change (<code>kind: &#39;event&#39;</code>, <code>action: &#39;deleted&#39;</code>). Bringing it back
+from the trash records <code>action: &#39;restored&#39;</code>.</li>
+<li>The <strong>Trash</strong> button and dialog (<code>frontend/src/trash.ts</code>, <code>#trash-modal</code>, <code>#trash-btn</code>) are
+replaced by the <strong>History</strong> dialog.<ul>
+<li>Its &quot;Deleted events&quot; filter shows what the trash showed.</li>
+<li>Each deleted event&#39;s entry has <strong>Bring back event</strong>, which calls the existing <code>restoreEvent</code>
+operation.</li>
+<li>Once the event is back, its timeline and version restore work as usual.</li>
+</ul>
+</li>
+<li><code>getTrash</code> can be removed once the dialog no longer uses it. Only the frontend calls it.</li>
+<li><code>TRASH_DAYS = HISTORY_DAYS</code> (one constant, 30), so a deleted event and its history disappear
+together.</li>
+<li>Compare and version restore are refused for an event in the trash: &quot;Bring the event back
+first.&quot;</li>
+</ul>
+<h2 id="data">Data</h2>
+<p>New migration <code>supabase/migrations/20261119000000_changes.sql</code>, in the style of the existing
+ones: a comment at the top, RLS on with no policy, and revoke from anon and authenticated.</p>
+<pre><code class="language-sql">create table public.changes (
+  id bigint generated always as identity primary key,  -- also the order of changes
+  at timestamptz not null default now(),
+  by text not null,                       -- email of whoever did it
+  event_id uuid,                          -- no foreign key: history outlives the row. null for admins
+  kind text not null check (kind in (&#39;event&#39;, &#39;input&#39;, &#39;key&#39;, &#39;role&#39;, &#39;admin&#39;)),
+  row_id uuid not null,                   -- id of the event / input / key / role / admin
+  action text not null check (action in (&#39;added&#39;, &#39;edited&#39;, &#39;deleted&#39;, &#39;restored&#39;)),
+  before jsonb,                           -- null when added
+  after jsonb,                            -- null when deleted
+  batch uuid,                             -- same value for every row of one version restore
+  restored_to bigint                      -- for a version restore: the change it went back to
+);
+create index changes_event_id_idx on public.changes (event_id, id desc);
+create index changes_at_idx on public.changes (at);
+</code></pre>
+<ul>
+<li><code>before</code> and <code>after</code> hold the row in the shape of <code>types.ts</code> (<code>KeyRow</code>, <code>RoleRow</code>, <code>InputRow</code>,
+<code>EventRow</code>, <code>AdminRow</code>), in camelCase, so the code reads them without mapping.</li>
+<li>For an event deleted or brought back from the trash, store <code>{ name, destinations, inputs }</code>.
+The rows themselves stay in their tables.</li>
+<li>Input order: record <code>reorderInputs</code> as one <code>kind: &#39;input&#39;</code> change for each input whose
+<code>position</code> changed. The order is then part of a version and comes back with it.</li>
+</ul>
+<p>Extend <code>test/migrations-db-check.mjs</code> for the new table.</p>
+<h2 id="server">Server</h2>
+<h3 id="typests"><code>types.ts</code></h3>
+<ul>
+<li><code>export const HISTORY_DAYS = 30;</code> and <code>TRASH_DAYS = HISTORY_DAYS</code>.</li>
+<li><code>ChangeRow</code>: <code>{ id: number; at: string; by: string; event: string | null; kind; rowId; action; before; after; batch: string | null; restoredTo: number | null }</code>.</li>
+<li><code>ChangeView extends ChangeRow</code>, adding:<ul>
+<li><code>eventName</code>: the current name, or the last one known;</li>
+<li><code>rowName</code>: the destination, input or event name, or the person&#39;s email, taken from
+<code>after ?? before</code>.</li>
+</ul>
+</li>
+<li><code>EventState</code>: <code>{ event: EventRow; inputs: InputRow[]; keys: KeyRow[]; roles: RoleRow[] }</code>.</li>
+<li><code>RowDiff</code>: <code>{ kind: &#39;event&#39; | &#39;input&#39; | &#39;key&#39; | &#39;role&#39;; rowId; status: &#39;added&#39; | &#39;deleted&#39; | &#39;changed&#39;; then: row | null; now: row | null; fields: string[] }</code>.<ul>
+<li><code>status</code> is relative to now: <code>added</code> means added since then, so a restore removes it.</li>
+<li><code>fields</code> lists the fields that changed.</li>
+</ul>
+</li>
+<li><code>AppData.canSeeHistory: boolean</code>, true for admins and owners.</li>
+</ul>
+<h3 id="operations">Operations</h3>
+<p>All of these are for admins only, checked with a new <code>access.canSeeHistory()</code>.</p>
+<ul>
+<li><code>getHistory({ event?, before?, limit? }) → ChangeView[]</code><ul>
+<li>Newest first, paged by id: <code>before</code> is the smallest id already shown. Default limit 200.</li>
+<li>Without <code>event</code>, it returns every event plus admin changes.</li>
+<li>The rows of one restore share a <code>batch</code>, so the browser can fold them into one entry.</li>
+</ul>
+</li>
+<li><code>compareEvent({ event, atChange }) → { then: EventState; diff: RowDiff[] }</code><ul>
+<li>Returns the event as it was right after change <code>atChange</code> (this event&#39;s later changes
+undone) and its differences from now.</li>
+<li><code>atChange: 0</code> means &quot;start of history&quot;: the event as it was before its oldest recorded
+change.</li>
+<li>The change must belong to this event and be within 30 days.</li>
+</ul>
+</li>
+<li><code>restoreEventVersion({ event, atChange }) → { changed: number }</code><ul>
+<li>Recomputes <code>then</code> on the server, validates it, makes the event equal to it in one
+transaction, and records that as one batch.</li>
+<li>If <code>then</code> already equals now, it does nothing and says so.</li>
+</ul>
+</li>
+</ul>
+<h3 id="a-new-pure-module-supabasefunctions_sharedhistoryts">A new pure module: <code>supabase/functions/_shared/history.ts</code></h3>
+<p>Unit-test it on its own, with no store.</p>
+<ul>
+<li><code>stateAt(now: EventState, changes: ChangeRow[], atChange: number): EventState</code><ul>
+<li>Walk this event&#39;s changes with <code>id &gt; atChange</code>, newest first.</li>
+<li><code>added</code>: remove the row. <code>edited</code>, <code>deleted</code> or <code>restored</code>: put <code>before</code> back.</li>
+<li>Event <code>deleted</code>/<code>restored</code> entries do not apply here, because compare is refused while the
+event is in the trash.</li>
+<li><code>stateAt</code> works when the event itself was added after <code>atChange</code>: the result is an empty
+event. Refuse to restore to a point before the event existed (&quot;This event did not exist
+yet&quot;). Deleting the event is done with Delete.</li>
+</ul>
+</li>
+<li><code>diffStates(then, now): RowDiff[]</code><ul>
+<li>Match rows by id across inputs, keys and roles, and compare the event&#39;s name.</li>
+<li>Ignore <code>updatedBy</code>, <code>updatedAction</code> and <code>updatedAt</code> when deciding whether a key changed.</li>
+</ul>
+</li>
+<li><code>restoreSteps(then, now)</code>: the upserts and deletes that turn now into then. See the order
+under &quot;Store&quot;.</li>
+</ul>
+<h3 id="validation">Validation</h3>
+<p><code>then</code> was valid when it was current, but check it again, because the rules in
+<code>platforms.ts</code> may have changed since. Reuse the existing checks on the whole <code>then</code> event:</p>
+<ul>
+<li><code>destinationNameProblem</code>, <code>destinationProblem</code> and <code>findClash</code> for every key against the
+other keys;</li>
+<li>input names unique within the event;</li>
+<li>role emails valid.</li>
+</ul>
+<p>If anything fails, refuse the restore with the list of problems and change nothing.</p>
+<h3 id="store-both-supabase-storets-and-memory-storets">Store (both <code>supabase-store.ts</code> and <code>memory-store.ts</code>)</h3>
+<ul>
+<li><code>recordChanges(changes: Omit&lt;ChangeRow, &#39;id&#39; | &#39;at&#39;&gt;[], at: string): Promise&lt;void&gt;</code></li>
+<li><code>loadChanges(filter: { event?: string; before?: number; after?: number; limit?: number }): Promise&lt;ChangeRow[]&gt;</code></li>
+<li><code>purgeChanges(before: string): Promise&lt;void&gt;</code></li>
+<li><code>applyEventVersion(event: string, steps: Step[], changes: Omit&lt;ChangeRow, &#39;id&#39; | &#39;at&#39;&gt;[], at: string): Promise&lt;void&gt;</code>
+writes the rows and records the changes in one transaction.<ul>
+<li>A step upserts or deletes an event, input, key or role, using its original id, so history
+keeps pointing at the same rows.</li>
+<li>Supabase: a new RPC <code>apply_event_version(p_event uuid, p_steps jsonb, p_changes jsonb)</code> in
+the migration, granted to <code>service_role</code> only.</li>
+<li>Steps run in this order:<ol>
+<li>Upsert inputs, giving changed ones a temporary unique name first.
+<code>inputs_event_name_idx</code> is not deferrable, and two inputs may have swapped names.</li>
+<li>Upsert keys and roles.</li>
+<li>Delete keys and roles.</li>
+<li>Delete inputs.</li>
+<li>Set the final input names and positions.</li>
+<li>Update the event name.</li>
+</ol>
+</li>
+<li>Memory store: the same steps on its arrays, keeping the rules it already follows
+(cascading deletes, and an input that is still in use cannot be deleted).</li>
+</ul>
+</li>
+</ul>
+<h3 id="recording-ordinary-changes-in-operationsts">Recording ordinary changes, in <code>operations.ts</code></h3>
+<p>Every write operation calls this helper after its store write succeeds:</p>
+<pre><code class="language-ts">async function record(store, ctx, changes) {
+    try {
+        await store.recordChanges(
+            changes.map((c) =&gt; ({ ...c, by: ctx.email })),
+            new Date(ctx.nowMs).toISOString(),
+        );
+    } catch (error) {
+        console.error(&#39;Could not record the change:&#39;, error); // the change itself stands
+    }
+}
+</code></pre>
+<ul>
+<li>Wire it into <code>addEvent</code>, <code>editEvent</code>, <code>deleteEvent</code>, <code>restoreEvent</code>, <code>addAdmin</code>,
+<code>removeAdmin</code>, <code>addRole</code>, <code>editRole</code>, <code>deleteRole</code>, <code>addInput</code>, <code>editInput</code>, <code>reorderInputs</code>,
+<code>deleteInput</code>, <code>addKey</code>, <code>editKey</code> and <code>deleteKey</code>.</li>
+<li>&quot;Before&quot; is the row from <code>load()</code>; &quot;after&quot; is what was written.</li>
+<li>Skip an edit that changed nothing.</li>
+</ul>
+<p>Known gap: an ordinary change and its record are two calls, so a failure between them loses the
+record. That is acceptable for now. A version restore does not have this gap, because its
+transaction includes the record.</p>
+<p>Purge: in <code>getAllData</code>, next to <code>purgeTrash</code>, call <code>purgeChanges(now - HISTORY_DAYS)</code> inside the
+same try/catch.</p>
+<h2 id="frontend">Frontend</h2>
+<p>These are admin screens, so wording can be technical but must be clear (<code>DESIGN.md</code>, &quot;Who it is
+for&quot;). Follow the existing patterns:</p>
+<ul>
+<li><code>actions.ts</code> for calls;</li>
+<li><code>api-client.ts</code> (add the new operations to its list);</li>
+<li><code>main.ts</code> for <code>data-action</code> handlers;</li>
+<li><code>index.html</code> for dialogs;</li>
+<li><code>html.ts</code> for icons.</li>
+</ul>
+<h3 id="1-history-dialog-for-all-events">1. History dialog for all events</h3>
+<p><code>frontend/src/history.ts</code> replaces <code>trash.ts</code>, and the Trash button at the bottom right becomes
+History.</p>
+<ul>
+<li>Filter: All events, one event, Deleted events, Admins.</li>
+<li>Changes are grouped by day (&quot;Today&quot;, &quot;Yesterday&quot;, &quot;Tue 18 Nov&quot;).</li>
+<li>Changes by the same person to the same event within 10 minutes fold into one line (&quot;Priya
+changed 4 destinations in Winter Event&quot;), which opens to show each change.</li>
+<li>Each line says what happened in plain words, for example &quot;Ravi deleted Instagram English&quot; or
+&quot;Priya changed the stream key of YouTube Hindi&quot;.</li>
+<li>A version restore is one line: &quot;Asha restored Winter Event to 18 Nov 18:05&quot;.</li>
+<li>Clicking any change in a live event opens the compare view of that event at that change.</li>
+<li>Deleted events show <strong>Bring back event</strong> and how many days are left.</li>
+<li><strong>Load older</strong> at the bottom pages by id.</li>
+</ul>
+<h3 id="2-history-button-on-each-event">2. History button on each event</h3>
+<p>In the event header, next to Share and Rename, shown when <code>canSeeHistory</code>. It opens the compare
+view at the newest change.</p>
+<h3 id="3-compare-view">3. Compare view</h3>
+<p>This is the Google Sheets &quot;version history&quot; screen. It replaces the event&#39;s main area until it
+is closed.</p>
+<ul>
+<li><strong>Right side, the timeline:</strong><ul>
+<li>this event&#39;s changes, newest first, grouped and folded as in the History dialog;</li>
+<li>&quot;Now&quot; at the top and &quot;Start of history (date)&quot; at the bottom;</li>
+<li>the selected version highlighted.</li>
+</ul>
+</li>
+<li><strong>Top bar:</strong><ul>
+<li>what is shown, for example &quot;Version after Ravi deleted Instagram English · Tue 18 Nov
+18:05&quot;;</li>
+<li>a summary of what changed since then, for example &quot;2 added, 1 deleted, 3 changed since&quot;;</li>
+<li>the buttons <strong>Restore this version</strong> and <strong>Close</strong>.</li>
+</ul>
+</li>
+<li><strong>Main area:</strong> the event&#39;s normal cards and table, read only.<ul>
+<li>Render it from <code>then</code> with the existing renderers, with every <code>canChange</code> false.</li>
+<li>&quot;Only show differences&quot; is a toggle, on by default for big events.</li>
+<li>A row added since is marked &quot;added since&quot;.</li>
+<li>A row deleted since is shown faded with &quot;deleted since&quot;.</li>
+<li>A changed row highlights its changed fields and shows the current value next to the old
+one.</li>
+<li>Stream keys are shown as dots with a reveal button.</li>
+</ul>
+</li>
+<li><strong>Confirm before restoring:</strong> &quot;Restore Winter Event to how it was on Tue 18 Nov 18:05? 2
+destinations will be removed, 1 brought back and 3 changed. You can undo this from History.&quot;</li>
+<li><strong>If the server refuses,</strong> show its list of problems.</li>
+<li><strong>After a restore,</strong> reload the data and show the new restore entry at the top of the
+timeline.</li>
+</ul>
+<h2 id="docs-to-update">Docs to update</h2>
+<ul>
+<li><code>CONTEXT.md</code>: add <strong>History</strong> and <strong>Version</strong> to the glossary. Change <strong>Trash</strong> to say that
+deleted events are brought back from History.</li>
+<li><code>docs/1-user-guide.md</code> and <code>README.md</code>: replace the &quot;Deleted events (bin)&quot; text with History.</li>
+<li>New ADR <code>docs/adr/0005-history-is-a-change-log.md</code>, recording:<ul>
+<li>a log rather than snapshots;</li>
+<li>restoring whole versions rather than single changes;</li>
+<li>recording in operations rather than triggers;</li>
+<li>a restore being one transaction;</li>
+<li>the soft delete being kept.</li>
+</ul>
+</li>
+</ul>
+<h2 id="tests">Tests</h2>
+<ul>
+<li><code>history.ts</code>:<ul>
+<li><code>stateAt</code> for add, edit and delete sequences of each kind, input order, an event rename,
+and <code>atChange: 0</code>;</li>
+<li><code>diffStates</code> ignoring the <code>updated*</code> fields;</li>
+<li><code>restoreSteps</code> swapping two input names.</li>
+</ul>
+</li>
+<li><code>test/operations.test.mjs</code>:<ul>
+<li>each write records the right before and after, and reorder records positions;</li>
+<li>non-admins are denied <code>getHistory</code>, <code>compareEvent</code> and <code>restoreEventVersion</code>;</li>
+<li>a restore makes the event equal to <code>then</code>, including a destination deleted since and one
+added since;</li>
+<li>a restore never touches another event;</li>
+<li>a restore that fails validation is refused and changes nothing;</li>
+<li>a restore is recorded as one batch, and restoring to the version before it reverts it;</li>
+<li>compare is refused for an event in the trash, for a change of another event, and for a
+change older than 30 days;</li>
+<li>old changes are purged;</li>
+<li>a recording failure does not fail the operation.</li>
+</ul>
+</li>
+<li><code>test/actions.test.mjs</code> and <code>test/demo.test.mjs</code>: the trash tests move to History. Seed some
+history in <code>frontend/src/demo/demo-data.ts</code> so the demo shows a timeline.</li>
+<li><code>test/migrations-db-check.mjs</code>:<ul>
+<li>the table exists and RLS blocks anon;</li>
+<li><code>apply_event_version</code> rolls back fully when one step fails;</li>
+<li>two inputs can swap names.</li>
+</ul>
+</li>
+</ul>
+<h2 id="order-of-work">Order of work</h2>
+<ol>
+<li><strong>Recording.</strong> Migration, types, the recording Store methods in both stores, <code>record()</code>
+wired into every write, purge, <code>getHistory</code>, tests. Ship this first even with no UI: history
+only exists from the day recording starts.</li>
+<li><strong>History dialog.</strong> It replaces the Trash dialog, read only, with Bring back event for
+deleted events. Update the docs.</li>
+<li><strong>Compare.</strong> <code>history.ts</code> (<code>stateAt</code>, <code>diffStates</code>), <code>compareEvent</code>, and the read-only
+compare view with the timeline and differences.</li>
+<li><strong>Restore.</strong> Validation, <code>restoreSteps</code>, <code>apply_event_version</code>, <code>restoreEventVersion</code>, and
+the Restore button. Write the ADR.</li>
+</ol>
+</article><a class="more caption mt-8 inline-block" href="https://github.com/live-miracles/key-vault/blob/master/docs/plans/change-history.md">Edit this page on GitHub</a><div class="mt-12 grid gap-4 sm:grid-cols-2">
+              <a class="panel link-quiet hover:bg-parchment p-5 transition-colors" href="/projects/key-vault/docs/bunryu-contract/"><div class="text-muted caption">Previous</div><div class="font-semibold">The bunryu link</div></a>
+              
+            </div></div>
+            </div></div></div></main>
+    <footer class="caption waves text-muted border-line border-t pb-28">
+      <div class="mx-auto flex w-full max-w-[980px] flex-wrap items-center justify-between gap-x-6 gap-y-2 px-5 py-8 sm:px-6">
+        <span>Live Miracles · Open tools for live teams</span>
+        <span class="flex gap-5">
+          <a class="link-quiet" href="/blog/">Blog</a>
+          <a class="link-quiet" href="/blog/feed.xml">RSS</a>
+          <a class="link-quiet" href="https://github.com/live-miracles">GitHub</a>
+        </span>
+      </div>
+    </footer>
+    <dialog id="lightbox" class="lightbox" aria-label="Enlarged image">
+      <button type="button" class="lightbox-close" aria-label="Close image"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg></button>
+      <div class="lightbox-frame"><img alt="" /></div>
+    </dialog>
+    <script>
+      (function () {
+        var dialog = document.getElementById('lightbox');
+        if (!dialog || !dialog.showModal) return;
+        var shown = dialog.querySelector('img');
+        function zoomable(img) {
+          return !img.closest('a') && img.naturalWidth >= 300 && img.naturalHeight >= 100;
+        }
+        function mark(img) {
+          if (img.dataset.zoom || !zoomable(img)) return;
+          img.dataset.zoom = '1';
+          img.classList.add('zoomable');
+          img.tabIndex = 0;
+          img.setAttribute('role', 'button');
+          img.setAttribute('aria-label', 'Enlarge image: ' + (img.alt || 'screenshot'));
+        }
+        function open(img) {
+          shown.src = img.currentSrc || img.src;
+          shown.alt = img.alt;
+          shown.classList.remove('actual');
+          dialog.showModal();
+          dialog.scrollTo(0, 0);
+        }
+        document.querySelectorAll('.readme img').forEach(function (img) {
+          if (img.complete) mark(img);
+          else img.addEventListener('load', function () { mark(img); }, { once: true });
+        });
+        document.addEventListener('click', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom) open(img);
+        });
+        document.addEventListener('keydown', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom && (event.key === 'Enter' || event.key === ' ')) {
+            event.preventDefault();
+            open(img);
+          }
+        });
+        shown.addEventListener('click', function () {
+          shown.classList.toggle('actual');
+        });
+        dialog.addEventListener('click', function (event) {
+          if (event.target !== shown) dialog.close();
+        });
+      })();
+    </script>
+    <script>
+      (function () {
+        var button = document.getElementById('theme-toggle');
+        if (!button) return;
+        var root = document.documentElement;
+        function current() {
+          return root.dataset.theme === 'light' ? 'light' : 'dark';
+        }
+        function sync() {
+          var theme = current();
+          button.dataset.mode = theme;
+          button.setAttribute('aria-label', 'Switch to ' + (theme === 'dark' ? 'light' : 'dark') + ' theme');
+        }
+        button.hidden = false;
+        sync();
+        button.addEventListener('click', function () {
+          var next = current() === 'dark' ? 'light' : 'dark';
+          root.dataset.theme = next;
+          try {
+            localStorage.setItem('theme', next);
+          } catch (e) {}
+          sync();
+        });
+      })();
+    </script>
+  </body>
+</html>

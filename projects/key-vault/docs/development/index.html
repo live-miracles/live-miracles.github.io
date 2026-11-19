@@ -53,6 +53,9 @@
               <div class="">
                 
                 <ul class="caption"><li><a href="/projects/key-vault/docs/user-guide/" class="link-quiet hover:text-ink block py-1 text-muted">User guide</a></li><li><a href="/projects/key-vault/docs/install-as-app/" class="link-quiet hover:text-ink block py-1 text-muted">Install Key Vault as an app</a></li><li><a href="/projects/key-vault/docs/setup/" class="link-quiet hover:text-ink block py-1 text-muted">Setting up Key Vault</a></li><li><a href="/projects/key-vault/docs/development/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">Development</a></li><li><a href="/projects/key-vault/docs/bunryu-contract/" class="link-quiet hover:text-ink block py-1 text-muted">The bunryu link</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Plans</div>
+                <ul class="caption"><li><a href="/projects/key-vault/docs/plans/change-history/" class="link-quiet hover:text-ink block py-1 text-muted">Plan: change history and restoring an event to an earlier version (admins only)</a></li></ul>
               </div>
             </nav></div>
             </details>
@@ -61,6 +64,9 @@
               <div class="">
                 
                 <ul class="caption"><li><a href="/projects/key-vault/docs/user-guide/" class="link-quiet hover:text-ink block py-1 text-muted">User guide</a></li><li><a href="/projects/key-vault/docs/install-as-app/" class="link-quiet hover:text-ink block py-1 text-muted">Install Key Vault as an app</a></li><li><a href="/projects/key-vault/docs/setup/" class="link-quiet hover:text-ink block py-1 text-muted">Setting up Key Vault</a></li><li><a href="/projects/key-vault/docs/development/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">Development</a></li><li><a href="/projects/key-vault/docs/bunryu-contract/" class="link-quiet hover:text-ink block py-1 text-muted">The bunryu link</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Plans</div>
+                <ul class="caption"><li><a href="/projects/key-vault/docs/plans/change-history/" class="link-quiet hover:text-ink block py-1 text-muted">Plan: change history and restoring an event to an earlier version (admins only)</a></li></ul>
               </div>
             </nav></div>
               <div class="min-w-0"><details class="bg-parchment text-muted caption mb-8 rounded-xl p-4">
@@ -81,7 +87,7 @@ npm run format:check
 npm run test:db       # applies the migration to a throwaway Postgres in Docker
 </code></pre>
 <p>CI (<code>.github/workflows/deploy.yml</code>) runs the first three, builds both the demo and the real site, and fails on any of them. Run <code>npm run format</code> before you commit.</p>
-<p>Run <code>npm test</code> with a Node.js that can load <code>.ts</code> files (22.18 or newer, or the official build). Some Linux distributions ship a Node without TypeScript support, and the tests fail on the first import.</p>
+<p>Use Node 26, the version in <code>.nvmrc</code> (CI reads the same file). With <a href="https://github.com/Schniz/fnm">fnm</a>, run <code>fnm use</code> in the repository, or <code>fnm install</code> the first time. Tests need a Node that can load <code>.ts</code> files; some Linux distributions ship a Node without TypeScript support, and the tests fail on the first import.</p>
 <h2 id="build-the-real-site">Build the real site</h2>
 <p>Set the project URL and the <strong>publishable</strong> key (never a secret key; the build refuses one) and run <code>npm run build</code>. The result is in <code>dist/</code>. <code>npm run build:demo</code> builds the demo instead.</p>
 <pre><code class="language-bash">KEY_VAULT_SUPABASE_URL=https://&lt;project-ref&gt;.supabase.co KEY_VAULT_SUPABASE_PUBLISHABLE_KEY=&lt;publishable key&gt; npm run build
