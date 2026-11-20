@@ -152,7 +152,7 @@ JSON, <code>{ &quot;error&quot;: &quot;…&quot; }</code>; an unexpected failure
 <tr>
 <td>POST</td>
 <td><code>/api/pipelines</code></td>
-<td>Create pipeline (auto-names and assigns stream key) — 409 when every stream key is already assigned</td>
+<td>Create pipeline. With no body it is named <code>Pipeline &lt;id&gt;</code> and gets the next free stream key (409 when every key is already assigned). An optional body <code>{ name?, streamKeyId?, groupId? }</code> sets them: <code>streamKeyId</code> may be a key another pipeline already has (a shared key, which the dashboard flags), so it works when every key is assigned. Pipeline names are unique ignoring case: 409 for a name another pipeline has; 400 for a bad name, key or group</td>
 </tr>
 <tr>
 <td>GET</td>
@@ -162,7 +162,7 @@ JSON, <code>{ &quot;error&quot;: &quot;…&quot; }</code>; an unexpected failure
 <tr>
 <td>POST</td>
 <td><code>/api/pipelines/:id</code></td>
-<td>Rename pipeline <code>{ name }</code>, optionally reassign key <code>{ name, streamKeyId }</code> (<code>400</code> for an unknown <code>streamKeyId</code>) — a key change returns 409 while any of your outputs is running; a shared encode still running is stopped first, so the next one pulls the new key</td>
+<td>Rename pipeline <code>{ name }</code> (409 when another pipeline has that name, ignoring case; saving the pipeline&#39;s own name is always fine), optionally reassign key <code>{ name, streamKeyId }</code> (<code>400</code> for an unknown <code>streamKeyId</code>) — a key change returns 409 while any of your outputs is running; a shared encode still running is stopped first, so the next one pulls the new key</td>
 </tr>
 <tr>
 <td>DELETE</td>

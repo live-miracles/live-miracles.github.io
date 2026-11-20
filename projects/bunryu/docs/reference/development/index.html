@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="light dark" />
     <title>Development — Bunryu</title>
-    <meta name="description" content="Prerequisites: Node.js 22+ plus curl, unzip, tar, and xz-utils." />
+    <meta name="description" content="Prerequisites: Node.js 26+ plus curl, unzip, tar, and xz-utils." />
     <link rel="canonical" href="https://live-miracles.github.io/projects/bunryu/docs/reference/development/" />
     <meta property="og:site_name" content="Live Miracles" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Development — Bunryu" />
-    <meta property="og:description" content="Prerequisites: Node.js 22+ plus curl, unzip, tar, and xz-utils." />
+    <meta property="og:description" content="Prerequisites: Node.js 26+ plus curl, unzip, tar, and xz-utils." />
     <meta property="og:url" content="https://live-miracles.github.io/projects/bunryu/docs/reference/development/" />
     <meta property="og:image" content="https://live-miracles.github.io/assets/social/bunryu.png" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -81,7 +81,7 @@
                 <ul class="caption"><li><a href="/projects/bunryu/docs/reference/api/" class="link-quiet hover:text-ink block py-1 text-muted">REST API</a></li><li><a href="/projects/bunryu/docs/reference/development/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">Development</a></li><li><a href="/projects/bunryu/docs/reference/design-decisions/" class="link-quiet hover:text-ink block py-1 text-muted">Design decisions</a></li></ul>
               </div>
             </nav></div>
-              <div class="min-w-0"><article class="readme min-w-0"><p>Prerequisites: Node.js 22+ plus <code>curl</code>, <code>unzip</code>, <code>tar</code>, and <code>xz-utils</code>.</p>
+              <div class="min-w-0"><article class="readme min-w-0"><p>Prerequisites: Node.js 26+ plus <code>curl</code>, <code>unzip</code>, <code>tar</code>, and <code>xz-utils</code>.</p>
 <p><strong>1. Install dependencies and local media binaries:</strong></p>
 <pre><code class="language-bash">npm install
 npm run dev-install   # downloads SRS and pinned FFmpeg into ./objs
@@ -122,7 +122,12 @@ npm run typecheck
 npm run lint          # ESLint: unhandled promises, dead code
 npm run format:check
 </code></pre>
-<p><code>test/malformedInput.test.js</code> feeds seeded random mutations of <code>ss</code> output,
+<p>The tests are TypeScript. <code>npm run typecheck</code> checks them against the types in <code>src/</code>
+(<code>tsconfig.test.json</code>, <code>strict</code>), so a fake that no longer matches the real interface fails there
+instead of passing quietly. Build a partial fake in one typed factory with a single
+<code>as unknown as RealType</code> cast, not a cast at every use, and use <code>test/helpers/http.ts</code> to drive an
+Express app in an API test.</p>
+<p><code>test/malformedInput.test.ts</code> feeds seeded random mutations of <code>ss</code> output,
 destination URLs, names, the relay config and the relay <code>/status</code> JSON to their
 parsers and asserts they never throw, hang or return a malformed value. A failure
 prints the seed and input; turn it into a regression test next to the parser&#39;s own.

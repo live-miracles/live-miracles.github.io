@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Security — Key Vault</title>
+    <meta name="description" content="For the people who deploy Key Vault, and for anyone changing its code. It says what Key Vault protects, what you must set up yourself, what it does not do, and the rules for changing it safely." />
+    <link rel="canonical" href="https://live-miracles.github.io/projects/key-vault/docs/security/" />
+    <meta property="og:site_name" content="Live Miracles" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Security — Key Vault" />
+    <meta property="og:description" content="For the people who deploy Key Vault, and for anyone changing its code. It says what Key Vault protects, what you must set up yourself, what it does not do, and the rules for changing it safely." />
+    <meta property="og:url" content="https://live-miracles.github.io/projects/key-vault/docs/security/" />
+    <meta property="og:image" content="https://raw.githubusercontent.com/live-miracles/key-vault/master/docs/images/dashboard.webp" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/assets/logo.png" type="image/png" />
+    <link rel="alternate" type="application/rss+xml" title="Live Miracles blog" href="/blog/feed.xml" />
+    <script>
+      try {
+        var theme = localStorage.getItem('theme');
+        if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
+      } catch (e) {}
+    </script>
+    <link rel="stylesheet" href="/assets/styles.css" />
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <header class="topbar">
+        <nav class="caption mx-auto flex h-12 w-full max-w-[1024px] items-center justify-between gap-4 px-5 sm:px-6" aria-label="Site">
+          <a href="/" class="flex items-center gap-2.5 font-semibold" aria-label="Live Miracles">
+            <img src="/assets/logo.png" alt="" class="logo size-6" />
+            <span>Live Miracles</span>
+          </a>
+          <div class="flex items-center gap-5 sm:gap-7">
+            <a href="/#projects" class="text-muted hover:text-ink transition-colors">Projects</a>
+            <a href="/blog/" class="text-muted hover:text-ink transition-colors">Blog</a>
+            <div class="-mr-2 flex items-center gap-1">
+              <a href="https://github.com/live-miracles" class="icon-btn" aria-label="Live Miracles on GitHub" title="GitHub"><svg xmlns="http://www.w3.org/2000/svg" class="size-[18px]" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.79 23.39c.6.11.82-.26.82-.58v-2.02c-3.34.73-4.04-1.42-4.04-1.42-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.57A12 12 0 0 0 12 .5Z"/></svg></a>
+              <button type="button" id="theme-toggle" class="icon-btn theme-toggle" hidden><svg xmlns="http://www.w3.org/2000/svg" class="icon-sun size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32 1.41-1.41"/></svg><svg xmlns="http://www.w3.org/2000/svg" class="icon-moon size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg></button>
+            </div>
+          </div>
+        </nav>
+      </header>
+    <main class="flex-1"><div class="wash" style="--gx1: 9%; --gx2: 66%; --gx3: 49%; --gy1: -51px; --gy2: -43px; --gy1p: 21%; --gy2p: 7%; --px: 89%; --glow-1: var(--glow-b); --glow-2: var(--glow-a); --tint: #d4a24c; --glow-a: color-mix(in srgb, #d4a24c 30%, transparent); --pattern: url('/assets/patterns/kikko.svg')"><div class="mx-auto w-full max-w-[980px] px-5 py-10 sm:px-6 sm:py-14"><nav class="text-muted caption flex flex-wrap items-center gap-2" aria-label="Breadcrumb">
+              <a href="/projects/key-vault/" class="link-quiet hover:text-ink flex items-center gap-2"><img src="/assets/key-vault-logo.png" alt="" class="logo size-5 " /><span>Key Vault</span></a>
+              <span aria-hidden="true">›</span><a class="link-quiet hover:text-ink" href="/projects/key-vault/docs/">Documentation</a>
+            </nav>
+            <h1 class="display display-lg mt-4">Security</h1><nav class="border-line mt-8 flex gap-6 border-b" aria-label="Key Vault sections">
+              <a href="/projects/key-vault/" class="tab">Overview</a><a href="/projects/key-vault/docs/" class="tab" aria-current="page">Documentation</a>
+            </nav><details class="bg-parchment caption mt-6 rounded-xl p-4 lg:hidden">
+              <summary class="cursor-pointer font-semibold">Documentation menu</summary>
+              <div class="mt-3"><nav class="lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto" aria-label="Key Vault documentation">
+              <div class="">
+                
+                <ul class="caption"><li><a href="/projects/key-vault/docs/user-guide/" class="link-quiet hover:text-ink block py-1 text-muted">User guide</a></li><li><a href="/projects/key-vault/docs/install-as-app/" class="link-quiet hover:text-ink block py-1 text-muted">Install Key Vault as an app</a></li><li><a href="/projects/key-vault/docs/setup/" class="link-quiet hover:text-ink block py-1 text-muted">Setting up Key Vault</a></li><li><a href="/projects/key-vault/docs/development/" class="link-quiet hover:text-ink block py-1 text-muted">Development</a></li><li><a href="/projects/key-vault/docs/bunryu-contract/" class="link-quiet hover:text-ink block py-1 text-muted">The bunryu link</a></li><li><a href="/projects/key-vault/docs/security/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">Security</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Plans</div>
+                <ul class="caption"><li><a href="/projects/key-vault/docs/plans/change-history/" class="link-quiet hover:text-ink block py-1 text-muted">Plan: change history and restoring an event to an earlier version (admins only)</a></li></ul>
+              </div>
+            </nav></div>
+            </details>
+            <div class="mt-10 grid gap-12 lg:grid-cols-[13rem_minmax(0,1fr)]">
+              <div class="hidden lg:block"><nav class="lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto" aria-label="Key Vault documentation">
+              <div class="">
+                
+                <ul class="caption"><li><a href="/projects/key-vault/docs/user-guide/" class="link-quiet hover:text-ink block py-1 text-muted">User guide</a></li><li><a href="/projects/key-vault/docs/install-as-app/" class="link-quiet hover:text-ink block py-1 text-muted">Install Key Vault as an app</a></li><li><a href="/projects/key-vault/docs/setup/" class="link-quiet hover:text-ink block py-1 text-muted">Setting up Key Vault</a></li><li><a href="/projects/key-vault/docs/development/" class="link-quiet hover:text-ink block py-1 text-muted">Development</a></li><li><a href="/projects/key-vault/docs/bunryu-contract/" class="link-quiet hover:text-ink block py-1 text-muted">The bunryu link</a></li><li><a href="/projects/key-vault/docs/security/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">Security</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Plans</div>
+                <ul class="caption"><li><a href="/projects/key-vault/docs/plans/change-history/" class="link-quiet hover:text-ink block py-1 text-muted">Plan: change history and restoring an event to an earlier version (admins only)</a></li></ul>
+              </div>
+            </nav></div>
+              <div class="min-w-0"><details class="bg-parchment text-muted caption mb-8 rounded-xl p-4">
+              <summary class="text-ink cursor-pointer font-semibold">On this page</summary>
+              <ol class="mt-3 space-y-2">
+                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#what-it-protects">What it protects</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#how-it-protects-them">How it protects them</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#who-can-do-what">Who can do what</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#before-you-go-live">Before you go live</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#design-decisions-and-why">Design decisions and why</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#how-to-verify">How to verify</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#rules-for-changing-the-code">Rules for changing the code</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#reporting-a-problem">Reporting a problem</a></li>
+              </ol>
+            </details><article class="readme min-w-0"><p>For the people who deploy Key Vault, and for anyone changing its code. It says what Key Vault protects, what you must set up yourself, what it does not do, and the rules for changing it safely.</p>
+<h2 id="what-it-protects">What it protects</h2>
+<p>Stream keys and SRT links: credentials that let someone publish to a YouTube, Facebook or Instagram channel, or to a TV or CDN ingest point. They are not personal data. A leaked key lets an outsider broadcast on that channel until the key is replaced on the platform. Key Vault also holds the email addresses of the people who have access.</p>
+<h2 id="how-it-protects-them">How it protects them</h2>
+<ul>
+<li><strong>The browser never reaches the database.</strong> Every call goes to one server function (<code>api</code>), which checks the Google sign-in, applies the access rules in <code>supabase/functions/_shared/access.ts</code>, validates the input, and only then uses the database. Every table has row-level security with no policy, and the browser&#39;s database roles hold no privileges.</li>
+<li><strong>Access is per event, and can be limited to one input.</strong> A person with a role limited to one input never receives the other inputs&#39; destinations, keys or statuses: the server filters them out. Roles are read from the database on every request, so removing someone takes effect on their next call.</li>
+<li><strong>Roles are matched on a verified email.</strong> Sign-in is Google only, and the server refuses an email the provider has not verified.</li>
+<li><strong>bunryu never receives a stream key.</strong> It reports a keyed hash of each output&#39;s address. Its token and the hash secret are derived from one server secret under separate labels, and the token is compared in constant time. See <a href="/projects/key-vault/docs/bunryu-contract/#secrets">The bunryu link</a>.</li>
+<li><strong>The browser app is hardened.</strong> All dynamic text is HTML-escaped, links open only if they are <code>http</code> or <code>https</code>, and the page has a strict Content-Security-Policy (no inline script, no <code>eval</code>, no third-party script), HSTS, frame denial and <code>nosniff</code> (<code>vercel.json</code>). API answers are sent with <code>Cache-Control: no-store</code>, and the service worker never caches them.</li>
+<li><strong>Changes are recorded.</strong> Every change to an event, input, destination, person or admin is logged with who, when, and the row before and after, for 30 days (admins only).</li>
+</ul>
+<h2 id="who-can-do-what">Who can do what</h2>
+<p>Access is granted per event, and can be narrowed to one input. &quot;Granted scope&quot; is the event, or the one input within it, named in the person&#39;s role. The server enforces every row of this table (<code>access.ts</code>); the browser only shows or hides buttons.</p>
+<table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Owner</th>
+<th>Admin</th>
+<th>Editor</th>
+<th>Viewer</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>See events, inputs and destinations</td>
+<td>All events</td>
+<td>All events</td>
+<td>Granted scope only</td>
+<td>Granted scope only</td>
+</tr>
+<tr>
+<td>See and copy full stream keys</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Granted scope only</td>
+<td>Granted scope only</td>
+</tr>
+<tr>
+<td>Add, edit and delete destinations</td>
+<td>All</td>
+<td>All</td>
+<td>Granted scope only</td>
+<td>No</td>
+</tr>
+<tr>
+<td>See who has access to an event</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes, in their events</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Create, rename and delete events; manage inputs; share</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Add or remove admins</td>
+<td>Yes</td>
+<td>Yes (not themselves)</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Read the history, restore a version, restore deleted events</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Open the bunryu settings and secret</td>
+<td>Yes</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+</tr>
+</tbody></table>
+<p>Owners are named in <code>KEY_VAULT_OWNER_EMAILS</code> and cannot be added or removed in the app. Admins are managed in the app by other admins.</p>
+<h2 id="before-you-go-live">Before you go live</h2>
+<p>Some protections are settings in the Google, Supabase, Vercel and GitHub dashboards, not code. Check each one for your deployment.</p>
+<ul>
+<li><input disabled="" type="checkbox"> <strong>Limit who can sign in.</strong> If everyone who uses Key Vault has an account in your organisation&#39;s Google Workspace, set the OAuth consent screen&#39;s user type to <strong>Internal</strong> (Google Cloud → APIs &amp; Services → OAuth consent screen). Only your organisation can then sign in at all. Use External only if people sign in with outside addresses; they still see nothing until someone gives them a role.</li>
+<li><input disabled="" type="checkbox"> <strong>Require two-step verification.</strong> Key Vault trusts Google to prove who someone is, so enforce 2-Step Verification in your Google Workspace admin console. Turn it on for the GitHub accounts of everyone who can push to the repository too.</li>
+<li><input disabled="" type="checkbox"> <strong>Allow only Google in Supabase.</strong> In Authentication → Providers, enable Google and switch the Email provider off, so nobody can register an address they do not own.</li>
+<li><input disabled="" type="checkbox"> <strong>Set the redirect addresses.</strong> In Authentication → URL Configuration, list only your site (and <code>http://localhost:2837</code> for local development).</li>
+<li><input disabled="" type="checkbox"> <strong>Set the function secrets exactly.</strong> <code>KEY_VAULT_APP_ORIGIN</code> is your site&#39;s origin with no trailing slash. <code>KEY_VAULT_SECRET</code> is at least 32 random characters (<code>openssl rand -hex 32</code>) kept in a password manager, never in the repository. <code>KEY_VAULT_OWNER_EMAILS</code> lists only the people who run the streaming side.</li>
+<li><input disabled="" type="checkbox"> <strong>Give the site the publishable key only.</strong> The Vercel build takes the Supabase <strong>publishable</strong> key. The service-role key lives only in the Supabase function environment, and the build refuses a secret-style key.</li>
+<li><input disabled="" type="checkbox"> <strong>Keep the repository clean.</strong> Turn on secret scanning and push protection, and Dependabot alerts and security updates. If more than one person can push, protect the main branch (require a pull request and the build check), because a change to it deploys the database and the functions.</li>
+<li><input disabled="" type="checkbox"> <strong>Keep your deployment&#39;s address private.</strong> Do not put it in the repository, its description or its Website field, in issues, or on public pages. Anyone who clones the repository deploys their own.</li>
+<li><input disabled="" type="checkbox"> <strong>Offboard people.</strong> When someone leaves, remove their roles (or their admin entry) in Key Vault as well as suspending their Google account.</li>
+<li><input disabled="" type="checkbox"> <strong>Treat backups like the keys.</strong> A database dump contains every stream key. Store it as a secret and delete it when it is not needed.</li>
+<li><input disabled="" type="checkbox"> <strong>Replace a key that may have leaked.</strong> Make a new stream key on the platform and update the destination. Changing <code>KEY_VAULT_SECRET</code> means entering the new value in bunryu too; until both match, statuses show &quot;Not set up yet&quot;.</li>
+</ul>
+<h2 id="design-decisions-and-why">Design decisions and why</h2>
+<p>A scanner or a reviewer may flag the points below. Each is deliberate, with the reason and what limits the risk. Decide whether they fit your needs.</p>
+<ul>
+<li><strong>Stream keys are stored unencrypted by the application.</strong> The server has to return a key in clear to the people allowed to use it, and match it to bunryu&#39;s hashes, so it cannot be stored as a one-way hash. Supabase encrypts the disk and the connection. The browser has no database access (row-level security with no policy, privileges revoked), and only the server&#39;s service role can read the tables. The spreadsheet this replaces held the same keys in plain text for every editor. Encrypting them in the application, with a key only the server holds, would also protect dumps and backups; it is not built yet.</li>
+<li><strong>Everyone with access to an input sees and can copy its full stream keys</strong>, viewers included. Editors must read a key to check and fix it, and the viewer role exists so someone can verify a destination without being able to change it. Scope is per input and filtered on the server, so a team never receives another team&#39;s keys. A key exposed by mistake is replaced on its platform in seconds. Give access to the smallest scope that works.</li>
+<li><strong>Admins and owners see every event.</strong> A small streaming team runs every event. Owners are fixed in a server setting and cannot be changed in the app, admin changes are recorded, an admin cannot remove themselves, and only admins read the history.</li>
+<li><strong>History and the trash keep earlier stream keys for 30 days.</strong> This lets an accidental deletion during a live event be undone. Only admins can restore, and the data is removed automatically when the 30 days end.</li>
+<li><strong>Owners can reveal the server secret</strong> in the bunryu dialog. bunryu needs it to derive its token and hash secret, and owners are the people who set bunryu up. The server allows owners only. The secret is fetched when the dialog opens, masked until revealed, and cleared from the page when it closes.</li>
+<li><strong>The <code>ingest</code> function skips Supabase&#39;s user-token check</strong> and uses a shared bearer token, because bunryu is a server and has no Google account. The token is derived from a secret of at least 32 characters and compared in constant time. The body is capped at 1 MB and 1,000 entries, and the function can only write status rows and returns no data. Whoever holds the token can post false statuses, but cannot read anything or learn a stream key.</li>
+<li><strong>Supabase&#39;s Data API is on and reachable with the publishable key.</strong> The server function uses the service role through that same API, so it has to stay on. A direct call with the publishable key gets nothing, because every table has row-level security with no policy and the public roles hold no privileges. A table added later starts closed.</li>
+<li><strong>Editors see who else has access to their events</strong>, admins and owners included. Everyone is a colleague and needs to know who to ask. Viewers do not receive the list.</li>
+<li><strong>The duplicate check can say an address is &quot;already added in this event&quot;</strong> when the match is in an input the person cannot open. It has to look across the event, because the same address in two inputs would break the stream. It confirms only that an address identical to the one just typed exists, and returns no name, input or key.</li>
+<li><strong>bunryu&#39;s redacted status text reaches the browser.</strong> bunryu redacts URLs and secrets and the server redacts them again. The text is needed to write the plain-language advice that editors see. The technical text itself is available only through a Copy button meant for the streaming team, and as a hover detail for owners.</li>
+<li><strong>Reading a key is not logged</strong>, only changes are, for 30 days. The change history covers every write, reading is limited to people with a role, and the hosting platform&#39;s function logs record each API call.</li>
+<li><strong>There is no application-level rate limit.</strong> Every call needs a valid token for a verified Google account, the app has no password to guess, and the hosting platform applies its own limits.</li>
+<li><strong>The session token is kept in the browser&#39;s local storage</strong>, as is usual for Supabase Auth. The risk is script injection, which the Content-Security-Policy (no inline script, no <code>eval</code>, no third-party script) and output escaping prevent. Access tokens are short-lived and refreshed, and sign-in uses PKCE.</li>
+<li><strong>The Content-Security-Policy allows any <code>*.supabase.co</code> host</strong> for connections, because the project address is set at build time and the header file is static. Using it would first need script injection, which the policy prevents. Pinning the exact host is a configuration change.</li>
+<li><strong>Multi-factor sign-in is Google&#39;s, not the app&#39;s.</strong> Identity is delegated to Google, so your Workspace policy (2-Step Verification, session control, suspending leavers) applies. See the checklist above.</li>
+<li><strong>The repository is public.</strong> Security does not depend on the code being secret. No secret or key belongs in the repository or its history, and secrets live in the Supabase and Vercel settings.</li>
+<li><strong>A build-time development dependency may carry an advisory.</strong> The stylesheet build runs only on a developer or CI machine, on the project&#39;s own CSS, and is not shipped to users. The production dependencies are kept at no known vulnerabilities, and Dependabot tracks the rest.</li>
+<li><strong>Changes may be pushed straight to the main branch</strong> when one person maintains the project. Every push runs the tests, type checks and both builds, and the database deploy runs the tests again before it applies anything. When a second person can push, protect the branch (see the checklist).</li>
+</ul>
+<h2 id="how-to-verify">How to verify</h2>
+<p>Run these against your own deployment and checkout. Replace the placeholders.</p>
+<ul>
+<li><p><strong>The database is closed to the browser&#39;s key.</strong> This call, with the publishable key, should return a permission error and no rows:</p>
+<pre><code class="language-bash">curl -s &quot;https://&lt;project-ref&gt;.supabase.co/rest/v1/keys?select=*&quot;       -H &quot;apikey: &lt;publishable key&gt;&quot; -H &quot;Authorization: Bearer &lt;publishable key&gt;&quot;
+</code></pre>
+</li>
+<li><p><strong>No public privileges.</strong> In the Supabase SQL editor, <code>select has_table_privilege(&#39;anon&#39;, &#39;public.keys&#39;, &#39;select&#39;), has_table_privilege(&#39;authenticated&#39;, &#39;public.keys&#39;, &#39;select&#39;);</code> should return <code>false, false</code>. Repeat for each table in <code>public</code>.</p>
+</li>
+<li><p><strong>The security headers are served.</strong> <code>curl -sI https://your-app.vercel.app/</code> should show <code>Content-Security-Policy</code>, <code>Strict-Transport-Security</code>, <code>X-Frame-Options: DENY</code>, <code>X-Content-Type-Options: nosniff</code> and <code>Cross-Origin-Opener-Policy</code>.</p>
+</li>
+<li><p><strong>The rules hold.</strong> <code>npm test</code> runs the access, validation, history, status, hashing and rendering tests, <code>npm run typecheck</code> checks the types, and <code>npm run test:db</code> (needs Docker) applies every migration to a fresh Postgres and checks the schema and SQL functions.</p>
+</li>
+<li><p><strong>The dependencies are clean.</strong> <code>npm audit --omit=dev</code> should report no vulnerabilities in what ships to users.</p>
+</li>
+<li><p><strong>No secret is in the history.</strong> Search the whole history for key patterns, for example <code>git log -p --all -S&quot;sb_secret_&quot;</code>, and rely on the repository&#39;s secret scanning for the rest.</p>
+</li>
+<li><p><strong>Sign-in is limited.</strong> Sign in with an account outside your organisation. If the consent screen is Internal, Google refuses it. With any other account, the app shows nothing until you give it a role.</p>
+</li>
+</ul>
+<h2 id="rules-for-changing-the-code">Rules for changing the code</h2>
+<p>These keep the properties above true. Follow them in every change.</p>
+<ul>
+<li><strong>Decide who may do what in <code>access.ts</code> and in the operations, on the server.</strong> The browser only shows what the server tells it. Never add a permission check that exists only in the browser.</li>
+<li><strong>A new table</strong> turns on row level security, adds no policy for <code>anon</code> or <code>authenticated</code>, and revokes their privileges. A new function revokes <code>execute</code> from <code>public</code>. <code>npm run test:db</code> must still pass.</li>
+<li><strong>Never send a service-role or secret key to the browser</strong>, and never put a stream key in a URL, a log line or bunryu&#39;s report.</li>
+<li><strong>Escape all dynamic text</strong> with <code>escapeHtml</code> and open links only through <code>safeUrl</code>. Add no inline script, inline style, <code>eval</code> or third-party script: the Content-Security-Policy forbids them. A new external host needs a deliberate change to <code>vercel.json</code>.</li>
+<li><strong>Validate every field on the server</strong> with a length limit, and take roles, platforms and kinds from fixed lists. Keep the destination rules in the shared module, so the form and the server cannot disagree.</li>
+<li><strong>Record every write</strong> in the change history, and keep it out of the browser&#39;s reach.</li>
+<li><strong>Run the checks</strong> (<code>npm test</code>, <code>npm run typecheck</code>, <code>npm run format:check</code>, and <code>npm run test:db</code> for database changes) before you push.</li>
+</ul>
+<h2 id="reporting-a-problem">Reporting a problem</h2>
+<p>Do not open a public issue for a vulnerability. Tell the maintainers of the deployment, or the repository owners, privately.</p>
+</article><a class="more caption mt-8 inline-block" href="https://github.com/live-miracles/key-vault/blob/master/docs/6-security.md">Edit this page on GitHub</a><div class="mt-12 grid gap-4 sm:grid-cols-2">
+              <a class="panel link-quiet hover:bg-parchment p-5 transition-colors" href="/projects/key-vault/docs/bunryu-contract/"><div class="text-muted caption">Previous</div><div class="font-semibold">The bunryu link</div></a>
+              <a class="panel link-quiet hover:bg-parchment p-5 transition-colors sm:text-right" href="/projects/key-vault/docs/plans/change-history/"><div class="text-muted caption">Next</div><div class="font-semibold">Plan: change history and restoring an event to an earlier version (admins only)</div></a>
+            </div></div>
+            </div></div></div></main>
+    <footer class="caption waves text-muted border-line border-t pb-28">
+      <div class="mx-auto flex w-full max-w-[980px] flex-wrap items-center justify-between gap-x-6 gap-y-2 px-5 py-8 sm:px-6">
+        <span>Live Miracles · Open tools for live teams</span>
+        <span class="flex gap-5">
+          <a class="link-quiet" href="/blog/">Blog</a>
+          <a class="link-quiet" href="/blog/feed.xml">RSS</a>
+          <a class="link-quiet" href="https://github.com/live-miracles">GitHub</a>
+        </span>
+      </div>
+    </footer>
+    <dialog id="lightbox" class="lightbox" aria-label="Enlarged image">
+      <button type="button" class="lightbox-close" aria-label="Close image"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg></button>
+      <div class="lightbox-frame"><img alt="" /></div>
+    </dialog>
+    <script>
+      (function () {
+        var dialog = document.getElementById('lightbox');
+        if (!dialog || !dialog.showModal) return;
+        var shown = dialog.querySelector('img');
+        function zoomable(img) {
+          return !img.closest('a') && img.naturalWidth >= 300 && img.naturalHeight >= 100;
+        }
+        function mark(img) {
+          if (img.dataset.zoom || !zoomable(img)) return;
+          img.dataset.zoom = '1';
+          img.classList.add('zoomable');
+          img.tabIndex = 0;
+          img.setAttribute('role', 'button');
+          img.setAttribute('aria-label', 'Enlarge image: ' + (img.alt || 'screenshot'));
+        }
+        function open(img) {
+          shown.src = img.currentSrc || img.src;
+          shown.alt = img.alt;
+          shown.classList.remove('actual');
+          dialog.showModal();
+          dialog.scrollTo(0, 0);
+        }
+        document.querySelectorAll('.readme img').forEach(function (img) {
+          if (img.complete) mark(img);
+          else img.addEventListener('load', function () { mark(img); }, { once: true });
+        });
+        document.addEventListener('click', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom) open(img);
+        });
+        document.addEventListener('keydown', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom && (event.key === 'Enter' || event.key === ' ')) {
+            event.preventDefault();
+            open(img);
+          }
+        });
+        shown.addEventListener('click', function () {
+          shown.classList.toggle('actual');
+        });
+        dialog.addEventListener('click', function (event) {
+          if (event.target !== shown) dialog.close();
+        });
+      })();
+    </script>
+    <script>
+      (function () {
+        var button = document.getElementById('theme-toggle');
+        if (!button) return;
+        var root = document.documentElement;
+        function current() {
+          return root.dataset.theme === 'light' ? 'light' : 'dark';
+        }
+        function sync() {
+          var theme = current();
+          button.dataset.mode = theme;
+          button.setAttribute('aria-label', 'Switch to ' + (theme === 'dark' ? 'light' : 'dark') + ' theme');
+        }
+        button.hidden = false;
+        sync();
+        button.addEventListener('click', function () {
+          var next = current() === 'dark' ? 'light' : 'dark';
+          root.dataset.theme = next;
+          try {
+            localStorage.setItem('theme', next);
+          } catch (e) {}
+          sync();
+        });
+      })();
+    </script>
+  </body>
+</html>

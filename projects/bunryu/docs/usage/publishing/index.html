@@ -84,7 +84,7 @@
               <div class="min-w-0"><details class="bg-parchment text-muted caption mb-8 rounded-xl p-4">
               <summary class="text-ink cursor-pointer font-semibold">On this page</summary>
               <ol class="mt-3 space-y-2">
-                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#pipeline-buttons">Pipeline buttons</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#pipeline-groups">Pipeline groups</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#test-commands">Test commands</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#without-a-camera-file-or-destination">Without a camera, file or destination</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#from-a-file">From a file</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#checking-the-input">Checking the input</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#preview">Preview</a></li>
+                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#pipeline-buttons">Pipeline buttons</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#pipeline-groups">Pipeline groups</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#copy-a-configuration-to-another-server">Copy a configuration to another server</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#test-commands">Test commands</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#without-a-camera-file-or-destination">Without a camera, file or destination</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#from-a-file">From a file</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#checking-the-input">Checking the input</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#preview">Preview</a></li>
               </ol>
             </details><article class="readme min-w-0"><p>A <strong>pipeline</strong> is one live input. Creating a pipeline assigns it a stream key;
 the pipeline panel&#39;s <strong>Publish to this input</strong> card shows one input mode at a
@@ -204,6 +204,25 @@ drop a pipeline on a group to move it in. A pipeline&#39;s group can also be set
 dialog.</li>
 <li><strong>Collapse:</strong> the arrow folds a group; the choice is kept per browser.</li>
 </ul>
+<h2 id="copy-a-configuration-to-another-server">Copy a configuration to another server</h2>
+<p><strong>Settings → Configuration</strong> has two buttons that copy every group, pipeline and output of
+this server and add them to another one, to set up a second Bunryu without retyping:</p>
+<ul>
+<li><strong>Copy configuration</strong> puts the groups, each pipeline with its group, and its outputs on
+the clipboard. Stream keys are not copied: every server has its own.</li>
+<li><strong>Paste configuration</strong> adds what the clipboard has and this server lacks. Groups and
+pipelines are matched by name, ignoring case. A pipeline that exists gets the pasted
+outputs it does not have yet (an output whose destination it already uses is skipped, as
+when pasting outputs) and, only if it is in no group, the pasted group; one that is in a
+group stays there. A pipeline that does not exist is created, in its group (which is created
+too if missing), with the next free stream key. When the keys run out, the remaining new
+pipelines take the last key, and the message says so: they then share a key, which the
+dashboard flags, so give each its own. The pasted outputs start stopped, and nothing
+running is touched.</li>
+</ul>
+<p>Point each encoder at the new server&#39;s pipeline key and URL after pasting.</p>
+<p>Pipeline names are unique, ignoring case: creating or renaming a pipeline to a name another
+one has is refused.</p>
 <h2 id="test-commands">Test commands</h2>
 <p>These <code>ffmpeg</code> commands publish a test stream. Replace <code>localhost</code> with the
 server address, and <code>&lt;stream-key&gt;</code> / <code>&lt;passphrase&gt;</code> with the values from the
