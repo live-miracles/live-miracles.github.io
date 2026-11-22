@@ -96,7 +96,9 @@ copy button (two overlapping squares): server URL, key, stream ID or passphrase 
 that ask for them in separate fields, and the full publish URL (SRT Relay has two: <strong>Bonded URL</strong> for an encoder that sends over several links, and <strong>Single-link URL</strong> for an ordinary one). The stream key and
 stream ID are masked after their <code>keyNN_</code> prefix (<code>key01_••••••••</code>) and the passphrase
 entirely; the eye button beside each shows the real value for 15 s, for typing it
-into an encoder by hand. Copy always copies the real value.</p>
+into an encoder by hand. Copy always copies the real value. When another pipeline uses the
+same stream key (a primary and its backup, say), a yellow line under the rows names it:
+only one of them can publish at a time.</p>
 <table>
 <thead>
 <tr>
@@ -320,7 +322,9 @@ own about 20 s after nobody is watching (see
 </ul>
 <p>Publishes with an unknown stream key, or to any app other than <code>live</code>, are
 rejected by SRS before any output starts. Recent rejected attempts are listed under the pipeline list (&quot;Rejected
-publish attempts&quot;), which helps when an encoder is configured with a stale key;
+publish attempts&quot;), which helps when an encoder is configured with a stale key. The <strong>Status</strong> page,
+which hides that list, shows one red &quot;Rejected publishers&quot; card with their number; click it to open the Overview.
+An entry is forgotten five minutes after its last attempt;
 see <a href="/projects/bunryu/docs/operations/security/">Security</a> for details.</p>
 </article><a class="more caption mt-8 inline-block" href="https://github.com/live-miracles/bunryu/blob/master/docs/2-usage/1-publishing.md">Edit this page on GitHub</a><div class="mt-12 grid gap-4 sm:grid-cols-2">
               <a class="panel link-quiet hover:bg-parchment p-5 transition-colors" href="/projects/bunryu/docs/getting-started/comparison/"><div class="text-muted caption">Previous</div><div class="font-semibold">Comparison with alternatives</div></a>

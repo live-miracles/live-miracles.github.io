@@ -193,7 +193,8 @@ process.</p>
 <p><strong>Outputs that never stay up.</strong> If an output is stopped after 5 failed attempts in a
 row, none of which stayed up for 60 s, the stop is recorded with the count and the
 last failure (&quot;Stopped after 5 failed attempts. Last error: Connection refused&quot;),
-the output&#39;s card keeps showing that line in red, and its History button stays red,
+the output&#39;s card keeps showing that line in yellow (not a Problem: no tint, and no
+mark on the pipeline), and its History button stays yellow,
 until the output is started again. A plain stop, or a run that lasted at least 60 s,
 leaves no such mark. The stop also writes an <code>output-stopped-after-failures</code>
 diagnostics event.</p>

@@ -345,8 +345,8 @@ its own name. A rename shows in the next report, within a minute.</p>
 <ul>
 <li><strong><code>status</code></strong> is <code>running</code>, <code>warning</code>, <code>error</code> or <code>stopped</code>: the dashboard&#39;s output status
 (green, amber, red, grey) with its &quot;Problems&quot; rule for errors. A stop after repeated
-failed attempts is <code>error</code> with <code>stoppedAfterFailures: true</code>; a stop an operator chose
-is plain <code>stopped</code>. Advice about the configuration (an output that shares a destination
+failed attempts is <code>error</code> with <code>stoppedAfterFailures: true</code> (the dashboard shows it only as a yellow
+line on the output&#39;s card); a stop an operator chose is plain <code>stopped</code>. Advice about the configuration (an output that shares a destination
 with another, encoding tips) is not a warning here.</li>
 <li><strong><code>hash</code></strong> identifies the destination without revealing it: the first 32 hex characters of
 HMAC-SHA256 (keyed with the hash secret derived from the secret) of the URL, trimmed, with a lowercase scheme and host and
