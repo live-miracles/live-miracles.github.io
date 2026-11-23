@@ -23,6 +23,14 @@ Issues are tracked in GitHub Issues (`live-miracles/live-miracles.github.io`) vi
 
 Single-context: one `GLOSSARY.md` and `docs/adr/` at the repo root. See `docs/agents/domain.md`.
 
+## Private production links
+
+Never put a production or private deployment URL (for example the Vercel apps for
+Setu and Key Vault) anywhere public: not in a GitHub repo's "website"/homepage
+field, README, docs, a project's `website` in `scripts/projects.js`, or blog
+posts. Those apps are internal; their repos are listed without a site link. If a
+URL like this is already there, remove it and tell the user.
+
 ## Before committing
 
 Run `npx prettier --check .` and `npm test`, and `npm run build` for any change to
