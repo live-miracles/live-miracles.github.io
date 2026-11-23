@@ -285,8 +285,8 @@ were added and how many skipped. An output that would publish back into the pipe
 input (or into another pipeline that leads back to it) is added too, with a yellow line on
 its card.</p>
 <p>With many outputs, use the bar above the list: the filter box matches an output&#39;s name
-or destination as you type, and <strong>Problems</strong> keeps only outputs with an error or a
-warning (the same ones the card colors red or yellow). The badges count the pipeline&#39;s
+or destination as you type, and <strong>Problems</strong> keeps only outputs with a line on their card: an error,
+a warning or advice (see below), even the advice that is not counted as a problem. The badges count the pipeline&#39;s
 outputs: running and stopped are every output (so they add up to the total), while errors
 and warnings count the outputs with one, stopped or not. &quot;8 of 44&quot; shows how many the
 filter leaves. Drag a card anywhere to reorder the outputs. Its History, Edit and Delete buttons show when you hover the card (a touch screen shows them always). The filter is per browser, starts empty
@@ -298,11 +298,13 @@ happening to the stream: the same destination as another output, a destination t
 publishes back into this pipeline&#39;s own input (a loop; it cannot work), a track selection the
 input cannot supply (an RTMP input has one audio track; an SRT input may have fewer than you
 chose), Track 1 re-encoding the audio (costs CPU), SRT to RTMP with copy audio (can
-jitter), and an output that was stopped after repeated failed attempts (one short line: after how
-many attempts, to check the link and stream key, update the output and start it again). Each is one yellow line on the card and nowhere else: it does not tint the card or
-colour the dot, and it is not in the pipeline list, the Overview, the Status view or
-<strong>Problems</strong>, because you may do it on purpose (a backup pipeline with the same destination
-as the primary).</p>
+jitter), and an output that was stopped after repeated failed attempts (one short line under the error line,
+which already says after how many attempts: check the link and stream key, update the output and start it again). Each is one yellow line on the card. The output&#39;s dot on the <strong>Status</strong> view and its status
+on the <strong>Overview</strong> get a yellow outline (a stopped output is a grey dot with the outline
+instead of the dash), and the lines are listed in the dot&#39;s hover text and in the Overview&#39;s
+Issues column. It does not tint the card or change a colour, and it is not in the pipeline
+list or a count, and is not a Problem (only the card&#39;s <strong>Problems</strong> button lists it), because you may do it on purpose (a backup pipeline with the
+same destination as the primary).</p>
 <h3 id="overview">Overview</h3>
 <p>The dashboard&#39;s <strong>Overview</strong> lists every input and every output in two tables. Open it with
 the grid icon at the start of the navbar (the sidebar&#39;s warning and error counts open it on
@@ -327,7 +329,7 @@ Overview&#39;s Outputs table). The badges are:</p>
 input&#39;s (the output copies the video and the input&#39;s rate is known), or below 200 kbps.
 Without an input rate to compare with, only the 200 kbps floor applies. Its tooltip says
 which. A copy output at a few dozen kbps from a multi-Mbps input is sending audio only:
-look at the input&#39;s Issues (an interlaced input is one cause).</li>
+look at the input&#39;s Issues.</li>
 <li><strong>CPU</strong> (% of a core): always on an output with a video encode, to see what each one costs;
 on an output that copies the video, only from 50% of a core.</li>
 <li><strong>Memory</strong>, from 70% of the output&#39;s limit (yellow; red from 90%).</li>
@@ -353,16 +355,17 @@ line, as on the card) with <strong>Show full log</strong> to expand it, and its 
 whole log on the clipboard. After a stop, or with only warnings, the button keeps the normal color. The exception is an
 output you stop after 5 failed attempts in a row: its card keeps a yellow &quot;Stopped
 after 5 failed attempts&quot; line with the last error, and the History button stays yellow,
-until you start the output again. It is a note on that card, not a Problem: the card is not
-tinted, and the pipeline&#39;s dot, the Status view, the Overview&#39;s Issues and the Problems
-filter ignore it, since a few outputs are always broken.
+until you start the output again. It is a note, not a Problem: the card is not
+tinted, and the pipeline&#39;s dot, the counts, the Overview&#39;s Issues filter and the Problems
+filter ignore it, since a few outputs are always broken. The Status view and the Overview
+show it as a grey dot with a yellow outline.
 Under a known error or warning (connection refused, a rejected stream key, an
 unresolvable host, a failed SRT handshake, an output falling behind realtime) the card
 adds an info icon to the line; hover or focus it for a &quot;Hint:&quot; with what to check first.
-The pipeline alerts show their hint as a muted line. An error it has no advice for is
-shown as is.
-The card&#39;s status dot says the same on hover: every error and warning on the card, with
-the hint. A yellow dot always has a line on the card (for example &quot;Output bitrate is
+The input&#39;s and the relay&#39;s problems on the pipeline page, and the Overview&#39;s Issues column, get the same info icon. An error
+it has no advice for is shown as is.
+The card&#39;s status dot says the same on hover: every error and warning on the card,
+without the advice. A yellow dot always has a line on the card (for example &quot;Output bitrate is
 below 200 kb/s.&quot;); a healthy output&#39;s dot has no hover text.
 See <a href="/projects/bunryu/docs/operations/reliability/">Reliability</a> for what is detected and when
 outputs are restarted.</p>
@@ -370,10 +373,13 @@ outputs are restarted.</p>
 <p>The pulse icon in the navbar opens <strong>Status</strong>: every pipeline on one page, without the
 pipeline list. Each pipeline is a card in the sidebar&#39;s groups and order, with a large dot
 for its input and a small dot for each of its outputs: green is running, yellow a warning,
-red with a ring failed, and hollow stopped. The input dot also shows the SRT relay&#39;s warning
-or error (an unstable or lost leg, or the relay unable to reach SRS), even while no stream
-is live yet. Hover a dot for the output&#39;s name and what is
-wrong with it. A card with a warning or an error has a coloured border, and a pipeline with
+red with a ring failed, and hollow stopped. A yellow outline round a dot means the output has
+advice (see above), including one stopped after repeated failures, which is then a filled grey
+dot. The input dot also shows the SRT relay&#39;s warning
+or error (an unstable or lost leg, interval alerts such as dropped packets or loss, or the
+relay unable to reach SRS), even while no stream is live yet. Hover a dot for its name and
+every error and warning on it, as the pipeline list&#39;s hover does; the relay&#39;s
+forward to SRS is listed under its own heading on the input dot. A card with a warning or an error has a coloured border, and a pipeline with
 many outputs shows them as a block with its warning and failure counts.</p>
 <p>When SRS has refused publishers in the last five minutes, one red <strong>Rejected publishers</strong>
 card with their number sits above the pipelines (on both tabs); click it to open the Overview,
@@ -399,9 +405,10 @@ lines), loads when you open the page or press Refresh, and does not update itsel
 <p>The dashboard beeps for 5 s when something goes wrong that needs attention: an output
 crashes or is restarted by a watchdog, an input goes offline while its outputs are
 running, a pipeline raises an error alert, the server, SRS or the SRT relay becomes
-unreachable, or the host runs low on memory or disk space. It beeps when the problem appears, not while it lasts, and an output that
+unreachable, or the host&#39;s memory or disk reaches 90%. It beeps when the problem appears, not while it lasts, and an output that
 keeps failing beeps only when it starts failing. Warnings and the host CPU alert do not
-beep; the host alerts are listed in Server Logs under Events.</p>
+beep (nor does a host warning at 70%); the host alerts are banners across the top and rows in
+Server Logs under Events.</p>
 <p>The bell in the navbar mutes and unmutes the beeps; hover it for the volume slider.
 Both settings are kept in the browser and shared by tabs on the same site. The dashboard
 tries to enable audio when it opens. Some browsers require a click or key press before

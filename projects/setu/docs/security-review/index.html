@@ -70,7 +70,7 @@
               </ol>
             </details><article class="readme min-w-0"><p>Prepared for Security Review | 2 October 2026</p>
 <p>Setu is a small internal operations application used across teams for inventory requests, program scheduling, approvals, comments, and reference data. This document summarizes the current security controls and the intentional design choices relevant to rollout approval.</p>
-<p><strong>Review conclusion.</strong> No known Critical or High severity issue remains in the reviewed authentication, authorization, image upload, comment, idempotency, inventory, or scheduling paths. The application is suitable for a limited internal rollout.</p>
+<p><strong>Review conclusion.</strong> No known Critical or High severity issue remains in the reviewed authentication, authorization, image upload, comment, inventory, or scheduling paths. The application is suitable for a limited internal rollout.</p>
 <blockquote>
 <p>Automated scanners and reviewers without background on the app may flag items that are deliberate. Section 4 lists those items and explains why each is not a security risk in this context. If you change one of those areas, update this document in the same change.</p>
 </blockquote>
@@ -145,7 +145,7 @@
 <li>Only Admins can manage the allowed email-domain list and user roles.</li>
 <li>Request data is restricted by ownership, participation, and operational role.</li>
 <li>Comments are limited to request owners, participants, Admins, and Approvers, and authorship must match the authenticated user.</li>
-<li>Idempotency records are scoped to the authenticated user so one user cannot receive another user&#39;s cached result.</li>
+<li>A repeated create of a request or comment carries the client&#39;s id as the row id. A replay returns the caller&#39;s own row; a request or comment id already used by someone else is refused, so one user cannot read or take over another user&#39;s row through a replay.</li>
 </ul>
 <h3 id="image-upload-controls">Image upload controls</h3>
 <ul>
@@ -160,7 +160,9 @@
 <li>Request transitions execute through service-role-only PostgreSQL functions.</li>
 <li>Request, inventory, and scheduling rows are locked before state and availability checks.</li>
 <li>Concurrent issuance cannot commit more inventory than is available.</li>
-<li>Concurrent approvals cannot commit conflicting use of the same place.</li>
+<li>Concurrent approvals cannot commit conflicting use of the same place, and neither can concurrent edits: saving a program request re-checks place availability under the same place lock.</li>
+<li>Creating or editing a request writes the request and its items, sessions and participants in one transaction (<code>save_inventory_request_tx</code>, <code>save_program_request_tx</code>), so a failure leaves no half-saved request. An edit is refused if the request changed status after the caller&#39;s permission was checked. An edit never carries a status: any <code>status</code> sent by a client is ignored, because the status only changes through workflow actions.</li>
+<li>The request list functions (<code>list_*_requests_page</code>) are <code>SECURITY DEFINER</code> so they can match on a requester&#39;s name; each row is still limited to requests the caller may view (<code>can_view_*_request</code>).</li>
 <li>Status changes and activity comments commit in one transaction and roll back together on failure.</li>
 </ul>
 <h2 id="4-intentional-design-decisions">4 Intentional Design Decisions</h2>

@@ -303,59 +303,72 @@ colours, so a dead Bunryu does not leave keys looking green.</li>
 </ul>
 <h2 id="host-resource-alerts">Host resource alerts</h2>
 <p>The health poll (every 5 s) watches the host itself, because an overloaded or full host
-degrades every pipeline at once and no single output&#39;s error explains it. Each alert
-has a start and an end threshold that differ, so a reading hovering near the line is
-one episode, and each start and end is written three ways: a journal line
-(<code>[host] ...</code>), a diagnostics event with the numbers, and a row in the <strong>Events</strong>
-table of the dashboard&#39;s Server Logs view (the last 200 host and service rows, kept in
-memory, so the diagnostics are the record that survives a restart).</p>
+degrades every pipeline at once and no single output&#39;s error explains it. CPU, memory
+and disk each have two levels on the same figure the dashboard&#39;s top bar shows (percent
+used): a <strong>warning from 70%</strong> and an <strong>error from 90%</strong>. Production is meant to stay under
+65%, so a warning ends only once the figure is back under 65% and an error once it is
+under 85%; in between an open alert stays open, so a reading hovering near a line is one
+episode. Each start and end is written three ways: a journal line (<code>[host] ...</code>), a
+diagnostics event with the numbers, and a row in the <strong>Events</strong> table of the dashboard&#39;s
+Server Logs view (the last 200 host and service rows, kept in memory, so the diagnostics
+are the record that survives a restart).</p>
 <table>
 <thead>
 <tr>
 <th>Alert</th>
-<th>Starts when</th>
+<th>Warning / error when</th>
 <th>Ends when</th>
 <th>Events</th>
 </tr>
 </thead>
 <tbody><tr>
 <td>CPU</td>
-<td>CPU pressure (10 s average) is 50% or more for 30 s</td>
+<td>the host is 70% / 90% busy for 30 s</td>
+<td>under 65% / 85% for 60 s</td>
+<td><code>host-cpu-high</code>, <code>host-cpu-critical</code>, <code>host-cpu-recovered</code></td>
+</tr>
+<tr>
+<td>CPU saturated</td>
+<td>CPU pressure (10 s average) is 50% or more for 30 s (error)</td>
 <td>below 30% for 60 s</td>
-<td><code>host-cpu-high</code>, <code>host-cpu-recovered</code></td>
+<td><code>host-cpu-saturated</code>, <code>host-cpu-pressure-recovered</code></td>
 </tr>
 <tr>
 <td>Memory</td>
-<td>available memory under 15% of total</td>
-<td>back at 20%</td>
-<td><code>host-memory-low</code>, <code>host-memory-recovered</code></td>
+<td>70% / 90% of total memory used</td>
+<td>under 65% / 85%</td>
+<td><code>host-memory-high</code>, <code>host-memory-critical</code>, <code>host-memory-recovered</code></td>
 </tr>
 <tr>
 <td>Disk</td>
-<td>free space under 10% of the filesystem</td>
-<td>back at 15%</td>
-<td><code>host-disk-low</code>, <code>host-disk-recovered</code></td>
+<td>70% / 90% of the filesystem used</td>
+<td>under 65% / 85%</td>
+<td><code>host-disk-high</code>, <code>host-disk-critical</code>, <code>host-disk-recovered</code></td>
 </tr>
 </tbody></table>
 <ul>
-<li><strong>CPU pressure</strong> is the share of the last 10 s in which a runnable task waited for a
-CPU (<code>/proc/pressure/cpu</code>, &quot;some&quot;). It measures starvation, not busyness: a host that
-runs its encodes at 100% with nothing waiting reads low, which is healthy. The start
-event names the busiest managed processes (SRS, the control plane, the outputs&#39;
-FFmpeg); the end event has the peak and how long it lasted. On a kernel without PSI
-there is no CPU alert.</li>
-<li><strong>Memory</strong> is <code>MemAvailable</code> (free plus reclaimable cache). The start event names the
-five largest processes by RSS.</li>
+<li><strong>CPU</strong> has two signals. <em>Busy</em> is the share of the machine in use, what the top bar
+shows and what the 65% target is measured against. <em>Pressure</em> is the share of the last
+10 s in which a runnable task waited for a CPU (<code>/proc/pressure/cpu</code>, &quot;some&quot;): it
+measures starvation and stays low until the machine is full, so it is the error that
+says work is already being held back. The start event names the busiest managed
+processes (SRS, the control plane, the outputs&#39; FFmpeg); the end event has the peak and
+how long it lasted. On a kernel without PSI there is only the busy alert.</li>
+<li><strong>Memory</strong> is used = total minus <code>MemAvailable</code> (free plus reclaimable cache). The start
+event names the five largest processes by RSS.</li>
 <li><strong>Disk</strong> checks the filesystem holding the database (which also holds the
 diagnostics and HLS previews) and the root filesystem (journald, SRS logs), once
 each when they are the same one. The event carries the path, so it says which filled.
 The navbar&#39;s Disk figure is the fuller of the same two filesystems.</li>
 </ul>
-<p>The open alerts are listed in <code>/api/health</code> as <code>hostAlerts</code>, and the dashboard beeps
-once when the memory or disk alert opens (not CPU, whose thresholds are not yet proven
-on production, so a beep on a healthy event would get the sound muted). They are
-reporting only: nothing is stopped or restarted for them. Why these
-thresholds: <a href="/projects/bunryu/docs/reference/design-decisions/#host-resource-alerts-cpu-pressure-memory-and-disk">Host resource alerts</a>.</p>
+<p>The open alerts are listed in <code>/api/health</code> as <code>hostAlerts</code>. The dashboard shows each as a
+banner and colours the top bar&#39;s CPU, RAM and Disk from them (yellow for a warning, red for
+an error), so the bar, the banner and the events always agree. The CPU colour therefore
+appears after the 30 s the alert needs, not on a single busy sample. The dashboard beeps
+once when a memory or disk <strong>error</strong> opens (a warning is silent), not for CPU, whose
+thresholds are not yet proven on production. The alerts are reporting only: nothing is
+stopped or restarted for them. Why these thresholds:
+<a href="/projects/bunryu/docs/reference/design-decisions/#host-resource-alerts-cpu-memory-and-disk">Host resource alerts</a>.</p>
 <h2 id="falling-behind-realtime">Falling behind realtime</h2>
 <p>An output that processes media slower than realtime falls further behind live every
 second: a slow encode or destination, or an input delivering slowly. The output
@@ -556,10 +569,7 @@ cost and the reasons are in the
 as <code>1080i25tff</code> in the pipeline panel), the pipeline gets an <code>input-interlaced</code>
 warning alert for as long as that publisher is connected. It is reporting only:
 nothing is restarted or converted. YouTube&#39;s help page says interlaced video is not
-supported and warns of artifacts. On 2026-11-15 a 1080i SRT input also left every copy
-output of a pipeline sending only audio (about 58 kb/s of a 9 Mb/s input) while the
-FFmpeg processes ran as if healthy and logged <code>non-existing PPS 0 referenced</code>; setting
-the encoder to progressive fixed it, but the mechanism was not pinned down. The reason is in the
+supported and warns of artifacts. The reason is in the
 <a href="/projects/bunryu/docs/reference/design-decisions/#warn-about-interlaced-input-do-not-convert-or-refuse-it">design decision</a>.</p>
 <h2 id="flapping-inputs">Flapping inputs</h2>
 <p>When an input disconnects 3 or more times within 5 minutes (a bad uplink, a
@@ -572,7 +582,19 @@ the pipeline log; the alert is what makes a pattern visible without reading it.<
 to the input itself, so they show on every input, RTMP included: the pipeline&#39;s
 status icon and the Inputs table&#39;s status and Issues column turn to warning, with the
 time the alert began. The SRT link-quality alerts (loss, drops, retransmissions,
-latency, forwarding) stay with the SRT relay views.</p>
+belated packets, latency, a bitrate collapse, forwarding) stay with the SRT relay views, and
+they set its status too: the relay&#39;s input half (its forward to SRS for the forwarding alert)
+turns to a warning, or an error for 5% or 1000 dropped packets in one 5 s interval, 10% loss, or
+a bitrate down to a fifth. They come from one interval, so each stays in the payload for 30 s
+after it was last raised and the status does not blink with every poll.</p>
+<p>Two of the thresholds follow from what the counters mean. The latency the relay reports is
+the one <strong>negotiated</strong> for the connection, the encoder&#39;s setting, so it neither fluctuates
+nor measures delay; SRT&#39;s guidance is about four times the round-trip time, which puts a
+long or lossy link at 2 s or more on purpose. The <code>srt-high-latency</code> alert (and a leg&#39;s
+&quot;latency is N ms&quot;) therefore starts at 5 s, where it is more likely a typing mistake than a
+choice. Belated packets (late for their play time) are judged as a share of the packets
+received in the interval, from 3% and at least 10 packets, because a fixed count means 3% at
+5 Mb/s and 20% at 1 Mb/s.</p>
 <h2 id="encoder-restarts-do-not-restart-outputs">Encoder restarts do not restart outputs</h2>
 <p>When an encoder stops and reconnects (for example a manual ffmpeg restart), the
 pipeline&#39;s input reconnects but its <strong>outputs keep running and are not restarted</strong>,
