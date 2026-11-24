@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="light dark" />
     <title>Publishing to a pipeline — Bunryu</title>
-    <meta name="description" content="A pipeline is one live input. Creating a pipeline assigns it a stream key; the pipeline panel&#39;s Publish to this input card shows one input mode at a time (RTMP, SRT or SRT Relay), chosen with the butt" />
+    <meta name="description" content="A pipeline is one live input. Creating a pipeline assigns it a stream key; the pipeline panel&#39;s Publish to this input card shows one input mode at a time (RTMP or SRT), chosen with the buttons at its " />
     <link rel="canonical" href="https://live-miracles.github.io/projects/bunryu/docs/usage/publishing/" />
     <meta property="og:site_name" content="Live Miracles" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Publishing to a pipeline — Bunryu" />
-    <meta property="og:description" content="A pipeline is one live input. Creating a pipeline assigns it a stream key; the pipeline panel&#39;s Publish to this input card shows one input mode at a time (RTMP, SRT or SRT Relay), chosen with the butt" />
+    <meta property="og:description" content="A pipeline is one live input. Creating a pipeline assigns it a stream key; the pipeline panel&#39;s Publish to this input card shows one input mode at a time (RTMP or SRT), chosen with the buttons at its " />
     <meta property="og:url" content="https://live-miracles.github.io/projects/bunryu/docs/usage/publishing/" />
     <meta property="og:image" content="https://live-miracles.github.io/assets/social/bunryu.png" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -88,12 +88,13 @@
               </ol>
             </details><article class="readme min-w-0"><p>A <strong>pipeline</strong> is one live input. Creating a pipeline assigns it a stream key;
 the pipeline panel&#39;s <strong>Publish to this input</strong> card shows one input mode at a
-time (<strong>RTMP</strong>, <strong>SRT</strong> or <strong>SRT Relay</strong>), chosen with the buttons at its top. It
+time (<strong>RTMP</strong> or <strong>SRT</strong>), chosen with the buttons at its top. It
 follows the encoder: when a publisher connects the card switches to the mode it is
-using (marked with a green dot), and until the mode changes again a mode you picked
-stays. Each row shows a value, shortened with an ellipsis if it is long, and a
+using (marked with a green dot; an encoder sending SRT straight to SRS opens the SRT mode
+without the dot, since the card does not offer that port), and until the mode changes
+again a mode you picked stays. Each row shows a value, shortened with an ellipsis if it is long, and a
 copy button (two overlapping squares): server URL, key, stream ID or passphrase separately for encoders
-that ask for them in separate fields, and the full publish URL (SRT Relay has two: <strong>Bonded URL</strong> for an encoder that sends over several links, and <strong>Single-link URL</strong> for an ordinary one). The stream key and
+that ask for them in separate fields, and the full publish URL (SRT has two: <strong>Single-link URL</strong> for an ordinary encoder, and <strong>Bonded URL</strong> for one that sends over several links). The stream key and
 stream ID are masked after their <code>keyNN_</code> prefix (<code>key01_••••••••</code>) and the passphrase
 entirely; the eye button beside each shows the real value for 15 s, for typing it
 into an encoder by hand. Copy always copies the real value. When another pipeline uses the
@@ -113,17 +114,12 @@ only one of them can publish at a time.</p>
 <td><code>rtmp://&lt;public-host&gt;:21935/live/&lt;stream-key&gt;</code></td>
 </tr>
 <tr>
-<td>SRT</td>
-<td>10080/udp</td>
-<td><code>srt://&lt;public-host&gt;:10080?streamid=#!::r=live/&lt;stream-key&gt;,m=publish&amp;passphrase=&lt;passphrase&gt;&amp;pbkeylen=16</code></td>
-</tr>
-<tr>
-<td>SRT via relay</td>
+<td>SRT (single link)</td>
 <td>10081/udp</td>
 <td><code>srt://&lt;public-host&gt;:10081?mode=caller&amp;streamid=#!::r=live/&lt;stream-key&gt;,m=publish&amp;passphrase=&lt;passphrase&gt;&amp;pbkeylen=16</code></td>
 </tr>
 <tr>
-<td>Bonded SRT</td>
+<td>SRT (bonded)</td>
 <td>10081/udp</td>
 <td><code>srt://&lt;public-host&gt;:10081?mode=caller&amp;grouptype=broadcast&amp;streamid=#!::r=live/&lt;stream-key&gt;,m=publish&amp;passphrase=&lt;passphrase&gt;&amp;pbkeylen=16</code></td>
 </tr>
@@ -141,16 +137,15 @@ bonded SRT for encoders that send the same stream over several network links
 (for example cellular bonding units); the SRT relay
 (<a href="https://github.com/live-miracles/goryu">Goryu</a>)
 merges the links before SRS sees the stream.</p>
-<p>The relay port also accepts an ordinary single-link SRT connection: use the
-relay URL without <code>grouptype=broadcast</code>. The dashboard then shows it as an
-&quot;SRT input via relay&quot; with the encoder&#39;s IP, instead of a bonded group. This is
-optional. Plain SRT sent straight to port 10080 avoids the relay&#39;s extra hop
-(about 200 ms) and keeps the stream independent of the relay process; see
+<p>SRT goes through the relay in both cases. For an ordinary encoder use the
+single-link URL; the dashboard shows it as an &quot;SRT input via relay&quot; with the encoder&#39;s IP,
+instead of a bonded group. SRS&#39;s own SRT port (10080) is not offered in the
+dashboard, because SRS does not expose packet loss, retransmit or drop counters for an SRT
+publisher: a stream sent straight to it has no link statistics or loss alerts (its input
+card says so and points to the SRT mode), while through the relay you get them. An
+encoder already publishing to 10080 keeps working. The relay adds about 200 ms and a
+second process that SRT inputs depend on; see
 <a href="/projects/bunryu/docs/reference/design-decisions/#srt-ingest">SRT ingest</a>.
-The trade-off is visibility: SRS does not expose packet loss, retransmit or drop
-counters for an SRT publisher, so a stream sent straight to 10080 has no link
-statistics or loss alerts in the dashboard (its input card says so). Through the
-relay you get them, so use the bonded port when you want to watch the link.
 While an encoder is publishing through the relay, the pipeline shows the SRT Relay card
 under the input&#39;s video and audio details, whichever Publish mode is selected. It keeps a compact summary
 visible; select the <strong>Detailed stats</strong> icon (bars) in the card&#39;s top right corner to open a dialog sized to its
@@ -261,15 +256,8 @@ stream. Preview either one.</p>
   -c:v libx264 -preset veryfast -b:v 2500k -c:a aac -b:a 128k \
   -f flv rtmp://localhost:21935/live/&lt;stream-key&gt;
 </code></pre>
-<p>SRT (if the passphrase check is disabled, drop
-<code>&amp;passphrase=&lt;passphrase&gt;&amp;pbkeylen=16</code>):</p>
-<pre><code class="language-bash">ffmpeg -re -stream_loop -1 -i video.mp4 \
-  -c:v libx264 -preset veryfast -b:v 2500k -x264-params &quot;repeat-headers=1&quot; \
-  -c:a aac -b:a 128k \
-  -f mpegts &#39;srt://localhost:10080?streamid=#!::r=live/&lt;stream-key&gt;,m=publish&amp;passphrase=&lt;passphrase&gt;&amp;pbkeylen=16&#39;
-</code></pre>
-<p>For a normal single-link SRT connection through the relay, use port 10081 without
-<code>grouptype=broadcast</code>:</p>
+<p>SRT, single link, through the relay (if the passphrase check is disabled, drop
+<code>&amp;passphrase=&lt;passphrase&gt;&amp;pbkeylen=16</code>; for a bonded group add <code>grouptype=broadcast</code>):</p>
 <pre><code class="language-bash">ffmpeg -re -stream_loop -1 -i video.mp4 \
   -c:v libx264 -preset veryfast -b:v 2500k -x264-params &quot;repeat-headers=1&quot; \
   -c:a aac -b:a 128k \
@@ -282,7 +270,7 @@ stream. Preview either one.</p>
   -x264-params &quot;repeat-headers=1&quot; \
   -force_key_frames &#39;expr:gte(t,n_forced*2)&#39; -g 60 -keyint_min 60 -sc_threshold 0 \
   -c:a aac -b:a 128k \
-  -f mpegts &#39;srt://localhost:10080?streamid=#!::r=live/&lt;stream-key&gt;,m=publish&amp;passphrase=&lt;passphrase&gt;&amp;pbkeylen=16&#39;
+  -f mpegts &#39;srt://localhost:10081?mode=caller&amp;streamid=#!::r=live/&lt;stream-key&gt;,m=publish&amp;passphrase=&lt;passphrase&gt;&amp;pbkeylen=16&#39;
 </code></pre>
 <h2 id="checking-the-input">Checking the input</h2>
 <p>Once a publisher connects, the pipeline turns live and the dashboard shows the

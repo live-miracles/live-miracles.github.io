@@ -193,7 +193,7 @@ process.</p>
 <p><strong>Outputs that never stay up.</strong> If an output is stopped after 5 failed attempts in a
 row, none of which stayed up for 60 s, the stop is recorded with the count and the
 last failure (&quot;Stopped after 5 failed attempts. Last error: Connection refused&quot;),
-the output&#39;s card keeps showing that line in yellow (not a Problem: no tint, and no
+the output&#39;s card shows it as one yellow line with the next step (not a Problem: no tint, and no
 mark on the pipeline), and its History button stays yellow,
 until the output is started again. A plain stop, or a run that lasted at least 60 s,
 leaves no such mark. The stop also writes an <code>output-stopped-after-failures</code>
@@ -214,7 +214,13 @@ succeeds:</p>
 <td>Media validation</td>
 <td>Connected RTMP/SRT inputs without a successful probe yet for this publisher</td>
 <td>Immediate probe (staggered across pipelines), then retried every <code>FFPROBE_FAILED_REFRESH_MS</code> (30s) while it keeps failing</td>
-<td>Stops re-probing once a probe succeeds for the current publisher; a new probe cycle starts on the next publisher change. Every failed probe is written to diagnostics as <code>media-probe-failed</code> (reason <code>timeout</code>/<code>exit</code>/<code>parse</code>/<code>unusable</code>, elapsed time, exit status, ffprobe stderr tail) and the first failure and the later recovery per publisher are added to the pipeline log (<code>probe_failed</code> / <code>probe_recovered</code>). Input liveness and output recovery do not wait for a valid ffprobe result — ffprobe fills in media/track details when available.</td>
+<td>Stops re-probing once a probe succeeds for the current publisher, except for the re-check below; a new probe cycle starts on the next publisher change. Every failed probe is written to diagnostics as <code>media-probe-failed</code> (reason <code>timeout</code>/<code>exit</code>/<code>parse</code>/<code>unusable</code>, elapsed time, exit status, ffprobe stderr tail) and the first failure and the later recovery per publisher are added to the pipeline log (<code>probe_failed</code> / <code>probe_recovered</code>). Input liveness and output recovery do not wait for a valid ffprobe result — ffprobe fills in media/track details when available.</td>
+</tr>
+<tr>
+<td>Re-check after an output watchdog</td>
+<td>An input whose last probe passed, when one of its outputs is killed for getting no input data or for a progress stall</td>
+<td>One ffprobe at once, at most one per pipeline per 5 minutes (<code>media-probe-requested</code> with <code>reason: output-watchdog</code>)</td>
+<td>An encoder that lost its source (an SDI feed switched off) keeps sending at the same bitrate with nothing decodable, so the connect-time probe stays green. A failing re-check turns the input red and the 30 s retry above watches for its recovery; outputs keep retrying meanwhile. Needs a running output. Why: <a href="/projects/bunryu/docs/reference/design-decisions/#re-probe-an-input-when-an-outputs-watchdog-finds-it-stuck-not-on-a-timer">Re-probe an input when an output&#39;s watchdog finds it stuck</a>.</td>
 </tr>
 <tr>
 <td>Keyframe interval</td>
