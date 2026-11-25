@@ -168,12 +168,19 @@ Browser → Vercel static app → Supabase Auth
 </tr>
 <tr>
 <td>Last heartbeat older than 3 minutes</td>
-<td>(report offline)</td>
-<td>bunryu offline</td>
-<td>nothing is claimed, no alarm</td>
+<td><code>stopped</code> (<code>off</code>)</td>
+<td>bunryu is off</td>
+<td>indigo, &quot;Not sending&quot;</td>
+</tr>
+<tr>
+<td>Same, but the link was not in it</td>
+<td><code>not_configured</code></td>
+<td>Not set up yet</td>
+<td>no color</td>
 </tr>
 </tbody></table>
 <p>bunryu only runs during events, so silence is normal and never shown as a problem.</p>
+<p><strong>A silent bunryu is not shown as running.</strong> Once every bunryu that has reported has been silent for <code>FRESH_MS</code> (3 minutes), the report says <code>off: true</code>. A destination&#39;s last status can no longer be trusted, so each destination whose link was in bunryu&#39;s last report is <code>stopped</code> (the output is off) with no message or failure count, and each that was not is <code>not_configured</code>, exactly as the last report said. Which links bunryu has is remembered from the stored last heartbeat (kept for 30 days); what it was doing is not. Inputs are not remembered: no pipeline has a status while bunryu is off. Before any bunryu has ever reported, <code>off</code> is false and nothing is claimed. A live bunryu always wins: <code>off</code> is false while any bunryu is reporting.</p>
 <h2 id="secrets">Secrets</h2>
 <p>One secret, <code>KEY_VAULT_SECRET</code> (at least 32 characters). Two values are derived from it, each by HMAC-SHA256 under its own label (<code>_shared/secrets.ts</code>): the <strong>ingest token</strong>, which travels in a header on every heartbeat, and the <strong>hash secret</strong>, which never leaves bunryu and the server. Knowing the token reveals nothing about the hash secret. bunryu takes the same <code>KEY_VAULT_SECRET</code> (owners copy it, with the link, from the bunryu dialog in the app) and derives both itself; both repositories pin the derivation in tests.</p>
 <table>

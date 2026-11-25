@@ -157,7 +157,7 @@ npx supabase secrets list --project-ref &lt;project-ref&gt;
 <li>In Key Vault a destination whose main or backup address is configured in bunryu shows its status; hovering shows the pipeline, output and message (owners and admins). One not configured in bunryu says &quot;Not set up yet&quot;.</li>
 <li>Stop an output in bunryu: its destination turns indigo (&quot;configured, not running&quot;). Make one fail until bunryu gives up: red, with &quot;stopped after N failed attempts&quot;.</li>
 <li>The header shows &quot;bunryu connected&quot; with a green dot.</li>
-<li>Stop bunryu: after about three minutes the statuses clear and the header says &quot;bunryu last seen N min ago&quot; (there is no warning: bunryu is only on during events).</li>
+<li>Stop bunryu: after about three minutes every destination bunryu had says &quot;Not sending&quot; (off) and the rest still say &quot;Not set up yet&quot;, as in its last report, and the header says &quot;bunryu last seen N min ago&quot; (there is no warning: bunryu is only on during events).</li>
 </ul>
 <p>If a destination you know is configured shows nothing, the address differs between the two systems (a trailing path, a different server, a changed key). Compare them; the hash is of the whole address.</p>
 <h2 id="6-install-it-as-an-app-optional">6. Install it as an app (optional)</h2>
