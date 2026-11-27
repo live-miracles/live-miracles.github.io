@@ -1,0 +1,469 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Security review — Bunryu</title>
+    <meta name="description" content="This page is the security assessment of Bunryu for reviewers. It states what the system exposes and what protects it, then lists the points a review is likely to raise, each with the reason it is acce" />
+    <link rel="canonical" href="https://live-miracles.github.io/projects/bunryu/docs/operations/security-review/" />
+    <meta property="og:site_name" content="Live Miracles" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Security review — Bunryu" />
+    <meta property="og:description" content="This page is the security assessment of Bunryu for reviewers. It states what the system exposes and what protects it, then lists the points a review is likely to raise, each with the reason it is acce" />
+    <meta property="og:url" content="https://live-miracles.github.io/projects/bunryu/docs/operations/security-review/" />
+    <meta property="og:image" content="https://live-miracles.github.io/assets/social/bunryu.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/assets/logo.png" type="image/png" />
+    <link rel="alternate" type="application/rss+xml" title="Live Miracles blog" href="/blog/feed.xml" />
+    <script>
+      try {
+        var theme = localStorage.getItem('theme');
+        if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
+      } catch (e) {}
+    </script>
+    <link rel="stylesheet" href="/assets/styles.css" />
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <header class="topbar">
+        <nav class="caption mx-auto flex h-12 w-full max-w-[1024px] items-center justify-between gap-4 px-5 sm:px-6" aria-label="Site">
+          <a href="/" class="flex items-center gap-2.5 font-semibold" aria-label="Live Miracles">
+            <img src="/assets/logo.png" alt="" class="logo size-6" />
+            <span>Live Miracles</span>
+          </a>
+          <div class="flex items-center gap-5 sm:gap-7">
+            <a href="/#projects" class="text-muted hover:text-ink transition-colors">Projects</a>
+            <a href="/blog/" class="text-muted hover:text-ink transition-colors">Blog</a>
+            <div class="-mr-2 flex items-center gap-1">
+              <a href="https://github.com/live-miracles" class="icon-btn" aria-label="Live Miracles on GitHub" title="GitHub"><svg xmlns="http://www.w3.org/2000/svg" class="size-[18px]" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.79 23.39c.6.11.82-.26.82-.58v-2.02c-3.34.73-4.04-1.42-4.04-1.42-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5.99.11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.12-.3-.54-1.52.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.81 5.63-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.57A12 12 0 0 0 12 .5Z"/></svg></a>
+              <button type="button" id="theme-toggle" class="icon-btn theme-toggle" hidden><svg xmlns="http://www.w3.org/2000/svg" class="icon-sun size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32 1.41-1.41"/></svg><svg xmlns="http://www.w3.org/2000/svg" class="icon-moon size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg></button>
+            </div>
+          </div>
+        </nav>
+      </header>
+    <main class="flex-1"><div class="wash" style="--gx1: 22%; --gx2: 92%; --gx3: 50%; --gy1: -26px; --gy2: -36px; --gy1p: 8%; --gy2p: 3%; --px: 83%; --tint: #2f6fb3; --glow-a: color-mix(in srgb, #2f6fb3 30%, transparent); --pattern: url('/assets/patterns/seigaiha.svg')"><div class="mx-auto w-full max-w-[980px] px-5 py-10 sm:px-6 sm:py-14"><nav class="text-muted caption flex flex-wrap items-center gap-2" aria-label="Breadcrumb">
+              <a href="/projects/bunryu/" class="link-quiet hover:text-ink flex items-center gap-2"><img src="/assets/bunryu-logo.png" alt="" class="logo size-5 " /><span>Bunryu</span></a>
+              <span aria-hidden="true">›</span><a class="link-quiet hover:text-ink" href="/projects/bunryu/docs/">Documentation</a><span aria-hidden="true">›</span><span>Operations</span>
+            </nav>
+            <h1 class="display display-lg mt-4">Security review</h1><nav class="border-line mt-8 flex gap-6 border-b" aria-label="Bunryu sections">
+              <a href="/projects/bunryu/" class="tab">Overview</a><a href="/projects/bunryu/docs/" class="tab" aria-current="page">Documentation</a>
+            </nav><details class="bg-parchment caption mt-6 rounded-xl p-4 lg:hidden">
+              <summary class="cursor-pointer font-semibold">Documentation menu</summary>
+              <div class="mt-3"><nav class="lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto" aria-label="Bunryu documentation">
+              <div class="">
+                <div class="eyebrow mb-1">Getting started</div>
+                <ul class="caption"><li><a href="/projects/bunryu/docs/getting-started/introduction/" class="link-quiet hover:text-ink block py-1 text-muted">Introduction</a></li><li><a href="/projects/bunryu/docs/getting-started/docker/" class="link-quiet hover:text-ink block py-1 text-muted">Docker</a></li><li><a href="/projects/bunryu/docs/getting-started/install/" class="link-quiet hover:text-ink block py-1 text-muted">Native install</a></li><li><a href="/projects/bunryu/docs/getting-started/sizing/" class="link-quiet hover:text-ink block py-1 text-muted">Sizing a server</a></li><li><a href="/projects/bunryu/docs/getting-started/comparison/" class="link-quiet hover:text-ink block py-1 text-muted">Comparison with alternatives</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Usage</div>
+                <ul class="caption"><li><a href="/projects/bunryu/docs/usage/publishing/" class="link-quiet hover:text-ink block py-1 text-muted">Publishing to a pipeline</a></li><li><a href="/projects/bunryu/docs/usage/outputs/" class="link-quiet hover:text-ink block py-1 text-muted">Outputs</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Operations</div>
+                <ul class="caption"><li><a href="/projects/bunryu/docs/operations/security/" class="link-quiet hover:text-ink block py-1 text-muted">Security</a></li><li><a href="/projects/bunryu/docs/operations/remote-access/" class="link-quiet hover:text-ink block py-1 text-muted">Remote access (Cloudflare Tunnel)</a></li><li><a href="/projects/bunryu/docs/operations/configuration/" class="link-quiet hover:text-ink block py-1 text-muted">Configuration</a></li><li><a href="/projects/bunryu/docs/operations/reliability/" class="link-quiet hover:text-ink block py-1 text-muted">Reliability</a></li><li><a href="/projects/bunryu/docs/operations/known-issues/" class="link-quiet hover:text-ink block py-1 text-muted">Known issues</a></li><li><a href="/projects/bunryu/docs/operations/security-review/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">Security review</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Reference</div>
+                <ul class="caption"><li><a href="/projects/bunryu/docs/reference/api/" class="link-quiet hover:text-ink block py-1 text-muted">REST API</a></li><li><a href="/projects/bunryu/docs/reference/development/" class="link-quiet hover:text-ink block py-1 text-muted">Development</a></li><li><a href="/projects/bunryu/docs/reference/design-decisions/" class="link-quiet hover:text-ink block py-1 text-muted">Design decisions</a></li></ul>
+              </div>
+            </nav></div>
+            </details>
+            <div class="mt-10 grid gap-12 lg:grid-cols-[13rem_minmax(0,1fr)]">
+              <div class="hidden lg:block"><nav class="lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto" aria-label="Bunryu documentation">
+              <div class="">
+                <div class="eyebrow mb-1">Getting started</div>
+                <ul class="caption"><li><a href="/projects/bunryu/docs/getting-started/introduction/" class="link-quiet hover:text-ink block py-1 text-muted">Introduction</a></li><li><a href="/projects/bunryu/docs/getting-started/docker/" class="link-quiet hover:text-ink block py-1 text-muted">Docker</a></li><li><a href="/projects/bunryu/docs/getting-started/install/" class="link-quiet hover:text-ink block py-1 text-muted">Native install</a></li><li><a href="/projects/bunryu/docs/getting-started/sizing/" class="link-quiet hover:text-ink block py-1 text-muted">Sizing a server</a></li><li><a href="/projects/bunryu/docs/getting-started/comparison/" class="link-quiet hover:text-ink block py-1 text-muted">Comparison with alternatives</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Usage</div>
+                <ul class="caption"><li><a href="/projects/bunryu/docs/usage/publishing/" class="link-quiet hover:text-ink block py-1 text-muted">Publishing to a pipeline</a></li><li><a href="/projects/bunryu/docs/usage/outputs/" class="link-quiet hover:text-ink block py-1 text-muted">Outputs</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Operations</div>
+                <ul class="caption"><li><a href="/projects/bunryu/docs/operations/security/" class="link-quiet hover:text-ink block py-1 text-muted">Security</a></li><li><a href="/projects/bunryu/docs/operations/remote-access/" class="link-quiet hover:text-ink block py-1 text-muted">Remote access (Cloudflare Tunnel)</a></li><li><a href="/projects/bunryu/docs/operations/configuration/" class="link-quiet hover:text-ink block py-1 text-muted">Configuration</a></li><li><a href="/projects/bunryu/docs/operations/reliability/" class="link-quiet hover:text-ink block py-1 text-muted">Reliability</a></li><li><a href="/projects/bunryu/docs/operations/known-issues/" class="link-quiet hover:text-ink block py-1 text-muted">Known issues</a></li><li><a href="/projects/bunryu/docs/operations/security-review/" class="link-quiet hover:text-ink block py-1 text-ink font-semibold" aria-current="page">Security review</a></li></ul>
+              </div><div class="mt-5">
+                <div class="eyebrow mb-1">Reference</div>
+                <ul class="caption"><li><a href="/projects/bunryu/docs/reference/api/" class="link-quiet hover:text-ink block py-1 text-muted">REST API</a></li><li><a href="/projects/bunryu/docs/reference/development/" class="link-quiet hover:text-ink block py-1 text-muted">Development</a></li><li><a href="/projects/bunryu/docs/reference/design-decisions/" class="link-quiet hover:text-ink block py-1 text-muted">Design decisions</a></li></ul>
+              </div>
+            </nav></div>
+              <div class="min-w-0"><details class="bg-parchment text-muted caption mb-8 rounded-xl p-4">
+              <summary class="text-ink cursor-pointer font-semibold">On this page</summary>
+              <ol class="mt-3 space-y-2">
+                <li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#system-and-trust-boundaries">System and trust boundaries</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#controls-in-place">Controls in place</a></li><li class=""><a class="link-quiet hover:text-accent block leading-5 text-ink" href="#points-a-review-may-raise">Points a review may raise</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#one-shared-password-no-accounts-roles-or-mfa">One shared password, no accounts, roles or MFA</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#the-application-does-not-terminate-tls">The application does not terminate TLS</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#no-script-content-security-policy">No script Content-Security-Policy</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#defaults-in-the-repository">Defaults in the repository</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#ingest-over-rtmp-is-not-encrypted-and-its-only-credential-is-the-stream-key">Ingest over RTMP is not encrypted and its only credential is the stream key</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#rtmps-output-certificates-are-not-verified">RTMPS output certificates are not verified</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#the-server-connects-to-destinations-an-operator-types-in">The server connects to destinations an operator types in</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#secrets-visible-to-a-signed-in-user-and-in-the-logs">Secrets visible to a signed-in user and in the logs</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#secrets-in-process-arguments">Secrets in process arguments</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#services-share-one-user-and-the-units-are-lightly-hardened">Services share one user and the units are lightly hardened</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#the-installer-runs-as-root-and-trusts-what-it-fetches">The installer runs as root and trusts what it fetches</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#the-docker-image-publishes-the-dashboard-on-every-interface">The Docker image publishes the dashboard on every interface</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#the-login-limit-is-per-client-address">The login limit is per client address</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#sessions-last-seven-days-and-have-no-idle-timeout">Sessions last seven days and have no idle timeout</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#the-database-is-not-encrypted">The database is not encrypted</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#denial-of-service">Denial of service</a></li><li class="pl-4"><a class="link-quiet hover:text-accent block leading-5 " href="#third-party-components">Third-party components</a></li>
+              </ol>
+            </details><article class="readme min-w-0"><p>This page is the security assessment of Bunryu for reviewers. It states what the system
+exposes and what protects it, then lists the points a review is likely to raise, each
+with the reason it is accepted, what limits the risk and when to revisit it. The controls
+themselves are described in <a href="/projects/bunryu/docs/operations/security/">Security</a>; this page links to them instead of
+repeating them.</p>
+<p>Scope: the Node.js control plane (REST API and dashboard), its use of SRS, the Goryu SRT
+relay and FFmpeg, the native installer and the Docker evaluation image. Version 3.1.0,
+reviewed November 2026.</p>
+<h2 id="system-and-trust-boundaries">System and trust boundaries</h2>
+<table>
+<thead>
+<tr>
+<th>Listener</th>
+<th>Exposure</th>
+<th>Protection</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Dashboard and API, <code>8080/tcp</code></td>
+<td>Not opened by the installer. Meant to be reached through a zero-trust tunnel (<a href="/projects/bunryu/docs/operations/remote-access/">Remote access</a>)</td>
+<td>Tunnel identity check, then the dashboard password and a session cookie</td>
+</tr>
+<tr>
+<td>RTMP ingest, <code>21935/tcp</code></td>
+<td>Public, so encoders can reach it</td>
+<td>Per-pipeline stream key checked by SRS&#39;s <code>on_publish</code> hook; playback refused</td>
+</tr>
+<tr>
+<td>SRT ingest, <code>10080/udp</code> and <code>10081/udp</code></td>
+<td>Public</td>
+<td>Passphrase checked at the handshake, then the same stream key check</td>
+</tr>
+<tr>
+<td>SRS HTTP API, <code>1985/tcp</code></td>
+<td>Loopback only</td>
+<td>Bound to <code>127.0.0.1</code> in <code>srs.conf</code></td>
+</tr>
+<tr>
+<td>SRS hooks, <code>8082/tcp</code></td>
+<td>Loopback only</td>
+<td>Bound to <code>127.0.0.1</code>; a separate listener from the dashboard</td>
+</tr>
+<tr>
+<td>Relay status, <code>8081/tcp</code></td>
+<td>Never opened in the firewall</td>
+<td>Read by the app only</td>
+</tr>
+</tbody></table>
+<p>Outbound connections: one FFmpeg per output to the destinations the operator configures,
+and, if set up, one HTTPS report a minute to Key Vault.</p>
+<p>What an attacker would want, in order of value: the stream keys and destination URLs
+(a destination URL can contain a platform&#39;s own stream key, which lets someone broadcast
+as the organisation), the SRT passphrase, the dashboard password, and the ability to
+interrupt a live stream.</p>
+<table>
+<thead>
+<tr>
+<th>Actor</th>
+<th>What they can reach</th>
+<th>Main limit</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Internet scanner</td>
+<td>Ingest ports, and the dashboard port if it is exposed</td>
+<td>Unknown keys and apps are refused before any stream starts; login is rate limited</td>
+</tr>
+<tr>
+<td>Publisher with a valid key</td>
+<td>One pipeline&#39;s input</td>
+<td>The key only authorises publishing to its own pipeline; the public ports cannot play streams back</td>
+</tr>
+<tr>
+<td>Holder of the dashboard password</td>
+<td>Everything in the dashboard</td>
+<td>One role by design (see the first point below)</td>
+</tr>
+<tr>
+<td>Compromised media component (SRS, Goryu, FFmpeg)</td>
+<td>The service user&#39;s files</td>
+<td>See the installer point below</td>
+</tr>
+</tbody></table>
+<h2 id="controls-in-place">Controls in place</h2>
+<table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Control</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Authentication</td>
+<td>scrypt password hash, 12-character minimum on change, 7-day sessions stored as SHA-256 hashes, revoked on password change and logout</td>
+<td><a href="/projects/bunryu/docs/operations/security/#authentication">Security</a></td>
+</tr>
+<tr>
+<td>Brute force</td>
+<td>5 failures a minute per client (IPv6 grouped by /64), then a 5-minute block; scrypt runs off the event loop</td>
+<td><a href="/projects/bunryu/docs/operations/security/">Security</a></td>
+</tr>
+<tr>
+<td>Cross-site requests</td>
+<td><code>SameSite=Strict</code> cookie, JSON-only bodies, and a browser-declared cross-site write is refused</td>
+<td><a href="/projects/bunryu/docs/operations/security/">Security</a></td>
+</tr>
+<tr>
+<td>Browser hardening</td>
+<td>Frame, sniffing, referrer, device-feature and cross-origin-embedding headers; HSTS over TLS; API answers are <code>no-store</code>; the dashboard escapes everything it renders</td>
+<td><a href="/projects/bunryu/docs/operations/security/">Security</a></td>
+</tr>
+<tr>
+<td>Input validation</td>
+<td>Bounded names, URLs and counts; destination schemes limited to <code>rtmp</code>, <code>rtmps</code> and <code>srt</code>; arguments passed to FFmpeg as an argument list, never through a shell</td>
+<td><a href="/projects/bunryu/docs/operations/security/">Security</a></td>
+</tr>
+<tr>
+<td>Outbound policy</td>
+<td>Link-local, unspecified and loopback destinations refused by what the host resolves to, with the same host parsing FFmpeg uses; the reserved <code>internal</code> app refused; restream loops marked on the output card (SRS refuses the second publisher)</td>
+<td><a href="/projects/bunryu/docs/operations/security/">Security</a></td>
+</tr>
+<tr>
+<td>Process isolation</td>
+<td>FFmpeg gets a minimal environment; the three services run as an unprivileged user; the application tree is root-owned</td>
+<td><a href="/projects/bunryu/docs/operations/security/">Security</a></td>
+</tr>
+<tr>
+<td>Ingest</td>
+<td>Per-server random SRT passphrase, per-pipeline stream keys of 128 random bits, publish and play hooks, non-default RTMP port</td>
+<td><a href="/projects/bunryu/docs/operations/security/">Security</a></td>
+</tr>
+<tr>
+<td>Data access</td>
+<td>One embedded SQLite database; every query is parameterised and the only dynamic SQL is a column list built from constants</td>
+<td><code>src/db/index.ts</code></td>
+</tr>
+<tr>
+<td>Secrets at rest</td>
+<td>No secret has a default on a production install; the database is mode 600 and the configuration directory mode 750</td>
+<td><a href="/projects/bunryu/docs/getting-started/install/">Install</a></td>
+</tr>
+<tr>
+<td>Supply chain</td>
+<td>SRS, Goryu and FFmpeg pinned with SHA-256 checks; <code>npm ci</code> with integrity hashes; Dependabot for npm, GitHub Actions and the Docker base images; CodeQL; every GitHub Action pinned to a commit</td>
+<td><code>.github/</code></td>
+</tr>
+<tr>
+<td>Resilience</td>
+<td>A malformed request, a failed output or an uncaught error does not stop the server; restart and watchdog loops are bounded</td>
+<td><a href="/projects/bunryu/docs/operations/reliability/">Reliability</a></td>
+</tr>
+</tbody></table>
+<p>Unauthenticated routes are <code>/api/ready</code> (a bare <code>{&quot;ok&quot;:true}</code>), <code>/api/auth/login</code>, the
+login page and the static dashboard files, which contain no secrets. Every other <code>/api</code>
+route, and the HLS previews, require a session.</p>
+<h2 id="points-a-review-may-raise">Points a review may raise</h2>
+<h3 id="one-shared-password-no-accounts-roles-or-mfa">One shared password, no accounts, roles or MFA</h3>
+<p>The dashboard has a single password and every signed-in user can do everything. This is
+intended for a small crew running one live event, where per-user accounts would add
+a user store to maintain and a way to lock the team out mid-event. The identity layer is
+the zero-trust tunnel, which provides per-person authentication, MFA and audit; the
+password is a second factor behind it. Sessions can be revoked all at once by
+changing the password. Revisit if the dashboard must be operated by people with different
+privileges.</p>
+<h3 id="the-application-does-not-terminate-tls">The application does not terminate TLS</h3>
+<p>The server listens on plain HTTP. TLS is provided by the tunnel or reverse proxy in front
+of it, and the session cookie gets <code>Secure</code> and HSTS is sent when the request arrived over
+TLS. A direct exposure of port 8080 without a proxy would send the password in clear text,
+which is why the installer does not open it and the documentation says to keep it closed.</p>
+<h3 id="no-script-content-security-policy">No script Content-Security-Policy</h3>
+<p>The dashboard uses inline event handlers in its static markup, so <code>script-src</code> cannot yet
+exclude inline script. Mitigations: every value from the server (names, URLs, FFmpeg and
+SRS log lines, publisher addresses, codec names) goes through an escaping helper before it
+reaches HTML, none is placed in an inline handler, there is no <code>eval</code>, and secrets are
+not stored in browser storage. The handlers carry only fixed strings. Moving them to
+listeners and adding a CSP is planned as hardening, not a known hole.</p>
+<h3 id="defaults-in-the-repository">Defaults in the repository</h3>
+<p>The development <code>bunryu.json</code> ships the password <code>admin</code>, and <code>srs.conf</code> and <code>goryu.json</code>
+ship a public SRT passphrase. They exist so a first run from a checkout works without
+setup, and the password can be changed straight away in Settings. Neither reaches a
+production system:</p>
+<ul>
+<li>The installer and the Docker image refuse to start without a dashboard password you
+supply, and never generate, print or default one.</li>
+<li>The installer replaces the SRT passphrase with a per-server random value; the Docker
+entrypoint does the same.</li>
+<li>A production start that still has the public or an empty passphrase logs a warning.</li>
+</ul>
+<h3 id="ingest-over-rtmp-is-not-encrypted-and-its-only-credential-is-the-stream-key">Ingest over RTMP is not encrypted and its only credential is the stream key</h3>
+<p>RTMP carries the key and the video in clear text, as the protocol does. Each pipeline has
+its own key, an unknown key or an app other than <code>live</code> is refused before anything is
+forwarded, and a key can be replaced by moving the pipeline to another one. For links that
+cross an untrusted network the same input accepts SRT, which is encrypted with a
+per-server passphrase checked at the handshake. The RTMP port is a non-default one to keep
+scanner noise out of the logs.</p>
+<h3 id="rtmps-output-certificates-are-not-verified">RTMPS output certificates are not verified</h3>
+<p>FFmpeg&#39;s default for <code>rtmps://</code> destinations is not to verify the server certificate, and
+Bunryu keeps that default. The risk is an attacker who can intercept the connection
+between the server and a streaming platform and read the stream key sent to it. It is
+accepted because the destinations are platforms the operator chose, from a server in a data
+centre, and turning verification on without a tested trust store would make live outputs
+fail on a host without a certificate bundle, which is the worse failure in the middle of an
+event. The output environment already passes <code>SSL_CERT_FILE</code> and <code>SSL_CERT_DIR</code> so
+verification can be switched on later. Revisit when it can be tested against the
+platforms in use. See <a href="/projects/bunryu/docs/reference/design-decisions/#give-up-on-a-blocked-rtmprtmps-destination-with-an-output--rw_timeout">Design decisions</a>.</p>
+<h3 id="the-server-connects-to-destinations-an-operator-types-in">The server connects to destinations an operator types in</h3>
+<p>An output URL makes the server open a connection, so a stolen session could aim it at
+internal hosts. Link-local addresses (cloud metadata), the unspecified address and
+loopback outside the server&#39;s own ingest ports are refused, judged by what the name
+resolves to and with the host parsed as FFmpeg parses it. Private LAN ranges are
+allowed on purpose, because pushing to a venue encoder or a local media server is a
+real use. DNS that changes between the check and FFmpeg&#39;s own lookup cannot be ruled out. Key Vault
+reports use the same host check and refuse redirects. The connection speaks RTMP or SRT,
+not HTTP, and only FFmpeg&#39;s own error text comes back, so it cannot be used to read the
+content of internal services.</p>
+<h3 id="secrets-visible-to-a-signed-in-user-and-in-the-logs">Secrets visible to a signed-in user and in the logs</h3>
+<p>The dashboard shows publish URLs and the SRT passphrase to any signed-in user, because
+configuring an encoder needs them (they are masked by default and revealed for a few
+seconds). Logs, the output History and the diagnostics files keep FFmpeg&#39;s error text
+as it is, including destination URLs. This is deliberate: a redacted log cannot explain
+why an output failed during an incident. The logs are private to the server and to its
+operators, are rotated and size-capped, and the documentation says to redact before
+copying any of them elsewhere. The report sent to Key Vault is the exception: destinations
+leave the server only as an HMAC hash and error text is redacted.</p>
+<h3 id="secrets-in-process-arguments">Secrets in process arguments</h3>
+<p>An FFmpeg process receives the input URL (with the SRT passphrase when the input is SRT)
+and the destination URL as arguments, so any local account on the host can read them from
+the process list. There is no way to pass them through an option file or environment
+variable to FFmpeg&#39;s network protocols without losing the URL-based configuration, and the
+server is meant to be a dedicated machine with no untrusted local users. The installer
+and the Docker entrypoint also pass the initial password and passphrase to short-lived
+helper commands, for seconds.</p>
+<h3 id="services-share-one-user-and-the-units-are-lightly-hardened">Services share one user and the units are lightly hardened</h3>
+<p>SRS, the relay and the dashboard run as the same unprivileged user, with
+<code>NoNewPrivileges</code>, <code>ProtectSystem=full</code>, <code>PrivateTmp</code> and write access limited to the data
+and configuration directories. SRS and Goryu parse network input, so a flaw in either would
+give an attacker that user&#39;s files, including the database and <code>bunryu.json</code>. This is
+accepted for the first release because the three services must share the diagnostics
+and configuration files, the binaries are pinned by checksum and run at the version the
+installer was tested with, and the host is dedicated to this application. Splitting users
+and adding further systemd restrictions (capability bounding, kernel and namespace
+restrictions, system call filtering) would need testing on a production host with every
+media component and is the planned next step. The service user can also read the system
+journal, which is how the dashboard shows the three services&#39; logs.</p>
+<h3 id="the-installer-runs-as-root-and-trusts-what-it-fetches">The installer runs as root and trusts what it fetches</h3>
+<p>The installer is run by an administrator. It installs Node.js from the NodeSource
+repository, updates the application from the repository&#39;s default branch, installs the
+npm dependencies and does file operations in the configuration and data directories, which
+the service user owns. The media binaries are fetched at pinned versions and verified by
+SHA-256, and <code>npm ci</code> runs with install scripts disabled apart from the one native module the
+application needs. The remaining trust is in the project&#39;s own repository and in the
+NodeSource script, the same trust a package-manager install of any server software places
+in its source. Misusing the directories would first need code execution as the service
+user. Revisit with the service-user split above.</p>
+<h3 id="the-docker-image-publishes-the-dashboard-on-every-interface">The Docker image publishes the dashboard on every interface</h3>
+<p><code>compose.yaml</code> publishes port 8080 as Docker does by default. The image is an evaluation
+tool for trying the product on a laptop or a test machine, not for production, and it
+refuses to start without a password. For anything reachable from a network, bind it to
+the loopback address (<code>127.0.0.1:8080:8080</code>) or put the tunnel in front of it, as in
+production.</p>
+<h3 id="the-login-limit-is-per-client-address">The login limit is per client address</h3>
+<p>The five-failure limit is keyed on the client address. Behind a proxy with
+<code>trust_proxy</code> unset, everyone shares the proxy&#39;s address and a few mistyped passwords
+lock the dashboard for five minutes. This is the safer failure: a guessing flood cannot
+be spread across spoofed headers, and ingest and the running outputs are not affected.
+The remote-access guide sets <code>trust_proxy</code> for the tunnel.</p>
+<h3 id="sessions-last-seven-days-and-have-no-idle-timeout">Sessions last seven days and have no idle timeout</h3>
+<p>A session is valid for seven days from login so an operator is not signed out during a
+multi-day event. Sessions are stored only as hashes, are revoked by logout and by a
+password change, and the cookie is <code>HttpOnly</code> and <code>SameSite=Strict</code>.</p>
+<h3 id="the-database-is-not-encrypted">The database is not encrypted</h3>
+<p>The SQLite database holds the stream keys, destination URLs and the password hash. It
+is readable only by the service user and root. Encryption at rest is the job of the
+host&#39;s disk encryption, which cloud virtual machines provide by default; an application-level key
+would have to be stored on the same machine.</p>
+<h3 id="denial-of-service">Denial of service</h3>
+<p>The unauthenticated surfaces are bounded. The ingest ports are limited by SRS&#39;s connection
+cap, and a flood of refused publishes is counted in a fixed-size structure and logged once
+a minute per key. Login attempts are rate limited and their hashing does not block the
+event loop. Request bodies are capped at 1 MB. The dashboard is sized for about ten
+clients; authenticated API calls are not rate limited because the users are the operators.</p>
+<h3 id="third-party-components">Third-party components</h3>
+<p>The application has three runtime npm dependencies (Express, compression and
+better-sqlite3), and <code>npm audit --omit=dev</code> reports no known vulnerabilities. The dashboard
+ships one vendored library, hls.js, which only parses playlists produced by the
+application&#39;s own FFmpeg on the same origin. SRS is an official static build, so it
+receives no distribution patches; it is updated by changing the pinned version in the
+installer and the Docker image. Both are tracked in <a href="/projects/bunryu/docs/getting-started/install/">Install</a>.</p>
+</article><a class="more caption mt-8 inline-block" href="https://github.com/live-miracles/bunryu/blob/master/docs/3-operations/6-security-review.md">Edit this page on GitHub</a><div class="mt-12 grid gap-4 sm:grid-cols-2">
+              <a class="panel link-quiet hover:bg-parchment p-5 transition-colors" href="/projects/bunryu/docs/operations/known-issues/"><div class="text-muted caption">Previous</div><div class="font-semibold">Known issues</div></a>
+              <a class="panel link-quiet hover:bg-parchment p-5 transition-colors sm:text-right" href="/projects/bunryu/docs/reference/api/"><div class="text-muted caption">Next</div><div class="font-semibold">REST API</div></a>
+            </div></div>
+            </div></div></div></main>
+    <footer class="caption waves text-muted border-line border-t pb-28">
+      <div class="mx-auto flex w-full max-w-[980px] flex-wrap items-center justify-between gap-x-6 gap-y-2 px-5 py-8 sm:px-6">
+        <span>Live Miracles · Open tools for live teams</span>
+        <span class="flex gap-5">
+          <a class="link-quiet" href="/blog/">Blog</a>
+          <a class="link-quiet" href="/blog/feed.xml">RSS</a>
+          <a class="link-quiet" href="https://github.com/live-miracles">GitHub</a>
+        </span>
+      </div>
+    </footer>
+    <dialog id="lightbox" class="lightbox" aria-label="Enlarged image">
+      <button type="button" class="lightbox-close" aria-label="Close image"><svg xmlns="http://www.w3.org/2000/svg" class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg></button>
+      <div class="lightbox-frame"><img alt="" /></div>
+    </dialog>
+    <script>
+      (function () {
+        var dialog = document.getElementById('lightbox');
+        if (!dialog || !dialog.showModal) return;
+        var shown = dialog.querySelector('img');
+        function zoomable(img) {
+          return !img.closest('a') && img.naturalWidth >= 300 && img.naturalHeight >= 100;
+        }
+        function mark(img) {
+          if (img.dataset.zoom || !zoomable(img)) return;
+          img.dataset.zoom = '1';
+          img.classList.add('zoomable');
+          img.tabIndex = 0;
+          img.setAttribute('role', 'button');
+          img.setAttribute('aria-label', 'Enlarge image: ' + (img.alt || 'screenshot'));
+        }
+        function open(img) {
+          shown.src = img.currentSrc || img.src;
+          shown.alt = img.alt;
+          shown.classList.remove('actual');
+          dialog.showModal();
+          dialog.scrollTo(0, 0);
+        }
+        document.querySelectorAll('.readme img').forEach(function (img) {
+          if (img.complete) mark(img);
+          else img.addEventListener('load', function () { mark(img); }, { once: true });
+        });
+        document.addEventListener('click', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom) open(img);
+        });
+        document.addEventListener('keydown', function (event) {
+          var img = event.target.closest && event.target.closest('.readme img');
+          if (img && img.dataset.zoom && (event.key === 'Enter' || event.key === ' ')) {
+            event.preventDefault();
+            open(img);
+          }
+        });
+        shown.addEventListener('click', function () {
+          shown.classList.toggle('actual');
+        });
+        dialog.addEventListener('click', function (event) {
+          if (event.target !== shown) dialog.close();
+        });
+      })();
+    </script>
+    <script>
+      (function () {
+        var button = document.getElementById('theme-toggle');
+        if (!button) return;
+        var root = document.documentElement;
+        function current() {
+          return root.dataset.theme === 'light' ? 'light' : 'dark';
+        }
+        function sync() {
+          var theme = current();
+          button.dataset.mode = theme;
+          button.setAttribute('aria-label', 'Switch to ' + (theme === 'dark' ? 'light' : 'dark') + ' theme');
+        }
+        button.hidden = false;
+        sync();
+        button.addEventListener('click', function () {
+          var next = current() === 'dark' ? 'light' : 'dark';
+          root.dataset.theme = next;
+          try {
+            localStorage.setItem('theme', next);
+          } catch (e) {}
+          sync();
+        });
+      })();
+    </script>
+  </body>
+</html>
